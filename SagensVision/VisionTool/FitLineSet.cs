@@ -339,28 +339,28 @@ namespace SagensVision.VisionTool
                         }
                         HTuple[] lineCoord = new HTuple[1];
 
-                        //全选
-                        if (SelectAll)
-                        {
-                            for (int i = 0; i < fParam[Id].roiP.Count; i++)
-                            {
-                                DispSection((ROIRectangle2)roiList2[Id][i], Id, i, out lineCoord, hwindow_final2);
-                            }
-                        }
-                        else
-                        {
-                            if (currentId != -1 && isInsert)
-                            {
-                                isInsert = false;
-                                DispSection((ROIRectangle2)roiList2[Id][currentId], Id, currentId, out lineCoord, hwindow_final2);
+                        ////全选
+                        //if (SelectAll)
+                        //{
+                        //    for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                        //    {
+                        //        DispSection((ROIRectangle2)roiList2[Id][i], Id, i, out lineCoord, hwindow_final2);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    if (currentId != -1 && isInsert)
+                        //    {
+                        //        isInsert = false;
+                        //        DispSection((ROIRectangle2)roiList2[Id][currentId], Id, currentId, out lineCoord, hwindow_final2);
 
-                            }
-                            else
-                            {
-                                DispSection((ROIRectangle2)roiList2[Id][ActiveId], Id, ActiveId, out lineCoord, hwindow_final2);
+                        //    }
+                        //    else
+                        //    {
+                        //        DispSection((ROIRectangle2)roiList2[Id][ActiveId], Id, ActiveId, out lineCoord, hwindow_final2);
 
-                            }
-                        }
+                        //    }
+                        //}
                         
                         //listBox1.SelectedItem = ActiveId;
                         HTuple ModelData = roiList2[Id][ActiveId].getModelData();
@@ -3229,24 +3229,7 @@ namespace SagensVision.VisionTool
                             hwind.viewWindow.displayHobject(cross1, "cadet blue");
                         }
 
-                        if (hwind != null)
-                        {
-                            //string[] color = { "red", "blue", "green", "lime green", "black" };
-                            if (row.Length != 0)
-                            {
-                                //Random rad = new Random();
-                                //int radi = rad.Next(4);
-                                string msg = "";
-                                foreach (var item in DicPointName[Sid])
-                                {
-                                    if (item.Value == i)
-                                    {
-                                        msg = item.Key;
-                                    }
-                                }
-                                hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
-                            }
-                        }
+                        
 
 
                         //HTuple linephi = new HTuple();
@@ -3312,15 +3295,32 @@ namespace SagensVision.VisionTool
 
                         siglePart = ArcObj;
                     }
-                   
 
+                    if (hwind != null)
+                    {
+                        //string[] color = { "red", "blue", "green", "lime green", "black" };
+                        if (row.Length != 0)
+                        {
+                            //Random rad = new Random();
+                            //int radi = rad.Next(4);
+                            string msg = "";
+                            foreach (var item in DicPointName[Sid])
+                            {
+                                if (item.Value == i)
+                                {
+                                    msg = item.Key;
+                                }
+                            }
+                            hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
+                        }
+                    }
 
 
                     //加上 x y z 偏移
                     //row = row + fParam[Sid].roiP[i].Yoffset;
                     //col = col + fParam[Sid].roiP[i].Xoffset;
 
-                  
+
                     //旋转至原图
                     //HOperatorSet.AffineTransPoint2d(homMatRotateInvert, row, col, out row, out col);
 
