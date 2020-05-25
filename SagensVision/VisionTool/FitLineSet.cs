@@ -1119,6 +1119,7 @@ namespace SagensVision.VisionTool
             {
                 return;
             }
+
             PseudoColor.GrayToPseudoColor(HeightImage, out RGBImage, true, -20, 10);
             //PseudoColor.HeightAreaToPseudoColor(HeightImage, out RGBImage, -20, 10, fParam[Id].MinZ, fParam[Id].MaxZ);
             hwindow_final2.HobjectToHimage(RGBImage);
@@ -1168,6 +1169,9 @@ namespace SagensVision.VisionTool
             //{
             //    hwindow_final1.viewWindow.displayROI(ref roiList[Id]);
             //}
+
+
+           
 
         }
 
@@ -2282,9 +2286,7 @@ namespace SagensVision.VisionTool
         {
             if (comboBox1.SelectedItem != null)
             {
-                DialogResult result = MessageBox.Show("确定需要保存当前边的参数设置吗?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                    FitLineParamSave();
+              
                 SideName = comboBox1.SelectedItem.ToString();
                 ParamPath.ParaName = SideName;
                 hwindow_final1.viewWindow.notDisplayRoi();
@@ -2294,6 +2296,13 @@ namespace SagensVision.VisionTool
 
                 ChangeSide();
 
+                if (!HeightImage.IsInitialized())
+                {
+                    return;
+                }
+                DialogResult result = MessageBox.Show("确定需要保存当前边的参数设置吗?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    FitLineParamSave();
 
                 //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 //if (File.Exists(MyGlobal.ConfigPath + SideName + ".xml"))
