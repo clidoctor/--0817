@@ -2549,6 +2549,10 @@ namespace SagensVision.VisionTool
 
         private void 删除所有ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!(MessageBox.Show("是否删除所有区域", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes))
+            {
+                return;
+            }
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             if (roiList2[Id].Count > 0)
             {
@@ -4992,10 +4996,10 @@ namespace SagensVision.VisionTool
 
         private void richTextBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (PreSelect!="")
+            int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            if (PreSelect!="" && DicPointName[SideId].Keys.Contains(PreSelect))
             {
                 richTextBox1.Focus();
-                int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 int id = DicPointName[SideId][PreSelect];
                 int fId = richTextBox1.GetFirstCharIndexFromLine(id);
                 richTextBox1.Select(fId, PreSelect.Length);
