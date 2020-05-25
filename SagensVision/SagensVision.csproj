@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B20E930F-EFC5-4110-B134-901DD4FDBBF1}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SagensVision</RootNamespace>
+    <AssemblyName>SagensVision</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>sagens.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Calibration, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\extro\Calibration-New\Calibration\bin\Debug\Calibration.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.BonusSkins.v17.1" />
+    <Reference Include="DevExpress.Data.v17.1" />
+    <Reference Include="DevExpress.Utils.v17.1" />
+    <Reference Include="DevExpress.Sparkline.v17.1.Core" />
+    <Reference Include="DevExpress.XtraBars.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v17.1" />
+    <Reference Include="DevExpress.Printing.v17.1.Core" />
+    <Reference Include="DevExpress.XtraLayout.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraNavBar.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="halcondotnet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Projects\MyHalocnWindow-0912\MyHalocnWindow\bin\Debug\halcondotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="HWindow_Tool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\extro\halcon控件\bin\Debug\HWindow_Tool.dll</HintPath>
+    </Reference>
+    <Reference Include="LookForCircleLine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\LookForCircleLine0312\LookForCircleLine\LookForCircleLine\bin\Debug\LookForCircleLine.dll</HintPath>
+    </Reference>
+    <Reference Include="Matching, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Test\Matching\Matching\bin\Debug\Matching.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SagensSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\extro\SagensSdk\SagensSdk\bin\Debug\SagensSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="SecretKey, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Projects\sdk0401\SDK模块\SagensSdk\SagensSdk\bin\Debug\SecretKey.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="txtHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\txtHelper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Communication\Communication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Communication\Communication.Designer.cs">
+      <DependentUpon>Communication.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Communication\IPControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Communication\IPControl1.Designer.cs">
+      <DependentUpon>IPControl1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Communication\TcpTest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Communication\TcpTest.Designer.cs">
+      <DependentUpon>TcpTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Frm_sql.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Data\Frm_sql.Designer.cs">
+      <DependentUpon>Frm_sql.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PseudoColor.cs" />
+    <Compile Include="Sensor\SensorSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sensor\SensorSet.Designer.cs">
+      <DependentUpon>SensorSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sensor\ShowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sensor\ShowForm.Designer.cs">
+      <DependentUpon>ShowForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sensor\ShowWindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sensor\ShowWindow.Designer.cs">
+      <DependentUpon>ShowWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SQLiteHelper.cs" />
+    <Compile Include="UserLoginIn\UserEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserLoginIn\UserEdit.Designer.cs">
+      <DependentUpon>UserEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserLoginIn\UserLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserLoginIn\UserLogin.Designer.cs">
+      <DependentUpon>UserLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\Blob.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VisionTool\Blob.Designer.cs">
+      <DependentUpon>Blob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\BlobForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\BlobForm.Designer.cs">
+      <DependentUpon>BlobForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\CalibrationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\CalibrationForm.Designer.cs">
+      <DependentUpon>CalibrationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\ClassShow3D.cs" />
+    <Compile Include="VisionTool\Display3D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VisionTool\Display3D.Designer.cs">
+      <DependentUpon>Display3D.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\FitLineSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\FitLineSet.Designer.cs">
+      <DependentUpon>FitLineSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\Fixcs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\Fixcs.Designer.cs">
+      <DependentUpon>Fixcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\LineCircleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\LineCircleForm.Designer.cs">
+      <DependentUpon>LineCircleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\OfflineFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\OfflineFrm.Designer.cs">
+      <DependentUpon>OfflineFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionTool\Show3D.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\Show3D.Designer.cs">
+      <DependentUpon>Show3D.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Communication\Communication.resx">
+      <DependentUpon>Communication.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Communication\IPControl1.resx">
+      <DependentUpon>IPControl1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Communication\TcpTest.resx">
+      <DependentUpon>TcpTest.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Frm_sql.resx">
+      <DependentUpon>Frm_sql.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Sensor\SensorSet.resx">
+      <DependentUpon>SensorSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sensor\ShowForm.resx">
+      <DependentUpon>ShowForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sensor\ShowWindow.resx">
+      <DependentUpon>ShowWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserLoginIn\UserEdit.resx">
+      <DependentUpon>UserEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserLoginIn\UserLogin.resx">
+      <DependentUpon>UserLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\Blob.resx">
+      <DependentUpon>Blob.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\BlobForm.resx">
+      <DependentUpon>BlobForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\CalibrationForm.resx">
+      <DependentUpon>CalibrationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\Display3D.resx">
+      <DependentUpon>Display3D.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\FitLineSet.resx">
+      <DependentUpon>FitLineSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\Fixcs.resx">
+      <DependentUpon>Fixcs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\LineCircleForm.resx">
+      <DependentUpon>LineCircleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\OfflineFrm.resx">
+      <DependentUpon>OfflineFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\Show3D.resx">
+      <DependentUpon>Show3D.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sagens.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
