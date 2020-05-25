@@ -178,9 +178,19 @@ namespace SagensVision.VisionTool
                     //case ROIController.EVENT_DELETED_ALL_ROIS:
                     case ROIController.EVENT_UPDATE_ROI:
                         RoiIsMoving = true;
-                        
-                        ArrayList array = roiController2.ROIList;
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+                        
+                        if (roiController2.ROIList.Count != roiList2[Id].Count)
+                        {
+                            roiList2[Id].Add(new ROIRectangle2());
+
+                            //每个区域单独设置Roi
+                            hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref roiList[Id]);
+                        }
+                        isGenSection = false;
+
+                        ArrayList array = roiController2.ROIList;
+                       
                         
                         int ActiveId = roiController2.getActiveROIIdx();
                         if (array.Count == 1)
@@ -2299,7 +2309,7 @@ namespace SagensVision.VisionTool
             //roiController.setROIShape(new ROIRectangle1());          
             //roiCount++;
         }
-        int roiId = 0;
+        bool isGenSection = false;
         private void button4_Click(object sender, EventArgs e)
         {
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
@@ -2315,12 +2325,11 @@ namespace SagensVision.VisionTool
                 return;
             }
             roiController2.setROIShape(new ROIRectangle2());
-            roiId++;
+            isGenSection = true;
+            //roiList2[Id].Add(new ROIRectangle2());
 
-            roiList2[Id].Add(new ROIRectangle2());
-          
-            //每个区域单独设置Roi
-            hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref roiList[Id]);
+            ////每个区域单独设置Roi
+            //hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref roiList[Id]);
 
         }
 
@@ -4715,6 +4724,7 @@ namespace SagensVision.VisionTool
         {
             try
             {
+                isGenSection = false;
                 richTextBox1.HideSelection = true;
                 int currentPos = richTextBox1.SelectionStart;
                 int row = richTextBox1.GetLineFromCharIndex(currentPos);
@@ -4762,7 +4772,7 @@ namespace SagensVision.VisionTool
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    
+                  
                     SelectRow();
 
                     richTextBox1.ReadOnly = true;
@@ -4806,6 +4816,7 @@ namespace SagensVision.VisionTool
             }
             try
             {
+                isGenSection = false;
                 RoiIsMoving = true;
                 isSelectOne = false;
                 string Name = richTextBox1.SelectedText.ToString();
@@ -4890,6 +4901,7 @@ namespace SagensVision.VisionTool
             catch (Exception)
             {
                 RoiIsMoving = false;
+                //Debug.WriteLine(richTextBox1.SelectedText);
                 throw;
             }
 
@@ -4998,7 +5010,7 @@ namespace SagensVision.VisionTool
         {
             int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             if (PreSelect!="" && DicPointName[SideId].Keys.Contains(PreSelect))
-            {
+            {               
                 richTextBox1.Focus();
                 int id = DicPointName[SideId][PreSelect];
                 int fId = richTextBox1.GetFirstCharIndexFromLine(id);
