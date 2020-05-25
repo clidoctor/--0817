@@ -1096,12 +1096,12 @@ namespace SagensVision.VisionTool
                 if (File.Exists(Path1 + "\\" + SideName + "H.tiff"))
                 {
                     HeightImage.Dispose();
-                    HOperatorSet.ReadImage(out HeightImage, MyGlobal.ModelPath + "\\" + SideName + "H.tiff");
+                    HOperatorSet.ReadImage(out HeightImage, Path1 + "\\" + SideName + "H.tiff");
                 }
                 if (File.Exists(Path1 + "\\" + SideName + "I.tiff"))
                 {
                     IntensityImage.Dispose();
-                    HOperatorSet.ReadImage(out IntensityImage, MyGlobal.ModelPath + "\\" + SideName + "I.tiff");
+                    HOperatorSet.ReadImage(out IntensityImage, Path1 + "\\" + SideName + "I.tiff");
                 }
 
             }
@@ -3562,13 +3562,13 @@ namespace SagensVision.VisionTool
                     switch (fParam[Sid].roiP[i].LineOrCircle)
                     {
                         case "连接段":
-                            StrLineOrCircle[i][0] = "0";
+                            StrLineOrCircle[i][0] = "0;";
                             break;
                         case "直线段":
-                            StrLineOrCircle[i][0] = "1";
+                            StrLineOrCircle[i][0] = "1;";
                             break;
                         case "圆弧段":
-                            StrLineOrCircle[i][0] = "2";
+                            StrLineOrCircle[i][0] = "2;";
                             break;
                     }
                     //for (int n = 1; n < zcoord.Length; n++)

@@ -623,6 +623,36 @@ namespace SagensSdk
         }
 
 
+        public string GenFillingImage(List<ProfileByte> _ProfileByteList, bool isUpsideDownImage, double EncoderResolution, double YResolution, out HObject Image)
+        {
+            Image = null;
+            try
+            {
+                List<ProfileByte> LAST = new List<ProfileByte>();
+                FillingRow(_ProfileByteList, isUpsideDownImage, EncoderResolution, YResolution, out LAST);
+                long Length = LAST.Count;
+                long width = LAST[0].zByte.Length;
+                byte[] imageArray = new byte[Length * width];
+                int k = 0;
+                for (int i = 0; i < Length; i++)
+                {
+                    for (int ind = 0; ind < width; ind++)
+                    {
+                        imageArray[k] = LAST[i].zByte[ind];
+                        k++;
+                    }
+                }
+                HOperatorSet.GenEmptyObj(out Image);
+                GenHalconImage(imageArray, width, Length, out Image);
+                LAST.Clear();
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return "GenFillingImage:" + ex.Message;
+            }
+        }
+
 
         #endregion
 
@@ -655,6 +685,12 @@ namespace SagensSdk
     public struct Profile
     {
         public ProfilePoint[] points;
+        public long encoder;
+    }
+    [Serializable]
+    public struct ProfileByte
+    {
+        public byte[] zByte;
         public long encoder;
     }
     public struct ProfilePoint
