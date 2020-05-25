@@ -2229,9 +2229,9 @@ namespace SagensVision.VisionTool
             ShowSection = checkBox1.Checked;
         }
         string SideName = "Side1";
-        private void button2_Click(object sender, EventArgs e)
+
+        public void FitLineParamSave()
         {
-            //simpleButton7_Click(sender, e);
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             ParamPath.ParaName = SideName;
             string Name = this.Text;
@@ -2244,7 +2244,7 @@ namespace SagensVision.VisionTool
                 hwindow_final1.viewWindow.saveROI(roiList[Id], MyGlobal.ConfigPath + SideName + "_Section.roi");
                 hwindow_final2.viewWindow.saveROI(roiList2[Id], MyGlobal.ConfigPath + SideName + "_Region.roi");
                 hwindow_final2.viewWindow.saveROI(roiList3[Id], MyGlobal.ConfigPath + SideName + "_CorrectRegion.roi");
-               
+
             }
             else
             {
@@ -2253,41 +2253,53 @@ namespace SagensVision.VisionTool
                 StaticOperate.WriteInSerializable(ParamPath.ParamDir, DicPointName[Id], 1, SideName + ".Dic", false);
                 hwindow_final1.viewWindow.saveROI(roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
                 hwindow_final2.viewWindow.saveROI(roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
-                hwindow_final2.viewWindow.saveROI(roiList3[Id], ParamPath.ParamDir + SideName + "_CorrectRegion.roi");               
+                hwindow_final2.viewWindow.saveROI(roiList3[Id], ParamPath.ParamDir + SideName + "_CorrectRegion.roi");
             }
-            
+
             StaticOperate.WriteXML(MyGlobal.flset2.intersectCoordList[Id], ParamPath.Path_Param);
             MyGlobal.flset2.Init();
             MessageBox.Show("保存成功！");
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FitLineParamSave();
+            //simpleButton7_Click(sender, e);
+
+        }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SideName = comboBox1.SelectedItem.ToString();
-            ParamPath.ParaName = SideName;
-            hwindow_final1.viewWindow.notDisplayRoi();
-            hwindow_final2.viewWindow.notDisplayRoi();
-            hwindow_final1.ClearWindow();
-            hwindow_final2.ClearWindow();
+            if (comboBox1.SelectedItem != null)
+            {
+                DialogResult result = MessageBox.Show("确定需要保存当前边的参数设置吗?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    FitLineParamSave();
+                SideName = comboBox1.SelectedItem.ToString();
+                ParamPath.ParaName = SideName;
+                hwindow_final1.viewWindow.notDisplayRoi();
+                hwindow_final2.viewWindow.notDisplayRoi();
+                hwindow_final1.ClearWindow();
+                hwindow_final2.ClearWindow();
 
-            ChangeSide();
+                ChangeSide();
 
 
-            //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            //if (File.Exists(MyGlobal.ConfigPath + SideName + ".xml"))
-            //{
-            //   fParam[Id] = (FitProfileParam)StaticOperate.ReadXML(MyGlobal.ConfigPath + SideName + ".xml", typeof(FitProfileParam));
-            //   LoadToUI(Id);
-            //}
-            //if (File.Exists(MyGlobal.ConfigPath + SideName[Id] + "_Section.roi"))
-            //{
-            //    hwindow_final1.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[Id] + "_Section.roi", out roiList[Id]);
-            //}            
-            //if (File.Exists(MyGlobal.ConfigPath + SideName[Id] + "_Region.roi"))
-            //{
-            //    hwindow_final2.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[Id] + "_Region.roi", out roiList2[Id]);
-            //}
-
+                //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+                //if (File.Exists(MyGlobal.ConfigPath + SideName + ".xml"))
+                //{
+                //   fParam[Id] = (FitProfileParam)StaticOperate.ReadXML(MyGlobal.ConfigPath + SideName + ".xml", typeof(FitProfileParam));
+                //   LoadToUI(Id);
+                //}
+                //if (File.Exists(MyGlobal.ConfigPath + SideName[Id] + "_Section.roi"))
+                //{
+                //    hwindow_final1.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[Id] + "_Section.roi", out roiList[Id]);
+                //}            
+                //if (File.Exists(MyGlobal.ConfigPath + SideName[Id] + "_Region.roi"))
+                //{
+                //    hwindow_final2.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[Id] + "_Region.roi", out roiList2[Id]);
+                //}
+            }
         }
         private void button3_Click(object sender, EventArgs e)
         {
