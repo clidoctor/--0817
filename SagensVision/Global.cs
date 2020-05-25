@@ -120,12 +120,11 @@ namespace SagensVision
 
             }
 
-            string time = System.DateTime.Now.ToString("hh_mm_ss_ffff");
-            if (!Directory.Exists(path + 1 + "_" + Count))
+            if (!Directory.Exists(path + FormMain.saveImageTime))
             {
-                Directory.CreateDirectory(path + 1 + "_" + Count);
+                Directory.CreateDirectory(path + FormMain.saveImageTime);
             }
-            string filePath = path + 1 +  "_" + Count +"\\" + Product ;
+            string filePath = path + FormMain.saveImageTime + "\\" + Product ;
             HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
 
 

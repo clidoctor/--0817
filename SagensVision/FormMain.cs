@@ -409,6 +409,10 @@ namespace SagensVision
 
 
         string[] SideName = { "Side1", "Side2", "Side3", "Side4" };
+
+        //设定图像保存路径命名，以扫描的第一条边时间为当前物料保存路径名
+        public static string saveImageTime = "";
+
         private string Run(int Station)
         {
             try
@@ -469,6 +473,9 @@ namespace SagensVision
                     //MyGlobal.hWindow_Final[Station -1].HobjectToHimage(rgbImage);
 
                     MyGlobal.hWindow_Final[Station -1].HobjectToHimage(IntensityImage);
+                    if (Station == 1)
+                        saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+
                     StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                     StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
 
@@ -1587,8 +1594,7 @@ namespace SagensVision
             //}
         }
 
-
-
+     
         private void TcpListen()
         {
             int nSent = 0;
