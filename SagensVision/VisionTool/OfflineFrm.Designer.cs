@@ -37,10 +37,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cb_runMode = new System.Windows.Forms.CheckBox();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tb_PathName = new System.Windows.Forms.TextBox();
+            this.cb_runMode = new System.Windows.Forms.CheckBox();
             this.btn_pathImport = new System.Windows.Forms.Button();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +58,7 @@
             // 
             // btn_next
             // 
-            this.btn_next.Location = new System.Drawing.Point(551, 58);
+            this.btn_next.Location = new System.Drawing.Point(451, 28);
             this.btn_next.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_next.Name = "btn_next";
             this.btn_next.Size = new System.Drawing.Size(75, 28);
@@ -69,12 +69,12 @@
             // 
             // btn_run
             // 
-            this.btn_run.Location = new System.Drawing.Point(688, 377);
+            this.btn_run.Location = new System.Drawing.Point(642, 28);
             this.btn_run.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_run.Name = "btn_run";
-            this.btn_run.Size = new System.Drawing.Size(65, 49);
+            this.btn_run.Size = new System.Drawing.Size(80, 49);
             this.btn_run.TabIndex = 2;
-            this.btn_run.Text = "run";
+            this.btn_run.Text = "运行";
             this.btn_run.UseVisualStyleBackColor = true;
             this.btn_run.Click += new System.EventHandler(this.btn_run_Click);
             // 
@@ -98,7 +98,7 @@
             this.tb_checkNum.Location = new System.Drawing.Point(634, 454);
             this.tb_checkNum.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tb_checkNum.Name = "tb_checkNum";
-            this.tb_checkNum.Size = new System.Drawing.Size(132, 26);
+            this.tb_checkNum.Size = new System.Drawing.Size(119, 26);
             this.tb_checkNum.TabIndex = 10;
             // 
             // tb_FileNum
@@ -106,7 +106,7 @@
             this.tb_FileNum.Location = new System.Drawing.Point(223, 455);
             this.tb_FileNum.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tb_FileNum.Name = "tb_FileNum";
-            this.tb_FileNum.Size = new System.Drawing.Size(132, 26);
+            this.tb_FileNum.Size = new System.Drawing.Size(115, 26);
             this.tb_FileNum.TabIndex = 11;
             // 
             // label2
@@ -136,6 +136,7 @@
             this.groupBox1.Controls.Add(this.btn_pathImport);
             this.groupBox1.Controls.Add(this.btn_select);
             this.groupBox1.Controls.Add(this.btn_next);
+            this.groupBox1.Controls.Add(this.btn_run);
             this.groupBox1.Location = new System.Drawing.Point(29, 330);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
@@ -145,22 +146,22 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "操作";
             // 
+            // tb_PathName
+            // 
+            this.tb_PathName.Location = new System.Drawing.Point(194, 79);
+            this.tb_PathName.Name = "tb_PathName";
+            this.tb_PathName.Size = new System.Drawing.Size(332, 26);
+            this.tb_PathName.TabIndex = 10;
+            // 
             // cb_runMode
             // 
-            this.cb_runMode.Location = new System.Drawing.Point(428, 56);
+            this.cb_runMode.Location = new System.Drawing.Point(533, 57);
             this.cb_runMode.Margin = new System.Windows.Forms.Padding(4);
             this.cb_runMode.Name = "cb_runMode";
             this.cb_runMode.Size = new System.Drawing.Size(116, 30);
             this.cb_runMode.TabIndex = 9;
             this.cb_runMode.Text = "单次运行";
             this.cb_runMode.CheckedChanged += new System.EventHandler(this.cb_runMode_CheckedChanged);
-            // 
-            // tb_PathName
-            // 
-            this.tb_PathName.Location = new System.Drawing.Point(194, 79);
-            this.tb_PathName.Name = "tb_PathName";
-            this.tb_PathName.Size = new System.Drawing.Size(132, 26);
-            this.tb_PathName.TabIndex = 10;
             // 
             // btn_pathImport
             // 
@@ -184,7 +185,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.btn_run);
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "OfflineFrm";
