@@ -58,7 +58,7 @@
             // 
             // btn_next
             // 
-            this.btn_next.Location = new System.Drawing.Point(451, 28);
+            this.btn_next.Location = new System.Drawing.Point(505, 28);
             this.btn_next.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_next.Name = "btn_next";
             this.btn_next.Size = new System.Drawing.Size(75, 28);
@@ -155,10 +155,10 @@
             // 
             // cb_runMode
             // 
-            this.cb_runMode.Location = new System.Drawing.Point(533, 57);
+            this.cb_runMode.Location = new System.Drawing.Point(613, 86);
             this.cb_runMode.Margin = new System.Windows.Forms.Padding(4);
             this.cb_runMode.Name = "cb_runMode";
-            this.cb_runMode.Size = new System.Drawing.Size(116, 30);
+            this.cb_runMode.Size = new System.Drawing.Size(109, 30);
             this.cb_runMode.TabIndex = 9;
             this.cb_runMode.Text = "单次运行";
             this.cb_runMode.CheckedChanged += new System.EventHandler(this.cb_runMode_CheckedChanged);
