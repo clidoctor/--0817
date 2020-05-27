@@ -76,7 +76,7 @@
             this.dockPanel2_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
-            this.btn_MessageClean = new System.Windows.Forms.Button();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panelContainer1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
@@ -343,7 +343,6 @@
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar2.FloatLocation = new System.Drawing.Point(142, 211);
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.skinBarSubItem1, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barSubItem3, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem5, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem9, true),
@@ -558,11 +557,11 @@
             this.dockPanel2.Controls.Add(this.dockPanel2_Container);
             this.dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
             this.dockPanel2.ID = new System.Guid("2a08fcca-ef38-4a4b-aefa-fdffbb3950c6");
-            this.dockPanel2.Location = new System.Drawing.Point(1179, 30);
+            this.dockPanel2.Location = new System.Drawing.Point(1175, 30);
             this.dockPanel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dockPanel2.Name = "dockPanel2";
-            this.dockPanel2.OriginalSize = new System.Drawing.Size(200, 469);
-            this.dockPanel2.Size = new System.Drawing.Size(200, 787);
+            this.dockPanel2.OriginalSize = new System.Drawing.Size(204, 469);
+            this.dockPanel2.Size = new System.Drawing.Size(204, 787);
             this.dockPanel2.Text = "消息栏";
             // 
             // dockPanel2_Container
@@ -571,7 +570,7 @@
             this.dockPanel2_Container.Location = new System.Drawing.Point(7, 28);
             this.dockPanel2_Container.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(188, 754);
+            this.dockPanel2_Container.Size = new System.Drawing.Size(192, 754);
             this.dockPanel2_Container.TabIndex = 0;
             // 
             // xtraTabControl1
@@ -581,30 +580,29 @@
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(188, 754);
+            this.xtraTabControl1.Size = new System.Drawing.Size(192, 754);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
             // 
             // xtraTabPage1
             // 
-            this.xtraTabPage1.Controls.Add(this.btn_MessageClean);
+            this.xtraTabPage1.Controls.Add(this.simpleButton1);
             this.xtraTabPage1.Controls.Add(this.textBox1);
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(181, 718);
+            this.xtraTabPage1.Size = new System.Drawing.Size(185, 718);
             this.xtraTabPage1.Text = "工位信息";
             // 
-            // btn_MessageClean
+            // simpleButton1
             // 
-            this.btn_MessageClean.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_MessageClean.Location = new System.Drawing.Point(0, 690);
-            this.btn_MessageClean.Name = "btn_MessageClean";
-            this.btn_MessageClean.Size = new System.Drawing.Size(181, 28);
-            this.btn_MessageClean.TabIndex = 1;
-            this.btn_MessageClean.Text = "消息栏手动清除";
-            this.btn_MessageClean.UseVisualStyleBackColor = true;
-            this.btn_MessageClean.Click += new System.EventHandler(this.btn_MessageClean_Click);
+            this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.simpleButton1.Location = new System.Drawing.Point(0, 687);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(185, 31);
+            this.simpleButton1.TabIndex = 1;
+            this.simpleButton1.Text = "消息栏信息清除";
+            this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // textBox1
             // 
@@ -615,7 +613,7 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(179, 680);
+            this.textBox1.Size = new System.Drawing.Size(183, 680);
             this.textBox1.TabIndex = 0;
             // 
             // panelContainer1
@@ -863,7 +861,7 @@
             this.dockPanel8_Container.Controls.Add(this.panel1);
             this.dockPanel8_Container.Location = new System.Drawing.Point(0, 0);
             this.dockPanel8_Container.Name = "dockPanel8_Container";
-            this.dockPanel8_Container.Size = new System.Drawing.Size(987, 765);
+            this.dockPanel8_Container.Size = new System.Drawing.Size(983, 765);
             this.dockPanel8_Container.TabIndex = 0;
             // 
             // panel1
@@ -872,7 +870,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(987, 765);
+            this.panel1.Size = new System.Drawing.Size(983, 765);
             this.panel1.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -894,13 +892,13 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(987, 765);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(983, 765);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label6
             // 
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(791, 0);
+            this.label6.Location = new System.Drawing.Point(787, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(193, 38);
             this.label6.TabIndex = 4;
@@ -910,9 +908,9 @@
             // label5
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(594, 0);
+            this.label5.Location = new System.Drawing.Point(591, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(191, 38);
+            this.label5.Size = new System.Drawing.Size(190, 38);
             this.label5.TabIndex = 3;
             this.label5.Text = "右边";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -920,9 +918,9 @@
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(397, 0);
+            this.label4.Location = new System.Drawing.Point(395, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(191, 38);
+            this.label4.Size = new System.Drawing.Size(190, 38);
             this.label4.TabIndex = 2;
             this.label4.Text = "轨迹";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -930,9 +928,9 @@
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(200, 0);
+            this.label3.Location = new System.Drawing.Point(199, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(191, 38);
+            this.label3.Size = new System.Drawing.Size(190, 38);
             this.label3.TabIndex = 1;
             this.label3.Text = "上边";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -942,7 +940,7 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(191, 38);
+            this.label2.Size = new System.Drawing.Size(190, 38);
             this.label2.TabIndex = 0;
             this.label2.Text = "左边";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1090,7 +1088,6 @@
         private DevExpress.XtraBars.Docking.DockPanel panelContainer1;
         private DevExpress.XtraBars.Docking.DockPanel dockPanel7;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel7_Container;
-        private System.Windows.Forms.Button btn_MessageClean;
         private DevExpress.XtraBars.Docking.DockPanel dockPanel8;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel8_Container;
         private System.Windows.Forms.Panel panel1;
@@ -1102,6 +1099,7 @@
         private System.Windows.Forms.Label label2;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup documentGroup1;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.Document document4;
+        private DevExpress.XtraEditors.SimpleButton simpleButton1;
     }
 }
 

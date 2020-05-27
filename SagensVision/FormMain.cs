@@ -2400,7 +2400,7 @@ namespace SagensVision
 
         }
 
-        private void btn_MessageClean_Click(object sender, EventArgs e)
+        private void simpleButton1_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
         }
