@@ -700,6 +700,11 @@ namespace SagensVision.VisionTool
         {
             MyGlobal.GoSDK.EnableProfle = true;
             string error = "";
+            if (!MyGlobal.GoSDK.IsConnected(ref error))
+            {
+                MessageBox.Show("请先连接Sensor!");
+                return;
+            }
             bool ok = MyGlobal.GoSDK.Start(ref error);
             if (ok != true)
             {

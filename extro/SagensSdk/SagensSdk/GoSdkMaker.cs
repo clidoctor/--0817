@@ -36,6 +36,7 @@ namespace SagensSdk
         IntPtr go_sensor = IntPtr.Zero;
         IntPtr go_setuo = IntPtr.Zero;
         IntPtr Setup = IntPtr.Zero;
+        IntPtr go_role = IntPtr.Zero;
         public DataContext context = new DataContext();
 
         address addr = new address();
@@ -95,7 +96,9 @@ namespace SagensSdk
 
                
                 Setup = GoSdkWrapper.GoSensor_Setup(go_sensor);
-
+                zRange = GoSdkWrapper.GoSetup_ActiveAreaHeight(Setup, GoRole.GO_ROLE_MAIN);
+                z_byte_resolution = 255 / zRange;
+                zStart = GoSdkWrapper.GoSetup_ActiveAreaZ(Setup, GoRole.GO_ROLE_MAIN);
 
                 ondatatype = new onDataType(OnData);
                 state = GoSdkWrapper.GoSystem_SetDataHandler(go_system, ondatatype, context);
@@ -209,6 +212,9 @@ namespace SagensSdk
                         float[] surfaceData = new float[surfaceWidth * surfaceHeight];
                         float[] surfaceDataX = new float[surfaceWidth * surfaceHeight];
                         float[] surfaceDataY = new float[surfaceWidth * surfaceHeight];
+                        byte[] surfaceDataZByte = new byte[surfaceWidth * surfaceHeight];
+
+
                         Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
                         for (int j = 0; j < surfaceHeight; j++)
                         {
@@ -217,10 +223,21 @@ namespace SagensSdk
                                 surfaceData[j*surfaceWidth +k ] = surfacePoints[j * surfaceWidth + k] == -32768 ? -100 : (float)(ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]);
                                 surfaceDataX[j * surfaceWidth + k] = (float)(ctx.xOffset + ctx.xResolution * k);
                                 surfaceDataY[j * surfaceWidth + k] = (float)(ctx.yOffset + ctx.yResolution * j);
-
+                                if (IsRecSurfaceDataZByte)
+                                {
+                                    if (surfacePoints[j * surfaceWidth + k] != -32768)
+                                    {
+                                        surfaceDataZByte[j * surfaceWidth + k] = (byte)Math.Ceiling(((ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]) - zStart) * z_byte_resolution);
+                                    }
+                                    else
+                                    {
+                                        surfaceDataZByte[j * surfaceWidth + k] = 0;
+                                    }
+                                }
                             }
                         }
 
+                        this.SurfaceDataZByte = surfaceDataZByte;
                         this.surfaceDataX = surfaceDataX;
                         this.surfaceDataY = surfaceDataY;
                         this.SurfaceDataZ = surfaceData;
@@ -477,6 +494,13 @@ namespace SagensSdk
             }
         }
 
+        private double z_byte_resolution;
+        public double zRange { set; get; }
+        public double zStart { set; get; }
+        public Byte[] SurfaceDataZByte;
+
+        public bool IsRecSurfaceDataZByte { set; get; }
+
         /// <summary>
         /// 获取轮廓点
         /// </summary>
@@ -704,5 +728,5 @@ namespace SagensSdk
         public ushort id;
         public double value;
     }
-    
+     
 }
