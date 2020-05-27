@@ -31,12 +31,14 @@ namespace SagensVision.VisionTool
 
         List<ROI>[] roiList = new List<ROI>[4];
         List<ROI>[] roiList2 = new List<ROI>[4];
-        List<ROI>[] roiList3 = new List<ROI>[4];//校准区域
+        List<ROI> tempList = new List<ROI>();
+        //List<ROI>[] roiList3 = new List<ROI>[4];//校准区域
         HObject HeightImage = new HObject();
         HObject IntensityImage = new HObject();
         HObject RGBImage = new HObject();
         public IntersetionCoord[] intersectCoordList = new IntersetionCoord[4];
-       
+        //计算输出交点
+        IntersetionCoord intersection = new IntersetionCoord();
         public FitLineSet(string text = "")
         {
             InitializeComponent();
@@ -54,11 +56,13 @@ namespace SagensVision.VisionTool
         private void FitLineSet_Load(object sender, EventArgs e)
         {
 
-            Init();
+            //Init();
             splitContainerControl1.Panel1.Controls.Add(hwindow_final1);
             splitContainerControl1.Panel2.Controls.Add(hwindow_final2);
             hwindow_final1.Dock = DockStyle.Fill;
-            hwindow_final2.Dock = DockStyle.Fill;
+            hwindow_final2.Dock = DockStyle.Left;         
+   
+
 
             trackBarControl1.Properties.Minimum = 1;
           
@@ -68,9 +72,12 @@ namespace SagensVision.VisionTool
             roiController2 = hwindow_final2.viewWindow._roiController;
             roiController2.NotifyRCObserver = new IconicDelegate(ROiMove2);
             comboBox2.SelectedIndex = 0;
+            comboBox1.SelectedIndex = 0;
             ParamPath.ParaName = comboBox1.SelectedItem.ToString();
+            CurrentSide = ParamPath.ParaName;
             hwindow_final1.viewWindow.setEditModel(false);
             hwindow_final2.viewWindow.setEditModel(false);
+            ChangeSide();
         }
 
        
@@ -180,7 +187,7 @@ namespace SagensVision.VisionTool
                         RoiIsMoving = true;
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                         
-                        if (roiController2.ROIList.Count != roiList2[Id].Count)
+                        if (/*roiController2.ROIList.Count != roiList2[Id].Count*/isGenSection)
                         {
                             roiList2[Id].Add(new ROIRectangle2());
 
@@ -243,11 +250,13 @@ namespace SagensVision.VisionTool
                         }
                         else
                         {
-                            roiList2[Id][currentId] = (ROI)array[ActiveId];
+                            
+                                roiList2[Id][currentId] = (ROI)array[ActiveId];
+                           
                         }
 
                         string key =  "L";
-                        if (fParam[Id].roiP.Count != array.Count)
+                        if (fParam[Id].roiP.Count != array.Count )
                         {
                             RoiParam RP = new RoiParam();
 
@@ -418,6 +427,8 @@ namespace SagensVision.VisionTool
         {
             try
             {
+                HWindow_Final hwnd = new HWindow_Final();
+                //HSystem.SetSystem("flush_graphic", "false");
                 string[] SideName = { "Side1", "Side2", "Side3", "Side4" };
                 string initError = "OK";
                 for (int i = 0; i < 4; i++)
@@ -425,9 +436,9 @@ namespace SagensVision.VisionTool
                     fParam[i] = new FitProfileParam();
                     roiList[i] = new List<ROI>();
                     roiList2[i] = new List<ROI>();
-                    roiList3[i] = new List<ROI>();
+                    //roiList3[i] = new List<ROI>();
                     DicPointName[i] = new Dictionary<string, int>();
-                    hwindow_final2.viewWindow.genRect1(400, 400, 1000, 1000, ref roiList3[i]);
+                    //hwindow_final2.viewWindow.genRect1(400, 400, 1000, 1000, ref roiList3[i]);
                     hwindow_final2.viewWindow.notDisplayRoi();
 
                 }
@@ -455,8 +466,8 @@ namespace SagensVision.VisionTool
                         }
                         if (File.Exists(ParamPath.ParamDir + SideName[i] + "_Section.roi"))
                         {
-                            hwindow_final1.viewWindow.loadROI(ParamPath.ParamDir + SideName[i] + "_Section.roi", out roiList[i]);
-                            hwindow_final1.viewWindow.notDisplayRoi();
+                            hwnd.viewWindow.loadROI(ParamPath.ParamDir + SideName[i] + "_Section.roi", out roiList[i]);
+                            hwnd.viewWindow.notDisplayRoi();
                         }
                         else
                         {
@@ -465,8 +476,8 @@ namespace SagensVision.VisionTool
                         }
                         if (File.Exists(ParamPath.ParamDir + SideName[i] + "_Region.roi"))
                         {
-                            hwindow_final2.viewWindow.loadROI(ParamPath.ParamDir + SideName[i] + "_Region.roi", out roiList2[i]);
-                            hwindow_final2.viewWindow.notDisplayRoi();
+                            hwnd.viewWindow.loadROI(ParamPath.ParamDir + SideName[i] + "_Region.roi", out roiList2[i]);
+                            hwnd.viewWindow.notDisplayRoi();
                         }
                         else
                         {
@@ -474,16 +485,16 @@ namespace SagensVision.VisionTool
                             continue;
                         }
                         //_CorrectRegion
-                        if (File.Exists(ParamPath.ParamDir + SideName[i] + "_CorrectRegion.roi"))
-                        {
-                            hwindow_final1.viewWindow.loadROI(ParamPath.ParamDir + SideName[i] + "_CorrectRegion.roi", out roiList3[i]);
-                            hwindow_final2.viewWindow.notDisplayRoi();
-                        }
-                        else
-                        {
-                            initError = "校准区域加载失败";
-                            continue;
-                        }
+                        //if (File.Exists(ParamPath.ParamDir + SideName[i] + "_CorrectRegion.roi"))
+                        //{
+                        //    hwindow_final1.viewWindow.loadROI(ParamPath.ParamDir + SideName[i] + "_CorrectRegion.roi", out roiList3[i]);
+                        //    hwindow_final2.viewWindow.notDisplayRoi();
+                        //}
+                        //else
+                        //{
+                        //    initError = "校准区域加载失败";
+                        //    continue;
+                        //}
                         if (File.Exists(ParamPath.ParamDir + 1.ToString() + "_" + SideName[i] + ".Dic"))
                         {
                             //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[i], 1, SideName + ".Dic", false);
@@ -520,8 +531,8 @@ namespace SagensVision.VisionTool
                         }
                         if (File.Exists(MyGlobal.ConfigPath + SideName[i] + "_Section.roi"))
                         {
-                            hwindow_final1.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[i] + "_Section.roi", out roiList[i]);
-                            hwindow_final1.viewWindow.notDisplayRoi();
+                            hwnd.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[i] + "_Section.roi", out roiList[i]);
+                            hwnd.viewWindow.notDisplayRoi();
                         }
                         else
                         {
@@ -530,8 +541,8 @@ namespace SagensVision.VisionTool
                         }
                         if (File.Exists(MyGlobal.ConfigPath + SideName[i] + "_Region.roi"))
                         {
-                            hwindow_final2.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[i] + "_Region.roi", out roiList2[i]);
-                            hwindow_final2.viewWindow.notDisplayRoi();
+                            hwnd.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[i] + "_Region.roi", out roiList2[i]);
+                            hwnd.viewWindow.notDisplayRoi();
                         }
                         else
                         {
@@ -539,16 +550,16 @@ namespace SagensVision.VisionTool
                             continue;
                         }
                         //_CorrectRegion
-                        if (File.Exists(MyGlobal.ConfigPath + SideName[i] + "_CorrectRegion.roi"))
-                        {
-                            hwindow_final1.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[i] + "_CorrectRegion.roi", out roiList3[i]);
-                            hwindow_final2.viewWindow.notDisplayRoi();
-                        }
-                        else
-                        {
-                            initError = "校准区域加载失败";
-                            continue;
-                        }
+                        //if (File.Exists(MyGlobal.ConfigPath + SideName[i] + "_CorrectRegion.roi"))
+                        //{
+                        //    hwindow_final1.viewWindow.loadROI(MyGlobal.ConfigPath + SideName[i] + "_CorrectRegion.roi", out roiList3[i]);
+                        //    hwindow_final2.viewWindow.notDisplayRoi();
+                        //}
+                        //else
+                        //{
+                        //    initError = "校准区域加载失败";
+                        //    continue;
+                        //}
                         if (File.Exists(MyGlobal.ConfigPath + 1.ToString() + "_" + SideName[i] + ".Dic"))
                         {
                             //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[i], 1, SideName + ".Dic", false);
@@ -1088,6 +1099,7 @@ namespace SagensVision.VisionTool
         bool NotUseFix = false;
         private void ChangeSide()
         {
+            Init();
             textBox_Current.Text = "0";
             textBox_Total.Text = "0";
 
@@ -1096,42 +1108,45 @@ namespace SagensVision.VisionTool
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
 
             string Path1 = SelectedPath == "" ? MyGlobal.ModelPath + "\\" : SelectedPath;
-            if (MyGlobal.ImageMulti.Count >= Id + 1)
+            if (MyGlobal.ImageMulti.Count >= Id + 1 && SelectedPath == "")
             {
                 HeightImage = MyGlobal.ImageMulti[Id][1];
+                IntensityImage = MyGlobal.ImageMulti[Id][0];
             }
             else
             {
                 //读取指定路径下或选择路径下图片
                 if (File.Exists(Path1 + "\\" + SideName + "H.tiff"))
                 {
-                    HeightImage.Dispose();
+                    //HeightImage.Dispose();
                     HOperatorSet.ReadImage(out HeightImage, Path1 + "\\" + SideName + "H.tiff");
                 }
                 if (File.Exists(Path1 + "\\" + SideName + "I.tiff"))
                 {
-                    IntensityImage.Dispose();
+                    //IntensityImage.Dispose();
                     HOperatorSet.ReadImage(out IntensityImage, Path1 + "\\" + SideName + "I.tiff");
                 }
-
             }
+
             if (!HeightImage.IsInitialized())
             {
                 return;
             }
 
-            PseudoColor.GrayToPseudoColor(HeightImage, out RGBImage, true, -20, 10);
+            //PseudoColor.GrayToPseudoColor(HeightImage, out RGBImage, true, -20, 10);
             //PseudoColor.HeightAreaToPseudoColor(HeightImage, out RGBImage, -20, 10, fParam[Id].MinZ, fParam[Id].MaxZ);
-            hwindow_final2.HobjectToHimage(RGBImage);
+            //hwindow_final2.HobjectToHimage(RGBImage);
+            hwindow_final2.HobjectToHimage(IntensityImage);
             GC.Collect();
 
-            IntersetionCoord intersect = new IntersetionCoord();
-            string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect);
-            HTuple homMaxFix = new HTuple();
-            HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                0, intersect.Row, intersect.Col, 0, out homMaxFix);          
+                     
             if (!NotUseFix &&this.Text!="Fix")
             {
+                IntersetionCoord intersect = new IntersetionCoord();
+                string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect, hwindow_final2, true);
+                HTuple homMaxFix = new HTuple();
+                HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
+                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
                 {
@@ -1144,6 +1159,7 @@ namespace SagensVision.VisionTool
                         hwindow_final2.viewWindow.genRect2(tempR, tempC, orignal[2], orignal[3], orignal[4], ref temproi);
                         roiList2[Id][i] = temproi[0];
                     }
+                    
                 }
             }
             else
@@ -1171,7 +1187,7 @@ namespace SagensVision.VisionTool
             //}
 
 
-           
+            //HSystem.SetSystem("flush_graphic", "true");
 
         }
 
@@ -2257,7 +2273,7 @@ namespace SagensVision.VisionTool
                 StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[Id], 1, SideName + ".Dic", false);
                 hwindow_final1.viewWindow.saveROI(roiList[Id], MyGlobal.ConfigPath + SideName + "_Section.roi");
                 hwindow_final2.viewWindow.saveROI(roiList2[Id], MyGlobal.ConfigPath + SideName + "_Region.roi");
-                hwindow_final2.viewWindow.saveROI(roiList3[Id], MyGlobal.ConfigPath + SideName + "_CorrectRegion.roi");
+                //hwindow_final2.viewWindow.saveROI(roiList3[Id], MyGlobal.ConfigPath + SideName + "_CorrectRegion.roi");
 
             }
             else
@@ -2267,12 +2283,19 @@ namespace SagensVision.VisionTool
                 StaticOperate.WriteInSerializable(ParamPath.ParamDir, DicPointName[Id], 1, SideName + ".Dic", false);
                 hwindow_final1.viewWindow.saveROI(roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
                 hwindow_final2.viewWindow.saveROI(roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
-                hwindow_final2.viewWindow.saveROI(roiList3[Id], ParamPath.ParamDir + SideName + "_CorrectRegion.roi");
+                //hwindow_final2.viewWindow.saveROI(roiList3[Id], ParamPath.ParamDir + SideName + "_CorrectRegion.roi");
             }
-
-            StaticOperate.WriteXML(MyGlobal.flset2.intersectCoordList[Id], ParamPath.Path_Param);
-            MyGlobal.flset2.Init();
+          
             MessageBox.Show("保存成功！");
+            isSave = true;
+            if (intersection.Row == 0 && intersection.Col==0)
+            {
+                return;
+            }
+            MyGlobal.flset2.intersectCoordList[Id] = intersection;
+            StaticOperate.WriteXML(MyGlobal.flset2.intersectCoordList[Id], ParamPath.Path_Param);
+            //MyGlobal.flset2.Init();
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -2282,11 +2305,37 @@ namespace SagensVision.VisionTool
 
         }
 
+        string CurrentSide = "";
+        bool isSave = false;
+        bool NoChange = false;
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (NoChange || comboBox1.SelectedItem.ToString() == CurrentSide)
+            {
+                NoChange = false;
+                return;
+            }
             if (comboBox1.SelectedItem != null)
             {
-              
+                if (isSave)
+                {
+                    isSave = false;
+                    return;
+                }
+                DialogResult result = MessageBox.Show("当前参数未保存，是否切换?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result != DialogResult.Yes)
+                {
+                   
+                    if (comboBox1.SelectedItem.ToString() != CurrentSide)
+                    {
+                        NoChange = true;
+                        comboBox1.SelectedItem = CurrentSide;
+                    }
+                   
+                    return;
+                }
+
                 SideName = comboBox1.SelectedItem.ToString();
                 ParamPath.ParaName = SideName;
                 hwindow_final1.viewWindow.notDisplayRoi();
@@ -2300,10 +2349,10 @@ namespace SagensVision.VisionTool
                 {
                     return;
                 }
-                DialogResult result = MessageBox.Show("确定需要保存当前边的参数设置吗?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                    FitLineParamSave();
-
+                
+                
+                CurrentSide = comboBox1.SelectedItem.ToString();
+               
                 //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 //if (File.Exists(MyGlobal.ConfigPath + SideName + ".xml"))
                 //{
@@ -2403,18 +2452,69 @@ namespace SagensVision.VisionTool
             }
         }
 
+        private void DispSection___1(ROIRectangle2 roi, int SideID, int RoiId, out HTuple[] LineCoord, HWindow_Final hwnd = null)
+        {
+            LineCoord = new HTuple[1];
+            try
+            {
+                HTuple RoiCoord = roi.getModelData();
+
+                double cosa = Math.Cos(RoiCoord[2].D);
+                double sina = Math.Sin(RoiCoord[2].D);
+                double r1 = RoiCoord[0].D + RoiCoord[4].D * cosa;
+                double c1 = RoiCoord[1].D - RoiCoord[4].D * sina;
+                double r2 = RoiCoord[0].D - RoiCoord[4].D * cosa;
+                double c2 = RoiCoord[1].D + RoiCoord[4].D * sina;
+
+                //
+
+                int Num = fParam[SideID].roiP[RoiId].NumOfSection;
+                LineCoord = new HTuple[Num];
+                double Average = RoiCoord[4].D * 2 / (Num + 1);
+                for (int i = 0; i < Num; i++)
+                {
+                    LineCoord[i] = new HTuple();
+                    double AverageLen = Average * (i + 1);
+                    double Row2 = r2 + AverageLen * cosa + RoiCoord[3].D * sina;
+                    double Col2 = c2 - AverageLen * sina + RoiCoord[3].D * cosa;
+
+                    double Row1 = r2 + AverageLen * cosa - RoiCoord[3].D * sina;
+                    double Col1 = c2 - AverageLen * sina - RoiCoord[3].D * cosa;
+
+                    LineCoord[i] = LineCoord[i].TupleConcat(Row1).TupleConcat(Col1).TupleConcat(Row2).TupleConcat(Col2).TupleConcat(RoiCoord[2].D);
+                    if (hwnd != null)
+                    {
+                        HObject Line = new HObject();
+                        HOperatorSet.GenRegionLine(out Line, LineCoord[i][0], LineCoord[i][1], LineCoord[i][2], LineCoord[i][3]);
+                        HOperatorSet.SetColor(hwindow_final2.HWindowHalconID, "red");
+                        HOperatorSet.DispObj(Line, hwindow_final2.HWindowHalconID);
+                    }
+
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
         string GenSection(HObject Image, HTuple lineCoord, out HTuple row, out HTuple col, out HTuple IgnorePt)
         {
             row = new HTuple(); col = new HTuple();  IgnorePt = 0;
             try
             {
-
+                HTuple width, height, lessId1, lessId2;
+                HOperatorSet.GetImageSize(Image, out width, out height);
+          
                 HObject Rline; HObject Rline1 = new HObject();
                 HOperatorSet.GenRegionLine(out Rline, lineCoord[0], lineCoord[1], lineCoord[2], lineCoord[3]);
-
                 HOperatorSet.GenContourRegionXld(Rline, out Rline1, "center");
                 HOperatorSet.GetContourXld(Rline1, out row, out col);
-
+                
                 if (row.Length == 0)
                 {
                     IgnorePt = 1;
@@ -2453,15 +2553,14 @@ namespace SagensVision.VisionTool
 
 
 
-                HTuple width, height, lessId1, lessId2;
-                HOperatorSet.GetImageSize(Image, out width, out height);
+                
                 HOperatorSet.TupleLessElem(row, height, out lessId1);
                 HOperatorSet.TupleFind(lessId1, 1, out lessId1);
                 if (lessId1.D == -1)
                 {
                     IgnorePt = 1;
-                    row = -999;
-                    col = -999;
+                    row = 0;
+                    col = 0;
                     return "GenSection截面在图像之外";
                 }
 
@@ -2472,8 +2571,8 @@ namespace SagensVision.VisionTool
                 if (lessId2.D == -1)
                 {
                     IgnorePt = 1;
-                    row = -999;
-                    col = -999;
+                    row = 0;
+                    col = 0;
                     return "GenSection截面在图像之外";
                 }
 
@@ -2512,6 +2611,7 @@ namespace SagensVision.VisionTool
                 //ConstImage.Dispose();
 
                 //Contour.Dispose();
+             
                 return "OK";
             }
             catch (Exception ex)
@@ -2620,7 +2720,7 @@ namespace SagensVision.VisionTool
                 hwindow_final2.viewWindow.selectROI(id);
 
                 textBox_Num.Text = fParam[SideId].roiP[id].NumOfSection.ToString();
-                HTuple[] lineCoord = new HTuple[1];
+                HTuple[] lineCoord = new HTuple[1];         
                 DispSection((ROIRectangle2)roiList2[SideId][id], SideId, id, out lineCoord, hwindow_final2);
                 int pID = 1;
                 for (int i = 0; i < id; i++)
@@ -2869,7 +2969,11 @@ namespace SagensVision.VisionTool
                 {
                     for (int j = 0; j < profileNum[i]; j++)
                     {
-                        total++;
+                        if (Rarray[i][j] != 0 && Carray[i][j] != 0)
+                        {
+                            total++;
+                        }
+                          
                     }
                 }
                 Rarray1 = new double[total];
@@ -2880,9 +2984,11 @@ namespace SagensVision.VisionTool
                 {
                     for (int j = 0; j < profileNum[i]; j++)
                     {
-                        Rarray1[tt] = Rarray[i][j];
-                        Carray1[tt] = Carray[i][j];
-                        tt++;
+                        
+                            Rarray1[tt] = Rarray[i][j];
+                            Carray1[tt] = Carray[i][j];
+                            tt++;
+                        
                     }
                 }
 
@@ -2893,12 +2999,16 @@ namespace SagensVision.VisionTool
               
                 for (int i = 0; i < profileNum.Length; i++)
                 {
-                   
-                        HTuple z = Zpoint.TupleSelectRange(m, m + profileNum[i] - 1);
-                        HTuple r = HRarray.TupleSelectRange(m, m + profileNum[i] - 1);
-                        HTuple c = HCarray.TupleSelectRange(m, m + profileNum[i] - 1);
+                    if (profileNum[i]==0)
+                    {
+                        continue ;
+                    }
+                    HTuple z = Zpoint.TupleSelectRange(m, m + profileNum[i] - 1);
+                    HTuple r = HRarray.TupleSelectRange(m, m + profileNum[i] - 1);
+                    HTuple c = HCarray.TupleSelectRange(m, m + profileNum[i] - 1);
 
-                        HTuple EqId = new HTuple();
+
+                    HTuple EqId = new HTuple();
                         HOperatorSet.TupleGreaterElem(z, -10, out EqId);
                         HOperatorSet.TupleFind(EqId, 1, out EqId);
                         if (EqId.D != -1)
@@ -2943,7 +3053,8 @@ namespace SagensVision.VisionTool
                 return;
             }
             int Id = Convert.ToInt32(SideName.Substring(4, 1));
-
+            HObject image = new HObject();
+            HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
             GenProfileCoord(Id, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore);
 
 
@@ -2971,7 +3082,7 @@ namespace SagensVision.VisionTool
         {
             try
             {
-                if (!RGBImage.IsInitialized() || !HeightImage.IsInitialized())
+                if (/*!RGBImage.IsInitialized() || */!HeightImage.IsInitialized())
                 {
                     return;
                 }
@@ -2979,11 +3090,13 @@ namespace SagensVision.VisionTool
                 int Id = Convert.ToInt32(SideName.Substring(4, 1));
                 double[][] Rcoord, Ccoord, Zcoord; string[][] Str;
                 hwindow_final2.ClearWindow();
-                hwindow_final2.HobjectToHimage(RGBImage);
+                //hwindow_final2.HobjectToHimage(RGBImage);
+                hwindow_final2.HobjectToHimage(IntensityImage);
                 if (this.Text == "Fix")
                 {
-                    //计算输出交点
-                    IntersetionCoord intersection = new IntersetionCoord();
+                    //HObject image = new HObject();
+                    //HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
+
                     string ok1 = MyGlobal.flset2.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2,true);
 
                     //string ok1 = FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
@@ -2992,11 +3105,11 @@ namespace SagensVision.VisionTool
                     {
                         MessageBox.Show(ok1);
                     }
-                    else
-                    {
-                        intersectCoordList[Id - 1] = intersection;
+                    //else
+                    //{
+                    //    intersectCoordList[Id - 1] = intersection;
 
-                    }
+                    //}
                 }
                 else
                 {
@@ -3098,7 +3211,8 @@ namespace SagensVision.VisionTool
             //将图像转正‘
             int Sid = SideId - 1;
             HObject ReduceImage = new HObject(); HObject Rec = new HObject();
-            HTuple Coor = roiList3[Sid][0].getModelData();
+            //HTuple Coor = roiList3[Sid][0].getModelData();
+            HTuple Coor = new HTuple();
             HOperatorSet.GenRectangle1(out Rec, Coor[0], Coor[1], Coor[2], Coor[3]);
             HOperatorSet.ReduceDomain(IntensityImage, Rec, out ReduceImage);
             HOperatorSet.Threshold(ReduceImage, out Rec, 5, 255);
@@ -3153,7 +3267,8 @@ namespace SagensVision.VisionTool
             try
             {
                 int Sid = SideId - 1;
-
+                HObject image = new HObject();
+                HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore,homMatFix);
                 if (ok1 != "OK")
                 {
@@ -3194,14 +3309,28 @@ namespace SagensVision.VisionTool
                         col = col.TupleConcat(col1);
                         Num++;
                     }
+
+                    string msg = "";
+                    if (hwind != null)
+                    {
+                        if (row.Length != 0)
+                        {                            
+                            foreach (var item in DicPointName[Sid])
+                            {
+                                if (item.Value == i)
+                                {
+                                    msg = item.Key;
+                                }
+                            }
+                        }
+                    }
+
                     if (row.Length<2)
                     {
-                        return "区域"+ (i+1).ToString() +"拟合点数过少";
+                        return "区域"+ msg + "拟合点数过少";
                     }
                     
                     
-
-
                     Add = Num;
                     if (row.Length == 0) //区域之外
                     {
@@ -3211,8 +3340,9 @@ namespace SagensVision.VisionTool
                     if (hwind != null && debug)
                     {
                         HObject Cross = new HObject();
-                        HOperatorSet.GenCrossContourXld(out Cross, row, col, 10, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "yellow");
+                        HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
+                       
+                        hwind.viewWindow.displayHobject(Cross, "green", false,5);
 
                     }
                     //直线段拟合
@@ -3226,16 +3356,34 @@ namespace SagensVision.VisionTool
                         HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
                         HOperatorSet.FitLineContourXld(line, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
                         HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
+                        HTuple lineAngle;
+                        HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
 
+                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
 
-                        row = (Rowbg.D + RowEd.D) / 2 + fParam[Sid].roiP[i].Yoffset;
-                        col = (Colbg.D + ColEd.D) / 2 + fParam[Sid].roiP[i].Xoffset;
+                        if (Xresolution == 0)
+                        {
+                            return "XResolution=0";
+                        }
+                        double DisX = fParam[Sid].roiP[i].Yoffset * Math.Sin(lineAngle.D) / Xresolution;
+                        double DisY = fParam[Sid].roiP[i].Yoffset * Math.Cos(lineAngle.D) / Yresolution;
+                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                        if (fParam[Sid].roiP[i].Yoffset < 0)
+                        {
+                            D = -D;
+                        }
+                        double distR = D * Math.Cos(lineAngle.D);
+                        double distC = D * Math.Sin(lineAngle.D);
+
+                        row = (Rowbg.D + RowEd.D) / 2 - distR;
+                        col = (Colbg.D + ColEd.D) / 2 - distC;
                       
                         if (hwind!=null)
                         {
                             HObject cross1 = new HObject();
                             HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                            hwind.viewWindow.displayHobject(cross1, "cadet blue");
+                            hwind.viewWindow.displayHobject(cross1, "cadet blue",false,5);
                         }
 
                         
@@ -3287,9 +3435,31 @@ namespace SagensVision.VisionTool
                         HTuple Rb, Cb, Re,Ce, Nr1, Nc1, Ptorder;
                         HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, 0, 5, 2, out Rb, out Cb, out Re, out Ce, out Nr1, out Nc1, out Ptorder);
                         HOperatorSet.GenContourPolygonXld(out ArcObj, Rb.TupleConcat(Re), Cb.TupleConcat(Ce));
-                        row = (Rb.D + Re.D) / 2 + fParam[Sid].roiP[i].Yoffset;
-                        col = (Cb.D + Ce.D) / 2 + fParam[Sid].roiP[i].Xoffset;
-     
+
+                        HTuple lineAngle;
+                        HOperatorSet.AngleLx(Rb, Cb, Re, Ce, out lineAngle);
+                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+
+                        if (Xresolution == 0)
+                        {
+                            return "XResolution=0";
+                        }
+                        double DisX = fParam[Sid].roiP[i].Yoffset * Math.Sin(lineAngle.D) / Xresolution;
+                        double DisY = fParam[Sid].roiP[i].Yoffset * Math.Cos(lineAngle.D) / Yresolution;                        
+                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                        if (fParam[Sid].roiP[i].Yoffset < 0)
+                        {
+                            D = -D;
+                        }
+                        double distR = D * Math.Cos(lineAngle.D);
+                        double distC = D * Math.Sin(lineAngle.D);
+
+                        row = (Rb.D + Re.D) / 2 - distR;
+                        col = (Cb.D + Ce.D) / 2 - distC;
+                        //row = (Rb.D + Re.D) / 2 + fParam[Sid].roiP[i].Yoffset;
+                        //col = (Cb.D + Ce.D) / 2 + fParam[Sid].roiP[i].Xoffset;
+
                         if (hwind != null)
                         {
                             HObject CrossArc = new HObject();
@@ -3298,32 +3468,15 @@ namespace SagensVision.VisionTool
                         }
                         if (hwind != null && debug)
                         {
+                           
                             hwind.viewWindow.displayHobject(ArcObj, "red");
 
                         }
 
                         siglePart = ArcObj;
                     }
-
-                    if (hwind != null)
-                    {
-                        //string[] color = { "red", "blue", "green", "lime green", "black" };
-                        if (row.Length != 0)
-                        {
-                            //Random rad = new Random();
-                            //int radi = rad.Next(4);
-                            string msg = "";
-                            foreach (var item in DicPointName[Sid])
-                            {
-                                if (item.Value == i)
-                                {
-                                    msg = item.Key;
-                                }
-                            }
-                            hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
-                        }
-                    }
-
+                    
+                    hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
 
                     //加上 x y z 偏移
                     //row = row + fParam[Sid].roiP[i].Yoffset;
@@ -3347,7 +3500,7 @@ namespace SagensVision.VisionTool
                     catch (Exception)
                     {
 
-                        return "偏移点设置在图像之外";
+                        return "偏移点"+ msg +"设置在图像之外";
                     }
                     //
                     
@@ -3664,7 +3817,8 @@ namespace SagensVision.VisionTool
             try
             {
                 int Sid = SideId - 1;
-
+                HObject image = new HObject();
+                HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore, null);
                 if (ok1 != "OK")
                 {
@@ -3702,6 +3856,7 @@ namespace SagensVision.VisionTool
                         col = col.TupleConcat(col1);
                         Num++;
                     }
+                    Add = Num;
                     if (row.Length < 2)
                     {
                         //return "区域" + (i + 1).ToString() + "拟合点数过少";
@@ -3710,7 +3865,7 @@ namespace SagensVision.VisionTool
                     }
                    
 
-                    Add = Num;
+                  
                     if (row.Length == 0) //区域之外
                     {
                         continue;
@@ -3719,8 +3874,8 @@ namespace SagensVision.VisionTool
                     if (hwind != null && debug)
                     {
                         HObject Cross = new HObject();
-                        HOperatorSet.GenCrossContourXld(out Cross, row, col, 10, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "yellow");
+                        HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
+                        hwind.viewWindow.displayHobject(Cross, "green",false,5);
 
                     }
                     //直线段拟合
@@ -3962,7 +4117,8 @@ namespace SagensVision.VisionTool
             try
             {
                 int Sid = SideId - 1;
-
+                HObject image = new HObject();
+                HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore, homMatFix);
                 if (ok1 != "OK")
                 {
@@ -4222,7 +4378,7 @@ namespace SagensVision.VisionTool
                         {
                             Debug.WriteLine("k" + k);
                         }
-                        Debug.WriteLine("k" + k);
+                        //Debug.WriteLine("k" + k);
 
 
                         int id = (int)(Div * k);
@@ -4622,15 +4778,22 @@ namespace SagensVision.VisionTool
             {
                 hwindow_final2.Image.Dispose();
                 hwindow_final2.ClearWindow();
-            }        
-            //HeightImage.Dispose();
-            //IntensityImage.Dispose();
+            }
+            //if (SelectedPath!="")
+            //{
+            //    SelectedPath = "";
+            //    HeightImage.Dispose();
+            //    IntensityImage.Dispose();
+            //}
+
             RGBImage.Dispose();
             checkBox1.Checked = false;
             checkBox2.Checked = false;
             checkBox4.Checked = false;
             checkBoxRoi.Checked = false;
-
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
+            CurrentSide = "";
         }
         bool isInsert = false;
         private void 插入ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4848,14 +5011,37 @@ namespace SagensVision.VisionTool
                 hwindow_final2.viewWindow.notDisplayRoi();
                 if (roiList2[SideId].Count > 0)
                 {
-                    hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                    //if (SelectAll)
+                    //{
+                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                        hwindow_final2.viewWindow.selectROI(id);
+                    //}
+                    //else
+                    //{
+                    //    tempList.Clear();
+                    //    for (int i = 0; i < roiList2[SideId].Count; i++)
+                    //    {
+                    //        ROI temp = (ROI)roiList2[SideId][i];
+                    //        tempList.Add(temp);
+                    //    }
+                    //    hwindow_final2.viewWindow.displayROI(ref tempList, id);
+                    //}
+                  
                 }
 
-                hwindow_final2.viewWindow.selectROI(id);
+                
 
                 textBox_Num.Text = fParam[SideId].roiP[id].NumOfSection.ToString();
                 HTuple[] lineCoord = new HTuple[1];
-                DispSection((ROIRectangle2)roiList2[SideId][id], SideId, id, out lineCoord, hwindow_final2);
+                //if (SelectAll)
+                //{
+                    DispSection((ROIRectangle2)roiList2[SideId][id], SideId, id, out lineCoord, hwindow_final2);
+
+                //}
+                //else
+                //{
+                //    DispSection((ROIRectangle2)tempList[0], SideId, id, out lineCoord, hwindow_final2);
+                //}
                 int pID = 1;
                 for (int i = 0; i < id; i++)
                 {

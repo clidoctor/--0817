@@ -48,7 +48,6 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
@@ -73,23 +72,23 @@
             this.插入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.重命名ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxRoi = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.textBox_OffsetX = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.textBox_OffsetZ = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.textBox_OffsetY = new System.Windows.Forms.TextBox();
             this.textBox_SingleOffset = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.textBox_IndStart1 = new System.Windows.Forms.TextBox();
+            this.textBox_OffsetY = new System.Windows.Forms.TextBox();
             this.textBox_IndEnd2 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton13 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton12 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton11 = new DevExpress.XtraEditors.SimpleButton();
@@ -325,7 +324,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.simpleButton6);
             this.panel1.Controls.Add(this.simpleButton3);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.simpleButton4);
@@ -340,15 +338,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1013, 62);
             this.panel1.TabIndex = 2;
-            // 
-            // simpleButton6
-            // 
-            this.simpleButton6.Location = new System.Drawing.Point(825, 11);
-            this.simpleButton6.Name = "simpleButton6";
-            this.simpleButton6.Size = new System.Drawing.Size(75, 23);
-            this.simpleButton6.TabIndex = 14;
-            this.simpleButton6.Text = "保存参数";
-            this.simpleButton6.Click += new System.EventHandler(this.button2_Click);
             // 
             // simpleButton3
             // 
@@ -440,6 +429,7 @@
             this.simpleButton1.Size = new System.Drawing.Size(75, 23);
             this.simpleButton1.TabIndex = 2;
             this.simpleButton1.Text = "加载数据";
+            this.simpleButton1.Visible = false;
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
             // 
             // panel2
@@ -468,9 +458,11 @@
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.LightGray;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
             this.xtraTabPage1.Controls.Add(this.checkBox4);
+            this.xtraTabPage1.Controls.Add(this.textBox_OffsetX);
             this.xtraTabPage1.Controls.Add(this.groupBox6);
             this.xtraTabPage1.Controls.Add(this.richTextBox1);
             this.xtraTabPage1.Controls.Add(this.checkBoxRoi);
+            this.xtraTabPage1.Controls.Add(this.label15);
             this.xtraTabPage1.Controls.Add(this.groupBox5);
             this.xtraTabPage1.Controls.Add(this.textBox_IndStart1);
             this.xtraTabPage1.Controls.Add(this.textBox_IndEnd2);
@@ -598,6 +590,15 @@
             this.checkBoxRoi.UseVisualStyleBackColor = true;
             this.checkBoxRoi.CheckedChanged += new System.EventHandler(this.checkBoxRoi_CheckedChanged);
             // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(939, 322);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(24, 22);
+            this.label15.TabIndex = 37;
+            this.label15.Text = "pix";
+            this.label15.Visible = false;
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.panel3);
@@ -612,17 +613,14 @@
             // 
             this.panel3.AutoScroll = true;
             this.panel3.Controls.Add(this.label9);
-            this.panel3.Controls.Add(this.textBox_OffsetX);
             this.panel3.Controls.Add(this.label14);
             this.panel3.Controls.Add(this.label11);
-            this.panel3.Controls.Add(this.label15);
-            this.panel3.Controls.Add(this.label10);
             this.panel3.Controls.Add(this.textBox_OffsetZ);
             this.panel3.Controls.Add(this.label17);
-            this.panel3.Controls.Add(this.textBox_OffsetY);
             this.panel3.Controls.Add(this.textBox_SingleOffset);
             this.panel3.Controls.Add(this.label12);
             this.panel3.Controls.Add(this.label16);
+            this.panel3.Controls.Add(this.textBox_OffsetY);
             this.panel3.Location = new System.Drawing.Point(6, 19);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(254, 121);
@@ -634,52 +632,37 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(65, 22);
             this.label9.TabIndex = 28;
-            this.label9.Text = "X起点偏移";
+            this.label9.Text = "偏移";
             // 
             // textBox_OffsetX
             // 
-            this.textBox_OffsetX.Location = new System.Drawing.Point(98, 4);
+            this.textBox_OffsetX.Location = new System.Drawing.Point(833, 318);
             this.textBox_OffsetX.Name = "textBox_OffsetX";
             this.textBox_OffsetX.Size = new System.Drawing.Size(100, 22);
             this.textBox_OffsetX.TabIndex = 29;
             this.textBox_OffsetX.Text = "0";
+            this.textBox_OffsetX.Visible = false;
             this.textBox_OffsetX.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // label14
             // 
             this.label14.Location = new System.Drawing.Point(203, 4);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(24, 22);
+            this.label14.Size = new System.Drawing.Size(28, 22);
             this.label14.TabIndex = 36;
-            this.label14.Text = "pix";
+            this.label14.Text = "mm";
             // 
             // label11
             // 
-            this.label11.Location = new System.Drawing.Point(27, 65);
+            this.label11.Location = new System.Drawing.Point(27, 34);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(43, 22);
             this.label11.TabIndex = 30;
             this.label11.Text = "Z偏移";
             // 
-            // label15
-            // 
-            this.label15.Location = new System.Drawing.Point(204, 31);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(24, 22);
-            this.label15.TabIndex = 37;
-            this.label15.Text = "pix";
-            // 
-            // label10
-            // 
-            this.label10.Location = new System.Drawing.Point(27, 34);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(65, 22);
-            this.label10.TabIndex = 26;
-            this.label10.Text = "Y起点偏移";
-            // 
             // textBox_OffsetZ
             // 
-            this.textBox_OffsetZ.Location = new System.Drawing.Point(97, 65);
+            this.textBox_OffsetZ.Location = new System.Drawing.Point(97, 34);
             this.textBox_OffsetZ.Name = "textBox_OffsetZ";
             this.textBox_OffsetZ.Size = new System.Drawing.Size(100, 22);
             this.textBox_OffsetZ.TabIndex = 31;
@@ -688,24 +671,15 @@
             // 
             // label17
             // 
-            this.label17.Location = new System.Drawing.Point(201, 93);
+            this.label17.Location = new System.Drawing.Point(203, 62);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(30, 22);
             this.label17.TabIndex = 39;
             this.label17.Text = "mm";
             // 
-            // textBox_OffsetY
-            // 
-            this.textBox_OffsetY.Location = new System.Drawing.Point(98, 31);
-            this.textBox_OffsetY.Name = "textBox_OffsetY";
-            this.textBox_OffsetY.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetY.TabIndex = 27;
-            this.textBox_OffsetY.Text = "0";
-            this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
             // textBox_SingleOffset
             // 
-            this.textBox_SingleOffset.Location = new System.Drawing.Point(97, 93);
+            this.textBox_SingleOffset.Location = new System.Drawing.Point(97, 62);
             this.textBox_SingleOffset.Name = "textBox_SingleOffset";
             this.textBox_SingleOffset.Size = new System.Drawing.Size(100, 22);
             this.textBox_SingleOffset.TabIndex = 33;
@@ -714,7 +688,7 @@
             // 
             // label12
             // 
-            this.label12.Location = new System.Drawing.Point(26, 93);
+            this.label12.Location = new System.Drawing.Point(26, 62);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(65, 22);
             this.label12.TabIndex = 32;
@@ -722,7 +696,7 @@
             // 
             // label16
             // 
-            this.label16.Location = new System.Drawing.Point(202, 68);
+            this.label16.Location = new System.Drawing.Point(203, 34);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(29, 22);
             this.label16.TabIndex = 38;
@@ -738,6 +712,15 @@
             this.textBox_IndStart1.Visible = false;
             this.textBox_IndStart1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
             // 
+            // textBox_OffsetY
+            // 
+            this.textBox_OffsetY.Location = new System.Drawing.Point(97, 6);
+            this.textBox_OffsetY.Name = "textBox_OffsetY";
+            this.textBox_OffsetY.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetY.TabIndex = 27;
+            this.textBox_OffsetY.Text = "0";
+            this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
             // textBox_IndEnd2
             // 
             this.textBox_IndEnd2.Location = new System.Drawing.Point(872, 196);
@@ -750,6 +733,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.simpleButton6);
             this.groupBox4.Controls.Add(this.simpleButton13);
             this.groupBox4.Controls.Add(this.simpleButton12);
             this.groupBox4.Controls.Add(this.simpleButton11);
@@ -761,6 +745,15 @@
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "拟合直线";
+            // 
+            // simpleButton6
+            // 
+            this.simpleButton6.Location = new System.Drawing.Point(77, 204);
+            this.simpleButton6.Name = "simpleButton6";
+            this.simpleButton6.Size = new System.Drawing.Size(75, 23);
+            this.simpleButton6.TabIndex = 14;
+            this.simpleButton6.Text = "保存参数";
+            this.simpleButton6.Click += new System.EventHandler(this.button2_Click);
             // 
             // simpleButton13
             // 
@@ -800,11 +793,11 @@
             // 
             // simpleButton7
             // 
-            this.simpleButton7.Location = new System.Drawing.Point(77, 200);
+            this.simpleButton7.Location = new System.Drawing.Point(77, 172);
             this.simpleButton7.Name = "simpleButton7";
             this.simpleButton7.Size = new System.Drawing.Size(75, 23);
             this.simpleButton7.TabIndex = 24;
-            this.simpleButton7.Text = "提取边";
+            this.simpleButton7.Text = "Run";
             this.simpleButton7.Click += new System.EventHandler(this.simpleButton7_Click);
             // 
             // groupBox3
@@ -1125,7 +1118,6 @@
         private System.Windows.Forms.TextBox textBox_OffsetX;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox_OffsetY;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox_SingleOffset;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label17;
