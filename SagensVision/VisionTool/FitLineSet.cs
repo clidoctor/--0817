@@ -1142,11 +1142,11 @@ namespace SagensVision.VisionTool
                      
             if (!NotUseFix &&this.Text!="Fix")
             {
-                IntersetionCoord intersect = new IntersetionCoord();
-                string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect, hwindow_final2, true);
+                //IntersetionCoord intersect = new IntersetionCoord();
+                string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
+                    0, intersection.Row, intersection.Col, 0, out homMaxFix);
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
                 {
@@ -2288,7 +2288,7 @@ namespace SagensVision.VisionTool
           
             MessageBox.Show("保存成功！");
             isSave = true;
-            if (intersection.Row == 0 && intersection.Col==0)
+            if (intersection.Row == 0 && intersection.Col == 0)
             {
                 return;
             }
@@ -2690,6 +2690,7 @@ namespace SagensVision.VisionTool
                 hwindow_final2.viewWindow.notDisplayRoi();
                 richTextBox1.Clear();
                 roiList[Id].Clear();
+                PreSelect = "";
                 DicPointName[Id].Clear();
                 if (Id >= 0)
                 {
@@ -2697,94 +2698,7 @@ namespace SagensVision.VisionTool
                 }
             }
         }
-        List<ROI> temp = new List<ROI>();
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-            if (listBox1.SelectedItem == null)
-            {
-                return;
-            }
-            try
-            {
-                string Name = listBox1.SelectedItem.ToString();
-                int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-                int id = DicPointName[SideId][Name];
-
-                hwindow_final2.viewWindow.notDisplayRoi();
-                if (roiList2[SideId].Count > 0)
-                {
-                    hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                }
-
-                hwindow_final2.viewWindow.selectROI(id);
-
-                textBox_Num.Text = fParam[SideId].roiP[id].NumOfSection.ToString();
-                HTuple[] lineCoord = new HTuple[1];         
-                DispSection((ROIRectangle2)roiList2[SideId][id], SideId, id, out lineCoord, hwindow_final2);
-                int pID = 1;
-                for (int i = 0; i < id; i++)
-                {
-                    for (int j = 0; j < fParam[SideId].roiP[i].NumOfSection; j++)
-                    {
-                        pID++;
-                    }
-                }
-
-                CurrentIndex = pID;
-                textBox_Current.Text = CurrentIndex.ToString();
-                HTuple row, col; HTuple anchor, anchorc;
-                FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
-
-
-
-                //HTuple tempData = new HTuple();
-                //List<ROI> temproi = new List<ROI>();
-                //tempData = roiList2[SideId][id].getModelData();
-
-                //hwindow_final2.viewWindow.genRect2(tempData[0].D, tempData[1].D, tempData[2].D, fParam[SideId].roiP[id].Len1, fParam[SideId].roiP[id].Len2, ref temproi);
-                //roiList2[SideId][id] = temproi[0];
-                //hwindow_final2.viewWindow.notDisplayRoi();
-                //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-
-                temp.Clear();
-                ROI roi = roiList[SideId][id];
-                temp.Add(roi);
-                hwindow_final1.viewWindow.notDisplayRoi();
-                hwindow_final1.viewWindow.displayROI(ref temp);
-
-
-                textBox_Num.Text = ((int)fParam[SideId].roiP[id].NumOfSection).ToString();
-                textBox_Len.Text = ((int)fParam[SideId].roiP[id].Len1).ToString();
-                textBox_Width.Text = ((int)fParam[SideId].roiP[id].Len2).ToString();
-                textBox_Row.Text = ((int)fParam[SideId].roiP[id].CenterRow).ToString();
-                textBox_Col.Text = ((int)fParam[SideId].roiP[id].CenterCol).ToString();
-                HTuple deg = new HTuple();
-                HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
-                textBox_phi.Text = ((int)deg.D).ToString();
-                textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
-                textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
-                textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
-                textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
-                textBox_IndStart1.Text = fParam[SideId].roiP[id].StartOffSet1.ToString();
-                textBox_IndStart2.Text = fParam[SideId].roiP[id].StartOffSet2.ToString();
-                textBox_IndEnd1.Text = fParam[SideId].roiP[id].EndOffSet1.ToString();
-                textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
-
-                comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
-                //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
-                //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
-
-        }
- 
+        List<ROI> temp = new List<ROI>(); 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
@@ -2983,11 +2897,10 @@ namespace SagensVision.VisionTool
                 for (int i = 0; i < n; i++)
                 {
                     for (int j = 0; j < profileNum[i]; j++)
-                    {
-                        
-                            Rarray1[tt] = Rarray[i][j];
-                            Carray1[tt] = Carray[i][j];
-                            tt++;
+                    {              
+                        Rarray1[tt] = Rarray[i][j];
+                        Carray1[tt] = Carray[i][j];
+                        tt++;
                         
                     }
                 }
@@ -3031,13 +2944,6 @@ namespace SagensVision.VisionTool
                    
                 }
 
-               
-
-               
-
-
-
-
                 return "OK";
             }
             catch (Exception ex)
@@ -3053,8 +2959,6 @@ namespace SagensVision.VisionTool
                 return;
             }
             int Id = Convert.ToInt32(SideName.Substring(4, 1));
-            HObject image = new HObject();
-            HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
             GenProfileCoord(Id, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore);
 
 
@@ -3091,6 +2995,7 @@ namespace SagensVision.VisionTool
                 double[][] Rcoord, Ccoord, Zcoord; string[][] Str;
                 hwindow_final2.ClearWindow();
                 //hwindow_final2.HobjectToHimage(RGBImage);
+
                 hwindow_final2.HobjectToHimage(IntensityImage);
                 if (this.Text == "Fix")
                 {
@@ -3112,7 +3017,8 @@ namespace SagensVision.VisionTool
                     //}
                 }
                 else
-                {
+                {      
+                    //ChangeSide已定位Roi 不用定位          
                     string ok = FindPoint(Id, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, null, hwindow_final2, true);
                     if (ok != "OK")
                     {
@@ -3267,8 +3173,6 @@ namespace SagensVision.VisionTool
             try
             {
                 int Sid = SideId - 1;
-                HObject image = new HObject();
-                HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore,homMatFix);
                 if (ok1 != "OK")
                 {
@@ -3817,8 +3721,6 @@ namespace SagensVision.VisionTool
             try
             {
                 int Sid = SideId - 1;
-                HObject image = new HObject();
-                HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore, null);
                 if (ok1 != "OK")
                 {
@@ -4117,8 +4019,6 @@ namespace SagensVision.VisionTool
             try
             {
                 int Sid = SideId - 1;
-                HObject image = new HObject();
-                HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore, homMatFix);
                 if (ok1 != "OK")
                 {
@@ -5008,13 +4908,31 @@ namespace SagensVision.VisionTool
                 
                 int id = DicPointName[SideId][Name];
 
-                hwindow_final2.viewWindow.notDisplayRoi();
+                //hwindow_final2.viewWindow.notDisplayRoi();
                 if (roiList2[SideId].Count > 0)
                 {
+                    if (SelectAll)
+                    {
+                        hwindow_final2.viewWindow.notDisplayRoi();
+                        roiController2.viewController.ShowAllRoiModel = -1;
+                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                    }
+                    else
+                    {
+                        if (roiController2.ROIList.Count != roiList2[SideId].Count)
+                        {
+                            roiController2.viewController.ShowAllRoiModel = -1;
+                            hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                        }
+
+                        roiController2.viewController.ShowAllRoiModel = id;
+                        roiController2.viewController.repaint(id);
+                    }
+                    
                     //if (SelectAll)
                     //{
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        hwindow_final2.viewWindow.selectROI(id);
+                    //roiController2.viewController.repaint(id);
+
                     //}
                     //else
                     //{
@@ -5026,7 +4944,7 @@ namespace SagensVision.VisionTool
                     //    }
                     //    hwindow_final2.viewWindow.displayROI(ref tempList, id);
                     //}
-                  
+
                 }
 
                 
@@ -5074,11 +4992,11 @@ namespace SagensVision.VisionTool
                 //hwindow_final2.viewWindow.notDisplayRoi();
                 //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
 
-                temp.Clear();
-                ROI roi = roiList[SideId][id];
-                temp.Add(roi);
-                hwindow_final1.viewWindow.notDisplayRoi();
-                hwindow_final1.viewWindow.displayROI(ref temp);
+                //temp.Clear();
+                //ROI roi = roiList[SideId][id];
+                //temp.Add(roi);
+                //hwindow_final1.viewWindow.notDisplayRoi();
+                //hwindow_final1.viewWindow.displayROI(ref temp);
 
 
                 textBox_Num.Text = ((int)fParam[SideId].roiP[id].NumOfSection).ToString();
@@ -5090,7 +5008,7 @@ namespace SagensVision.VisionTool
                 HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
                 textBox_phi.Text = ((int)deg.D).ToString();
                 textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
+                //textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
                 textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();

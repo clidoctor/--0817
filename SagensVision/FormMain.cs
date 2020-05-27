@@ -173,6 +173,20 @@ namespace SagensVision
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side -1].Col,
                     0, intersect.Row, intersect.Col, 0,out homMaxFix);
                 string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z,out Str, Homat3D, Hwnd,false, homMaxFix);
+                double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+                HTuple deg = 0;
+                HOperatorSet.TupleDeg(intersect.Angle, out deg);
+                string AnchorX = Math.Round(intersect.Col,3).ToString(); string AnchorY = Math.Round(intersect.Row, 3).ToString();
+                if (Side == 4)
+                {
+                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
+                }
+                else
+                {
+                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString());
+                }
+                
                 return OK;
             }
             catch (Exception ex)

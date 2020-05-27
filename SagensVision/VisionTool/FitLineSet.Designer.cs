@@ -72,11 +72,9 @@
             this.插入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.重命名ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxRoi = new System.Windows.Forms.CheckBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox_OffsetX = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox_OffsetZ = new System.Windows.Forms.TextBox();
@@ -84,8 +82,8 @@
             this.textBox_SingleOffset = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox_IndStart1 = new System.Windows.Forms.TextBox();
             this.textBox_OffsetY = new System.Windows.Forms.TextBox();
+            this.textBox_IndStart1 = new System.Windows.Forms.TextBox();
             this.textBox_IndEnd2 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
@@ -115,7 +113,6 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
@@ -145,7 +142,7 @@
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(1013, 366);
+            this.splitContainerControl1.Size = new System.Drawing.Size(1011, 366);
             this.splitContainerControl1.SplitterPosition = 485;
             this.splitContainerControl1.TabIndex = 0;
             this.splitContainerControl1.Text = "splitContainerControl1";
@@ -319,7 +316,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.63169F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 84.36831F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 381F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1019, 822);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1017, 822);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // panel1
@@ -336,7 +333,7 @@
             this.panel1.Controls.Add(this.simpleButton1);
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1013, 62);
+            this.panel1.Size = new System.Drawing.Size(1011, 62);
             this.panel1.TabIndex = 2;
             // 
             // simpleButton3
@@ -344,7 +341,7 @@
             this.simpleButton3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton3.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.simpleButton3.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton3.ImageOptions.Image")));
-            this.simpleButton3.Location = new System.Drawing.Point(465, 3);
+            this.simpleButton3.Location = new System.Drawing.Point(463, 3);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(41, 39);
             this.simpleButton3.TabIndex = 13;
@@ -356,7 +353,7 @@
             this.simpleButton4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton4.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.simpleButton4.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton4.ImageOptions.Image")));
-            this.simpleButton4.Location = new System.Drawing.Point(417, 3);
+            this.simpleButton4.Location = new System.Drawing.Point(415, 3);
             this.simpleButton4.Name = "simpleButton4";
             this.simpleButton4.Size = new System.Drawing.Size(41, 39);
             this.simpleButton4.TabIndex = 12;
@@ -385,7 +382,7 @@
             // 
             this.trackBarControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBarControl1.EditValue = null;
-            this.trackBarControl1.Location = new System.Drawing.Point(112, 11);
+            this.trackBarControl1.Location = new System.Drawing.Point(110, 11);
             this.trackBarControl1.Name = "trackBarControl1";
             this.trackBarControl1.Properties.LabelAppearance.Options.UseTextOptions = true;
             this.trackBarControl1.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
@@ -397,7 +394,7 @@
             // textBox_Total
             // 
             this.textBox_Total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Total.Location = new System.Drawing.Point(333, 12);
+            this.textBox_Total.Location = new System.Drawing.Point(331, 12);
             this.textBox_Total.Name = "textBox_Total";
             this.textBox_Total.ReadOnly = true;
             this.textBox_Total.Size = new System.Drawing.Size(64, 22);
@@ -407,7 +404,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(314, 15);
+            this.label3.Location = new System.Drawing.Point(312, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(12, 14);
             this.label3.TabIndex = 7;
@@ -416,7 +413,7 @@
             // textBox_Current
             // 
             this.textBox_Current.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Current.Location = new System.Drawing.Point(243, 12);
+            this.textBox_Current.Location = new System.Drawing.Point(241, 12);
             this.textBox_Current.Name = "textBox_Current";
             this.textBox_Current.Size = new System.Drawing.Size(64, 22);
             this.textBox_Current.TabIndex = 6;
@@ -447,7 +444,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(9, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(995, 373);
+            this.xtraTabControl1.Size = new System.Drawing.Size(983, 373);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -458,11 +455,9 @@
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.LightGray;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
             this.xtraTabPage1.Controls.Add(this.checkBox4);
-            this.xtraTabPage1.Controls.Add(this.textBox_OffsetX);
             this.xtraTabPage1.Controls.Add(this.groupBox6);
             this.xtraTabPage1.Controls.Add(this.richTextBox1);
             this.xtraTabPage1.Controls.Add(this.checkBoxRoi);
-            this.xtraTabPage1.Controls.Add(this.label15);
             this.xtraTabPage1.Controls.Add(this.groupBox5);
             this.xtraTabPage1.Controls.Add(this.textBox_IndStart1);
             this.xtraTabPage1.Controls.Add(this.textBox_IndEnd2);
@@ -474,9 +469,8 @@
             this.xtraTabPage1.Controls.Add(this.comboBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox1);
-            this.xtraTabPage1.Controls.Add(this.listBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(989, 344);
+            this.xtraTabPage1.Size = new System.Drawing.Size(977, 344);
             this.xtraTabPage1.Text = "截取轮廓工具";
             // 
             // checkBox4
@@ -590,15 +584,6 @@
             this.checkBoxRoi.UseVisualStyleBackColor = true;
             this.checkBoxRoi.CheckedChanged += new System.EventHandler(this.checkBoxRoi_CheckedChanged);
             // 
-            // label15
-            // 
-            this.label15.Location = new System.Drawing.Point(939, 322);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(24, 22);
-            this.label15.TabIndex = 37;
-            this.label15.Text = "pix";
-            this.label15.Visible = false;
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.panel3);
@@ -633,16 +618,6 @@
             this.label9.Size = new System.Drawing.Size(65, 22);
             this.label9.TabIndex = 28;
             this.label9.Text = "偏移";
-            // 
-            // textBox_OffsetX
-            // 
-            this.textBox_OffsetX.Location = new System.Drawing.Point(833, 318);
-            this.textBox_OffsetX.Name = "textBox_OffsetX";
-            this.textBox_OffsetX.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetX.TabIndex = 29;
-            this.textBox_OffsetX.Text = "0";
-            this.textBox_OffsetX.Visible = false;
-            this.textBox_OffsetX.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // label14
             // 
@@ -702,6 +677,15 @@
             this.label16.TabIndex = 38;
             this.label16.Text = "mm";
             // 
+            // textBox_OffsetY
+            // 
+            this.textBox_OffsetY.Location = new System.Drawing.Point(97, 6);
+            this.textBox_OffsetY.Name = "textBox_OffsetY";
+            this.textBox_OffsetY.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetY.TabIndex = 27;
+            this.textBox_OffsetY.Text = "0";
+            this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
             // textBox_IndStart1
             // 
             this.textBox_IndStart1.Location = new System.Drawing.Point(872, 97);
@@ -711,15 +695,6 @@
             this.textBox_IndStart1.Text = "0";
             this.textBox_IndStart1.Visible = false;
             this.textBox_IndStart1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
-            // 
-            // textBox_OffsetY
-            // 
-            this.textBox_OffsetY.Location = new System.Drawing.Point(97, 6);
-            this.textBox_OffsetY.Name = "textBox_OffsetY";
-            this.textBox_OffsetY.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetY.TabIndex = 27;
-            this.textBox_OffsetY.Text = "0";
-            this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // textBox_IndEnd2
             // 
@@ -1006,18 +981,6 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // listBox1
-            // 
-            this.listBox1.ContextMenuStrip = this.contextMenuStrip1;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 14;
-            this.listBox1.Location = new System.Drawing.Point(931, 234);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(51, 32);
-            this.listBox1.TabIndex = 12;
-            this.listBox1.Visible = false;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            // 
             // xtraTabPage2
             // 
             this.xtraTabPage2.Controls.Add(this.groupBox2);
@@ -1029,9 +992,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 822);
+            this.ClientSize = new System.Drawing.Size(1017, 822);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FitLineSet";
             this.Text = "FitLineSet";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FitLineSet_FormClosing);
@@ -1095,7 +1059,6 @@
         private System.Windows.Forms.Panel panel2;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage1;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 删除所有ToolStripMenuItem;
@@ -1115,14 +1078,12 @@
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.TextBox textBox_OffsetZ;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox_OffsetX;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox_OffsetY;
         private System.Windows.Forms.TextBox textBox_SingleOffset;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ToolStripMenuItem 更改ToolStripMenuItem;
         private DevExpress.XtraEditors.SimpleButton simpleButton10;
