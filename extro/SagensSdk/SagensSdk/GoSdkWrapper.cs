@@ -142,6 +142,14 @@ namespace SagensSdk
         [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoMeasurementMsg_Id")]
         public static extern ushort GoMeasurementMsg_Id(IntPtr msg);
         #endregion
+
+        [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoSetup_ActiveAreaHeight")]
+        public static extern double GoSetup_ActiveAreaHeight(IntPtr setup, GoRole role);
+        [DllImport(Constants.GOSDKDLLPATH,EntryPoint = "GoSetup_ActiveAreaZ")]
+        public static extern double GoSetup_ActiveAreaZ(IntPtr setup, GoRole role);
+
+        [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoSensor_Role")]
+        public static extern IntPtr GoSensor_Role(IntPtr sensor);
     }
     public delegate int onDataType(DataContext ctx, IntPtr sys, IntPtr data);
     public class DataContext

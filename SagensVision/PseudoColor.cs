@@ -56,19 +56,42 @@ namespace SagensVision
             b.Dispose();
         }
 
-        public static void GrayToPseudoColor(HObject grayImg, out HObject rgbImg, bool imgIsByte, HTuple validThreMin, HTuple validThreMax)
+
+        public static void GrayToPseudoColor(HObject grayImg, out HObject rgbImg)
+        {
+            try
+            {
+                Bitmap bp;
+                HObject2Bpp8(grayImg, out bp);
+                HTuple w, h;
+                HOperatorSet.GetImageSize(grayImg, out w, out h);
+
+                Rectangle rect = new Rectangle(0, 0, w, h);
+                Bitmap a = PGrayToPseudoColor2(bp, rect, 2);
+
+                Bitmap b = (Bitmap)a.Clone();
+                Bitmap2HImageBpp24(b, out rgbImg);
+                if (!string.IsNullOrEmpty(AutoSavePath))
+                {
+                    HOperatorSet.WriteImage(rgbImg, Path.GetExtension(AutoSavePath).Remove(0, 1), 0, AutoSavePath);
+                }
+                bp.Dispose();
+                a.Dispose();
+                b.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static void GrayToPseudoColor(HObject grayImg, out HObject rgbImg, HTuple validThreMin, HTuple validThreMax)
         {
             try
             {
                 HObject imgMax;
-                if (imgIsByte)
-                {
-                    GetImgMax(grayImg, out imgMax, validThreMin, validThreMax);
-                }
-                else
-                {
-                    imgMax = grayImg;
-                }
+              
+                GetImgMax(grayImg, out imgMax, validThreMin, validThreMax);
+                
                 Bitmap bp;
                 HObject2Bpp8(imgMax, out bp);
                 HTuple w, h;

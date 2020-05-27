@@ -22,6 +22,7 @@ namespace SagensVision
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
 
+        public string test = "This is a test!";
         List<double[][]> XCoord = new List<double[][]>();
         List<double[][]> YCoord = new List<double[][]>();
         List<double[][]> ZCoord = new List<double[][]>();
@@ -371,7 +372,9 @@ namespace SagensVision
                 ShowAndSaveMsg("Sensor连接失败！" + Msg);
 
             }
+            MyGlobal.GoSDK.IsRecSurfaceDataZByte = true;
             MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
+            MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
         }
 
@@ -383,25 +386,48 @@ namespace SagensVision
             MyGlobal.thdWaitForClientAndMessage.Name = "以太网通信线程";
             MyGlobal.thdWaitForClientAndMessage.Start();
         }
-        private void GoSDK_SurfaceZRecFinish()
+
+        private int recStateCode;
+        public int RecStateCode
+        {
+            get { return recStateCode; }
+            set {
+                recStateCode = value;
+                if (recStateCode >= 2)
+                {
+                    recStateCode = 0;
+                    HIRecFinish();
+                }
+            }
+
+        }
+        private void HIRecFinish()
         {
             if (MyGlobal.globalConfig.SensorIP == "127.0.0.1")
             {
                 //if (SecretKey.License.SnOk)
                 //{
-                    Action run = () =>
-                     {
-                         string ok = RunSuface(1);
-                         if (ok != "OK")
-                         {
-                             ShowAndSaveMsg(ok);
-                         }
-                     };
-                    this.Invoke(run);
+                Action run = () =>
+                {
+                    string ok = RunSuface(1);
+                    if (ok != "OK")
+                    {
+                        ShowAndSaveMsg(ok);
+                    }
+                };
+                this.Invoke(run);
                 //}
 
             }
+        }
 
+        private void GoSDK_SurfaceIntensityFinish()
+        {
+            RecStateCode++;
+        }
+        private void GoSDK_SurfaceZRecFinish()
+        {
+            RecStateCode++;
         }
         void GenIntesityProfile(List<SagensSdk.Profile> profile, out HObject Image)
         {
@@ -591,14 +617,24 @@ namespace SagensVision
                     }
                     if (IntensityImage==null ||!IntensityImage.IsInitialized())
                     {
-                        return "未获取到高度图";
+                        return "未获取到亮度图";
                     }
-                    MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
+
+                    byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
+                    HObject byteImg = MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight);
+                    HObject rgbImg;
+                    PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+
+                    MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rgbImg);
+
+                    
+
                     if (Station == 1)
                         saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
                     StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                     StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                    StaticOperate.SaveImage(rgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
 
                     string OK = RunSide(Station, IntensityImage, HeightImage);
                     HObject[] temp = { IntensityImage, HeightImage };
@@ -632,6 +668,8 @@ namespace SagensVision
                     //    }
                     //    StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
                     //}
+                    rgbImg.Dispose();
+                    byteImg.Dispose();
                     return OK;
                 }
                 else
@@ -2212,6 +2250,8 @@ namespace SagensVision
             //    }
             //}
             //手动测试
+            if (MyGlobal.ImageMulti.Count == 0)
+                MessageBox.Show("请加载选择手动运行图片！");
             for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
             {
                 string OK = RunOutLine(i+1, i);
@@ -2267,13 +2307,14 @@ namespace SagensVision
                 sidelist.Clear();
                 int len = openfile.FileNames.Length;
                
-                string[] namesI = new string[len/2];
-                string[] namesH = new string[len/2];
+                string[] namesI = new string[len/3];
+                string[] namesH = new string[len/3];
+                string[] namesB = new string[len / 3];
                 if (len<2)
                 {
                     return;
                 }
-                int orderi = 0; int orderh = 0;
+                int orderi = 0; int orderh = 0;int orderB = 0 ;
                 foreach (var item in openfile.FileNames)
                 {
                     for (int i = orderi; i < namesH.Length; i++)
@@ -2303,6 +2344,19 @@ namespace SagensVision
                         }
                         break;
                     }
+                    for (int i = orderB; i < namesB.Length; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            if (item.Contains((j+1).ToString()+"B.tiff"))
+                            {
+                                namesB[i] = item;
+                                orderB = i + 1;
+                                break;
+                            }
+                        }
+
+                    }
                 }
 
 
@@ -2318,12 +2372,9 @@ namespace SagensVision
                     HOperatorSet.ReadImage(out image[1], namesH[i]);
 
                     MyGlobal.ImageMulti.Add(image);
-                    HObject rgbImage = new HObject();
-                    //PseudoColor.GrayToPseudoColor(image[1], out rgbImage, true, -20, 10);
-
-                    //MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImage);
-                    MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
-                    //rgbImage.Dispose();
+                    HObject rgbImg;
+                    HOperatorSet.ReadImage(out rgbImg,namesB[i] );
+                    MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
                    
                 }
 
@@ -2411,7 +2462,7 @@ namespace SagensVision
 
         }
 
-        private void btn_MessageClean_Click(object sender, EventArgs e)
+        private void simpleButton1_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
         }

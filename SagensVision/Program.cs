@@ -21,7 +21,7 @@ namespace SagensVision
 
             BonusSkins.Register();
             SkinManager.EnableFormSkins();
-            UserLookAndFeel.Default.SetSkinStyle("Office 2010 Blue");           
+            UserLookAndFeel.Default.SetSkinStyle("DevExpress Dark Style");           
             Application.Run(new FormMain());
         }
     }

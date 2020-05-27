@@ -31,49 +31,21 @@ namespace SagensVision
         private void btn_select_Click(object sender, EventArgs e)
         {
             path = "";
-            Button btn = sender as Button;
-            string index = btn.Tag.ToString();
             try
             {
-                switch (index)
+                if (tb_PathName != null)
                 {
-                    case "0":
+                    path = tb_PathName.Text;
+                    listBox1.Items.Clear();
+                    string[] ImportpathfileNames = Directory.GetDirectories(path);
 
-                        listBox1.Items.Clear();
-                        if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-                        {
-                            path = folderBrowserDialog1.SelectedPath.ToString();
-                           
-                        }
-                        
-                        string[] fileNames = Directory.GetDirectories(path);
+                    tb_FileNum.Text = ImportpathfileNames.Length.ToString();
 
-                        tb_FileNum.Text = fileNames.Length.ToString();
-
-                        //遍历路径下的所有物料文件夹，并Add到Listbox上
-                        foreach (string tempFileNames in fileNames)
-                        {
-                            listBox1.Items.Add(tempFileNames);
-                        }
-                        break;
-
-                    case "1":
-                        if (tb_PathName != null)
-                        {
-                            path = tb_PathName.Text;
-                            listBox1.Items.Clear();
-                            string[] ImportpathfileNames = Directory.GetDirectories(path);
-
-                            tb_FileNum.Text = ImportpathfileNames.Length.ToString();
-
-                            //遍历路径下的所有物料文件夹，并Add到Listbox上
-                            foreach (string tempFileNames in ImportpathfileNames)
-                            {
-                                listBox1.Items.Add(tempFileNames);
-                            }
-                            break;
-                        }
-                        break;
+                    //遍历路径下的所有物料文件夹，并Add到Listbox上
+                    foreach (string tempFileNames in ImportpathfileNames)
+                    {
+                        listBox1.Items.Add(tempFileNames);
+                    }    
                 }
             }
             catch(Exception ex)
@@ -165,6 +137,36 @@ namespace SagensVision
                 cb_runMode.Text = "单次运行";
             }
             cb_runMode.Text = "连续运行";
+        }
+
+        private void sBtn_pathSelect_Click(object sender, EventArgs e)
+        {
+            path = "";
+            try
+            {
+                listBox1.Items.Clear();
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    path = folderBrowserDialog1.SelectedPath.ToString();
+
+                }
+
+                string[] fileNames = Directory.GetDirectories(path);
+
+                tb_FileNum.Text = fileNames.Length.ToString();
+
+                //遍历路径下的所有物料文件夹，并Add到Listbox上
+                foreach (string tempFileNames in fileNames)
+                {
+                    listBox1.Items.Add(tempFileNames);
+                }
+     
+                }
+             catch (Exception ex)
+             {
+                MessageBox.Show("请确认选择正确的路径！");
+              }
+
         }
     }
 }
