@@ -3347,7 +3347,7 @@ namespace SagensVision.VisionTool
                         HObject Cross = new HObject();
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
                        
-                        hwind.viewWindow.displayHobject(Cross, "green", false,5);
+                        hwind.viewWindow.displayHobject(Cross, "green", false);
 
                     }
                     //直线段拟合
@@ -3388,7 +3388,7 @@ namespace SagensVision.VisionTool
                         {
                             HObject cross1 = new HObject();
                             HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                            hwind.viewWindow.displayHobject(cross1, "cadet blue",false,5);
+                            hwind.viewWindow.displayHobject(cross1, "cadet blue",false);
                         }
 
                         
@@ -3880,7 +3880,7 @@ namespace SagensVision.VisionTool
                     {
                         HObject Cross = new HObject();
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "green",false,5);
+                        hwind.viewWindow.displayHobject(Cross, "green",false);
 
                     }
                     //直线段拟合

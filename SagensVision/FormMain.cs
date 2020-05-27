@@ -2236,6 +2236,8 @@ namespace SagensVision
             //    }
             //}
             //手动测试
+            if (MyGlobal.ImageMulti.Count == 0)
+                MessageBox.Show("请加载选择手动运行图片！");
             for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
             {
                 string OK = RunOutLine(i+1, i);
@@ -2446,7 +2448,7 @@ namespace SagensVision
 
         }
 
-        private void btn_MessageClean_Click(object sender, EventArgs e)
+        private void simpleButton1_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
         }
