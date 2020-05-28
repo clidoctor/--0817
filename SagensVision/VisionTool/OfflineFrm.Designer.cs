@@ -175,7 +175,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "OfflineFrm";
-            this.Text = "OfflineFrm";
+            this.Text = "离线测试";
             ((System.ComponentModel.ISupportInitialize)(this.listBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

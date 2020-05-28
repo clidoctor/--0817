@@ -47,12 +47,12 @@ namespace SagensVision.Sensor
                 {
                     MyGlobal.globalConfig.dataContext = MyGlobal.GoSDK.context;
                 }
-               
-                //if (OK)
-                //{
-                //    MyGlobal.globalConfig.dataContext = MyGlobal.GoSDK.context;
-                //    StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
-                //}              
+
+                if (OK)
+                {
+                    MyGlobal.globalConfig.dataContext = MyGlobal.GoSDK.context;
+                    StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                }
                 MessageBox.Show(Error);
             }
             catch (Exception ex)
