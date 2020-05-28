@@ -494,7 +494,7 @@ namespace SagensSdk
             }
         }
 
-        private double z_byte_resolution;
+        public double z_byte_resolution;
         public double zRange { set; get; }
         public double zStart { set; get; }
         public Byte[] SurfaceDataZByte;

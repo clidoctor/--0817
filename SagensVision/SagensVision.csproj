@@ -85,6 +85,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -189,6 +190,12 @@
     <Compile Include="VisionTool\Display3D.Designer.cs">
       <DependentUpon>Display3D.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\EnlargeFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\EnlargeFrm.Designer.cs">
+      <DependentUpon>EnlargeFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="VisionTool\FitLineSet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -246,7 +253,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Properties\licenses.licx" />
+    <None Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Sensor\SensorSet.resx">
       <DependentUpon>SensorSet.cs</DependentUpon>
     </EmbeddedResource>
@@ -273,6 +280,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\Display3D.resx">
       <DependentUpon>Display3D.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\EnlargeFrm.resx">
+      <DependentUpon>EnlargeFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\FitLineSet.resx">
       <DependentUpon>FitLineSet.cs</DependentUpon>
