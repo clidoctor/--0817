@@ -27,6 +27,7 @@ namespace SagensVision
         public static string ModelPath = AppDomain.CurrentDomain.BaseDirectory + "Model\\";
         public static string fileName1 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "0.shm";
         public static string fileName2 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "1.shm";
+        public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "imgRotate.txt";
 
         public static SagensSdk.GoSdkMaker GoSDK = new GoSdkMaker();
         
@@ -46,6 +47,7 @@ namespace SagensVision
         //public static Fixcs fix = new Fixcs();
         public static FitLineSet flset2 = new FitLineSet("Fix");
         public static List<HObject[]> ImageMulti = new List<HObject[]>();
+        public static int[] imgRotateArr = new int[4];
     }
 
     public  class GlobalConfig

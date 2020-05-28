@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using GoVision3D.SaveLoad;
 
 namespace SagensSdk
 {
@@ -142,6 +143,8 @@ namespace SagensSdk
         [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoMeasurementMsg_Id")]
         public static extern ushort GoMeasurementMsg_Id(IntPtr msg);
         #endregion
+        [DllImport("GoFileLib.dll", EntryPoint = "SaveSufaceToFile", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SaveSufaceToFile(string filepath,ref GoSurface insurface,bool flag);
 
         [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoSetup_ActiveAreaHeight")]
         public static extern double GoSetup_ActiveAreaHeight(IntPtr setup, GoRole role);

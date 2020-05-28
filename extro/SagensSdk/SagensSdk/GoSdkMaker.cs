@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using GoVision3D.SaveLoad;
 
 namespace SagensSdk
 {
@@ -214,6 +215,13 @@ namespace SagensSdk
                         float[] surfaceDataY = new float[surfaceWidth * surfaceHeight];
                         byte[] surfaceDataZByte = new byte[surfaceWidth * surfaceHeight];
 
+                        if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy))
+                        {
+                            Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                            Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                            GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
+                            GoSdkWrapper.SaveSufaceToFile($"SaveKdatDirectoy/{DateTime.Now.ToFileTimeUtc().ToString()}.kdat", ref insurface, false);
+                        }
 
                         Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
                         for (int j = 0; j < surfaceHeight; j++)
@@ -513,6 +521,7 @@ namespace SagensSdk
         }
         #endregion
 
+        public string SaveKdatDirectoy { set; get; }
 
         #region 生成Halcon图像
         public void GenHalconImage(object pointsArr, long width, long height, out HObject image)
