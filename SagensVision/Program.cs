@@ -21,7 +21,7 @@ namespace SagensVision
 
             BonusSkins.Register();
             SkinManager.EnableFormSkins();
-            UserLookAndFeel.Default.SetSkinStyle("DevExpress Dark Style");           
+            UserLookAndFeel.Default.SetSkinStyle("Black");           
             Application.Run(new FormMain());
         }
     }

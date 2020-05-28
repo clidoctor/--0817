@@ -206,9 +206,6 @@ namespace SagensVision
                     }
                 }
 
-
-
-
                 if (!Directory.Exists(filePath))
                 {
                     Directory.CreateDirectory(filePath);
@@ -219,7 +216,8 @@ namespace SagensVision
                     {
                         if (MyGlobal.globalConfig.isChinese)
                         {
-                            sw.Write("高度1" + "\t" + "高度2" + "\t" + "高度3" + "\t" + "\r\n");
+                            sw.Write("AnchorX1" + "\t" + "AnchorY1" + "\t" + "AnchorAngle1" + "\t" + "AnchorX2" + "\t"+ "AnchorY2" + "\t" + "AnchorAngle12" + "\t"+
+                                     "AnchorX3" + "\t" + "AnchorY3" + "\t" + "AnchorAngle3" + "\t" + "AnchorX4" + "\t" + "AnchorY4" + "\t" + "AnchorAngle12" + "\t" + "\r\n");
                         }
                         else
                         {                           
@@ -231,11 +229,13 @@ namespace SagensVision
                 }
                 using (StreamWriter swrite = File.AppendText(fileName))
                 {
-                    swrite.Write(Height + "\t" + Width + "\t" + Area + "\t" + "\r\n");
+                    //swrite.Write(Height + "\t" + Width + "\t" + Area + "\t" + "\r\n");
+                    swrite.Write(Height + "\t" + Width + "\t" + Area + "\t" );
+
                     //if (MyGlobal.globalConfig.isChinese)
                     //{
                     //    //swrite.Write("高度1" + "\t" + Height + "\r\n" + "高度2" + "\t" + Width + "\r\n" + "高度3" + "\t" + Area + "\r\n");
-                       
+
 
                     //}
                     //else

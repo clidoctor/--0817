@@ -28,70 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btn_select = new System.Windows.Forms.Button();
-            this.btn_next = new System.Windows.Forms.Button();
-            this.btn_run = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OfflineFrm));
             this.tb_checkNum = new System.Windows.Forms.TextBox();
             this.tb_FileNum = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tb_PathName = new System.Windows.Forms.TextBox();
-            this.cb_runMode = new System.Windows.Forms.CheckBox();
-            this.btn_pathImport = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.listBox1 = new DevExpress.XtraEditors.ListBoxControl();
+            this.cb_runMode = new System.Windows.Forms.CheckBox();
+            this.tb_PathName = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
+            this.sBtn_next = new DevExpress.XtraEditors.SimpleButton();
+            this.sBtn_pathImport = new DevExpress.XtraEditors.SimpleButton();
+            this.sBtn_pathSelect = new DevExpress.XtraEditors.SimpleButton();
+            ((System.ComponentModel.ISupportInitialize)(this.listBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btn_select
-            // 
-            this.btn_select.Location = new System.Drawing.Point(32, 28);
-            this.btn_select.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_select.Name = "btn_select";
-            this.btn_select.Size = new System.Drawing.Size(142, 28);
-            this.btn_select.TabIndex = 0;
-            this.btn_select.Tag = "0";
-            this.btn_select.Text = "路径选择";
-            this.btn_select.UseVisualStyleBackColor = true;
-            this.btn_select.Click += new System.EventHandler(this.btn_select_Click);
-            // 
-            // btn_next
-            // 
-            this.btn_next.Location = new System.Drawing.Point(505, 28);
-            this.btn_next.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_next.Name = "btn_next";
-            this.btn_next.Size = new System.Drawing.Size(75, 28);
-            this.btn_next.TabIndex = 1;
-            this.btn_next.Text = "Next";
-            this.btn_next.UseVisualStyleBackColor = true;
-            this.btn_next.Click += new System.EventHandler(this.btn_next_Click);
-            // 
-            // btn_run
-            // 
-            this.btn_run.Location = new System.Drawing.Point(642, 28);
-            this.btn_run.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btn_run.Name = "btn_run";
-            this.btn_run.Size = new System.Drawing.Size(80, 49);
-            this.btn_run.TabIndex = 2;
-            this.btn_run.Text = "运行";
-            this.btn_run.UseVisualStyleBackColor = true;
-            this.btn_run.Click += new System.EventHandler(this.btn_run_Click);
-            // 
-            // listBox1
-            // 
-            this.listBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.HorizontalScrollbar = true;
-            this.listBox1.ItemHeight = 18;
-            this.listBox1.Location = new System.Drawing.Point(29, 34);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.ScrollAlwaysVisible = true;
-            this.listBox1.Size = new System.Drawing.Size(737, 290);
-            this.listBox1.TabIndex = 3;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // tb_checkNum
             // 
@@ -129,29 +82,13 @@
             this.label1.TabIndex = 9;
             this.label1.Text = "当前文件夹物料数量：";
             // 
-            // groupBox1
+            // listBox1
             // 
-            this.groupBox1.Controls.Add(this.tb_PathName);
-            this.groupBox1.Controls.Add(this.cb_runMode);
-            this.groupBox1.Controls.Add(this.btn_pathImport);
-            this.groupBox1.Controls.Add(this.btn_select);
-            this.groupBox1.Controls.Add(this.btn_next);
-            this.groupBox1.Controls.Add(this.btn_run);
-            this.groupBox1.Location = new System.Drawing.Point(29, 330);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Size = new System.Drawing.Size(744, 203);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "操作";
-            // 
-            // tb_PathName
-            // 
-            this.tb_PathName.Location = new System.Drawing.Point(194, 79);
-            this.tb_PathName.Name = "tb_PathName";
-            this.tb_PathName.Size = new System.Drawing.Size(332, 26);
-            this.tb_PathName.TabIndex = 10;
+            this.listBox1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.listBox1.Location = new System.Drawing.Point(29, 21);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(744, 301);
+            this.listBox1.TabIndex = 13;
             // 
             // cb_runMode
             // 
@@ -163,32 +100,82 @@
             this.cb_runMode.Text = "单次运行";
             this.cb_runMode.CheckedChanged += new System.EventHandler(this.cb_runMode_CheckedChanged);
             // 
-            // btn_pathImport
+            // tb_PathName
             // 
-            this.btn_pathImport.Location = new System.Drawing.Point(32, 77);
-            this.btn_pathImport.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_pathImport.Name = "btn_pathImport";
-            this.btn_pathImport.Size = new System.Drawing.Size(142, 28);
-            this.btn_pathImport.TabIndex = 0;
-            this.btn_pathImport.Tag = "1";
-            this.btn_pathImport.Text = "路径手动导入：";
-            this.btn_pathImport.UseVisualStyleBackColor = true;
-            this.btn_pathImport.Click += new System.EventHandler(this.btn_select_Click);
+            this.tb_PathName.Location = new System.Drawing.Point(194, 79);
+            this.tb_PathName.Name = "tb_PathName";
+            this.tb_PathName.Size = new System.Drawing.Size(332, 26);
+            this.tb_PathName.TabIndex = 10;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.simpleButton2);
+            this.groupBox1.Controls.Add(this.sBtn_next);
+            this.groupBox1.Controls.Add(this.sBtn_pathImport);
+            this.groupBox1.Controls.Add(this.sBtn_pathSelect);
+            this.groupBox1.Controls.Add(this.tb_PathName);
+            this.groupBox1.Controls.Add(this.cb_runMode);
+            this.groupBox1.Location = new System.Drawing.Point(29, 330);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Size = new System.Drawing.Size(744, 203);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "操作";
+            // 
+            // simpleButton2
+            // 
+            this.simpleButton2.Location = new System.Drawing.Point(613, 27);
+            this.simpleButton2.Name = "simpleButton2";
+            this.simpleButton2.Size = new System.Drawing.Size(109, 46);
+            this.simpleButton2.TabIndex = 14;
+            this.simpleButton2.Text = "运行";
+            this.simpleButton2.Click += new System.EventHandler(this.btn_run_Click);
+            // 
+            // sBtn_next
+            // 
+            this.sBtn_next.Location = new System.Drawing.Point(484, 27);
+            this.sBtn_next.Name = "sBtn_next";
+            this.sBtn_next.Size = new System.Drawing.Size(104, 46);
+            this.sBtn_next.TabIndex = 13;
+            this.sBtn_next.Text = "Next";
+            this.sBtn_next.Click += new System.EventHandler(this.btn_next_Click);
+            // 
+            // sBtn_pathImport
+            // 
+            this.sBtn_pathImport.Location = new System.Drawing.Point(32, 79);
+            this.sBtn_pathImport.Name = "sBtn_pathImport";
+            this.sBtn_pathImport.Size = new System.Drawing.Size(142, 26);
+            this.sBtn_pathImport.TabIndex = 12;
+            this.sBtn_pathImport.Text = "路径手动导入：";
+            this.sBtn_pathImport.Click += new System.EventHandler(this.btn_select_Click);
+            // 
+            // sBtn_pathSelect
+            // 
+            this.sBtn_pathSelect.Location = new System.Drawing.Point(32, 27);
+            this.sBtn_pathSelect.Name = "sBtn_pathSelect";
+            this.sBtn_pathSelect.Size = new System.Drawing.Size(142, 28);
+            this.sBtn_pathSelect.TabIndex = 11;
+            this.sBtn_pathSelect.Text = "路径选择";
+            this.sBtn_pathSelect.Click += new System.EventHandler(this.sBtn_pathSelect_Click);
             // 
             // OfflineFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 559);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.tb_checkNum);
             this.Controls.Add(this.tb_FileNum);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "OfflineFrm";
             this.Text = "OfflineFrm";
+            ((System.ComponentModel.ISupportInitialize)(this.listBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -197,19 +184,18 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btn_select;
-        private System.Windows.Forms.Button btn_next;
-        private System.Windows.Forms.Button btn_run;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.TextBox tb_checkNum;
         private System.Windows.Forms.TextBox tb_FileNum;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox cb_runMode;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private DevExpress.XtraEditors.ListBoxControl listBox1;
+        private System.Windows.Forms.CheckBox cb_runMode;
         private System.Windows.Forms.TextBox tb_PathName;
-        private System.Windows.Forms.Button btn_pathImport;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private DevExpress.XtraEditors.SimpleButton simpleButton2;
+        private DevExpress.XtraEditors.SimpleButton sBtn_next;
+        private DevExpress.XtraEditors.SimpleButton sBtn_pathImport;
+        private DevExpress.XtraEditors.SimpleButton sBtn_pathSelect;
     }
 }
