@@ -24,8 +24,7 @@ namespace SagensVision.VisionTool
         int CurrentIndex = 0;
         HWindow_Final hwindow_final1 = new HWindow_Final();
         HWindow_Final hwindow_final2 = new HWindow_Final();
-        public FitProfileParam[] fParam = new FitProfileParam[4];
-        public Dictionary<string, int>[] DicPointName = new Dictionary<string, int>[4];
+        public FitProfileParam[] fParam = new FitProfileParam[4];       
         ROIController roiController;
         ROIController roiController2;
 
@@ -80,7 +79,21 @@ namespace SagensVision.VisionTool
             ChangeSide();
         }
 
-       
+        string LoadDataGrid()
+        {
+            try
+            {
+                //Add Headers
+               
+
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
+        }
         public void ROiMove(int value)
         {
             try
@@ -93,32 +106,26 @@ namespace SagensVision.VisionTool
                     case ROIController.EVENT_UPDATE_ROI:
 
                         int Id = Convert.ToInt32(SideName.Substring(4, 1));
+                        if (dataGridView1.CurrentCell==null)
+                        {
+                            return;
+                        }
+                        int RowId = dataGridView1.CurrentCell.RowIndex;
+                             
                         
-                        if (richTextBox1.SelectedText =="")
+                        if (RowId <0 || RArray == null)
                         {
                             return;
                         }
-                        string Name = richTextBox1.SelectedText.ToString();
-                        int SideId = Id - 1;
-                        if (!DicPointName[SideId].Keys.Contains(Name))
-                        {
-                            return;
-                        }
-                        int RoiID = DicPointName[SideId][Name];
-                        
-                        if (RoiID == -1 || RArray == null)
-                        {
-                            return;
-                        }
-                        roiList[Id - 1][RoiID] = temp[0];
+                        roiList[Id - 1][RowId] = temp[0];
 
 
                         //记录当前锚定点坐标
 
                         HTuple row, col;
                         FindFirstAnchor(Id, out row, out col);
-                        fParam[Id - 1].roiP[RoiID].AnchorRow = row.D;
-                        fParam[Id - 1].roiP[RoiID].AnchorCol = col.D;
+                        fParam[Id - 1].roiP[RowId].AnchorRow = row.D;
+                        fParam[Id - 1].roiP[RowId].AnchorCol = col.D;
 
                         ROI pt = roiController.getActiveROI();
                         if (pt.Type == "ROIPoint")
@@ -129,26 +136,26 @@ namespace SagensVision.VisionTool
                             {
                                 case 0:
                                     
-                                    fParam[Id - 1].roiP[RoiID].StartOffSet1.Y = (int)(PointTemp[0].D - row.D);
-                                    fParam[Id - 1].roiP[RoiID].StartOffSet1.X = (int)(PointTemp[1].D - col.D);
+                                    fParam[Id - 1].roiP[RowId].StartOffSet1.Y = (int)(PointTemp[0].D - row.D);
+                                    fParam[Id - 1].roiP[RowId].StartOffSet1.X = (int)(PointTemp[1].D - col.D);
                                     PtOrder = -1;
                                     break;
                                 case 1:
                                   
-                                    fParam[Id - 1].roiP[RoiID].EndOffSet1.Y = (int)(PointTemp[0].D - row.D);
-                                    fParam[Id - 1].roiP[RoiID].EndOffSet1.X = (int)(PointTemp[1].D - col.D);
+                                    fParam[Id - 1].roiP[RowId].EndOffSet1.Y = (int)(PointTemp[0].D - row.D);
+                                    fParam[Id - 1].roiP[RowId].EndOffSet1.X = (int)(PointTemp[1].D - col.D);
                                     PtOrder = -1;
                                     break;
                                 case 2:
                                    
-                                    fParam[Id - 1].roiP[RoiID].StartOffSet2.Y = (int)(PointTemp[0].D - row.D);
-                                    fParam[Id - 1].roiP[RoiID].StartOffSet2.X = (int)(PointTemp[1].D - col.D);
+                                    fParam[Id - 1].roiP[RowId].StartOffSet2.Y = (int)(PointTemp[0].D - row.D);
+                                    fParam[Id - 1].roiP[RowId].StartOffSet2.X = (int)(PointTemp[1].D - col.D);
                                     PtOrder = -1;
                                     break;
                                 case 3:
                                    
-                                    fParam[Id - 1].roiP[RoiID].EndOffSet2.Y = (int)(PointTemp[0].D - row.D);
-                                    fParam[Id - 1].roiP[RoiID].EndOffSet2.X = (int)(PointTemp[1].D - col.D);
+                                    fParam[Id - 1].roiP[RowId].EndOffSet2.Y = (int)(PointTemp[0].D - row.D);
+                                    fParam[Id - 1].roiP[RowId].EndOffSet2.X = (int)(PointTemp[1].D - col.D);
                                     PtOrder = -1;
                                     break;
                             }
@@ -186,19 +193,30 @@ namespace SagensVision.VisionTool
                     case ROIController.EVENT_UPDATE_ROI:
                         RoiIsMoving = true;
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-                        
-                        if (/*roiController2.ROIList.Count != roiList2[Id].Count*/isGenSection)
+
+                        int currentId = -1; string Name = "";
+                        if (dataGridView1.CurrentCell == null)
                         {
+                            currentId = 0;
+                        }
+                        else
+                        {
+                            currentId = dataGridView1.CurrentCell.RowIndex;
+                            //ID
+                            Name = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
+                        }
+
+                        if (isGenSection)
+                        {
+                            
                             roiList2[Id].Add(new ROIRectangle2());
 
                             //每个区域单独设置Roi
                             hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref roiList[Id]);
                         }
-                        isGenSection = false;
-
-                        ArrayList array = roiController2.ROIList;
-                       
+                      
                         
+                        ArrayList array = roiController2.ROIList;                       
                         int ActiveId = roiController2.getActiveROIIdx();
                         if (array.Count == 1)
                         {
@@ -212,48 +230,54 @@ namespace SagensVision.VisionTool
                         {
                             return;
                         }
-                       
 
-                        int currentId = -1;
-                        if (richTextBox1.SelectedText != "" && isInsert)
-                        {
-                            string Name = richTextBox1.SelectedText.ToString();
-                            currentId = DicPointName[Id][Name];
-                        }
-                        else
-                        {
-                            //string[] lineArray = richTextBox1.Lines;
-                            //string tempStr = "";
-                            //foreach (var item in DicPointName[Id])
-                            //{
-                            //    if (item.Value == ActiveId)
-                            //    {
-                            //        tempStr = item.Key;
-                            //        break;
-                            //    }
-                            //}                          
-                            //for (int i = 0; i < lineArray.Length; i++)
-                            //{
-                            //    if (lineArray[i] ==tempStr)
-                            //    {
-                            //        currentId = i;
-                            //        break;
-                            //    }
-                            //}
+                        //if ( isInsert)
+                        //{
+                        //    currentId = currentId;
+                        //}
+                        //if (!isInsert)
+                        //{
+                        //    currentId = ActiveId;
+                        //}
 
-                            currentId = ActiveId;
-                        }
+                        //if (currentId != -1 && isInsert)
+                        //{
+                        //    isInsert = false;
 
-                        if (currentId != -1 && isInsert)
-                        {
-                            roiList2[Id][currentId] = (ROI)array[ActiveId];
-                        }
-                        else
-                        {
-                            
-                                roiList2[Id][currentId] = (ROI)array[ActiveId];
-                           
-                        }
+                        //    roiList2[Id][currentId] = (ROI)array[ActiveId];
+                        //    RoiParam RP = new RoiParam();  
+
+                        //    RP = fParam[Id].roiP[currentId].Clone();
+
+                        //    fParam[Id].roiP.Insert(currentId, RP);
+                        //    fParam[Id].roiP[currentId].LineOrCircle = comboBox2.SelectedItem.ToString();
+                        //    //insert
+                        //    dataGridView1.Rows.Insert(currentId);
+                        //    dataGridView1.Rows[currentId].Cells[0].Value = currentId;
+                        //    dataGridView1.Rows[currentId].Cells[1].Value = "Default";
+                        //    dataGridView1.Rows[currentId].Cells[2].Value = fParam[Id].roiP[currentId].LineOrCircle;
+                        //    fParam[Id].DicPointName.Insert(currentId, "Default");
+                        //    //排序
+                        //    for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        //    {
+                        //        dataGridView1.Rows[i].Cells[0].Value = i;
+                        //    }
+
+                        //}
+                        //else
+                        //{
+                        //if (isInsert)
+                        //{
+                        //    isInsert = false;
+                        //    //roiList2[Id][currentId] = (ROI)array[ActiveId];
+                        //}
+                        //else
+                        //{
+                        //    roiList2[Id][ActiveId] = (ROI)array[ActiveId];
+                        //}
+                        roiList2[Id][ActiveId] = (ROI)array[ActiveId];
+
+                        //}
 
                         string key =  "L";
                         if (fParam[Id].roiP.Count != array.Count )
@@ -262,21 +286,10 @@ namespace SagensVision.VisionTool
 
                             RP.AngleOfProfile = Convert.ToInt32(textBox_Deg.Text);
                             RP.NumOfSection = Convert.ToInt32(textBox_Num.Text);
-
-                            if (currentId != -1 && isInsert)
-                            {
-                                fParam[Id].roiP.Insert(currentId,RP);
-                            
-                                fParam[Id].roiP[currentId].LineOrCircle = comboBox2.SelectedItem.ToString();
-                            }
-                            else
-                            {
-                                fParam[Id].roiP.Add(RP);
-                               
-                                fParam[Id].roiP[ActiveId].LineOrCircle = comboBox2.SelectedItem.ToString();
-                            }
-                            
-                           
+                     
+                            fParam[Id].roiP.Add(RP);    
+                            fParam[Id].roiP[ActiveId].LineOrCircle = comboBox2.SelectedItem.ToString();
+                              
                             switch (fParam[Id].roiP[ActiveId].LineOrCircle)
                             {
                                 case"连接段":
@@ -289,62 +302,16 @@ namespace SagensVision.VisionTool
                                     key = "C";
                                     break;
                             }
-                            if (!DicPointName[Id].Keys.Contains(key + (ActiveId + 1).ToString()))
-                            {
-                                key = key + (ActiveId + 1).ToString();
-                            }
-                            else
-                            {
-                                key = key + (ActiveId + 1) + ("_1").ToString();
-                                if (DicPointName[Id].Keys.Contains(key))
+                            key = key + (ActiveId+1).ToString();
+                            if (isGenSection)                            
                                 {
-                                    key = key + "_1";
+                                isGenSection = false;
+                                AddToDataGrid(key, fParam[Id].roiP[ActiveId].LineOrCircle);
+                                    fParam[Id].DicPointName.Add(key);
                                 }
-                            }
-                            DicPointName[Id].Add(key, ActiveId);
-                            if (richTextBox1.Lines.Length != array.Count)
-                            {
-                                List<string> lines = richTextBox1.Lines.ToList();
-                                if (currentId != -1 && isInsert)
-                                {                                    
-                                    lines.Insert(currentId, key);
-                                    richTextBox1.Lines = lines.ToArray();
-
-                                    //listBox1.Items.Insert(currentId, key);
-
-                                    //ActiveId = currentId;
-                                }
-                                else
-                                {
-                                    lines.Add(key);
-                                    richTextBox1.Lines = lines.ToArray();
-                                    //listBox1.Items.Add(key);
-                                }
-                            }
-                            if (isInsert)
-                            {
-                                int[] values = DicPointName[Id].Values.ToArray();
-                                string[] keys = DicPointName[Id].Keys.ToArray();
-                                keys = richTextBox1.Lines;
-                                //listBox1.Items.CopyTo(keys,0);
-
-                                for (int i = currentId; i < DicPointName[Id].Count; i++)
-                                {
-                                    if (keys[i] == key)
-                                    {
-                                        DicPointName[Id][keys[i]] = currentId;
-                                    }
-                                    else
-                                    {
-                                        int value1 = DicPointName[Id][keys[i]];
-                                        DicPointName[Id][keys[i]] = value1 + 1;//后移
-                                    }
-                                }
-                            }
-                            //else
-                            //{
-                            //   DicPointName[Id].Add(key, ActiveId);
-                            //}
+                          
+                            //操作DicPointName    
+                            
                         }
                         HTuple[] lineCoord = new HTuple[1];
 
@@ -389,23 +356,40 @@ namespace SagensVision.VisionTool
 
                         //listBox1.SelectedItem = ActiveId;
                         //richTextBox1.SelectedText = key;
-                        int fId = richTextBox1.GetFirstCharIndexFromLine(currentId);
-                        string[] lines1 = richTextBox1.Lines;
+                        //int fId = richTextBox1.GetFirstCharIndexFromLine(currentId);
+                        //string[] lines1 = richTextBox1.Lines;
                      
-                        richTextBox1.Focus();
-                        richTextBox1.Select(fId, lines1[ActiveId].Length);
-                        PreSelect = richTextBox1.SelectedText;
+                        //richTextBox1.Focus();
+                        //richTextBox1.Select(fId, lines1[ActiveId].Length);
+                        PreSelect = Name;
+                       
+
                         //刷新界面roi
 
-                        hwindow_final2.viewWindow.notDisplayRoi();
+                        //
+                        
                         if (roiList2[Id].Count > 0)
                         {
-                            hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
+                            if (SelectAll)
+                            {
+                                hwindow_final2.viewWindow.notDisplayRoi();
+                                roiController2.viewController.ShowAllRoiModel = -1;
+                                hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
+                            }
+                            else
+                            {
+                                roiController2.viewController.ShowAllRoiModel = ActiveId;
+                                roiController2.viewController.repaint(ActiveId);
+                            }
                         }
-                        hwindow_final2.viewWindow.selectROI(currentId);
+                        hwindow_final2.viewWindow.selectROI(ActiveId);
 
+                        dataGridView1.ClearSelection();
+                        dataGridView1.Rows[ActiveId].Selected = true;
+                        CurrentRowIndex = ActiveId;
                         //记录当前锚定点坐标
                         RoiIsMoving = false;
+                        
                         break;
                     //case HWndCtrl.ERR_READING_IMG:
                     //    MessageBox.Show("Problem occured while reading file! \n", "Profile ",
@@ -437,7 +421,7 @@ namespace SagensVision.VisionTool
                     roiList[i] = new List<ROI>();
                     roiList2[i] = new List<ROI>();
                     //roiList3[i] = new List<ROI>();
-                    DicPointName[i] = new Dictionary<string, int>();
+                    fParam[i].DicPointName= new List<string>();
                     //hwindow_final2.viewWindow.genRect1(400, 400, 1000, 1000, ref roiList3[i]);
                     hwindow_final2.viewWindow.notDisplayRoi();
 
@@ -495,16 +479,16 @@ namespace SagensVision.VisionTool
                         //    initError = "校准区域加载失败";
                         //    continue;
                         //}
-                        if (File.Exists(ParamPath.ParamDir + 1.ToString() + "_" + SideName[i] + ".Dic"))
-                        {
-                            //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[i], 1, SideName + ".Dic", false);
-                            DicPointName[i] = (Dictionary<string, int>)StaticOperate.ReadInSerializable(ParamPath.ParamDir + 1.ToString() + "_" + SideName[i] + ".Dic");
-                        }
-                        else
-                        {
-                            initError = "设置参数.Dic加载失败";
-                            continue;
-                        }                      
+                        //if (File.Exists(ParamPath.ParamDir + 1.ToString() + "_" + SideName[i] + ".Dic"))
+                        //{
+                        //    //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[i], 1, SideName + ".Dic", false);
+                        //    DicPointName[i] = (Dictionary<string, int>)StaticOperate.ReadInSerializable(ParamPath.ParamDir + 1.ToString() + "_" + SideName[i] + ".Dic");
+                        //}
+                        //else
+                        //{
+                        //    initError = "设置参数.Dic加载失败";
+                        //    continue;
+                        //}                      
                         if (File.Exists(ParamPath.Path_Param))
                         {
                             intersectCoordList[i] = (IntersetionCoord)StaticOperate.ReadXML(ParamPath.Path_Param, typeof(IntersetionCoord));
@@ -560,16 +544,16 @@ namespace SagensVision.VisionTool
                         //    initError = "校准区域加载失败";
                         //    continue;
                         //}
-                        if (File.Exists(MyGlobal.ConfigPath + 1.ToString() + "_" + SideName[i] + ".Dic"))
-                        {
-                            //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[i], 1, SideName + ".Dic", false);
-                            DicPointName[i] = (Dictionary<string, int>)StaticOperate.ReadInSerializable(MyGlobal.ConfigPath + 1.ToString() + "_" + SideName[i] + ".Dic");
-                        }
-                        else
-                        {
-                            initError = "设置参数.Dic加载失败";
-                            continue;
-                        }
+                        //if (File.Exists(MyGlobal.ConfigPath + 1.ToString() + "_" + SideName[i] + ".Dic"))
+                        //{
+                        //    //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[i], 1, SideName + ".Dic", false);
+                        //    fParam[Id].DicPointName = (Dictionary<string, int>)StaticOperate.ReadInSerializable(MyGlobal.ConfigPath + 1.ToString() + "_" + SideName[i] + ".Dic");
+                        //}
+                        //else
+                        //{
+                        //    initError = "设置参数.Dic加载失败";
+                        //    continue;
+                        //}
                         ParamPath.ParaName = "Side" + (i + 1).ToString();
                         if (File.Exists(ParamPath.Path_Param))
                         {
@@ -591,11 +575,13 @@ namespace SagensVision.VisionTool
             }
 
         }
+        bool isLoading = false;
         void LoadToUI(int Index = 0)
         {
             try
             {
                 RoiIsMoving = true;
+                isLoading = true;
                 //trackBar1.Maximum = 5000; trackBar2.Maximum = 5000;
                 //trackBar1.Minimum = 0; trackBar2.Minimum = 0;
 
@@ -611,25 +597,28 @@ namespace SagensVision.VisionTool
                 //trackBarValue2 = fParam[Index].EndPt;
                 //cb_LorR.Checked = fParam[Index].BeLeft;
 
-                int count = fParam[Index].roiP.Count;
-                string[] keys =new string[count];
-                for (int i = 0; i < count; i++)
-                {
-                    foreach (var item in DicPointName[Index])
-                    {
-                        if (item.Value == i)
-                        {
-                            keys[i] = item.Key;
-                        }
-                    }
-                }
-                //listBox1.Items.Clear();
+                //int count = fParam[Index].roiP.Count;
+                //string[] keys =new string[count];
                 //for (int i = 0; i < count; i++)
                 //{
-                //    listBox1.Items.Add(keys[i]);
+                //    foreach (var item in fParam[i].DicPointName)
+                //    {
+                //        if (item.Value == i)
+                //        {
+                //            keys[i] = item.Key;
+                //        }
+                //    }
                 //}
-                richTextBox1.Lines = keys;
-                if (count > 0)
+                string[] keys = fParam[Index].DicPointName.ToArray();
+                //DataGridViewButtonColumn dgBtn = new DataGridViewButtonColumn();
+                //dgBtn.Text = "Run";
+                dataGridView1.Rows.Clear();
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    AddToDataGrid(keys[i], fParam[Index].roiP[0].LineOrCircle);
+                }
+
+                if (keys.Length > 0)
                 {
                     textBox_Num.Text = ((int)fParam[Index].roiP[0].NumOfSection).ToString();
                     textBox_Len.Text = ((int)fParam[Index].roiP[0].Len1).ToString();
@@ -643,12 +632,23 @@ namespace SagensVision.VisionTool
                 }
 
                 RoiIsMoving = false;
+                isLoading = false;
             }
             catch (Exception)
             {
 
                 throw;
             }
+        }
+
+        void AddToDataGrid(string ID, string Type)
+        {
+                     
+            dataGridView1.Rows.Add();
+            int count = dataGridView1.Rows.Count;
+            dataGridView1.Rows[count - 1].Cells[0].Value = count;
+            dataGridView1.Rows[count - 1].Cells[1].Value = ID;
+            dataGridView1.Rows[count - 1].Cells[2].Value = Type;
         }
 
         private void trackBarControl1_ValueChanged(object sender, EventArgs e)
@@ -1442,6 +1442,10 @@ namespace SagensVision.VisionTool
 
         private void textBox_Start_TextChanged(object sender, EventArgs e)
         {
+            if (isLoading)
+            {
+                return;
+            }
             TextBox tb = (TextBox)sender;
             string Num = tb.Text.ToString();
             bool ok = Regex.IsMatch(Num, @"(?i)^(\-[0-9]{1,}[.][0-9]*)+$") || Regex.IsMatch(Num, @"(?i)^(\-[0-9]{1,}[0-9]*)+$") || Regex.IsMatch(Num, @"(?i)^([0-9]{1,}[0-9]*)+$");
@@ -2275,7 +2279,7 @@ namespace SagensVision.VisionTool
                 GetCurrentFix();
                 StaticOperate.WriteXML(fParam[Id], MyGlobal.ConfigPath + SideName + ".xml");
                 StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
-                StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[Id], 1, SideName + ".Dic", false);
+                //StaticOperate.WriteInSerializable(MyGlobal.ConfigPath, DicPointName[Id], 1, SideName + ".Dic", false);
                 hwindow_final1.viewWindow.saveROI(roiList[Id], MyGlobal.ConfigPath + SideName + "_Section.roi");
                 hwindow_final2.viewWindow.saveROI(roiList2[Id], MyGlobal.ConfigPath + SideName + "_Region.roi");
                 //hwindow_final2.viewWindow.saveROI(roiList3[Id], MyGlobal.ConfigPath + SideName + "_CorrectRegion.roi");
@@ -2285,7 +2289,7 @@ namespace SagensVision.VisionTool
             {
                 StaticOperate.WriteXML(fParam[Id], ParamPath.ParamDir + SideName + ".xml");
                 //StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
-                StaticOperate.WriteInSerializable(ParamPath.ParamDir, DicPointName[Id], 1, SideName + ".Dic", false);
+                //StaticOperate.WriteInSerializable(ParamPath.ParamDir, DicPointName[Id], 1, SideName + ".Dic", false);
                 hwindow_final1.viewWindow.saveROI(roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
                 hwindow_final2.viewWindow.saveROI(roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
                 //hwindow_final2.viewWindow.saveROI(roiList3[Id], ParamPath.ParamDir + SideName + "_CorrectRegion.roi");
@@ -2391,7 +2395,11 @@ namespace SagensVision.VisionTool
             hwindow_final2.viewWindow.notDisplayRoi();
             if (roiList2[Id].Count > 0)
             {
-                hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
+                if (SelectAll)
+                {
+                    roiController2.viewController.ShowAllRoiModel = -1;
+                }                                 
+                 hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
             }
 
 
@@ -2630,42 +2638,43 @@ namespace SagensVision.VisionTool
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            if (richTextBox1.SelectedText == "")
+           
+            if (dataGridView1.CurrentCell==null)
             {
                 return;
             }
-            //string Name = listBox1.SelectedItem.ToString();
-            string Name = richTextBox1.SelectedText.ToString();
+            int RowId = dataGridView1.CurrentCell.RowIndex;
+            string Name = dataGridView1.Rows[RowId].Cells[1].Value.ToString();
 
             if (roiList2[Id].Count > 0 && roiController2.ROIList.Count == roiList2[Id].Count)
             {
-                int Index = DicPointName[Id][Name];
-                List<string> lines = richTextBox1.Lines.ToList();
-                if (Index >= 0)
+                if (RowId >= 0)
                 {
-                    roiList2[Id].RemoveAt(Index);
-                    roiController2.setActiveROIIdx(Index);
+                    roiList2[Id].RemoveAt(RowId);
+                    roiController2.setActiveROIIdx(RowId);
                     roiController2.removeActive();
-                    lines.RemoveAt(Index);
-                    richTextBox1.Lines = lines.ToArray();
-                    int count = lines.Count;
                     
-
-                    fParam[Id].roiP.RemoveAt(Index);
-                    roiList[Id].RemoveAt(Index);
-                    DicPointName[Id].Remove(Name);
-
-                    int[] values = DicPointName[Id].Values.ToArray();
-                    string[] keys = DicPointName[Id].Keys.ToArray();
-                    //listBox1.Items.CopyTo(keys, 0);
-                    keys = richTextBox1.Lines;
-                    for (int i = Index; i < DicPointName[Id].Count; i++)
+                    fParam[Id].roiP.RemoveAt(RowId);
+                    roiList[Id].RemoveAt(RowId);
+                    fParam[Id].DicPointName.RemoveAt(RowId);
+                    dataGridView1.Rows.RemoveAt(RowId);
+                    //排序
+                    for (int i = 0; i < dataGridView1.Rows.Count; i++)
                     {
+                        dataGridView1.Rows[i].Cells[0].Value = i;
+                    }
+                    
+                    //int[] values = DicPointName[Id].Values.ToArray();
+                    //string[] keys = DicPointName[Id].Keys.ToArray();
+                    ////listBox1.Items.CopyTo(keys, 0);
+                    //keys = richTextBox1.Lines;
+                    //for (int i = Index; i < DicPointName[Id].Count; i++)
+                    //{
                         
-                            int value1 = DicPointName[Id][keys[i]];
-                        DicPointName[Id][keys[i]] = value1 - 1;//前移
+                    //        int value1 = DicPointName[Id][keys[i]];
+                    //    DicPointName[Id][keys[i]] = value1 - 1;//前移
                        
-                    }      
+                    //}      
                 }
                 //刷新界面roi
 
@@ -2684,6 +2693,10 @@ namespace SagensVision.VisionTool
 
         private void 删除所有ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.Rows.Count==0)
+            {
+                return;
+            }
             if (!(MessageBox.Show("是否删除所有区域", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes))
             {
                 return;
@@ -2693,15 +2706,19 @@ namespace SagensVision.VisionTool
             {
                 roiList2[Id].Clear();
                 hwindow_final2.viewWindow.notDisplayRoi();
-                richTextBox1.Clear();
+                dataGridView1.Rows.Clear();
+   
+
                 roiList[Id].Clear();
+                hwindow_final1.viewWindow.notDisplayRoi();
                 PreSelect = "";
-                DicPointName[Id].Clear();
+                fParam[Id].DicPointName.Clear();
                 if (Id >= 0)
                 {
                     fParam[Id].roiP.Clear();
                 }
             }
+            CurrentRowIndex = -1;
         }
         List<ROI> temp = new List<ROI>(); 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -2722,17 +2739,8 @@ namespace SagensVision.VisionTool
                 double a = Convert.ToDouble(index);
                 int num = (int)a;
 
-                if (richTextBox1.SelectedText == "")
-                {
-                    return;
-                }
-                string SelectStr = richTextBox1.SelectedText;
-
-                int roiID = DicPointName[SideId][SelectStr];
-                //if (roiID == -1)
-                //{
-                //    return;
-                //}
+                int roiID = dataGridView1.CurrentCell.RowIndex;
+       
                 HTuple[] lineCoord = new HTuple[1];
                 switch (tb.Name)
                 {
@@ -2959,26 +2967,6 @@ namespace SagensVision.VisionTool
         private int Ignore = 0;
         private void simpleButton5_Click(object sender, EventArgs e)
         {
-            if (HeightImage == null || !HeightImage.IsInitialized())
-            {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1));
-            GenProfileCoord(Id, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore);
-
-
-            int Total = RArray.GetLength(0);
-            textBox_Total.Text = Total.ToString();
-            textBox_Current.Text = "1";
-            CurrentIndex = 1;
-            trackBarControl1.Properties.Maximum = Total;
-            trackBarControl1.Properties.Minimum = 1;
-
-            HTuple row, col; HTuple anchor, anchorc;
-            //ShowProfile(out row, out col,hwindow_final1);
-            FindMaxPt(Id, CurrentIndex - 1, out row, out col,out anchor,out anchorc, hwindow_final1, ShowSection);
-            StaticOperate.WriteInSerializable(MyGlobal.DataPath + "ProfileTemp\\R", RArray, 1, SideName, false);
-            StaticOperate.WriteInSerializable(MyGlobal.DataPath + "ProfileTemp\\C", CArray, 1, SideName, false);
 
         }
         bool SelectAll = false;
@@ -3223,14 +3211,15 @@ namespace SagensVision.VisionTool
                     if (hwind != null)
                     {
                         if (row.Length != 0)
-                        {                            
-                            foreach (var item in DicPointName[Sid])
-                            {
-                                if (item.Value == i)
-                                {
-                                    msg = item.Key;
-                                }
-                            }
+                        {
+                            //foreach (var item in fParam[Sid].DicPointName)
+                            //{
+                            //    if (item.Value == i)
+                            //    {
+                            //        msg = item.Key;
+                            //    }
+                            //}
+                            msg = fParam[Sid].DicPointName[i];
                         }
                     }
 
@@ -3885,13 +3874,14 @@ namespace SagensVision.VisionTool
                             //Random rad = new Random();
                             //int radi = rad.Next(4);
                             string msg = "";
-                            foreach (var item in DicPointName[Sid])
-                            {
-                                if (item.Value == i)
-                                {
-                                    msg = item.Key;
-                                }
-                            }
+                            //foreach (var item in DicPointName[Sid])
+                            //{
+                            //    if (item.Value == i)
+                            //    {
+                            //        msg = item.Key;
+                            //    }
+                            //}
+                            msg = fParam[Sid].DicPointName[i];
                             hwind.viewWindow.dispMessage("Fix" + msg, "red", row.D, col.D);
 
                         }
@@ -4500,6 +4490,7 @@ namespace SagensVision.VisionTool
 
         private void textBox_OffsetX_KeyDown(object sender, KeyEventArgs e)
         {
+            
             int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             TextBox tb = (TextBox)sender;
             string index = tb.Text.ToString();
@@ -4526,13 +4517,9 @@ namespace SagensVision.VisionTool
                         break;
 
                 }
-                if (richTextBox1.SelectedText == "")
-                {
-                    return;
-                }
-                string SelectStr = richTextBox1.SelectedText;
-                int roiID = DicPointName[SideId][SelectStr];               
-                if (roiID == -1)
+             
+                int roiID = dataGridView1.CurrentCell.RowIndex - 1;
+                if (roiID < 0)
                 {
                     return;
                 }
@@ -4583,27 +4570,7 @@ namespace SagensVision.VisionTool
 
         private void simpleButton9_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int Id = Convert.ToInt32(SideName.Substring(4, 1));
-                double[][] Rcoord, Ccoord, Zcoord; string[][] Str;
-                hwindow_final2.ClearWindow();
-                hwindow_final2.HobjectToHimage(IntensityImage);
-                FindPoint(Id, IntensityImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, MyGlobal.HomMat3D[Id - 1], hwindow_final2);
 
-
-                int Total = RArray.GetLength(0);
-                textBox_Total.Text = Total.ToString();
-                textBox_Current.Text = "1";
-                CurrentIndex = 1;
-                trackBarControl1.Properties.Maximum = Total;
-                trackBarControl1.Properties.Minimum = 1;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
 
         private void 更改ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4611,17 +4578,17 @@ namespace SagensVision.VisionTool
             try
             {
                 int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-
+                if (dataGridView1.CurrentCell == null)
+                {
+                    return;
+                }
                 if (roiList2[Id].Count > 0 && roiController2.ROIList.Count == roiList2[Id].Count)
                 {
-                    if (richTextBox1.SelectedText == "")
+                    int roiID = dataGridView1.CurrentCell.RowIndex;
+                    if (roiID < 0)
                     {
                         return;
                     }
-                    string SelectStr = richTextBox1.SelectedText;
-
-                    int roiID = DicPointName[Id][SelectStr];
-                    //int roiId = listBox1.SelectedIndex;
                     if (roiID >= 0)
                     {
 
@@ -4661,6 +4628,7 @@ namespace SagensVision.VisionTool
                                 break;
                         }
                         comboBox2.SelectedItem = fParam[Id].roiP[roiID].LineOrCircle;
+                        dataGridView1.Rows[roiID].Cells[2].Value = fParam[Id].roiP[roiID].LineOrCircle;
 
                     }
                 }
@@ -4703,36 +4671,87 @@ namespace SagensVision.VisionTool
         bool isInsert = false;
         private void 插入ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            hwindow_final2.viewWindow.notDisplayRoi();
-            if (roiList2[Id].Count > 0)
+            if (dataGridView1.CurrentCell == null)
             {
-                hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
+                return;
             }
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            
 
 
             if (hwindow_final2.Image == null || !hwindow_final2.Image.IsInitialized())
             {
                 return;
             }
-            isInsert = true;
-            roiController2.setROIShape(new ROIRectangle2());
-
-            if (richTextBox1.SelectedText == "")
+                  
+            int currentId = dataGridView1.CurrentCell.RowIndex;
+            currentId = CurrentRowIndex;
+            if (currentId < 0)
             {
                 return;
             }
-            string SelectStr = richTextBox1.SelectedText;
+            isInsert = true;
+            HTuple coord1 = roiList[Id][currentId].getModelData();
+            HTuple coord2 = roiList2[Id][currentId].getModelData();
 
-            int currentId = DicPointName[Id][SelectStr];
-            //int currentId = listBox1.SelectedIndex;
+            List<ROI> roilistTemp = new List<ROI>();
+            List<ROI> roilistTemp1 = new List<ROI>();
+            HWindow_Final tempWindow = new HWindow_Final();
+            tempWindow.viewWindow.genRect2(coord2[0].D + 45, coord2[1].D + 45, coord2[2].D, coord2[3].D, coord2[4].D, ref roilistTemp);
+            ROI temp2 = roilistTemp[0];
+            tempWindow.viewWindow.genRect1(coord1[0].D, coord1[1].D, coord1[2].D, coord1[3].D, ref roilistTemp1);
+            ROI rec = roilistTemp1[0];
 
-            roiList2[Id].Insert(currentId, new ROIRectangle2());
-            //每个区域单独设置Roi
-            ROI rec1 = roiList[Id][0];
+            roiList2[Id].Insert(currentId, temp2);
+            roiList[Id].Insert(currentId, rec);
+          
+            hwindow_final1.viewWindow.notDisplayRoi();
 
-            roiList[Id].Insert(currentId, rec1);
-            //hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref roiList[Id]);
+            if (roiList2[Id].Count > 0)
+            {
+                if (SelectAll)
+                {
+                    hwindow_final2.viewWindow.notDisplayRoi();
+                    roiController2.viewController.ShowAllRoiModel = -1;
+                    hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
+                }
+                else
+                {
+                    roiController2.viewController.ShowAllRoiModel = currentId + 1;
+                    roiController2.viewController.repaint(currentId + 1);
+                }
+                hwindow_final2.viewWindow.setActiveRoi(currentId + 1);         
+            }
+            if (roiList[Id].Count > 0)
+            {
+                temp.Clear();
+                ROI roi = roiList[Id][currentId + 1];
+                temp.Add(roi);
+                hwindow_final1.viewWindow.notDisplayRoi();
+                hwindow_final1.viewWindow.displayROI(ref temp);
+            }    
+
+                RoiParam RP = new RoiParam();
+                RP = fParam[Id].roiP[currentId].Clone();
+                //新位置的
+                HTuple NewCoord = CopyTemp2.getModelData();
+                RP.CenterRow = NewCoord[0]; RP.CenterCol = NewCoord[1];
+                 fParam[Id].roiP.Insert(currentId, RP);
+                fParam[Id].roiP[currentId].LineOrCircle = comboBox2.SelectedItem.ToString();
+                //insert
+                dataGridView1.Rows.Insert(currentId);
+                dataGridView1.Rows[currentId].Cells[0].Value = currentId;
+                dataGridView1.Rows[currentId].Cells[1].Value = "Default";
+                dataGridView1.Rows[currentId].Cells[2].Value = fParam[Id].roiP[currentId].LineOrCircle;
+                fParam[Id].DicPointName.Insert(currentId, "Default");
+                //排序
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    dataGridView1.Rows[i].Cells[0].Value = i;
+                }
+
+            //roiController2.setROIShape(new ROIRectangle2());
+
         }
 
         int PtOrder = -1;
@@ -4786,14 +4805,14 @@ namespace SagensVision.VisionTool
         {
             try
             {
-                ReName = true;
-                richTextBox1.ReadOnly = false;
-                int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-                if (richTextBox1.SelectedText == "")
-                {
-                    return;
-                }
-                PreSelect = richTextBox1.SelectedText;
+                //ReName = true;
+                //richTextBox1.ReadOnly = false;
+                //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+                //if (richTextBox1.SelectedText == "")
+                //{
+                //    return;
+                //}
+                //PreSelect = richTextBox1.SelectedText;
             }
             catch (Exception)
             {
@@ -4802,245 +4821,18 @@ namespace SagensVision.VisionTool
             }
         }
 
-        private void richTextBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            
-            SelectRow();
-        }
 
         bool isSelectOne = false;
-        void SelectRow()
-        {
-            try
-            {
-                isGenSection = false;
-                richTextBox1.HideSelection = true;
-                int currentPos = richTextBox1.SelectionStart;
-                int row = richTextBox1.GetLineFromCharIndex(currentPos);
-                int fId = richTextBox1.GetFirstCharIndexOfCurrentLine();
-                //isSelectOne = false;
-                //richTextBox1.SelectAll();
-               
-                //string allStr = richTextBox1.SelectedText;
-                //string tempStr = allStr.Replace("\n", " ");
-                //tempStr = tempStr.Replace("\t", " ");
-                //string[] strArr = tempStr.Split(" ".ToCharArray());
-                //int flag = 0;
-                //string ResultStr = "";
-
-                ////string[] strArr = richTextBox1.Lines;
-                //foreach (string str in strArr)
-                //{
-                //    if (flag == row)
-                //    {
-                //        ResultStr = str;
-                //        break;
-                //    }
-                //    flag++;
-                //}
-               
-                //currentPos = allStr.IndexOf(ResultStr);
-                isSelectOne = true;
-                string[] strArr = richTextBox1.Lines;
-                richTextBox1.Select(fId, strArr[row].Length);
-                //richTextBox1.Select(0, 10);
-               
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-
         string PreSelect= "";
-        private void richTextBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                  
-                    SelectRow();
-
-                    richTextBox1.ReadOnly = true;
-                    int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-                    if (richTextBox1.SelectedText == "")
-                    {
-                        return;
-                    }
-                    string SelectStr = richTextBox1.SelectedText;
-                    int currentId = DicPointName[Id][PreSelect];
-                    //先除去 再添加
-                    if (DicPointName[Id].Keys.Contains(SelectStr))
-                    {
-                        richTextBox1.SelectedText = PreSelect;
-                        MessageBox.Show("命名不可重复");
-                        return;
-                    }
-                    DicPointName[Id].Remove(PreSelect);
-                    DicPointName[Id].Add(SelectStr, currentId);
-                    ReName = false;
-                }
-                
-                if (e.KeyCode == Keys.Up ||e.KeyCode == Keys.Down)
-                {
-                    SelectRow();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        private void richTextBox1_SelectionChanged(object sender, EventArgs e)
-        {
-            
-            if (isSelectOne ==false|| richTextBox1.SelectedText == "" ||ReName)//richTextBox1.SelectedText == "" || 
-            {
-                return;
-            }
-            try
-            {
-                isGenSection = false;
-                RoiIsMoving = true;
-                isSelectOne = false;
-                string Name = richTextBox1.SelectedText.ToString();
-                int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-                
-                int id = DicPointName[SideId][Name];
-
-                //hwindow_final2.viewWindow.notDisplayRoi();
-                if (roiList2[SideId].Count > 0)
-                {
-                    if (SelectAll)
-                    {
-                        hwindow_final2.viewWindow.notDisplayRoi();
-                        roiController2.viewController.ShowAllRoiModel = -1;
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                    }
-                    else
-                    {
-                        if (roiController2.ROIList.Count != roiList2[SideId].Count)
-                        {
-                            roiController2.viewController.ShowAllRoiModel = -1;
-                            hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        }
-
-                        roiController2.viewController.ShowAllRoiModel = id;
-                        roiController2.viewController.repaint(id);
-                    }
-                    
-                    //if (SelectAll)
-                    //{
-                    //roiController2.viewController.repaint(id);
-
-                    //}
-                    //else
-                    //{
-                    //    tempList.Clear();
-                    //    for (int i = 0; i < roiList2[SideId].Count; i++)
-                    //    {
-                    //        ROI temp = (ROI)roiList2[SideId][i];
-                    //        tempList.Add(temp);
-                    //    }
-                    //    hwindow_final2.viewWindow.displayROI(ref tempList, id);
-                    //}
-
-                }
-
-                
-
-                textBox_Num.Text = fParam[SideId].roiP[id].NumOfSection.ToString();
-                HTuple[] lineCoord = new HTuple[1];
-                //if (SelectAll)
-                //{
-                    DispSection((ROIRectangle2)roiList2[SideId][id], SideId, id, out lineCoord, hwindow_final2);
-
-                //}
-                //else
-                //{
-                //    DispSection((ROIRectangle2)tempList[0], SideId, id, out lineCoord, hwindow_final2);
-                //}
-                int pID = 1;
-                for (int i = 0; i < id; i++)
-                {
-                    for (int j = 0; j < fParam[SideId].roiP[i].NumOfSection; j++)
-                    {
-                        pID++;
-                    }
-                }
-
-                CurrentIndex = pID;
-                textBox_Current.Text = CurrentIndex.ToString();
-                HTuple row, col; HTuple anchor, anchorc;
-                FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
-                //string[] color = {"red","blue","green", "lime green", "black" };
-                if (row.Length!=0)
-                {
-                    //Random rad = new Random();
-                    //int i = rad.Next(4);
-                    hwindow_final2.viewWindow.dispMessage(Name, "blue", row.D, col.D);
-                }
-
-
-
-                //HTuple tempData = new HTuple();
-                //List<ROI> temproi = new List<ROI>();
-                //tempData = roiList2[SideId][id].getModelData();
-
-                //hwindow_final2.viewWindow.genRect2(tempData[0].D, tempData[1].D, tempData[2].D, fParam[SideId].roiP[id].Len1, fParam[SideId].roiP[id].Len2, ref temproi);
-                //roiList2[SideId][id] = temproi[0];
-                //hwindow_final2.viewWindow.notDisplayRoi();
-                //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-
-                temp.Clear();
-                ROI roi = roiList[SideId][id];
-                temp.Add(roi);
-                hwindow_final1.viewWindow.notDisplayRoi();
-                hwindow_final1.viewWindow.displayROI(ref temp);
-
-
-                textBox_Num.Text = ((int)fParam[SideId].roiP[id].NumOfSection).ToString();
-                textBox_Len.Text = ((int)fParam[SideId].roiP[id].Len1).ToString();
-                textBox_Width.Text = ((int)fParam[SideId].roiP[id].Len2).ToString();
-                textBox_Row.Text = ((int)fParam[SideId].roiP[id].CenterRow).ToString();
-                textBox_Col.Text = ((int)fParam[SideId].roiP[id].CenterCol).ToString();
-                HTuple deg = new HTuple();
-                HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
-                textBox_phi.Text = ((int)deg.D).ToString();
-                textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                //textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
-                textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
-                textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
-                textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
-                textBox_IndStart1.Text = fParam[SideId].roiP[id].StartOffSet1.ToString();
-                textBox_IndStart2.Text = fParam[SideId].roiP[id].StartOffSet2.ToString();
-                textBox_IndEnd1.Text = fParam[SideId].roiP[id].EndOffSet1.ToString();
-                textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
-
-                comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
-                //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
-                //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
-                PreSelect = richTextBox1.SelectedText;
-                RoiIsMoving = false;
-            }
-            catch (Exception)
-            {
-                RoiIsMoving = false;
-                //Debug.WriteLine(richTextBox1.SelectedText);
-                throw;
-            }
-
-        }
 
         private void textBox_OffsetX_TextChanged(object sender, EventArgs e)
         {
             try
             {
+                if (isLoading)
+                {
+                    return;
+                }
                 
                 int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 TextBox tb = (TextBox)sender;
@@ -5076,12 +4868,8 @@ namespace SagensVision.VisionTool
                         fParam[SideId].MaxZ = num;
                         break;
                 }
-                    if (richTextBox1.SelectedText == "")
-                    {
-                        return;
-                    }
-                    string SelectStr = richTextBox1.SelectedText;
-                    int roiID = DicPointName[SideId][SelectStr];
+
+                    int roiID = dataGridView1.CurrentCell.RowIndex;
                     if (roiID == -1)
                     {
                         return;
@@ -5126,11 +4914,6 @@ namespace SagensVision.VisionTool
             }
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             NotUseFix = checkBox4.Checked;
@@ -5138,15 +4921,315 @@ namespace SagensVision.VisionTool
 
         private void richTextBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            if (PreSelect!="" && DicPointName[SideId].Keys.Contains(PreSelect))
-            {               
-                richTextBox1.Focus();
-                int id = DicPointName[SideId][PreSelect];
-                int fId = richTextBox1.GetFirstCharIndexFromLine(id);
-                richTextBox1.Select(fId, PreSelect.Length);
-            }
+            //int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            //if (PreSelect!="" && DicPointName[SideId].Keys.Contains(PreSelect))
+            //{               
+            //    richTextBox1.Focus();
+            //    int id = DicPointName[SideId][PreSelect];
+            //    int fId = richTextBox1.GetFirstCharIndexFromLine(id);
+            //    richTextBox1.Select(fId, PreSelect.Length);
+            //}
            
+        }
+
+        bool isSelecting = false;
+        private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentCell == null || RoiIsMoving|| isSelecting)
+            {
+                return;
+            }
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            if (roiID < 0)
+            {
+                return;
+            }
+            isSelecting = true;
+            dataGridView1.ClearSelection();
+            dataGridView1.Rows[roiID].Selected = true;
+            isSelecting = false;
+            try
+            {
+                isGenSection = false;
+                RoiIsMoving = true;
+                isSelectOne = false;
+                int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+
+                int id = roiID;
+
+                //hwindow_final2.viewWindow.notDisplayRoi();
+                if (roiList2[SideId].Count > 0)
+                {
+                    if (SelectAll)
+                    {
+                        hwindow_final2.viewWindow.notDisplayRoi();
+                        roiController2.viewController.ShowAllRoiModel = -1;
+                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                        hwindow_final2.viewWindow.selectROI(id);
+                    }
+                    else
+                    {
+                        if (roiController2.ROIList.Count != roiList2[SideId].Count)
+                        {
+                            roiController2.viewController.ShowAllRoiModel = -1;
+                            hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                        }
+
+                        roiController2.viewController.ShowAllRoiModel = id;
+                        roiController2.viewController.repaint(id);
+                    }
+
+                    //if (SelectAll)
+                    //{
+                    //roiController2.viewController.repaint(id);
+
+                    //}
+                    //else
+                    //{
+                    //    tempList.Clear();
+                    //    for (int i = 0; i < roiList2[SideId].Count; i++)
+                    //    {
+                    //        ROI temp = (ROI)roiList2[SideId][i];
+                    //        tempList.Add(temp);
+                    //    }
+                    //    hwindow_final2.viewWindow.displayROI(ref tempList, id);
+                    //}
+
+                }
+                else
+                {
+                    return;
+                }
+
+
+                textBox_Num.Text = fParam[SideId].roiP[id].NumOfSection.ToString();
+                HTuple[] lineCoord = new HTuple[1];
+                //if (SelectAll)
+                //{
+                DispSection((ROIRectangle2)roiList2[SideId][id], SideId, id, out lineCoord, hwindow_final2);
+
+                //}
+                //else
+                //{
+                //    DispSection((ROIRectangle2)tempList[0], SideId, id, out lineCoord, hwindow_final2);
+                //}
+                int pID = 1;
+                for (int i = 0; i < id; i++)
+                {
+                    for (int j = 0; j < fParam[SideId].roiP[i].NumOfSection; j++)
+                    {
+                        pID++;
+                    }
+                }
+
+                CurrentIndex = pID;
+                textBox_Current.Text = CurrentIndex.ToString();
+                HTuple row, col; HTuple anchor, anchorc;
+                FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                //string[] color = {"red","blue","green", "lime green", "black" };
+                if (row.Length != 0)
+                {
+                    //Random rad = new Random();
+                    //int i = rad.Next(4);
+                    hwindow_final2.viewWindow.dispMessage(Name, "blue", row.D, col.D);
+                }
+
+
+
+                //HTuple tempData = new HTuple();
+                //List<ROI> temproi = new List<ROI>();
+                //tempData = roiList2[SideId][id].getModelData();
+
+                //hwindow_final2.viewWindow.genRect2(tempData[0].D, tempData[1].D, tempData[2].D, fParam[SideId].roiP[id].Len1, fParam[SideId].roiP[id].Len2, ref temproi);
+                //roiList2[SideId][id] = temproi[0];
+                //hwindow_final2.viewWindow.notDisplayRoi();
+                //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+
+                temp.Clear();
+                ROI roi = roiList[SideId][id];
+                temp.Add(roi);
+                hwindow_final1.viewWindow.notDisplayRoi();
+                hwindow_final1.viewWindow.displayROI(ref temp);
+
+
+                textBox_Num.Text = ((int)fParam[SideId].roiP[id].NumOfSection).ToString();
+                textBox_Len.Text = ((int)fParam[SideId].roiP[id].Len1).ToString();
+                textBox_Width.Text = ((int)fParam[SideId].roiP[id].Len2).ToString();
+                textBox_Row.Text = ((int)fParam[SideId].roiP[id].CenterRow).ToString();
+                textBox_Col.Text = ((int)fParam[SideId].roiP[id].CenterCol).ToString();
+                HTuple deg = new HTuple();
+                HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
+                textBox_phi.Text = ((int)deg.D).ToString();
+                textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
+                //textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
+                textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
+                textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
+                textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
+                textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
+                textBox_IndStart1.Text = fParam[SideId].roiP[id].StartOffSet1.ToString();
+                textBox_IndStart2.Text = fParam[SideId].roiP[id].StartOffSet2.ToString();
+                textBox_IndEnd1.Text = fParam[SideId].roiP[id].EndOffSet1.ToString();
+                textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
+
+                comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
+                //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
+                //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
+                PreSelect = dataGridView1.Rows[id].Cells[1].Value.ToString();
+                CurrentRowIndex = roiID;
+                RoiIsMoving = false;
+            }
+            catch (Exception)
+            {
+                RoiIsMoving = false;
+                //Debug.WriteLine(richTextBox1.SelectedText);
+                throw;
+            }
+        }
+
+        ROI CopyTemp;
+        ROI CopyTemp2;
+        int CopyId = -1;
+        int CurrentRowIndex = -1;
+        private void 复制ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+               
+                if (dataGridView1.CurrentCell == null )
+                {
+                    return;
+                }
+                int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+
+                if (hwindow_final2.Image == null || !hwindow_final2.Image.IsInitialized())
+                {
+                    return;
+                }
+
+                int currentId = CurrentRowIndex;
+                if (currentId < 0)
+                {
+                    return;
+                }
+
+                HTuple coord1 = roiList[Id][currentId].getModelData();
+                HTuple coord2 = roiList2[Id][currentId].getModelData();
+
+                List<ROI> roilistTemp = new List<ROI>();
+                List<ROI> roilistTemp1 = new List<ROI>();
+                HWindow_Final tempWindow = new HWindow_Final();
+                tempWindow.viewWindow.genRect2(coord2[0].D + 45, coord2[1].D + 45, coord2[2].D, coord2[3].D, coord2[4].D, ref roilistTemp);
+                CopyTemp2 = roilistTemp[0];
+                tempWindow.viewWindow.genRect1(coord1[0].D , coord1[1].D , coord1[2].D, coord1[3].D, ref roilistTemp1);
+                CopyTemp = roilistTemp1[0];
+
+                CopyId = currentId;               
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+        private void 粘贴ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CopyId ==-1)
+                {
+                    return;
+                }
+                int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+                int currentId = dataGridView1.CurrentCell.RowIndex;
+                currentId = CurrentRowIndex;
+                //添加到当前Id之后
+                roiList2[Id].Insert(currentId + 1, CopyTemp2);
+                roiList[Id].Insert(currentId + 1, CopyTemp);
+                
+                hwindow_final1.viewWindow.notDisplayRoi();
+
+                if (roiList2[Id].Count > 0)
+                {
+                    if (SelectAll)
+                    {
+                        hwindow_final2.viewWindow.notDisplayRoi();
+                        roiController2.viewController.ShowAllRoiModel = -1;
+                        hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
+                    }
+                    else
+                    {
+                        roiController2.viewController.ShowAllRoiModel = CopyId + 1;
+                        roiController2.viewController.repaint(CopyId + 1);
+                    }
+                    hwindow_final2.viewWindow.setActiveRoi(currentId + 1);
+                }
+                if (roiList[Id].Count > 0)
+                {
+                    temp.Clear();
+                    ROI roi = roiList[Id][CopyId + 1];
+                    temp.Add(roi);
+                    hwindow_final1.viewWindow.notDisplayRoi();
+                    hwindow_final1.viewWindow.displayROI(ref temp);
+                }
+
+                RoiParam RP = new RoiParam();
+                RP = fParam[Id].roiP[CopyId].Clone();
+                //新位置的
+                HTuple NewCoord = CopyTemp2.getModelData();
+                RP.CenterRow = NewCoord[0];RP.CenterCol = NewCoord[1];
+                fParam[Id].roiP.Insert(currentId + 1, RP);
+                fParam[Id].roiP[currentId + 1].LineOrCircle = comboBox2.SelectedItem.ToString();
+                //insert
+                dataGridView1.Rows.Insert(currentId + 1);
+                dataGridView1.Rows[currentId + 1].Cells[0].Value = currentId + 1;
+                dataGridView1.Rows[currentId + 1].Cells[1].Value = "Default";
+                dataGridView1.Rows[currentId + 1].Cells[2].Value = fParam[Id].roiP[currentId + 1].LineOrCircle;
+                fParam[Id].DicPointName.Insert(currentId + 1, "Default");
+                //排序
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    dataGridView1.Rows[i].Cells[0].Value = (i+1);
+                }
+                //dataGridView1.ClearSelection();
+                //dataGridView1.Rows[currentId + 1].Selected = true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                bool newID = dataGridView1.IsCurrentCellInEditMode;
+                if (!newID)
+                {
+                    return;
+                }
+                int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;                
+                int currentId = CurrentRowIndex;
+                if (currentId!=-1)
+                {
+                    string Value = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
+                    if (fParam[Id].DicPointName.Contains(Value))
+                    {
+                        MessageBox.Show("ID已存在");
+                        dataGridView1.Rows[currentId].Cells[1].Value = "Default";
+                        return;
+                    }
+                    fParam[Id].DicPointName[currentId] = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 
@@ -5245,6 +5328,7 @@ namespace SagensVision.VisionTool
         public double MaxZ = 0.5;
 
         public List<RoiParam> roiP = new List<RoiParam>();
+        public List<string> DicPointName = new List<string>();
         /// <summary>
         /// 使用定位
         /// </summary>
@@ -5253,7 +5337,7 @@ namespace SagensVision.VisionTool
 
     [Serializable]
     public class RoiParam
-    {
+    {       
         /// <summary>
         /// 矩形区域截面数量
         /// </summary>
@@ -5298,6 +5382,24 @@ namespace SagensVision.VisionTool
         public Point EndOffSet1 = new Point(0, 0);
         public Point StartOffSet2 = new Point(0, 0);
         public Point EndOffSet2 = new Point(0, 0);
-
+ 
+        public RoiParam Clone()
+        {
+            RoiParam temp = new RoiParam();
+            //temp.AnchorCol = AnchorCol;
+            //temp.AnchorRow = AnchorCol;
+            //temp.AngleOfProfile = AngleOfProfile;
+            //temp.CenterCol = CenterCol;
+            //temp.CenterRow = CenterRow;
+            //temp.EndOffSet1 = EndOffSet1;
+            //temp.EndOffSet2 = EndOffSet2;
+            //temp.Len1 = Len1;
+            //temp.Len2 = Len2;
+            //temp.LineOrCircle = LineOrCircle;
+            //temp.NumOfSection = NumOfSection;
+            //temp.phi = phi;
+            temp = (RoiParam) this.MemberwiseClone();
+            return temp;
+        }
     }
 }
