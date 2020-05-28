@@ -54,7 +54,9 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
-
+             CurrentSide = "";
+             isSave = true;
+             isCloing = false;
             //Init();
             splitContainerControl1.Panel1.Controls.Add(hwindow_final1);
             splitContainerControl1.Panel2.Controls.Add(hwindow_final2);
@@ -73,7 +75,7 @@ namespace SagensVision.VisionTool
             comboBox2.SelectedIndex = 0;
             comboBox1.SelectedIndex = 0;
             ParamPath.ParaName = comboBox1.SelectedItem.ToString();
-            CurrentSide = ParamPath.ParaName;
+            CurrentSide = "";
             hwindow_final1.viewWindow.setEditModel(false);
             hwindow_final2.viewWindow.setEditModel(false);
             ChangeSide();
@@ -1143,7 +1145,7 @@ namespace SagensVision.VisionTool
             //PseudoColor.HeightAreaToPseudoColor(HeightImage, out RGBImage, -20, 10, fParam[Id].MinZ, fParam[Id].MaxZ);
             //hwindow_final2.HobjectToHimage(RGBImage);
             hwindow_final2.HobjectToHimage(IntensityImage);
-            GC.Collect();
+      
 
                      
             if (!NotUseFix &&this.Text!="Fix")
@@ -2318,10 +2320,13 @@ namespace SagensVision.VisionTool
         string CurrentSide = "";
         bool isSave = false;
         bool NoChange = false;
+        bool isCloing = false;
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (NoChange || comboBox1.SelectedItem.ToString() == CurrentSide)
+
+            if (isCloing ||NoChange || comboBox1.SelectedItem.ToString() == CurrentSide)
             {
+                isCloing = false;
                 NoChange = false;
                 return;
             }
@@ -2330,21 +2335,26 @@ namespace SagensVision.VisionTool
                 if (isSave)
                 {
                     isSave = false;
-                    return;
+                   
                 }
-                DialogResult result = MessageBox.Show("当前参数未保存，是否切换?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result != DialogResult.Yes)
+                else
                 {
-                   
-                    if (comboBox1.SelectedItem.ToString() != CurrentSide)
+                    DialogResult result = MessageBox.Show("当前参数未保存，是否切换?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (result != DialogResult.Yes)
                     {
-                        NoChange = true;
-                        comboBox1.SelectedItem = CurrentSide;
+
+                        if (comboBox1.SelectedItem.ToString() != CurrentSide)
+                        {
+                            NoChange = true;
+                            comboBox1.SelectedItem = CurrentSide;
+                            NoChange = false;
+                        }
+
+                        return;
                     }
-                   
-                    return;
                 }
+                
 
                 SideName = comboBox1.SelectedItem.ToString();
                 ParamPath.ParaName = SideName;
@@ -2663,7 +2673,7 @@ namespace SagensVision.VisionTool
                     //排序
                     for (int i = 0; i < dataGridView1.Rows.Count; i++)
                     {
-                        dataGridView1.Rows[i].Cells[0].Value = i;
+                        dataGridView1.Rows[i].Cells[0].Value = i + 1;
                     }
                     
                     //int[] values = DicPointName[Id].Values.ToArray();
@@ -4702,6 +4712,7 @@ namespace SagensVision.VisionTool
             checkBoxRoi.Checked = false;
             comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 0;
+            isCloing = true;
             CurrentSide = "";
         }
         bool isInsert = false;
