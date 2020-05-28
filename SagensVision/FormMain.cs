@@ -223,7 +223,7 @@ namespace SagensVision
                 string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
-                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
+                    MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
                 string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, Homat3D, Hwnd, false, homMaxFix);
                 return OK;
             }
@@ -681,7 +681,7 @@ namespace SagensVision
                     StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                     StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
                     StaticOperate.SaveImage(rgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
-
+                    
                     string OK = RunSide(Station, IntensityImage, HeightImage);
                     HObject[] temp = { IntensityImage, HeightImage };
                     MyGlobal.ImageMulti.Add(temp);

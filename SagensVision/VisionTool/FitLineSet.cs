@@ -111,8 +111,8 @@ namespace SagensVision.VisionTool
                             return;
                         }
                         int RowId = dataGridView1.CurrentCell.RowIndex;
-                             
-                        
+                        RowId = CurrentRowIndex;
+
                         if (RowId <0 || RArray == null)
                         {
                             return;
@@ -202,6 +202,7 @@ namespace SagensVision.VisionTool
                         else
                         {
                             currentId = dataGridView1.CurrentCell.RowIndex;
+                            currentId = CurrentRowIndex;
                             //ID
                             Name = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
                         }
@@ -1151,7 +1152,7 @@ namespace SagensVision.VisionTool
                 string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    0, intersection.Row, intersection.Col, 0, out homMaxFix);
+                    MyGlobal.flset2.intersectCoordList[Id].Angle, intersection.Row, intersection.Col, intersection.Angle, out homMaxFix);
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
                 {
@@ -1205,7 +1206,7 @@ namespace SagensVision.VisionTool
                 string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
+                    intersectCoordList[Id].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
                 MyGlobal.flset2.intersectCoordList[Id] = intersect;
             }
             catch (Exception)
@@ -2644,6 +2645,7 @@ namespace SagensVision.VisionTool
                 return;
             }
             int RowId = dataGridView1.CurrentCell.RowIndex;
+            RowId = CurrentRowIndex;
             string Name = dataGridView1.Rows[RowId].Cells[1].Value.ToString();
 
             if (roiList2[Id].Count > 0 && roiController2.ROIList.Count == roiList2[Id].Count)
@@ -2740,7 +2742,7 @@ namespace SagensVision.VisionTool
                 int num = (int)a;
 
                 int roiID = dataGridView1.CurrentCell.RowIndex;
-       
+                roiID = CurrentRowIndex;
                 HTuple[] lineCoord = new HTuple[1];
                 switch (tb.Name)
                 {
@@ -2860,12 +2862,6 @@ namespace SagensVision.VisionTool
                         HTuple CenterR = new HTuple(); HTuple CenterC = new HTuple();
                         List<ROI> temproi = new List<ROI>();
                         HTuple tempR = new HTuple(); HTuple tempC = new HTuple();
-
-                        //HTuple orignal = roiList2[SId][i].getModelData();
-                        //HOperatorSet.AffineTransPoint2d(Fix, orignal[0], orignal[1], out tempR, out tempC);
-                        //hwindow_final2.viewWindow.genRect2(tempR, tempC, orignal[2], orignal[3], orignal[4], ref temproi);
-                        //roiList2[SId][i] = temproi[0];
-
                         HOperatorSet.AffineTransPoint2d(Fix, recCoord[0], recCoord[1], out CenterR, out CenterC);                    
                         temp.Row = CenterR;temp.Column = CenterC;
                     }
@@ -3183,6 +3179,8 @@ namespace SagensVision.VisionTool
                 double[][] RowCoordt = new double[Len][]; double[][] ColCoordt = new double[Len][]; /*double[][] ZCoordt = new double[Len][];*/
 
                 int Num = 0; int Add = 0; HTuple NewZ = new HTuple();
+                HTuple origRow = new HTuple();
+                HTuple origCol = new HTuple();
                 for (int i = 0; i < Len; i++)
                 {
                     if (i == 11)
@@ -3210,8 +3208,7 @@ namespace SagensVision.VisionTool
                     string msg = "";
                     if (hwind != null)
                     {
-                        if (row.Length != 0)
-                        {
+                        
                             //foreach (var item in fParam[Sid].DicPointName)
                             //{
                             //    if (item.Value == i)
@@ -3220,7 +3217,7 @@ namespace SagensVision.VisionTool
                             //    }
                             //}
                             msg = fParam[Sid].DicPointName[i];
-                        }
+                       
                     }
 
                     if (row.Length<2)
@@ -3284,8 +3281,6 @@ namespace SagensVision.VisionTool
                             hwind.viewWindow.displayHobject(cross1, "cadet blue",false);
                         }
 
-                        
-
 
                         //HTuple linephi = new HTuple();
                         //HOperatorSet.LineOrientation(Rowbg, Colbg, RowEd, ColEd, out linephi);
@@ -3341,7 +3336,7 @@ namespace SagensVision.VisionTool
 
                         if (Xresolution == 0)
                         {
-                            return "XResolution=0";
+                            return "XResolution = 0";
                         }
                         double DisX = fParam[Sid].roiP[i].Yoffset * Math.Sin(lineAngle.D) / Xresolution;
                         double DisY = fParam[Sid].roiP[i].Yoffset * Math.Cos(lineAngle.D) / Yresolution;                        
@@ -3368,13 +3363,13 @@ namespace SagensVision.VisionTool
                         {
                            
                             hwind.viewWindow.displayHobject(ArcObj, "red");
-
+                            hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
                         }
 
                         siglePart = ArcObj;
                     }
                     
-                    hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
+                  
 
                     //加上 x y z 偏移
                     //row = row + fParam[Sid].roiP[i].Yoffset;
@@ -3401,7 +3396,7 @@ namespace SagensVision.VisionTool
                         return "偏移点"+ msg +"设置在图像之外";
                     }
                     //
-                    
+
 
 
                     ////除去 -100 的点
@@ -3546,7 +3541,7 @@ namespace SagensVision.VisionTool
 
                     //HTuple origRow = row;
                     //HTuple origCol = col;
-    
+
                     #region 单边去重
                     //if (i > 0)
                     //{
@@ -3568,7 +3563,7 @@ namespace SagensVision.VisionTool
                     //        switch (Sid)
                     //    {
                     //        case 0: //x2>x1
-                              
+
                     //            HTuple Grater1id = Grater1.TupleFind(1);
                     //            row = row.TupleRemove(Grater1id);
                     //            col = col.TupleRemove(Grater1id);
@@ -3576,7 +3571,7 @@ namespace SagensVision.VisionTool
 
                     //            break;
                     //        case 1: //y2>y1
-                                   
+
                     //            HTuple Grater2id = Grater1.TupleFind(1);
                     //            row = row.TupleRemove(Grater2id);
                     //            col = col.TupleRemove(Grater2id);
@@ -3585,7 +3580,7 @@ namespace SagensVision.VisionTool
                     //            zcoord = zcoord.TupleRemove(Grater2id);
                     //            break;
                     //        case 2: //x2<x1
-                                
+
                     //            HTuple Grater3id = Grater1.TupleFind(1);
                     //            row = row.TupleRemove(Grater3id);
                     //                col = col.TupleRemove(Grater3id);
@@ -3594,7 +3589,7 @@ namespace SagensVision.VisionTool
                     //                zcoord = zcoord.TupleRemove(Grater3id);
                     //                break;
                     //        case 3: //y2<y1
-                               
+
                     //            HTuple Grater4id = Grater1.TupleFind(1);
                     //            row = row.TupleRemove(Grater4id);
                     //            col = col.TupleRemove(Grater4id);
@@ -3604,13 +3599,12 @@ namespace SagensVision.VisionTool
                     //            break;
                     //    }
                     //}
+                    //if (row.Length == 0)
+                    //{
+                    //    return "单边设置 区域重复点数过大";
+                    //}
                     #endregion 单边去重
 
-
-                    if (row.Length == 0)
-                    {
-                        return "单边设置 区域重复点数过大";
-                    }
 
                     if (hwind != null && debug == false)
                     {
@@ -3618,7 +3612,8 @@ namespace SagensVision.VisionTool
                         HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
                         hwind.viewWindow.displayHobject(NewSide, "red");
                     }
-
+                    origRow = origRow.TupleConcat(row);
+                    origCol = origCol.TupleConcat(col);
                     RowCoordt[i] = row;
                     ColCoordt[i] = col;
                     //进行矩阵变换
@@ -3670,21 +3665,84 @@ namespace SagensVision.VisionTool
                     //    }
                     //}
 
-                    NewZ = NewZ.TupleConcat(ZCoord[i][0]);
+                    //NewZ = NewZ.TupleConcat(ZCoord[i][0]);
                 }
-                HTuple zId =  NewZ.TupleGreaterElem(-10);
-                NewZ = NewZ[zId];
+                //HTuple zId =  NewZ.TupleGreaterElem(-10);
+                //zId = zId.TupleFind(1);
+                //NewZ = NewZ[zId];
+                //for (int i = 0; i < ZCoord.GetLength(0); i++)
+                //{
+                //    if (ZCoord[i]== null)
+                //    {
+                //        return "Find Point 第" + (i + 1).ToString() + "点未取到";
+                //    }
+                //    if (ZCoord[i][0]==-30)
+                //    {
+
+                //        ZCoord[i][0] = NewZ.TupleMean();
+                //    }
+                //}
                 for (int i = 0; i < ZCoord.GetLength(0); i++)
                 {
-                    if (ZCoord[i]== null)
+                    //if (ZCoord[i][0] == -30)
+                    //{
+                        //在当前点附近取圆
+                        HObject Circle = new HObject();
+                        double radius = fParam[Sid].roiP[i].ZftRad;
+                        if (ZCoord[i][0] == -30 && radius ==0)
+                        {
+                            radius = 0.05;
+                        }
+                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                        radius = radius / Xresolution;
+                        if (radius!=0)
+                        {
+                            HOperatorSet.GenCircle(out Circle, RowCoord[i][0], ColCoord[i][0], radius);
+                            HTuple rows, cols;HTuple Zpt = new HTuple();
+                            HOperatorSet.GetRegionPoints(Circle, out rows, out cols);
+                            try
+                            {
+                                HOperatorSet.GetGrayval(HeightImage, rows, cols, out Zpt);
+                                HTuple greater = new HTuple();
+                                HOperatorSet.TupleGreaterElem(Zpt, -10, out greater);
+                                HTuple greaterId = greater.TupleFind(1);
+                                if (greaterId.D == -1)
+                                {
+                                   return "高度滤波区域无有效z值";
+                                }
+                                HTuple Zgreater = Zpt[greaterId];
+                                HTuple maxPer = fParam[Sid].roiP[i].ZftMax;
+                                HTuple minPer = fParam[Sid].roiP[i].ZftMin;
+                           
+                                int imax = (int) maxPer.D * Zgreater.Length;
+                                int imin = (int)minPer.D * Zgreater.Length;
+                            if (imax != imin)
+                            {
+                                HTuple Down = Zgreater.TupleSelectRange(imin, Zgreater.Length - imax);
+                                ZCoord[i][0] = Down.TupleMean();
+                            }
+                            else
+                            {
+                                ZCoord[i][0] = Zgreater.TupleMean();
+                            }
+                            
+                        }
+                        catch (Exception)
+                            {
+
+                                return "偏移点" + (i + 1).ToString() + "设置在图像之外";
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                        string msg = fParam[Sid].DicPointName[i] + "(" + Math.Round(ZCoord[i][0],3).ToString() + ")";
+                    if (hwind != null)
                     {
-                        return "Find Point 第" + (i + 1).ToString() + "点未取到";
+                        hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
                     }
-                    if (ZCoord[i][0]==-30)
-                    {
-                        
-                        ZCoord[i][0] = NewZ.TupleMean();
-                    }
+                    //}
                 }
 
                 if (HomMat3D == null)
@@ -3906,23 +3964,18 @@ namespace SagensVision.VisionTool
                     HTuple AvraRow = new HTuple(), AvraCol = new HTuple(), AvraZ = new HTuple();
                     int PointCount = fParam[Sid].roiP[i].NumOfSection;
 
-                    //取Z值 
-                    HTuple zcoord = new HTuple();
-                    try
-                    {
-                        HOperatorSet.GetGrayval(HeightImage, row, col, out zcoord);
-                    }
-                    catch (Exception)
-                    {
+                    ////取Z值 
+                    //HTuple zcoord = new HTuple();
+                    //try
+                    //{
+                    //    HOperatorSet.GetGrayval(HeightImage, row, col, out zcoord);
+                    //}
+                    //catch (Exception)
+                    //{
 
-                        return "偏移点设置在图像之外";
-                    }
+                    //    return "偏移点设置在图像之外";
+                    //}
                     //
-
-                    if (row.Length == 0)
-                    {
-                        return "单边设置 区域重复点数过大";
-                    }
 
                     if (hwind != null && debug == false)
                     {
@@ -3931,66 +3984,48 @@ namespace SagensVision.VisionTool
                         hwind.viewWindow.displayHobject(NewSide, "red");
                     }
 
-                    //RowCoordt[i] = row;
-                    //ColCoordt[i] = col;
-                    ////进行矩阵变换
-                    //if (HomMat3D != null)
-                    //{
-                    //    //HOperatorSet.AffineTransPoint3d(HomMat3D, row, col,zcoord, out row, out col,out zcoord);
-                    //    HOperatorSet.AffineTransPoint2d(HomMat3D, row, col, out row, out col);
-                    //    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalConfig.TotalZoffset;
-                    //}
-
-                    //for (int n = 0; n < row.Length; n++)
-                    //{
-                    //    Str.Append(row[n].D.ToString() + "," + col[n].D.ToString() + "," + zcoord[n].D.ToString() + "\r\n");
-                    //}
                     RowCoord[i] = row;
                     ColCoord[i] = col;
-                    ZCoord[i] = zcoord;
-                    StrLineOrCircle[i] = new string[zcoord.Length];
+                    //ZCoord[i] = zcoord;
+                    //StrLineOrCircle[i] = new string[zcoord.Length];
 
 
                     //ColCoordt[i] = col;
                     //ZCoordt[i] = zcoord;
 
 
-                    StrLineOrCircle[i][0] = fParam[Sid].roiP[i].LineOrCircle == "直线段" ? "1;" : "2;";
-                    for (int n = 1; n < zcoord.Length; n++)
-                    {
-
-                        if (n == zcoord.Length - 1 && i == Len - 1 && Sid != 3) //最后一段 第四边不给
-                        {
-                            StrLineOrCircle[i][n] = StrLineOrCircle[i][0];
-                        }
-                        else
-                        {
-                            StrLineOrCircle[i][n] = "0;";
-
-                        }
-                    }
-                    //if (hwind != null && debug == false)
+                    //StrLineOrCircle[i][0] = fParam[Sid].roiP[i].LineOrCircle == "直线段" ? "1;" : "2;";
+                    //for (int n = 1; n < zcoord.Length; n++)
                     //{
-                    //    HObject NewSide = new HObject();
-                    //    HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
-                    //    hwind.viewWindow.displayHobject(NewSide, "red");
-                    //}
-                    NewZ = NewZ.TupleConcat(ZCoord[i][0]);
-                }
-                HTuple zId = NewZ.TupleGreaterElem(-10);
-                NewZ = NewZ[zId];
-                for (int i = 0; i < ZCoord.GetLength(0); i++)
-                {
-                    if (ZCoord[i] == null)
-                    {
-                        return "Find Point 第" + (i + 1).ToString() + "点未取到";
-                    }
-                    if (ZCoord[i][0] == -30)
-                    {
 
-                        ZCoord[i][0] = NewZ.TupleMean();
-                    }
+                    //    if (n == zcoord.Length - 1 && i == Len - 1 && Sid != 3) //最后一段 第四边不给
+                    //    {
+                    //        StrLineOrCircle[i][n] = StrLineOrCircle[i][0];
+                    //    }
+                    //    else
+                    //    {
+                    //        StrLineOrCircle[i][n] = "0;";
+
+                    //    }
+                    //}
+           
+                    //NewZ = NewZ.TupleConcat(ZCoord[i][0]);
                 }
+                //HTuple zId = NewZ.TupleGreaterElem(-10);
+                //zId = zId.TupleFind(1);
+                //NewZ = NewZ[zId];
+                //for (int i = 0; i < ZCoord.GetLength(0); i++)
+                //{
+                //    if (ZCoord[i] == null)
+                //    {
+                //        return "Find Point 第" + (i + 1).ToString() + "点未取到";
+                //    }
+                //    if (ZCoord[i][0] == -30)
+                //    {
+
+                //        ZCoord[i][0] = NewZ.TupleMean();
+                //    }
+                //}
                 //RIntesity.Dispose();
                 //RHeight.Dispose();
                 return "OK";
@@ -4541,14 +4576,14 @@ namespace SagensVision.VisionTool
                     case "textBox_OffsetZ":
                         fParam[SideId].roiP[roiID].Zoffset = num;
                         break;
-                    case "textBox_IndStart1":
-                        //fParam[SideId].roiP[roiID].StartOffSet1 = (int)num;
+                    case "textBox_ZFtMax":
+                        fParam[SideId].roiP[roiID].ZftMax = (int)num;
                         break;
-                    case "textBox_IndEnd1":
-                        //fParam[SideId].roiP[roiID].EndOffSet1 = (int)num;
+                    case "textBox_ZFtMin":
+                        fParam[SideId].roiP[roiID].ZftMin = (int)num;
                         break;
-                    case "textBox_IndStart2":
-                        //fParam[SideId].roiP[roiID].StartOffSet2 = (int)num;
+                    case "textBox_ZFtRad":
+                        fParam[SideId].roiP[roiID].ZftRad = num;
                         break;
                     case "textBox_IndEnd2":
                         //fParam[SideId].roiP[roiID].EndOffSet2 = (int)num;
@@ -4585,6 +4620,7 @@ namespace SagensVision.VisionTool
                 if (roiList2[Id].Count > 0 && roiController2.ROIList.Count == roiList2[Id].Count)
                 {
                     int roiID = dataGridView1.CurrentCell.RowIndex;
+                    roiID = CurrentRowIndex;
                     if (roiID < 0)
                     {
                         return;
@@ -4870,6 +4906,7 @@ namespace SagensVision.VisionTool
                 }
 
                     int roiID = dataGridView1.CurrentCell.RowIndex;
+                    roiID = CurrentRowIndex;
                     if (roiID == -1)
                     {
                         return;
@@ -5027,12 +5064,13 @@ namespace SagensVision.VisionTool
                 HTuple row, col; HTuple anchor, anchorc;
                 FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
                 //string[] color = {"red","blue","green", "lime green", "black" };
-                if (row.Length != 0)
-                {
-                    //Random rad = new Random();
-                    //int i = rad.Next(4);
-                    hwindow_final2.viewWindow.dispMessage(Name, "blue", row.D, col.D);
-                }
+                //if (row.Length != 0)
+                //{
+                //    //Random rad = new Random();
+                //    //int i = rad.Next(4);
+                //    PreSelect = dataGridView1.Rows[id].Cells[1].Value.ToString();
+                //    hwindow_final2.viewWindow.dispMessage(PreSelect, "blue", row.D, col.D);
+                //}
 
 
 
@@ -5066,15 +5104,14 @@ namespace SagensVision.VisionTool
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
-                textBox_IndStart1.Text = fParam[SideId].roiP[id].StartOffSet1.ToString();
-                textBox_IndStart2.Text = fParam[SideId].roiP[id].StartOffSet2.ToString();
-                textBox_IndEnd1.Text = fParam[SideId].roiP[id].EndOffSet1.ToString();
-                textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
+                textBox_ZFtMax.Text = fParam[SideId].roiP[id].ZftMax.ToString();
+                textBox_ZFtRad.Text = fParam[SideId].roiP[id].ZftMin.ToString();
+                textBox_ZFtMin.Text = fParam[SideId].roiP[id].ZftRad.ToString();
+                //textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
 
                 comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
                 //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
                 //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
-                PreSelect = dataGridView1.Rows[id].Cells[1].Value.ToString();
                 CurrentRowIndex = roiID;
                 RoiIsMoving = false;
             }
@@ -5382,22 +5419,13 @@ namespace SagensVision.VisionTool
         public Point EndOffSet1 = new Point(0, 0);
         public Point StartOffSet2 = new Point(0, 0);
         public Point EndOffSet2 = new Point(0, 0);
+        public int ZftMax = 0;
+        public int ZftMin = 0;
+        public double ZftRad = 0;
  
         public RoiParam Clone()
         {
             RoiParam temp = new RoiParam();
-            //temp.AnchorCol = AnchorCol;
-            //temp.AnchorRow = AnchorCol;
-            //temp.AngleOfProfile = AngleOfProfile;
-            //temp.CenterCol = CenterCol;
-            //temp.CenterRow = CenterRow;
-            //temp.EndOffSet1 = EndOffSet1;
-            //temp.EndOffSet2 = EndOffSet2;
-            //temp.Len1 = Len1;
-            //temp.Len2 = Len2;
-            //temp.LineOrCircle = LineOrCircle;
-            //temp.NumOfSection = NumOfSection;
-            //temp.phi = phi;
             temp = (RoiParam) this.MemberwiseClone();
             return temp;
         }

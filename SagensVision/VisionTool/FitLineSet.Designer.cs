@@ -36,12 +36,10 @@
             this.textBox_totalZ = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.textBox_End = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_Start = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.cb_LorR = new System.Windows.Forms.CheckBox();
             this.tb_Updown = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -73,9 +71,6 @@
             this.复制ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.粘贴ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.textBox_OffsetX2 = new System.Windows.Forms.TextBox();
-            this.textBox_OffsetY2 = new System.Windows.Forms.TextBox();
             this.checkBoxRoi = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -83,12 +78,9 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox_OffsetZ = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.textBox_SingleOffset = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.textBox_OffsetY = new System.Windows.Forms.TextBox();
-            this.textBox_IndStart1 = new System.Windows.Forms.TextBox();
+            this.textBox_ZFtMax = new System.Windows.Forms.TextBox();
             this.textBox_IndEnd2 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
@@ -113,12 +105,24 @@
             this.label8 = new System.Windows.Forms.Label();
             this.textBox_Width = new System.Windows.Forms.TextBox();
             this.simpleButton10 = new DevExpress.XtraEditors.SimpleButton();
-            this.textBox_IndEnd1 = new System.Windows.Forms.TextBox();
-            this.textBox_IndStart2 = new System.Windows.Forms.TextBox();
+            this.textBox_ZFtMin = new System.Windows.Forms.TextBox();
+            this.textBox_ZFtRad = new System.Windows.Forms.TextBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBox_SingleOffset = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBox_OffsetX2 = new System.Windows.Forms.TextBox();
+            this.textBox_OffsetY2 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -133,12 +137,12 @@
             this.xtraTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.xtraTabPage2.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerControl1
@@ -155,20 +159,22 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.groupBox6);
+            this.groupBox2.Controls.Add(this.label17);
+            this.groupBox2.Controls.Add(this.textBox_SingleOffset);
+            this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.textBox_totalZ);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.textBox_End);
-            this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.cb_LorR);
             this.groupBox2.Controls.Add(this.tb_Updown);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(3, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(844, 160);
+            this.groupBox2.Size = new System.Drawing.Size(844, 228);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             // 
@@ -204,17 +210,6 @@
             this.textBox_End.TabIndex = 4;
             this.textBox_End.Visible = false;
             this.textBox_End.TextChanged += new System.EventHandler(this.textBox_Start_TextChanged);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(763, 97);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 10;
-            this.button3.Text = "选取区域";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // groupBox1
             // 
@@ -253,21 +248,10 @@
             this.label2.Text = "结束点";
             this.label2.Visible = false;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(763, 126);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "拟合线";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // cb_LorR
             // 
             this.cb_LorR.AutoSize = true;
-            this.cb_LorR.Location = new System.Drawing.Point(304, 113);
+            this.cb_LorR.Location = new System.Drawing.Point(564, 148);
             this.cb_LorR.Name = "cb_LorR";
             this.cb_LorR.Size = new System.Drawing.Size(62, 18);
             this.cb_LorR.TabIndex = 5;
@@ -462,16 +446,11 @@
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
             this.xtraTabPage1.Controls.Add(this.dataGridView1);
             this.xtraTabPage1.Controls.Add(this.checkBox4);
-            this.xtraTabPage1.Controls.Add(this.groupBox6);
             this.xtraTabPage1.Controls.Add(this.checkBoxRoi);
             this.xtraTabPage1.Controls.Add(this.groupBox5);
-            this.xtraTabPage1.Controls.Add(this.textBox_IndStart1);
-            this.xtraTabPage1.Controls.Add(this.textBox_IndEnd2);
             this.xtraTabPage1.Controls.Add(this.groupBox4);
             this.xtraTabPage1.Controls.Add(this.groupBox3);
             this.xtraTabPage1.Controls.Add(this.simpleButton10);
-            this.xtraTabPage1.Controls.Add(this.textBox_IndEnd1);
-            this.xtraTabPage1.Controls.Add(this.textBox_IndStart2);
             this.xtraTabPage1.Controls.Add(this.comboBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox1);
@@ -595,35 +574,6 @@
             this.checkBox4.UseVisualStyleBackColor = true;
             this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.textBox_OffsetX2);
-            this.groupBox6.Controls.Add(this.textBox_OffsetY2);
-            this.groupBox6.Location = new System.Drawing.Point(485, 209);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(266, 84);
-            this.groupBox6.TabIndex = 64;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "颜色高度区间";
-            // 
-            // textBox_OffsetX2
-            // 
-            this.textBox_OffsetX2.Location = new System.Drawing.Point(13, 33);
-            this.textBox_OffsetX2.Name = "textBox_OffsetX2";
-            this.textBox_OffsetX2.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetX2.TabIndex = 47;
-            this.textBox_OffsetX2.Text = "0";
-            this.textBox_OffsetX2.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // textBox_OffsetY2
-            // 
-            this.textBox_OffsetY2.Location = new System.Drawing.Point(150, 33);
-            this.textBox_OffsetY2.Name = "textBox_OffsetY2";
-            this.textBox_OffsetY2.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetY2.TabIndex = 45;
-            this.textBox_OffsetY2.Text = "0";
-            this.textBox_OffsetY2.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
             // checkBoxRoi
             // 
             this.checkBoxRoi.AutoSize = true;
@@ -640,7 +590,7 @@
             this.groupBox5.Controls.Add(this.panel3);
             this.groupBox5.Location = new System.Drawing.Point(485, 47);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(266, 152);
+            this.groupBox5.Size = new System.Drawing.Size(266, 246);
             this.groupBox5.TabIndex = 61;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "偏移设置";
@@ -648,18 +598,25 @@
             // panel3
             // 
             this.panel3.AutoScroll = true;
+            this.panel3.Controls.Add(this.label25);
+            this.panel3.Controls.Add(this.label22);
+            this.panel3.Controls.Add(this.label20);
+            this.panel3.Controls.Add(this.label19);
+            this.panel3.Controls.Add(this.label15);
+            this.panel3.Controls.Add(this.label10);
             this.panel3.Controls.Add(this.label9);
             this.panel3.Controls.Add(this.label14);
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.textBox_OffsetZ);
-            this.panel3.Controls.Add(this.label17);
-            this.panel3.Controls.Add(this.textBox_SingleOffset);
-            this.panel3.Controls.Add(this.label12);
+            this.panel3.Controls.Add(this.textBox_IndEnd2);
+            this.panel3.Controls.Add(this.textBox_ZFtMax);
             this.panel3.Controls.Add(this.label16);
             this.panel3.Controls.Add(this.textBox_OffsetY);
+            this.panel3.Controls.Add(this.textBox_ZFtMin);
+            this.panel3.Controls.Add(this.textBox_ZFtRad);
             this.panel3.Location = new System.Drawing.Point(6, 19);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(254, 121);
+            this.panel3.Size = new System.Drawing.Size(254, 211);
             this.panel3.TabIndex = 62;
             // 
             // label9
@@ -695,31 +652,6 @@
             this.textBox_OffsetZ.Text = "0";
             this.textBox_OffsetZ.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
-            // label17
-            // 
-            this.label17.Location = new System.Drawing.Point(203, 62);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(30, 22);
-            this.label17.TabIndex = 39;
-            this.label17.Text = "mm";
-            // 
-            // textBox_SingleOffset
-            // 
-            this.textBox_SingleOffset.Location = new System.Drawing.Point(97, 62);
-            this.textBox_SingleOffset.Name = "textBox_SingleOffset";
-            this.textBox_SingleOffset.Size = new System.Drawing.Size(100, 22);
-            this.textBox_SingleOffset.TabIndex = 33;
-            this.textBox_SingleOffset.Text = "0";
-            this.textBox_SingleOffset.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // label12
-            // 
-            this.label12.Location = new System.Drawing.Point(26, 62);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(65, 22);
-            this.label12.TabIndex = 32;
-            this.label12.Text = "单边高度";
-            // 
             // label16
             // 
             this.label16.Location = new System.Drawing.Point(203, 34);
@@ -737,19 +669,18 @@
             this.textBox_OffsetY.Text = "0";
             this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
-            // textBox_IndStart1
+            // textBox_ZFtMax
             // 
-            this.textBox_IndStart1.Location = new System.Drawing.Point(544, 319);
-            this.textBox_IndStart1.Name = "textBox_IndStart1";
-            this.textBox_IndStart1.Size = new System.Drawing.Size(100, 22);
-            this.textBox_IndStart1.TabIndex = 51;
-            this.textBox_IndStart1.Text = "0";
-            this.textBox_IndStart1.Visible = false;
-            this.textBox_IndStart1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
+            this.textBox_ZFtMax.Location = new System.Drawing.Point(97, 62);
+            this.textBox_ZFtMax.Name = "textBox_ZFtMax";
+            this.textBox_ZFtMax.Size = new System.Drawing.Size(100, 22);
+            this.textBox_ZFtMax.TabIndex = 51;
+            this.textBox_ZFtMax.Text = "0";
+            this.textBox_ZFtMax.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
             // 
             // textBox_IndEnd2
             // 
-            this.textBox_IndEnd2.Location = new System.Drawing.Point(872, 318);
+            this.textBox_IndEnd2.Location = new System.Drawing.Point(97, 146);
             this.textBox_IndEnd2.Name = "textBox_IndEnd2";
             this.textBox_IndEnd2.Size = new System.Drawing.Size(100, 22);
             this.textBox_IndEnd2.TabIndex = 58;
@@ -977,25 +908,23 @@
             this.simpleButton10.Text = "截取区域";
             this.simpleButton10.Click += new System.EventHandler(this.button4_Click);
             // 
-            // textBox_IndEnd1
+            // textBox_ZFtMin
             // 
-            this.textBox_IndEnd1.Location = new System.Drawing.Point(650, 319);
-            this.textBox_IndEnd1.Name = "textBox_IndEnd1";
-            this.textBox_IndEnd1.Size = new System.Drawing.Size(100, 22);
-            this.textBox_IndEnd1.TabIndex = 54;
-            this.textBox_IndEnd1.Text = "0";
-            this.textBox_IndEnd1.Visible = false;
-            this.textBox_IndEnd1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
+            this.textBox_ZFtMin.Location = new System.Drawing.Point(97, 90);
+            this.textBox_ZFtMin.Name = "textBox_ZFtMin";
+            this.textBox_ZFtMin.Size = new System.Drawing.Size(100, 22);
+            this.textBox_ZFtMin.TabIndex = 54;
+            this.textBox_ZFtMin.Text = "0";
+            this.textBox_ZFtMin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
             // 
-            // textBox_IndStart2
+            // textBox_ZFtRad
             // 
-            this.textBox_IndStart2.Location = new System.Drawing.Point(756, 318);
-            this.textBox_IndStart2.Name = "textBox_IndStart2";
-            this.textBox_IndStart2.Size = new System.Drawing.Size(100, 22);
-            this.textBox_IndStart2.TabIndex = 56;
-            this.textBox_IndStart2.Text = "0";
-            this.textBox_IndStart2.Visible = false;
-            this.textBox_IndStart2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
+            this.textBox_ZFtRad.Location = new System.Drawing.Point(97, 118);
+            this.textBox_ZFtRad.Name = "textBox_ZFtRad";
+            this.textBox_ZFtRad.Size = new System.Drawing.Size(100, 22);
+            this.textBox_ZFtRad.TabIndex = 56;
+            this.textBox_ZFtRad.Text = "0";
+            this.textBox_ZFtRad.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_OffsetX_KeyDown);
             // 
             // comboBox2
             // 
@@ -1039,6 +968,105 @@
             this.xtraTabPage2.Size = new System.Drawing.Size(977, 344);
             this.xtraTabPage2.Text = "找线设置";
             // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(225, 158);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(30, 22);
+            this.label17.TabIndex = 46;
+            this.label17.Text = "mm";
+            // 
+            // textBox_SingleOffset
+            // 
+            this.textBox_SingleOffset.Location = new System.Drawing.Point(121, 155);
+            this.textBox_SingleOffset.Name = "textBox_SingleOffset";
+            this.textBox_SingleOffset.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SingleOffset.TabIndex = 45;
+            this.textBox_SingleOffset.Text = "0";
+            // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(40, 158);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(65, 22);
+            this.label12.TabIndex = 44;
+            this.label12.Text = "单边高度";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBox_OffsetX2);
+            this.groupBox6.Controls.Add(this.textBox_OffsetY2);
+            this.groupBox6.Location = new System.Drawing.Point(272, 111);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(266, 84);
+            this.groupBox6.TabIndex = 65;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "颜色高度区间";
+            // 
+            // textBox_OffsetX2
+            // 
+            this.textBox_OffsetX2.Location = new System.Drawing.Point(13, 33);
+            this.textBox_OffsetX2.Name = "textBox_OffsetX2";
+            this.textBox_OffsetX2.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetX2.TabIndex = 47;
+            this.textBox_OffsetX2.Text = "0";
+            // 
+            // textBox_OffsetY2
+            // 
+            this.textBox_OffsetY2.Location = new System.Drawing.Point(150, 33);
+            this.textBox_OffsetY2.Name = "textBox_OffsetY2";
+            this.textBox_OffsetY2.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetY2.TabIndex = 45;
+            this.textBox_OffsetY2.Text = "0";
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(27, 65);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(55, 22);
+            this.label10.TabIndex = 59;
+            this.label10.Text = "滤波max";
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(27, 93);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(55, 22);
+            this.label15.TabIndex = 60;
+            this.label15.Text = "滤波min";
+            // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(27, 118);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(55, 22);
+            this.label19.TabIndex = 61;
+            this.label19.Text = "滤波半径";
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(201, 121);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(29, 22);
+            this.label20.TabIndex = 62;
+            this.label20.Text = "mm";
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(202, 62);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(29, 22);
+            this.label22.TabIndex = 63;
+            this.label22.Text = "%";
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(202, 90);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(29, 22);
+            this.label25.TabIndex = 64;
+            this.label25.Text = "%";
+            // 
             // FitLineSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1069,8 +1097,6 @@
             this.xtraTabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
@@ -1078,6 +1104,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.xtraTabPage2.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1100,14 +1128,12 @@
         private DevExpress.XtraEditors.SimpleButton simpleButton2;
         private DevExpress.XtraEditors.SimpleButton btn_open;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox cb_LorR;
         private System.Windows.Forms.TextBox tb_Updown;
         private System.Windows.Forms.Label label5;
         private DevExpress.XtraEditors.SimpleButton simpleButton3;
         private DevExpress.XtraEditors.SimpleButton simpleButton4;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Panel panel2;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage1;
@@ -1132,15 +1158,10 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox_OffsetY;
-        private System.Windows.Forms.TextBox textBox_SingleOffset;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ToolStripMenuItem 更改ToolStripMenuItem;
         private DevExpress.XtraEditors.SimpleButton simpleButton10;
-        private System.Windows.Forms.TextBox textBox_OffsetX2;
-        private System.Windows.Forms.TextBox textBox_OffsetY2;
         private System.Windows.Forms.ToolStripMenuItem 插入ToolStripMenuItem;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox textBox_totalZ;
@@ -1148,10 +1169,10 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox textBox_IndStart1;
+        private System.Windows.Forms.TextBox textBox_ZFtMax;
         private System.Windows.Forms.TextBox textBox_IndEnd2;
-        private System.Windows.Forms.TextBox textBox_IndEnd1;
-        private System.Windows.Forms.TextBox textBox_IndStart2;
+        private System.Windows.Forms.TextBox textBox_ZFtMin;
+        private System.Windows.Forms.TextBox textBox_ZFtRad;
         private System.Windows.Forms.GroupBox groupBox3;
         private DevExpress.XtraEditors.SimpleButton simpleButton13;
         private DevExpress.XtraEditors.SimpleButton simpleButton12;
@@ -1164,7 +1185,6 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox_Row;
         private System.Windows.Forms.CheckBox checkBoxRoi;
-        private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ToolStripMenuItem 复制ToolStripMenuItem;
@@ -1173,5 +1193,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewButtonColumn Column4;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox textBox_OffsetX2;
+        private System.Windows.Forms.TextBox textBox_OffsetY2;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox textBox_SingleOffset;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label20;
     }
 }
