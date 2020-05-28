@@ -18,7 +18,74 @@ namespace SagensVision
 
         public static string AutoSavePath { set; get; }
 
+        public static void markColor(PictureBox pictureBox1, PictureBox pictureBox2, byte[] grayArr, double z_byte_resolution,double zStart)
+        {
+            int w = pictureBox1.Width;
+            int h = pictureBox1.Height;
+            int mstart = 5;
+            int mheight = 13;
+            int mWidth = 20;
+            int mspace = 15;
+            double[] heightArr = new double[5];
+            Color[] colorArr = new Color[5];
+            for (int i = 0; i < grayArr.Length; i++)
+            {
+                heightArr[i] = Math.Round(grayArr[i] / z_byte_resolution + zStart , 3) ;
+                colorArr[i] = Color.FromArgb(rainTable[grayArr[i]/2, 0], rainTable[grayArr[i]/2, 1], rainTable[grayArr[i]/2, 2]);
+            }
 
+            Bitmap bt = new Bitmap(w, h);
+            for (int i = 0; i < w; i++)
+            {
+                if (i < mWidth)
+                {
+                    for (int j = 0; j < h; j++)
+                    {
+                        if (j > mstart && j < mstart + mheight)
+                        {
+                            bt.SetPixel(i, j, colorArr[0]);
+                        }
+                        else if (j > mstart + mheight + mspace && j < mstart + mheight + mspace + mheight)
+                        {
+                            bt.SetPixel(i, j, colorArr[1]);
+                        }
+                        else if (j > mstart + (mheight * 2) + (mspace * 2) && j < mstart + (mheight * 3) + (mspace * 2))
+                        {
+                            bt.SetPixel(i, j, colorArr[2]);
+                        }
+                        else if (j > mstart + (mheight * 3) + (mspace * 3) && j < mstart + (mheight * 4) + (mspace * 3))
+                        {
+                            bt.SetPixel(i, j, colorArr[3]);
+                        }
+                        else if (j > mstart + (mheight * 4) + (mspace * 4) && j < mstart + (mheight * 5) + (mspace * 4))
+                        {
+                            bt.SetPixel(i, j, colorArr[4]);
+                        }
+                        else
+                        {
+                            bt.SetPixel(i, j, Color.FromArgb(0, 0, 0));
+                        }
+
+                    }
+                }
+            }
+
+            pictureBox1.Image = bt;
+            PointF pf = new PointF(5, mstart);
+            PointF pf1 = new PointF(5, mstart + mheight + mspace);
+            PointF pf2 = new PointF(5, mstart + (mheight * 2) + (mspace * 2));
+            PointF pf3 = new PointF(5, mstart + (mheight * 3) + (mspace * 3));
+            PointF pf4 = new PointF(5, mstart + (mheight * 4) + (mspace * 4));
+            using (Graphics g = pictureBox2.CreateGraphics())
+            {
+                Font f = new Font("Arial", 8);
+                g.DrawString(heightArr[0].ToString(), f, Brushes.White, pf);
+                g.DrawString(heightArr[1].ToString(), f, Brushes.White, pf1);
+                g.DrawString(heightArr[2].ToString(), f, Brushes.White, pf2);
+                g.DrawString(heightArr[3].ToString(), f, Brushes.White, pf3);
+                g.DrawString(heightArr[4].ToString(), f, Brushes.White, pf4);
+            } 
+        }
         public static void HeightAreaToPseudoColor(HObject heightImg,out HObject rgbImg, HTuple validThreMin, HTuple validThreMax, HTuple heightMin, HTuple heightMax)
         {
             HObject threReg;

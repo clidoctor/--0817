@@ -38,6 +38,7 @@ namespace SagensVision
         public static MatchingAssistant[] mAssistant = new MatchingAssistant[2];
         public static MatchingParam[] parameterSet =new MatchingParam[2];
         public static MatchingResult[] tResult = new MatchingResult[2];
+        public static bool isShowHeightImg = false;
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
         public static bool sktOK = false;

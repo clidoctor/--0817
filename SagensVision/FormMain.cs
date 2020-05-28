@@ -27,7 +27,7 @@ namespace SagensVision
         List<double[][]> YCoord = new List<double[][]>();
         List<double[][]> ZCoord = new List<double[][]>();
         List<string[][]> StrLorC = new List<string[][]>();
-       
+
         public FormMain()
         {
             InitializeComponent();
@@ -91,15 +91,20 @@ namespace SagensVision
             }
 
             //dockPanel3.Controls.Add(MyGlobal.hWindow_Final[0]);
- 
+
             MyGlobal.hWindow_Final[0].Dock = DockStyle.Fill;
-            this.tableLayoutPanel1.Controls.Add(MyGlobal.hWindow_Final[0],0,1);
+            this.tableLayoutPanel1.Controls.Add(MyGlobal.hWindow_Final[0], 0, 1);
             MyGlobal.hWindow_Final[1].Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(MyGlobal.hWindow_Final[1], 1, 1);
             MyGlobal.hWindow_Final[2].Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(MyGlobal.hWindow_Final[2], 3, 1);
             MyGlobal.hWindow_Final[3].Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(MyGlobal.hWindow_Final[3], 4, 1);
+
+            MyGlobal.hWindow_Final[0].hWindowControl.HMouseUp += OnHMouseUp;
+            MyGlobal.hWindow_Final[1].hWindowControl.HMouseUp += OnHMouseUp1;
+            MyGlobal.hWindow_Final[2].hWindowControl.HMouseUp += OnHMouseUp2;
+            MyGlobal.hWindow_Final[3].hWindowControl.HMouseUp += OnHMouseUp3;
 
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
@@ -124,6 +129,52 @@ namespace SagensVision
             //match.load = new Matching.Form1.LoadParam(loadMathParam);
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+        }
+        private int MouseClickCnt = 0;
+        private int MouseClickCnt1 = 0;
+        private int MouseClickCnt2 = 0;
+        private int MouseClickCnt3 = 0;
+
+        private void OnHMouseUp(object sender, EventArgs e)
+        {
+            MouseClickCnt++;
+            if (MouseClickCnt == 2)
+            {
+                ShowEnlargeFrm(0);
+                MouseClickCnt = 0;
+            }
+        }
+        private void OnHMouseUp1(object sender, EventArgs e)
+        {
+            MouseClickCnt1++;
+            if (MouseClickCnt1 == 2)
+            {
+                ShowEnlargeFrm(1);
+                MouseClickCnt1 = 0;
+            }
+        }
+        private void OnHMouseUp2(object sender, EventArgs e)
+        {
+            MouseClickCnt2++;
+            if (MouseClickCnt2 == 2)
+            {
+                ShowEnlargeFrm(2);
+                MouseClickCnt2 = 0;
+            }
+        }
+        private void OnHMouseUp3(object sender, EventArgs e)
+        {
+            MouseClickCnt3++;
+            if (MouseClickCnt3 == 2)
+            {
+                ShowEnlargeFrm(3);
+                MouseClickCnt3 = 0;
+            }
+        }
+        public void ShowEnlargeFrm(int idx)
+        {
+            EnlargeFrm enlargefrm = new EnlargeFrm(MyGlobal.hWindow_Final[idx].Image, idx);
+            enlargefrm.Show();
         }
 
         void LoadDataDB()
@@ -161,9 +212,9 @@ namespace SagensVision
             }
         }
 
-        string RunFindPoint(int Side,HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z,out string[][] Str, HTuple Homat3D, HWindow_Final Hwnd)
+        string RunFindPoint(int Side, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, HTuple Homat3D, HWindow_Final Hwnd)
         {
-            X = null; Y = null; Z = null;Str = null;
+            X = null; Y = null; Z = null; Str = null;
             try
             {
                 HObject image = new HObject();
@@ -171,23 +222,9 @@ namespace SagensVision
                 IntersetionCoord intersect = new IntersetionCoord();
                 string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
                 HTuple homMaxFix = new HTuple();
-                HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side -1].Col,
-                    0, intersect.Row, intersect.Col, 0,out homMaxFix);
-                string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z,out Str, Homat3D, Hwnd,false, homMaxFix);
-                double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
-                HTuple deg = 0;
-                HOperatorSet.TupleDeg(intersect.Angle, out deg);
-                string AnchorX = Math.Round(intersect.Col,3).ToString(); string AnchorY = Math.Round(intersect.Row, 3).ToString();
-                if (Side == 4)
-                {
-                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
-                }
-                else
-                {
-                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString());
-                }
-                
+                HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
+                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
+                string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, Homat3D, Hwnd, false, homMaxFix);
                 return OK;
             }
             catch (Exception ex)
@@ -373,8 +410,8 @@ namespace SagensVision
 
             }
             MyGlobal.GoSDK.IsRecSurfaceDataZByte = true;
-            MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
-            MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
+            //MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
+            //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
         }
 
@@ -391,7 +428,8 @@ namespace SagensVision
         public int RecStateCode
         {
             get { return recStateCode; }
-            set {
+            set
+            {
                 recStateCode = value;
                 if (recStateCode >= 2)
                 {
@@ -464,7 +502,7 @@ namespace SagensVision
                 List<SagensSdk.Profile> profilet = MyGlobal.GoSDK.ProfileList;
                 if (Station == 1)
                 {
-                   
+
                     XCoord.Clear();
                     YCoord.Clear();
                     ZCoord.Clear();
@@ -486,9 +524,9 @@ namespace SagensVision
 
                 if (profilet != null)
                 {
-                  
+
                     List<SagensSdk.Profile> profile = new List<SagensSdk.Profile>();
-                    
+
                     MyGlobal.GoSDK.FillingRow(profilet, true, 0.002, MyGlobal.globalConfig.dataContext.yResolution, out profile);
                     long SurfaceWidth, SurfaceHeight;
                     SurfaceWidth = profile[0].points.Length;
@@ -514,7 +552,7 @@ namespace SagensVision
                     //PseudoColor.GrayToPseudoColor(HeightImage, out rgbImage, true, -20, 10);
                     //MyGlobal.hWindow_Final[Station -1].HobjectToHimage(rgbImage);
 
-                    MyGlobal.hWindow_Final[Station -1].HobjectToHimage(IntensityImage);
+                    MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
                     if (Station == 1)
                         saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
@@ -615,7 +653,7 @@ namespace SagensVision
                         HObject Intensity = new HObject();
                         MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out IntensityImage);
                     }
-                    if (IntensityImage==null ||!IntensityImage.IsInitialized())
+                    if (IntensityImage == null || !IntensityImage.IsInitialized())
                     {
                         return "未获取到亮度图";
                     }
@@ -625,9 +663,17 @@ namespace SagensVision
                     HObject rgbImg;
                     PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
 
-                    MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rgbImg);
+                    if (MyGlobal.isShowHeightImg)
+                    {
+                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
+                    }
+                    else
+                    {
+                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rgbImg);
+                    }
 
-                    
+
+
 
                     if (Station == 1)
                         saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -685,7 +731,7 @@ namespace SagensVision
         }
 
 
-        private string RunOutLine(int Station,int id)
+        private string RunOutLine(int Station, int id)
         {
 
             if (Station == 1)
@@ -695,56 +741,56 @@ namespace SagensVision
                 ZCoord.Clear();
                 StrLorC.Clear();
             }
-            if (MyGlobal.ImageMulti.Count==0)
+            if (MyGlobal.ImageMulti.Count == 0)
             {
                 return "加载高度图和亮度图 Ng";
             }
             string Ok = RunSide(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1]);
-           
-            if (Ok!="OK")
+
+            if (Ok != "OK")
             {
                 return Ok;
             }
-           // double[][] x, y, z; string[][] LorC;
-           //string OK = RunFindPoint(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], out x, out y, out z,out LorC, HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
-           // if (OK!="OK")
-           // {
-           //     return OK;
-           // }
-           // XCoord.Add(x);
-           // YCoord.Add(y);
-           // ZCoord.Add(z);
-           // StrLorC.Add(LorC);
-           // int count = 0;
-           // if (Station > 0 && XCoord.Count == Station)
-           // {
-           //     //写入到文本
-           //     StringBuilder Str = new StringBuilder();
-           //     for (int i = 0; i < Station; i++)
-           //     {
-           //         for (int j = 0; j < XCoord[i].GetLength(0); j++)
-           //         {
-           //             for (int k = 0; k < XCoord[i][j].Length; k++)
-           //             {
-           //                 double X1 = Math.Round(XCoord[i][j][k], 3);
-           //                 double Y1 = Math.Round(YCoord[i][j][k], 3);
-           //                 double Z1 = Math.Round(ZCoord[i][j][k], 3);
-           //                 string lorc = StrLorC[i][j][k];
-           //                 count++;
-           //                 Str.Append(count.ToString() + ","+ X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") +","+ lorc + "\r\n");
-           //             }
-           //         }
-           //     }
-           //     StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
-           // }
-           // else
-           // {
-           //     OK = "第" + (Station - 1).ToString()+ "边 点位获取失败";
-           // }
+            // double[][] x, y, z; string[][] LorC;
+            //string OK = RunFindPoint(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], out x, out y, out z,out LorC, HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
+            // if (OK!="OK")
+            // {
+            //     return OK;
+            // }
+            // XCoord.Add(x);
+            // YCoord.Add(y);
+            // ZCoord.Add(z);
+            // StrLorC.Add(LorC);
+            // int count = 0;
+            // if (Station > 0 && XCoord.Count == Station)
+            // {
+            //     //写入到文本
+            //     StringBuilder Str = new StringBuilder();
+            //     for (int i = 0; i < Station; i++)
+            //     {
+            //         for (int j = 0; j < XCoord[i].GetLength(0); j++)
+            //         {
+            //             for (int k = 0; k < XCoord[i][j].Length; k++)
+            //             {
+            //                 double X1 = Math.Round(XCoord[i][j][k], 3);
+            //                 double Y1 = Math.Round(YCoord[i][j][k], 3);
+            //                 double Z1 = Math.Round(ZCoord[i][j][k], 3);
+            //                 string lorc = StrLorC[i][j][k];
+            //                 count++;
+            //                 Str.Append(count.ToString() + ","+ X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") +","+ lorc + "\r\n");
+            //             }
+            //         }
+            //     }
+            //     StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
+            // }
+            // else
+            // {
+            //     OK = "第" + (Station - 1).ToString()+ "边 点位获取失败";
+            // }
             return Ok;
         }
-   
-        private string RunSide111(int Station,HObject IntensityImage,HObject HeightImage)
+
+        private string RunSide111(int Station, HObject IntensityImage, HObject HeightImage)
         {
             try
             {
@@ -757,15 +803,15 @@ namespace SagensVision
                 #region 除去起始位重复部分 并均分 
                 for (int i = 0; i < Station; i++)
                 {
-                    HTuple  firstPt,order =0, lastPt,fpt, Grater,Less, GraterId =new HTuple(), LessId = new HTuple(); string first = "";
+                    HTuple firstPt, order = 0, lastPt, fpt, Grater, Less, GraterId = new HTuple(), LessId = new HTuple(); string first = "";
                     HTuple ResultX = new HTuple(), ResultY = new HTuple(), ResultZ = new HTuple(), ResultLorC = new HTuple();
                     HTuple ResultX2 = new HTuple(), ResultY2 = new HTuple(), ResultZ2 = new HTuple(), ResultLorC2 = new HTuple();
-                    HTuple Lx1 = new HTuple(), Ly1 = new HTuple(), Lz1 = new HTuple(), Gx1 = new HTuple(), Gy1 = new HTuple(), Gz1 = new HTuple(); int Len1 = 0; int Len2 = 0;int Len = 0;
-                    HTuple tempx, tempy, tempz;HTuple x1, y1, x2, y2;
+                    HTuple Lx1 = new HTuple(), Ly1 = new HTuple(), Lz1 = new HTuple(), Gx1 = new HTuple(), Gy1 = new HTuple(), Gz1 = new HTuple(); int Len1 = 0; int Len2 = 0; int Len = 0;
+                    HTuple tempx, tempy, tempz; HTuple x1, y1, x2, y2;
                     switch (i)
                     {
                         case 0:
-                            if (Station ==4) //Y1<Y4  // 去掉第一条重叠 保留第4条
+                            if (Station == 4) //Y1<Y4  // 去掉第一条重叠 保留第4条
                             {
 
                                 ResultY = YCoord[i][0];//第1条第一段
@@ -773,7 +819,7 @@ namespace SagensVision
                                 ResultZ = ZCoord[i][0];//第1条第一段
                                 ResultLorC = StrLorC[i][0];//第一段
 
-                                if (ResultY.Length==0)
+                                if (ResultY.Length == 0)
                                 {
                                     break;
                                 }
@@ -796,7 +842,7 @@ namespace SagensVision
                                 }
 
                                 //重叠部分取均值
-                                Len2 =  GraterId.Length ;
+                                Len2 = GraterId.Length;
                                 Len1 = LessId.Length;
                                 Len = Len1 < Len2 ? Len1 : Len2;
                                 //Len2 添加到第4条
@@ -828,10 +874,10 @@ namespace SagensVision
                                 XCoord[3][order] = ResultX2;
                                 YCoord[3][order] = ResultY2;
                             }
-                            
+
                             break;
                         case 1:
-                            if (Station>= 2) //X2>X1  去掉第二条重叠 保留第1条
+                            if (Station >= 2) //X2>X1  去掉第二条重叠 保留第1条
                             {
 
                                 ResultX = XCoord[i][0];//第2条第第一段
@@ -839,7 +885,7 @@ namespace SagensVision
                                 ResultZ = ZCoord[i][0];//第2条第第一段
                                 ResultLorC = StrLorC[i][0];//第一段
 
-                                if (ResultX.Length==0)
+                                if (ResultX.Length == 0)
                                 {
                                     break;
                                 }
@@ -847,7 +893,7 @@ namespace SagensVision
                                 order = XCoord[0].GetLength(0) - 1;
                                 ResultX2 = XCoord[0][order];//第1边最后段
                                 ResultY2 = YCoord[0][order];//第1边最后段
-   
+
                                 lastPt = ResultX2[ResultX2.Length - 1];//第1条最后一点
                                 Grater = ResultX.TupleGreaterEqualElem(lastPt);//第2条大于第1条重叠部分
                                 Less = ResultX2.TupleLessEqualElem(firstPt);//第1条小于第2边重叠部分
@@ -865,21 +911,21 @@ namespace SagensVision
                                 //Gy1 = ResultY[LessId];
                                 //Gz1 = ResultZ[LessId];
 
-                                Len2 = LessId.Length;Len1 = GraterId.Length;
-                                Len = Len1<Len2 ?Len1:Len2;
+                                Len2 = LessId.Length; Len1 = GraterId.Length;
+                                Len = Len1 < Len2 ? Len1 : Len2;
                                 //Len2 添加到第4条
-                                if (Len >= ResultY.Length || Len>= ResultY2.Length)
+                                if (Len >= ResultY.Length || Len >= ResultY2.Length)
                                 {
                                     break;
                                 }
                                 y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
                                 x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
-                                y2 = ResultY.TupleSelectRange(0, Len -1);
-                                x2 = ResultX.TupleSelectRange(0, Len -1);
+                                y2 = ResultY.TupleSelectRange(0, Len - 1);
+                                x2 = ResultX.TupleSelectRange(0, Len - 1);
                                 Lx1 = (x1 + x2) / 2;
                                 Ly1 = (y1 + y2) / 2;
 
-                                HOperatorSet.TupleGenSequence(0, Len -1, 1, out Grater);
+                                HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Grater);
                                 HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Less);
 
 
@@ -974,7 +1020,7 @@ namespace SagensVision
                                 ResultZ = ZCoord[i][0];//第4条第一段
                                 ResultLorC = StrLorC[i][0]; //第4条//第一段
 
-                                if (ResultX.Length==0)
+                                if (ResultX.Length == 0)
                                 {
                                     break;
                                 }
@@ -1040,7 +1086,7 @@ namespace SagensVision
 
                         //return string.Format("第{0}边,第一段重合点数过多", i + 1);
                     }
-                    else if(GraterId.Length != 0)
+                    else if (GraterId.Length != 0)
                     {
 
                         //XCoord[i][0] = ResultX;
@@ -1053,7 +1099,7 @@ namespace SagensVision
                 #endregion
 
                 Dictionary<int, string> everySeg = new Dictionary<int, string>();
-                double[] xcoord, ycoord, zcoord;string[] keypt ;
+                double[] xcoord, ycoord, zcoord; string[] keypt;
                 int totalNum = 0;
                 for (int i = 0; i < XCoord.Count; i++)
                 {
@@ -1067,10 +1113,10 @@ namespace SagensVision
                         {
                             totalNum++;
                         }
-                       
+
                     }
                 }
-                xcoord = new double[totalNum];ycoord = new double[totalNum];zcoord = new double[totalNum];
+                xcoord = new double[totalNum]; ycoord = new double[totalNum]; zcoord = new double[totalNum];
                 keypt = new string[totalNum];
                 int ind = 0;
                 double x0 = 0, y0 = 0, z0 = 0;
@@ -1095,17 +1141,17 @@ namespace SagensVision
 
                         for (int k = 0; k < XCoord[i][j].Length; k++)
                         {
-                            if (k>0)
+                            if (k > 0)
                             {
-                                if (xcoord[ind] == xcoord[ind -1] && ycoord[ind] == ycoord[ind - 1])
+                                if (xcoord[ind] == xcoord[ind - 1] && ycoord[ind] == ycoord[ind - 1])
                                 {
                                     //存在重复点；
                                     MessageBox.Show("重复点");
                                 }
                             }
-                            xcoord[ind] = Math.Round(XCoord[i][j][k],3);
-                            ycoord[ind] = Math.Round(YCoord[i][j][k],3);
-                            zcoord[ind] = Math.Round(ZCoord[i][j][k],3);
+                            xcoord[ind] = Math.Round(XCoord[i][j][k], 3);
+                            ycoord[ind] = Math.Round(YCoord[i][j][k], 3);
+                            zcoord[ind] = Math.Round(ZCoord[i][j][k], 3);
                             keypt[ind] = StrLorC[i][j][k];
                             if (k == 0)
                             {
@@ -1127,7 +1173,7 @@ namespace SagensVision
                 int Start = MyGlobal.globalConfig.Startpt;
                 for (int i = 0; i < xcoord.Length; i++)
                 {
-                    
+
                     int start = Start;
                     if (Start - 1 + i >= xcoord.Length)
                     {
@@ -1159,7 +1205,7 @@ namespace SagensVision
                         y0 = Y1;
                         z0 = Z1;
                     }
-                    Str.Append((i+1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
+                    Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
 
                 }
                 string strlast = "0;";
@@ -1191,7 +1237,7 @@ namespace SagensVision
                 //            }
                 //            for (int k = 0; k < XCoord[i][j].Length; k++)
                 //            {
-                               
+
                 //                double X1 = Math.Round(XCoord[i][j][k], 3);
                 //                double Y1 = Math.Round(YCoord[i][j][k], 3);
                 //                double Z1 = Math.Round(ZCoord[i][j][k], 3);
@@ -1204,29 +1250,29 @@ namespace SagensVision
                 //                string lorc = StrLorC[i][j][k];
                 //                count++;
                 //                Str.Append(count.ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
-                                
+
                 //            }
                 //        }
                 //    }
-                    if (XCoord[Station -1][len1 -1] !=null)
-                    {
-                        strlast = StrLorC[Station - 1][len1 - 1][0];
-                    }
-                    else
-                    {
-                        strlast = StrLorC[Station - 1][len1 - 2][0];
+                if (XCoord[Station - 1][len1 - 1] != null)
+                {
+                    strlast = StrLorC[Station - 1][len1 - 1][0];
+                }
+                else
+                {
+                    strlast = StrLorC[Station - 1][len1 - 2][0];
 
-                    }
-                    Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
+                }
+                Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
 
-                    StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
+                StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
                 //}
                 return "OK";
             }
             catch (Exception ex)
             {
 
-                return "RunSide error :"+ ex.Message;
+                return "RunSide error :" + ex.Message;
             }
         }
 
@@ -1238,13 +1284,13 @@ namespace SagensVision
                 string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[Station - 1]);
                 if (OK != "OK")
                 {
-                    return "第" + Station + "边"+ OK;
+                    return "第" + Station + "边" + OK;
                 }
                 if (x[0] == null)
                 {
                     return "第" + Station + "边未找到边";
                 }
-               
+
                 XCoord.Add(x);
                 YCoord.Add(y);
                 ZCoord.Add(z);
@@ -1584,76 +1630,76 @@ namespace SagensVision
             }
         }
 
-      
+
 
         bool TcpIsConnect = false;
         string[] JobName = { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" };
         int Side = 0;
-        public  void TcpClientListen_Surface()
+        public void TcpClientListen_Surface()
         {
             int nSent = 0;
             //while (true)
             //{
+            try
+            {
+
+                MyGlobal.sktClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPAddress ip = IPAddress.Parse(MyGlobal.globalConfig.MotorIpAddress);
                 try
                 {
+                    MyGlobal.sktClient.Connect(ip, MyGlobal.globalConfig.MotorPort);
+                    ShowAndSaveMsg(string.Format("已连接{0}:{1}", MyGlobal.globalConfig.MotorIpAddress, MyGlobal.globalConfig.MotorPort.ToString()));
+                    TcpIsConnect = true;
+                    MyGlobal.sktOK = true;
+                }
+                catch (Exception ex)
+                {
+                    ShowAndSaveMsg(string.Format("连接服务器失败！" + ex.Message));
+                    TcpIsConnect = false;
+                    MyGlobal.sktOK = false;
+                    return;
+                }
 
-                    MyGlobal.sktClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    IPAddress ip = IPAddress.Parse(MyGlobal.globalConfig.MotorIpAddress);
-                    try
+
+                byte[] buffer = new byte[128];
+                byte[] ok = new byte[128];
+                byte[] ng = new byte[128];
+                //Sendmsg = "Chat|ok";
+
+                //ok = Encoding.UTF8.GetBytes(Sendmsg);
+                while (true)
+                {
+                    int len = MyGlobal.sktClient.Receive(buffer);
+
+                    byte[] temp = new byte[len];
+                    Array.Copy(buffer, temp, len);
+                    MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
+                    if (len == 0)
                     {
-                        MyGlobal.sktClient.Connect(ip, MyGlobal.globalConfig.MotorPort);
-                        ShowAndSaveMsg(string.Format("已连接{0}:{1}", MyGlobal.globalConfig.MotorIpAddress, MyGlobal.globalConfig.MotorPort.ToString()));
-                        TcpIsConnect = true;
-                        MyGlobal.sktOK = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        ShowAndSaveMsg(string.Format("连接服务器失败！" +ex.Message));                   
-                        TcpIsConnect = false;
+                        ShowAndSaveMsg(string.Format("服务器已断开连接！"));
                         MyGlobal.sktOK = false;
-                        return;
-                     }
-                   
-                  
-                    byte[] buffer = new byte[128];
-                    byte[] ok = new byte[128];
-                    byte[] ng = new byte[128];
-                    //Sendmsg = "Chat|ok";
-
-                    //ok = Encoding.UTF8.GetBytes(Sendmsg);
-                    while (true)
+                        break;
+                    }
+                    else
                     {
-                        int len = MyGlobal.sktClient.Receive(buffer);
+                        ShowAndSaveMsg(string.Format("收到数据{0}", MyGlobal.ReceiveMsg));
+                    }
+                    if (true)
+                    {
 
-                        byte[] temp = new byte[len];
-                        Array.Copy(buffer, temp, len);
-                        MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
-                        if (len == 0)
-                        {
-                            ShowAndSaveMsg(string.Format("服务器已断开连接！"));
-                            MyGlobal.sktOK = false;
-                            break;
-                        }
-                        else
-                        {
-                            ShowAndSaveMsg(string.Format("收到数据{0}", MyGlobal.ReceiveMsg));
-                        }
-                        if (true)
-                        {
-                           
                         string ReturnStr = "";
-                        if (MyGlobal.ReceiveMsg.Contains("1")|| MyGlobal.ReceiveMsg.Contains("2")||MyGlobal.ReceiveMsg.Contains("3")|| MyGlobal.ReceiveMsg.Contains("4"))
+                        if (MyGlobal.ReceiveMsg.Contains("1") || MyGlobal.ReceiveMsg.Contains("2") || MyGlobal.ReceiveMsg.Contains("3") || MyGlobal.ReceiveMsg.Contains("4"))
                         {
                             Side = Convert.ToInt32(MyGlobal.ReceiveMsg.Substring(0, 1));
-                            ReturnStr = MyGlobal.ReceiveMsg.Remove(0,1);
+                            ReturnStr = MyGlobal.ReceiveMsg.Remove(0, 1);
                         }
-                       
+
                         ok = Encoding.UTF8.GetBytes(ReturnStr + "_OK");
                         ng = Encoding.UTF8.GetBytes(ReturnStr + "_NG");
 
                         switch (ReturnStr)
-                            {
-                            
+                        {
+
                             //case "1":
                             //    Side = 1;
                             //    break;
@@ -1667,64 +1713,73 @@ namespace SagensVision
                             //    Side = 4;
                             //    break;
                             case "Start":
-                                if (MyGlobal.GoSDK.ProfileList!=null)
+                                if (MyGlobal.GoSDK.ProfileList != null)
                                 {
                                     MyGlobal.GoSDK.ProfileList.Clear();
 
                                 }
-                              
+
                                 //打开激光
                                 MyGlobal.GoSDK.EnableProfle = false;
                                 string Cutjob = "切换作业";
+
                                 if (MyGlobal.GoSDK.CutJob(JobName[Side - 1], ref Cutjob))
                                 {
-
-                                } 
+                                    ShowAndSaveMsg($"切换作业 {JobName[Side - 1]} 成功！");
+                                }
                                 string Msg = "开始扫描:" + Side.ToString();
 
 
-                                MyGlobal.GoSDK.Start(ref Msg);
-                                    ShowAndSaveMsg(Msg);                                 
-                                    nSent = MyGlobal.sktClient.Send(ok);
-                                    break;
-                                case "Stop":
-                                    //关闭激光
-                                    string Msg2 = "扫描结束";
-                                    MyGlobal.GoSDK.Stop(ref Msg2);
+                                if (MyGlobal.GoSDK.Start(ref Msg))
+                                {
+                                    ShowAndSaveMsg($"打开激光成功！");
+                                }
+                                ShowAndSaveMsg(Msg);
+                                nSent = MyGlobal.sktClient.Send(ok);
+                                break;
+                            case "Stop":
+                                //关闭激光
+                                string Msg2 = "扫描结束";
+                                if (MyGlobal.GoSDK.Stop(ref Msg2))
+                                {
+                                    ShowAndSaveMsg($"关闭激光成功！");
+                                }
+
                                 MyGlobal.GoSDK.EnableProfle = false;
+                                Thread.Sleep(2000);
                                 ShowAndSaveMsg(Msg2);
-                                    Action RunDetect = () =>
+                                Action RunDetect = () =>
+                                {
+                                    //string ok1 = Run(Side);
+                                    string ok1 = RunSuface(Side);
+
+                                    //byte[] SaveSend = new byte[128];
+
+                                    if (ok1 != "OK")
                                     {
-                                        //string ok1 = Run(Side);
-                                        string ok1 = RunSuface(Side);
-
-                                        //byte[] SaveSend = new byte[128];
-
-                                        if (ok1 != "OK")
+                                        ShowAndSaveMsg(ok1);
+                                        if (Side == 4)
                                         {
-                                            ShowAndSaveMsg(ok1);
-                                            if (Side==4)
-                                            {
-                                                //SaveSend = Encoding.UTF8.GetBytes("SAVE_NG");
-                                                ShowAndSaveMsg("输出点位失败！");                                                
-                                                MyGlobal.sktClient.Send(ng);
-                                            }
-                                           
+                                            //SaveSend = Encoding.UTF8.GetBytes("SAVE_NG");
+                                            ShowAndSaveMsg("输出点位失败！");
+                                            MyGlobal.sktClient.Send(ng);
                                         }
-                                        else
+
+                                    }
+                                    else
+                                    {
+                                        if (Side == 4)
                                         {
-                                            if (Side==4)
-                                            {
-                                                //SaveSend = Encoding.UTF8.GetBytes("SAVE_OK");
-                                                ShowAndSaveMsg("输出点位成功！");
-                                                MyGlobal.sktClient.Send(ok);
-                                            }
+                                            //SaveSend = Encoding.UTF8.GetBytes("SAVE_OK");
+                                            ShowAndSaveMsg("输出点位成功！");
+                                            MyGlobal.sktClient.Send(ok);
                                         }
-                                    };
-                               
+                                    }
+                                };
+
                                 this.Invoke(RunDetect);
-                                    nSent = MyGlobal.sktClient.Send(ok);
-                                    break;
+                                nSent = MyGlobal.sktClient.Send(ok);
+                                break;
                                 //case "Start_Right":
                                 //    //打开激光
                                 //    string Msg3 = "开始扫描";
@@ -1750,17 +1805,17 @@ namespace SagensVision
                                 //    nSent = MyGlobal.sktClient.Send(ok);
                                 //    break;
 
-                            }
-
                         }
+
                     }
-
                 }
-                catch (Exception)
-                {
 
-                    throw;
-                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             //}
         }
 
@@ -1960,7 +2015,7 @@ namespace SagensVision
                         byte[] temp = new byte[len];
                         Array.Copy(buffer, temp, len);
                         MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
-                        if (len==0)
+                        if (len == 0)
                         {
                             ShowAndSaveMsg(string.Format("客户端已断开连接！"));
                             break;
@@ -1971,7 +2026,7 @@ namespace SagensVision
                         }
                         if (true)
                         {
-                            ok = Encoding.UTF8.GetBytes(MyGlobal.ReceiveMsg+"_OK");
+                            ok = Encoding.UTF8.GetBytes(MyGlobal.ReceiveMsg + "_OK");
                             switch (MyGlobal.ReceiveMsg)
                             {
                                 case "Start_Left":
@@ -1989,12 +2044,12 @@ namespace SagensVision
                                     ShowAndSaveMsg(Msg2);
                                     Action RunDetect = () =>
                                      {
-                                       string ok1 =  Run(0);
-                                         if (ok1!="OK")
+                                         string ok1 = Run(0);
+                                         if (ok1 != "OK")
                                          {
                                              ShowAndSaveMsg(ok1);
                                          }
-                                        
+
                                      };
                                     this.Invoke(RunDetect);
 
@@ -2019,7 +2074,7 @@ namespace SagensVision
                                         if (ok2 != "OK")
                                         {
                                             ShowAndSaveMsg(ok2);
-                                        }                                      
+                                        }
                                     };
                                     this.Invoke(RunDetect1);
                                     nSent = MyGlobal.sktClient.Send(ok);
@@ -2041,10 +2096,10 @@ namespace SagensVision
 
         Communication.Communication cmu = new Communication.Communication();
         private void navBarItem1_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
-        {          
+        {
             //通信设置
             cmu.ShowDialog();
-            
+
         }
 
         private void navBarItem8_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
@@ -2087,13 +2142,13 @@ namespace SagensVision
 
         //Matching.Form1 match = new Matching.Form1(MyGlobal.fileName1);
 
-       
+
         private void navBarItem11_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
 
-            MyGlobal.flset2.ShowDialog();          
+            MyGlobal.flset2.ShowDialog();
             MyGlobal.flset2.Text = "Fix";
-                   
+
 
 
             //string path2 = MyGlobal.fileName1.Replace(".shm", ".roi");
@@ -2106,7 +2161,7 @@ namespace SagensVision
             //    MyGlobal.mAssistant[0].Roi = roilist[1];
             //}
             //match.ShowDialog();
-            
+
         }
 
         public void loadMathParam()
@@ -2135,8 +2190,8 @@ namespace SagensVision
                 {
                     MyGlobal.mAssistant[i] = new MatchingModule.MatchingAssistant(MyGlobal.parameterSet[i]);
                 }
-                 //path3 = MyGlobal.fileName1.Replace(".shm", ".xml");
-              
+                //path3 = MyGlobal.fileName1.Replace(".shm", ".xml");
+
 
                 string fileName = MyGlobal.ModelPath + i.ToString() + ".shm";
                 if (File.Exists(fileName))
@@ -2155,7 +2210,7 @@ namespace SagensVision
                     ShowAndSaveMsg("模板" + i.ToString() + "未找到....");
                 }
             }
-            
+
 
         }
 
@@ -2169,7 +2224,7 @@ namespace SagensVision
             //{
             //    show3D.ShieldRec();
             //}
-   
+
         }
         //VisionTool.FindMax[] FindMax = new VisionTool.FindMax[2];
 
@@ -2201,16 +2256,16 @@ namespace SagensVision
                 {
                     HObject[] image = new HObject[2];
 
-                    HOperatorSet.ReadImage(out image[0], ImagePath +"\\" + Intensity[i]);
+                    HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + Intensity[i]);
                     HOperatorSet.ReadImage(out image[1], ImagePath + "\\" + HeightStr[i]);
                     MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
                     MyGlobal.ImageMulti.Add(image);
-                   
+
                 }
 
                 for (int i = 0; i < 4; i++)
                 {
-                    string OK = RunOutLine(i+1, i);
+                    string OK = RunOutLine(i + 1, i);
                     if (OK != "OK")
                     {
                         ShowAndSaveMsg(OK);
@@ -2234,10 +2289,10 @@ namespace SagensVision
             catch (Exception ex)
             {
 
-                ShowAndSaveMsg("RunOffline :"+ ex.Message);
+                ShowAndSaveMsg("RunOffline :" + ex.Message);
             }
-            
-        }      
+
+        }
         private void barButtonItem9_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //手动测试
@@ -2254,7 +2309,7 @@ namespace SagensVision
                 MessageBox.Show("请加载选择手动运行图片！");
             for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
             {
-                string OK = RunOutLine(i+1, i);
+                string OK = RunOutLine(i + 1, i);
                 if (OK != "OK")
                 {
                     ShowAndSaveMsg(OK);
@@ -2281,7 +2336,7 @@ namespace SagensVision
             //}
 
         }
-       
+
         List<int> sidelist = new List<int>();
         private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -2290,31 +2345,43 @@ namespace SagensVision
             openfile.Multiselect = true;
             if (openfile.ShowDialog() == DialogResult.OK)
             {
-                
-                for (int i = 0; i <MyGlobal.ImageMulti.Count; i++)
+
+                for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                 {
                     for (int j = 0; j < 2; j++)
                     {
-                        if (MyGlobal.ImageMulti[i][j]!=null)
+                        if (MyGlobal.ImageMulti[i][j] != null)
                         {
                             MyGlobal.ImageMulti[i][j].Dispose();
                         }
-                      
+
                     }
-                                      
+
                 }
                 MyGlobal.ImageMulti.Clear();
                 sidelist.Clear();
                 int len = openfile.FileNames.Length;
-               
-                string[] namesI = new string[len/3];
-                string[] namesH = new string[len/3];
-                string[] namesB = new string[len / 3];
-                if (len<2)
+
+                string[] namesI;
+                string[] namesH;
+                string[] namesB;
+                if (len < 10)
+                {
+                    namesI = new string[len / 2];
+                    namesH = new string[len / 2];
+                    namesB = null;
+                }
+                else
+                {
+                    namesI = new string[len / 3];
+                    namesH = new string[len / 3];
+                    namesB = new string[len / 3];
+                }
+                if (len < 2)
                 {
                     return;
                 }
-                int orderi = 0; int orderh = 0;int orderB = 0 ;
+                int orderi = 0; int orderh = 0; int orderB = 0;
                 foreach (var item in openfile.FileNames)
                 {
                     for (int i = orderi; i < namesH.Length; i++)
@@ -2324,38 +2391,41 @@ namespace SagensVision
                             if (item.Contains((j + 1).ToString() + "I.tiff"))
                             {
                                 namesI[i] = item;
-                                orderi = i+1;
+                                orderi = i + 1;
                                 sidelist.Add(j + 1);
                                 break;
-                            }                            
+                            }
                         }
                         break;
                     }
                     for (int i = orderh; i < namesH.Length; i++)
                     {
                         for (int j = 0; j < 4; j++)
-                        {                           
+                        {
                             if (item.Contains((j + 1).ToString() + "H.tiff"))
                             {
                                 namesH[i] = item;
-                                orderh = i+1;
+                                orderh = i + 1;
                                 break;
                             }
                         }
                         break;
                     }
-                    for (int i = orderB; i < namesB.Length; i++)
+                    if (namesB != null)
                     {
-                        for (int j = 0; j < 4; j++)
+                        for (int i = orderB; i < namesB.Length; i++)
                         {
-                            if (item.Contains((j+1).ToString()+"B.tiff"))
+                            for (int j = 0; j < 4; j++)
                             {
-                                namesB[i] = item;
-                                orderB = i + 1;
-                                break;
+                                if (item.Contains((j + 1).ToString() + "B.tiff"))
+                                {
+                                    namesB[i] = item;
+                                    orderB = i + 1;
+                                    break;
+                                }
                             }
-                        }
 
+                        }
                     }
                 }
 
@@ -2372,10 +2442,20 @@ namespace SagensVision
                     HOperatorSet.ReadImage(out image[1], namesH[i]);
 
                     MyGlobal.ImageMulti.Add(image);
-                    HObject rgbImg;
-                    HOperatorSet.ReadImage(out rgbImg,namesB[i] );
-                    MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
-                   
+                    if (MyGlobal.isShowHeightImg || namesB == null)
+                    {
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                    }
+                    else
+                    {
+                        HObject rgbImg;
+                        HOperatorSet.ReadImage(out rgbImg, namesB[i]);
+
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
+                        rgbImg.Dispose();
+                    }
+
+
                 }
 
             }
@@ -2420,11 +2500,11 @@ namespace SagensVision
             fs.ShowDialog();
         }
 
-        string namestart = "时间," + "工位,"  + "高度1," + "高度2," + "高度3," + "实时良率," + "总计," + "结果";
-        string namestartid = "@时间," + "@工位," + "@高度1,"  + "@高度2," + "@高度3," + "@实时良率," + "@总计," + "@结果";
-        void  WriteToTable(int Sta,double H1,double H2,double H3,bool OK)
+        string namestart = "时间," + "工位," + "高度1," + "高度2," + "高度3," + "实时良率," + "总计," + "结果";
+        string namestartid = "@时间," + "@工位," + "@高度1," + "@高度2," + "@高度3," + "@实时良率," + "@总计," + "@结果";
+        void WriteToTable(int Sta, double H1, double H2, double H3, bool OK)
         {
-            string StationName = Sta == 0 ? "左工位 ": "右工位";
+            string StationName = Sta == 0 ? "左工位 " : "右工位";
 
             string Okstring = OK ? "OK" : "NG";
             total++;
@@ -2450,10 +2530,10 @@ namespace SagensVision
         }
         VisionTool.FitLineSet flset = new VisionTool.FitLineSet();
         private void navBarItem12_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
-        {           
-            flset.ShowDialog();           
+        {
+            flset.ShowDialog();
         }
-       
+
         private void barButtonItem10_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             OfflineFrm OffFram = new OfflineFrm();
@@ -2465,6 +2545,28 @@ namespace SagensVision
         private void simpleButton1_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            MouseClickCnt = 0;
+            MouseClickCnt1 = 0;
+            MouseClickCnt2 = 0;
+            MouseClickCnt3 = 0;
+        }
+
+
+        private void barCheckItem2_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            MyGlobal.isShowHeightImg = barCheckItem2.Checked;
+            //if (MyGlobal.isShowHeightImg)
+            //{
+            //    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+            //    {
+            //        MyGlobal.hWindow_Final[i].HobjectToHimage(MyGlobal.ImageMulti[MyGlobal.ImageMulti.Count - 1][0]);
+            //    }
+
+            //}
         }
     }
 }
