@@ -115,6 +115,7 @@
             this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -335,9 +336,10 @@
             this.barButtonItem10,
             this.barHeaderItem2,
             this.barCheckItem1,
-            this.barCheckItem2});
+            this.barCheckItem2,
+            this.barButtonItem11});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 22;
+            this.barManager1.MaxItemId = 23;
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar2
@@ -354,7 +356,8 @@
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem6, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem10),
             new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem1),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem2)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem2),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
@@ -974,6 +977,13 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // barButtonItem11
+            // 
+            this.barButtonItem11.Caption = "设置图像角度";
+            this.barButtonItem11.Id = 22;
+            this.barButtonItem11.Name = "barButtonItem11";
+            this.barButtonItem11.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem11_ItemClick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1112,6 +1122,7 @@
         private System.Windows.Forms.Timer timer1;
         private DevExpress.XtraBars.BarCheckItem barCheckItem1;
         private DevExpress.XtraBars.BarCheckItem barCheckItem2;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem11;
     }
 }
 

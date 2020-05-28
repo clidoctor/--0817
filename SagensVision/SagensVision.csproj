@@ -51,6 +51,10 @@
     <Reference Include="DevExpress.Printing.v17.1.Core" />
     <Reference Include="DevExpress.XtraLayout.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraNavBar.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="GoSaveSurfaceGraphic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\GoSaveSurfaceGraphic.dll</HintPath>
+    </Reference>
     <Reference Include="halcondotnet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Projects\MyHalocnWindow-0912\MyHalocnWindow\bin\Debug\halcondotnet.dll</HintPath>
@@ -208,6 +212,12 @@
     <Compile Include="VisionTool\Fixcs.Designer.cs">
       <DependentUpon>Fixcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\ImgRotateFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\ImgRotateFrm.Designer.cs">
+      <DependentUpon>ImgRotateFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="VisionTool\LineCircleForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -289,6 +299,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\Fixcs.resx">
       <DependentUpon>Fixcs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\ImgRotateFrm.resx">
+      <DependentUpon>ImgRotateFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\LineCircleForm.resx">
       <DependentUpon>LineCircleForm.cs</DependentUpon>

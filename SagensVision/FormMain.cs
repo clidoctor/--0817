@@ -30,6 +30,7 @@ namespace SagensVision
 
         public FormMain()
         {
+
             InitializeComponent();
             Init();
             // Handling the QueryControl event that will populate all automatically generated Documents     
@@ -42,7 +43,7 @@ namespace SagensVision
                 {
                     MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
                 }
-
+                
             }
             catch (Exception)
             {
@@ -366,17 +367,12 @@ namespace SagensVision
         VisionTool.Display3D show3D = new VisionTool.Display3D();
         private void FormMain_Load(object sender, EventArgs e)
         {
+            if (File.Exists(MyGlobal.imgRotatePath))
+            {
+                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
+            }
 
-            //this.dockPanel5.Controls.Add(show3D);
-            //show3D.Dock = DockStyle.Fill;
-            //dockPanel5.Show();
-
-
-            //dockPanel4.Show();
-            //dockPanel3.Show();
-            //dockPanel5.DockedAsTabbedDocument = true;
-            //dockPanel4.DockedAsTabbedDocument = true;
-            //dockPanel3.DockedAsTabbedDocument = true;
+          
 
             //MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen);
             MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen_Surface);
@@ -410,8 +406,8 @@ namespace SagensVision
 
             }
             MyGlobal.GoSDK.IsRecSurfaceDataZByte = true;
-            //MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
-            //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
+            MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
+            MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
         }
 
@@ -431,11 +427,11 @@ namespace SagensVision
             set
             {
                 recStateCode = value;
-                if (recStateCode >= 2)
-                {
-                    recStateCode = 0;
-                    HIRecFinish();
-                }
+                //if (recStateCode >= 2)
+                //{
+                //    recStateCode = 0;
+                //    HIRecFinish();
+                //}
             }
 
         }
@@ -462,10 +458,12 @@ namespace SagensVision
         private void GoSDK_SurfaceIntensityFinish()
         {
             RecStateCode++;
+            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}");
         }
         private void GoSDK_SurfaceZRecFinish()
         {
             RecStateCode++;
+            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}");
         }
         void GenIntesityProfile(List<SagensSdk.Profile> profile, out HObject Image)
         {
@@ -533,6 +531,7 @@ namespace SagensVision
                     SurfaceHeight = profile.Count;
                     float[] SurfacePointZ = new float[SurfaceWidth * SurfaceHeight];
 
+                    
                     HObject HeightImage = new HObject(); HObject IntensityImage = new HObject();
 
                     GenIntesityProfile(profile, out IntensityImage);
@@ -640,26 +639,34 @@ namespace SagensVision
                     long SurfaceWidth, SurfaceHeight;
                     SurfaceWidth = MyGlobal.GoSDK.surfaceWidth;
                     SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
-                    HObject HeightImage = new HObject(); HObject IntensityImage = new HObject();
+                    HObject tempHeightImg, tempInteImg, tempByteImg;
+                    HObject HeightImage, IntensityImage, byteImg;
                     if (SurfacePointZ != null)
                     {
                         HObject Height = new HObject();
-                        MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out HeightImage);
+                        MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
                     }
+                    else { return "高度值为空"; }
 
                     byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
                     if (IntesitySurfacePointZ != null)
                     {
-                        HObject Intensity = new HObject();
-                        MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out IntensityImage);
+                        MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
                     }
-                    if (IntensityImage == null || !IntensityImage.IsInitialized())
-                    {
-                        return "未获取到亮度图";
-                    }
+                    else { return "亮度值为空"; }
+
+                   
 
                     byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
-                    HObject byteImg = MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight);
+                    MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight,out tempByteImg);
+
+                    HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                    tempHeightImg.Dispose();
+                    HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                    tempInteImg.Dispose();
+                    HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
+                    tempByteImg.Dispose();
+
                     HObject rgbImg;
                     PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
 
@@ -1635,6 +1642,7 @@ namespace SagensVision
         bool TcpIsConnect = false;
         string[] JobName = { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" };
         int Side = 0;
+        Stopwatch sp = new Stopwatch();
         public void TcpClientListen_Surface()
         {
             int nSent = 0;
@@ -1693,25 +1701,19 @@ namespace SagensVision
                             Side = Convert.ToInt32(MyGlobal.ReceiveMsg.Substring(0, 1));
                             ReturnStr = MyGlobal.ReceiveMsg.Remove(0, 1);
                         }
-
+                        
+                        if (MyGlobal.ReceiveMsg.Contains("1"))
+                        {
+                            for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
+                            {
+                                MyGlobal.hWindow_Final[i].ClearWindow();
+                            }
+                        }
                         ok = Encoding.UTF8.GetBytes(ReturnStr + "_OK");
                         ng = Encoding.UTF8.GetBytes(ReturnStr + "_NG");
 
                         switch (ReturnStr)
                         {
-
-                            //case "1":
-                            //    Side = 1;
-                            //    break;
-                            //case "2":
-                            //    Side =2;
-                            //    break;
-                            //case "3":
-                            //    Side = 3;
-                            //    break;
-                            //case "4":
-                            //    Side = 4;
-                            //    break;
                             case "Start":
                                 if (MyGlobal.GoSDK.ProfileList != null)
                                 {
@@ -1746,7 +1748,13 @@ namespace SagensVision
                                 }
 
                                 MyGlobal.GoSDK.EnableProfle = false;
-                                Thread.Sleep(2000);
+                                
+                                sp.Start();
+                                while (recStateCode < 2)
+                                {
+                                    Thread.Sleep(100);
+                                }
+                                recStateCode = 0;
                                 ShowAndSaveMsg(Msg2);
                                 Action RunDetect = () =>
                                 {
@@ -1780,30 +1788,6 @@ namespace SagensVision
                                 this.Invoke(RunDetect);
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
-                                //case "Start_Right":
-                                //    //打开激光
-                                //    string Msg3 = "开始扫描";
-                                //    MyGlobal.GoSDK.Start(ref Msg3);
-                                //    ShowAndSaveMsg(Msg3);
-
-                                //    nSent = MyGlobal.sktClient.Send(ok);
-                                //    break;
-                                //case "Stop_Right":
-                                //    //关闭激光
-                                //    string Msg4 = "扫描结束";
-                                //    MyGlobal.GoSDK.Start(ref Msg4);
-                                //    ShowAndSaveMsg(Msg4);
-                                //    Action RunDetect1 = () =>
-                                //    {
-                                //        string ok2 = Run(1);
-                                //        if (ok2 != "OK")
-                                //        {
-                                //            ShowAndSaveMsg(ok2);
-                                //        }
-                                //    };
-                                //    this.Invoke(RunDetect1);
-                                //    nSent = MyGlobal.sktClient.Send(ok);
-                                //    break;
 
                         }
 
@@ -2411,21 +2395,11 @@ namespace SagensVision
                         }
                         break;
                     }
-                    if (namesB != null)
-                    {
-                        for (int i = orderB; i < namesB.Length; i++)
-                        {
-                            for (int j = 0; j < 4; j++)
-                            {
-                                if (item.Contains((j + 1).ToString() + "B.tiff"))
-                                {
-                                    namesB[i] = item;
-                                    orderB = i + 1;
-                                    break;
-                                }
-                            }
 
-                        }
+                    if (item.Contains("B.tiff"))
+                    {
+                        namesB[orderB] = item;
+                        orderB++;
                     }
                 }
 
@@ -2567,6 +2541,16 @@ namespace SagensVision
             //    }
 
             //}
+        }
+
+        private void barButtonItem11_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ImgRotateFrm imgrotatefrm = new ImgRotateFrm();
+            imgrotatefrm.Show();
+            if (File.Exists(MyGlobal.imgRotatePath))
+            {
+                MyGlobal.imgRotateArr = (int[]) StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
+            }
         }
     }
 }
