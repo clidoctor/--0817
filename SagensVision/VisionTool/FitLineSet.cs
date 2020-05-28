@@ -4997,11 +4997,11 @@ namespace SagensVision.VisionTool
                 //hwindow_final2.viewWindow.notDisplayRoi();
                 //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
 
-                //temp.Clear();
-                //ROI roi = roiList[SideId][id];
-                //temp.Add(roi);
-                //hwindow_final1.viewWindow.notDisplayRoi();
-                //hwindow_final1.viewWindow.displayROI(ref temp);
+                temp.Clear();
+                ROI roi = roiList[SideId][id];
+                temp.Add(roi);
+                hwindow_final1.viewWindow.notDisplayRoi();
+                hwindow_final1.viewWindow.displayROI(ref temp);
 
 
                 textBox_Num.Text = ((int)fParam[SideId].roiP[id].NumOfSection).ToString();
