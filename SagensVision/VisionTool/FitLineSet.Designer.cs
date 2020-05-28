@@ -60,17 +60,22 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.textBox_OffsetX2 = new System.Windows.Forms.TextBox();
-            this.textBox_OffsetY2 = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.删除所有ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.更改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.插入ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.重命名ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.复制ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.粘贴ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBox_OffsetX2 = new System.Windows.Forms.TextBox();
+            this.textBox_OffsetY2 = new System.Windows.Forms.TextBox();
             this.checkBoxRoi = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -126,8 +131,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
-            this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -454,9 +460,9 @@
             // 
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.LightGray;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
+            this.xtraTabPage1.Controls.Add(this.dataGridView1);
             this.xtraTabPage1.Controls.Add(this.checkBox4);
             this.xtraTabPage1.Controls.Add(this.groupBox6);
-            this.xtraTabPage1.Controls.Add(this.richTextBox1);
             this.xtraTabPage1.Controls.Add(this.checkBoxRoi);
             this.xtraTabPage1.Controls.Add(this.groupBox5);
             this.xtraTabPage1.Controls.Add(this.textBox_IndStart1);
@@ -473,59 +479,56 @@
             this.xtraTabPage1.Size = new System.Drawing.Size(977, 344);
             this.xtraTabPage1.Text = "截取轮廓工具";
             // 
-            // checkBox4
+            // dataGridView1
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(381, 13);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(86, 18);
-            this.checkBox4.TabIndex = 65;
-            this.checkBox4.Text = "不启用定位";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4});
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.dataGridView1.GridColor = System.Drawing.Color.Lavender;
+            this.dataGridView1.Location = new System.Drawing.Point(3, 47);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.Size = new System.Drawing.Size(244, 246);
+            this.dataGridView1.TabIndex = 66;
+            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_CurrentCellChanged);
             // 
-            // groupBox6
+            // Column1
             // 
-            this.groupBox6.Controls.Add(this.textBox_OffsetX2);
-            this.groupBox6.Controls.Add(this.textBox_OffsetY2);
-            this.groupBox6.Location = new System.Drawing.Point(384, 195);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(266, 84);
-            this.groupBox6.TabIndex = 64;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "颜色高度区间";
+            this.Column1.HeaderText = "编号";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 60;
             // 
-            // textBox_OffsetX2
+            // Column2
             // 
-            this.textBox_OffsetX2.Location = new System.Drawing.Point(13, 33);
-            this.textBox_OffsetX2.Name = "textBox_OffsetX2";
-            this.textBox_OffsetX2.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetX2.TabIndex = 47;
-            this.textBox_OffsetX2.Text = "0";
-            this.textBox_OffsetX2.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            this.Column2.HeaderText = "ID";
+            this.Column2.Name = "Column2";
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2.Width = 60;
             // 
-            // textBox_OffsetY2
+            // Column3
             // 
-            this.textBox_OffsetY2.Location = new System.Drawing.Point(150, 33);
-            this.textBox_OffsetY2.Name = "textBox_OffsetY2";
-            this.textBox_OffsetY2.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetY2.TabIndex = 45;
-            this.textBox_OffsetY2.Text = "0";
-            this.textBox_OffsetY2.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            this.Column3.HeaderText = "类型";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column3.Width = 60;
             // 
-            // richTextBox1
+            // Column4
             // 
-            this.richTextBox1.ContextMenuStrip = this.contextMenuStrip1;
-            this.richTextBox1.Location = new System.Drawing.Point(3, 40);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(100, 239);
-            this.richTextBox1.TabIndex = 63;
-            this.richTextBox1.Text = "";
-            this.richTextBox1.SelectionChanged += new System.EventHandler(this.richTextBox1_SelectionChanged);
-            this.richTextBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.richTextBox1_MouseClick);
-            this.richTextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
-            this.richTextBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.richTextBox1_MouseMove);
+            this.Column4.HeaderText = "运行";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 60;
             // 
             // contextMenuStrip1
             // 
@@ -534,9 +537,10 @@
             this.删除所有ToolStripMenuItem,
             this.更改ToolStripMenuItem,
             this.插入ToolStripMenuItem,
-            this.重命名ToolStripMenuItem});
+            this.复制ToolStripMenuItem,
+            this.粘贴ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 136);
             // 
             // 删除ToolStripMenuItem
             // 
@@ -566,12 +570,59 @@
             this.插入ToolStripMenuItem.Text = "插入";
             this.插入ToolStripMenuItem.Click += new System.EventHandler(this.插入ToolStripMenuItem_Click);
             // 
-            // 重命名ToolStripMenuItem
+            // 复制ToolStripMenuItem
             // 
-            this.重命名ToolStripMenuItem.Name = "重命名ToolStripMenuItem";
-            this.重命名ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.重命名ToolStripMenuItem.Text = "重命名";
-            this.重命名ToolStripMenuItem.Click += new System.EventHandler(this.重命名ToolStripMenuItem_Click);
+            this.复制ToolStripMenuItem.Name = "复制ToolStripMenuItem";
+            this.复制ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.复制ToolStripMenuItem.Text = "复制";
+            this.复制ToolStripMenuItem.Click += new System.EventHandler(this.复制ToolStripMenuItem_Click);
+            // 
+            // 粘贴ToolStripMenuItem
+            // 
+            this.粘贴ToolStripMenuItem.Name = "粘贴ToolStripMenuItem";
+            this.粘贴ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.粘贴ToolStripMenuItem.Text = "粘贴";
+            this.粘贴ToolStripMenuItem.Click += new System.EventHandler(this.粘贴ToolStripMenuItem_Click);
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(381, 13);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(86, 18);
+            this.checkBox4.TabIndex = 65;
+            this.checkBox4.Text = "不启用定位";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBox_OffsetX2);
+            this.groupBox6.Controls.Add(this.textBox_OffsetY2);
+            this.groupBox6.Location = new System.Drawing.Point(485, 209);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(266, 84);
+            this.groupBox6.TabIndex = 64;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "颜色高度区间";
+            // 
+            // textBox_OffsetX2
+            // 
+            this.textBox_OffsetX2.Location = new System.Drawing.Point(13, 33);
+            this.textBox_OffsetX2.Name = "textBox_OffsetX2";
+            this.textBox_OffsetX2.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetX2.TabIndex = 47;
+            this.textBox_OffsetX2.Text = "0";
+            this.textBox_OffsetX2.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // textBox_OffsetY2
+            // 
+            this.textBox_OffsetY2.Location = new System.Drawing.Point(150, 33);
+            this.textBox_OffsetY2.Name = "textBox_OffsetY2";
+            this.textBox_OffsetY2.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetY2.TabIndex = 45;
+            this.textBox_OffsetY2.Text = "0";
+            this.textBox_OffsetY2.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // checkBoxRoi
             // 
@@ -587,7 +638,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.panel3);
-            this.groupBox5.Location = new System.Drawing.Point(384, 33);
+            this.groupBox5.Location = new System.Drawing.Point(485, 47);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(266, 152);
             this.groupBox5.TabIndex = 61;
@@ -688,7 +739,7 @@
             // 
             // textBox_IndStart1
             // 
-            this.textBox_IndStart1.Location = new System.Drawing.Point(872, 97);
+            this.textBox_IndStart1.Location = new System.Drawing.Point(544, 319);
             this.textBox_IndStart1.Name = "textBox_IndStart1";
             this.textBox_IndStart1.Size = new System.Drawing.Size(100, 22);
             this.textBox_IndStart1.TabIndex = 51;
@@ -698,7 +749,7 @@
             // 
             // textBox_IndEnd2
             // 
-            this.textBox_IndEnd2.Location = new System.Drawing.Point(872, 196);
+            this.textBox_IndEnd2.Location = new System.Drawing.Point(872, 318);
             this.textBox_IndEnd2.Name = "textBox_IndEnd2";
             this.textBox_IndEnd2.Size = new System.Drawing.Size(100, 22);
             this.textBox_IndEnd2.TabIndex = 58;
@@ -714,16 +765,16 @@
             this.groupBox4.Controls.Add(this.simpleButton11);
             this.groupBox4.Controls.Add(this.simpleButton5);
             this.groupBox4.Controls.Add(this.simpleButton7);
-            this.groupBox4.Location = new System.Drawing.Point(657, 40);
+            this.groupBox4.Location = new System.Drawing.Point(757, 54);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(209, 239);
+            this.groupBox4.Size = new System.Drawing.Size(113, 239);
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "拟合直线";
             // 
             // simpleButton6
             // 
-            this.simpleButton6.Location = new System.Drawing.Point(77, 204);
+            this.simpleButton6.Location = new System.Drawing.Point(23, 208);
             this.simpleButton6.Name = "simpleButton6";
             this.simpleButton6.Size = new System.Drawing.Size(75, 23);
             this.simpleButton6.TabIndex = 14;
@@ -732,7 +783,7 @@
             // 
             // simpleButton13
             // 
-            this.simpleButton13.Location = new System.Drawing.Point(77, 109);
+            this.simpleButton13.Location = new System.Drawing.Point(23, 113);
             this.simpleButton13.Name = "simpleButton13";
             this.simpleButton13.Size = new System.Drawing.Size(75, 23);
             this.simpleButton13.TabIndex = 61;
@@ -741,7 +792,7 @@
             // 
             // simpleButton12
             // 
-            this.simpleButton12.Location = new System.Drawing.Point(77, 80);
+            this.simpleButton12.Location = new System.Drawing.Point(23, 84);
             this.simpleButton12.Name = "simpleButton12";
             this.simpleButton12.Size = new System.Drawing.Size(75, 23);
             this.simpleButton12.TabIndex = 60;
@@ -750,7 +801,7 @@
             // 
             // simpleButton11
             // 
-            this.simpleButton11.Location = new System.Drawing.Point(77, 47);
+            this.simpleButton11.Location = new System.Drawing.Point(23, 51);
             this.simpleButton11.Name = "simpleButton11";
             this.simpleButton11.Size = new System.Drawing.Size(75, 23);
             this.simpleButton11.TabIndex = 59;
@@ -759,7 +810,7 @@
             // 
             // simpleButton5
             // 
-            this.simpleButton5.Location = new System.Drawing.Point(77, 14);
+            this.simpleButton5.Location = new System.Drawing.Point(23, 18);
             this.simpleButton5.Name = "simpleButton5";
             this.simpleButton5.Size = new System.Drawing.Size(75, 23);
             this.simpleButton5.TabIndex = 58;
@@ -768,7 +819,7 @@
             // 
             // simpleButton7
             // 
-            this.simpleButton7.Location = new System.Drawing.Point(77, 172);
+            this.simpleButton7.Location = new System.Drawing.Point(23, 176);
             this.simpleButton7.Name = "simpleButton7";
             this.simpleButton7.Size = new System.Drawing.Size(75, 23);
             this.simpleButton7.TabIndex = 24;
@@ -791,7 +842,7 @@
             this.groupBox3.Controls.Add(this.textBox_Len);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.textBox_Width);
-            this.groupBox3.Location = new System.Drawing.Point(169, 33);
+            this.groupBox3.Location = new System.Drawing.Point(270, 47);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(209, 246);
             this.groupBox3.TabIndex = 59;
@@ -928,7 +979,7 @@
             // 
             // textBox_IndEnd1
             // 
-            this.textBox_IndEnd1.Location = new System.Drawing.Point(872, 130);
+            this.textBox_IndEnd1.Location = new System.Drawing.Point(650, 319);
             this.textBox_IndEnd1.Name = "textBox_IndEnd1";
             this.textBox_IndEnd1.Size = new System.Drawing.Size(100, 22);
             this.textBox_IndEnd1.TabIndex = 54;
@@ -938,7 +989,7 @@
             // 
             // textBox_IndStart2
             // 
-            this.textBox_IndStart2.Location = new System.Drawing.Point(872, 163);
+            this.textBox_IndStart2.Location = new System.Drawing.Point(756, 318);
             this.textBox_IndStart2.Name = "textBox_IndStart2";
             this.textBox_IndStart2.Size = new System.Drawing.Size(100, 22);
             this.textBox_IndStart2.TabIndex = 56;
@@ -985,7 +1036,7 @@
             // 
             this.xtraTabPage2.Controls.Add(this.groupBox2);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(989, 344);
+            this.xtraTabPage2.Size = new System.Drawing.Size(977, 344);
             this.xtraTabPage2.Text = "找线设置";
             // 
             // FitLineSet
@@ -1016,9 +1067,10 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage1.ResumeLayout(false);
             this.xtraTabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
@@ -1112,9 +1164,14 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox_Row;
         private System.Windows.Forms.CheckBox checkBoxRoi;
-        private System.Windows.Forms.ToolStripMenuItem 重命名ToolStripMenuItem;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ToolStripMenuItem 复制ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 粘贴ToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewButtonColumn Column4;
     }
 }
