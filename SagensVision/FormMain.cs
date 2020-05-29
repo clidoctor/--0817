@@ -22,11 +22,12 @@ namespace SagensVision
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
 
-        public string test = "This is a test!";
         List<double[][]> XCoord = new List<double[][]>();
         List<double[][]> YCoord = new List<double[][]>();
         List<double[][]> ZCoord = new List<double[][]>();
         List<string[][]> StrLorC = new List<string[][]>();
+        List<double[]> Xorigin = new List<double[]>();
+        List<double[]> Yorigin = new List<double[]>();
 
         public FormMain()
         {
@@ -213,9 +214,9 @@ namespace SagensVision
             }
         }
 
-        string RunFindPoint(int Side, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, HTuple Homat3D, HWindow_Final Hwnd)
+        string RunFindPoint(int Side, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HTuple Homat3D, HWindow_Final Hwnd)
         {
-            X = null; Y = null; Z = null; Str = null;
+            X = null; Y = null; Z = null; Str = null; original = new HTuple[2];
             try
             {
                 HObject image = new HObject();
@@ -224,8 +225,22 @@ namespace SagensVision
                 string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
-                    MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
-                string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, Homat3D, Hwnd, false, homMaxFix);
+                MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
+                
+                string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str,out original, Homat3D, Hwnd, false, homMaxFix);
+                double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+                HTuple deg = 0;
+                HOperatorSet.TupleDeg(intersect.Angle, out deg);
+                string AnchorX = Math.Round(intersect.Col, 3).ToString(); string AnchorY = Math.Round(intersect.Row, 3).ToString();
+                if (Side == 4)
+                {
+                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
+                }
+                else
+                {
+                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString());
+                }
                 return OK;
             }
             catch (Exception ex)
@@ -505,6 +520,8 @@ namespace SagensVision
                     YCoord.Clear();
                     ZCoord.Clear();
                     StrLorC.Clear();
+                    Xorigin.Clear();
+                    Yorigin.Clear();
                     MyGlobal.globalConfig.Count++;
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
 
@@ -747,6 +764,8 @@ namespace SagensVision
                 YCoord.Clear();
                 ZCoord.Clear();
                 StrLorC.Clear();
+                Xorigin.Clear();
+                Yorigin.Clear();
             }
             if (MyGlobal.ImageMulti.Count == 0)
             {
@@ -801,8 +820,8 @@ namespace SagensVision
         {
             try
             {
-                double[][] x, y, z; string[][] Strlorc;
-                string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
+                double[][] x, y, z; string[][] Strlorc;HTuple[] original = new HTuple[2];
+                string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc,out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
                 XCoord.Add(x);
                 YCoord.Add(y);
                 ZCoord.Add(z);
@@ -1287,8 +1306,8 @@ namespace SagensVision
         {
             try
             {
-                double[][] x, y, z; string[][] Strlorc;
-                string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[Station - 1]);
+                double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
+                string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc,out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[Station - 1]);
                 if (OK != "OK")
                 {
                     return "第" + Station + "边" + OK;
@@ -1302,6 +1321,13 @@ namespace SagensVision
                 YCoord.Add(y);
                 ZCoord.Add(z);
                 StrLorC.Add(Strlorc);
+                
+                Yorigin.Add(original[0]);
+                Xorigin.Add(original[1]);
+                if (Station!=4)
+                {
+                    return "OK";
+                }
                 #region 除去起始位重复部分 并均分 
                 for (int i = 0; i < Station; i++)
                 {
@@ -1483,9 +1509,10 @@ namespace SagensVision
                     }
                 }
                 xcoord = new double[totalNum]; ycoord = new double[totalNum]; zcoord = new double[totalNum];
-                keypt = new string[totalNum];
-                int ind = 0;
+                keypt = new string[totalNum]; double[] orginalR = new double[totalNum]; double[] orginalC = new double[totalNum];
+                int ind = 0;int ind2 = 0;
                 double x0 = 0, y0 = 0, z0 = 0;
+                string[] sigleTitle = new string[totalNum];
                 for (int i = 0; i < XCoord.Count; i++)
                 {
                     for (int j = 0; j < XCoord[i].GetLength(0); j++)
@@ -1518,6 +1545,12 @@ namespace SagensVision
                             xcoord[ind] = Math.Round(XCoord[i][j][k], 3);
                             ycoord[ind] = Math.Round(YCoord[i][j][k], 3);
                             zcoord[ind] = Math.Round(ZCoord[i][j][k], 3);
+
+                            orginalR[ind] = Yorigin[i][j];
+                            orginalC[ind] = Xorigin[i][j];
+                            sigleTitle[ind] = flset.fParam[i].DicPointName[j];
+                            ind2++;
+
                             keypt[ind] = StrLorC[i][j][k];
                             if (k == 0)
                             {
@@ -1525,16 +1558,28 @@ namespace SagensVision
                             }
                             ind++;
                         }
+                        
+
                     }
+                    
                 }
 
                 //排列起点
                 //写入到文本
                 StringBuilder Str = new StringBuilder();
+                StringBuilder StrOrginalHeader = new StringBuilder();
+                StringBuilder StrOrginalData = new StringBuilder();
+                StringBuilder StrAxisData = new StringBuilder();
+
+                string saveTime = DateTime.Now.ToString("HHmmss");
+
                 int Start = MyGlobal.globalConfig.Startpt;
+                double[] OrginalX1 = orginalR; double[] OrginalY1 = orginalC;
+
+                
                 for (int i = 0; i < xcoord.Length; i++)
                 {
-
+                    //Debug.WriteLine(i);
                     int start = Start;
                     if (Start - 1 + i >= xcoord.Length)
                     {
@@ -1548,6 +1593,11 @@ namespace SagensVision
                     double Y1 = ycoord[start];
                     double Z1 = zcoord[start];
                     string lorc = keypt[start];
+
+                    double xorigin = OrginalX1[start];
+                    double yorigin = OrginalY1[start];
+                    
+
                     if (i == 0)
                     {
                         int[] keys = everySeg.Keys.ToArray();
@@ -1566,55 +1616,34 @@ namespace SagensVision
                         y0 = Y1;
                         z0 = Z1;
                     }
+                    
                     Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
+                   
+                                       
+                        if (i==0)
+                        {
+                            StrOrginalHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
+                            StrOrginalData.Append(saveTime + "\t"+ xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                            StrAxisData.Append(saveTime + "\t" + X1.ToString("0.000") + "\t" + Y1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        }         
+                        else
+                        {
+  
+                            StrOrginalHeader.Append(sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
+                            StrOrginalData.Append(xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                            StrAxisData.Append(X1.ToString("0.000") + "\t" + Y1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        }
 
+                    if (Station == 4 && i == xcoord.Length - 1)
+                    {
+                        StrOrginalHeader.Append("\r\n");
+                        StrOrginalData.Append("\r\n");
+                        StrAxisData.Append("\r\n");
+                    }
                 }
                 string strlast = "0;";
                 int len1 = XCoord[Station - 1].GetLength(0);
-
-                //int count = 0;
-                //if (Station > 0)
-                //{
-                //    double x0 =0, y0 =0, z0 =0;                   
-
-                //    //写入到文本
-                //    StringBuilder Str = new StringBuilder();
-                //    for (int i = 0; i < Station; i++)
-                //    {
-                //        for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                //        {
-                //            if (XCoord[i][j] == null)
-                //            {
-                //                continue;
-                //            }
-                //            HTuple row = XCoord[i][j];
-                //            HTuple col = YCoord[i][j];
-
-                //            if (Station ==4)
-                //            {
-                //                HObject NewSide = new HObject();
-                //                HOperatorSet.GenContourPolygonXld(out NewSide,row, col);
-                //                MyGlobal.hWindow_Final[0].viewWindow.displayHobject(NewSide, "red");
-                //            }
-                //            for (int k = 0; k < XCoord[i][j].Length; k++)
-                //            {
-
-                //                double X1 = Math.Round(XCoord[i][j][k], 3);
-                //                double Y1 = Math.Round(YCoord[i][j][k], 3);
-                //                double Z1 = Math.Round(ZCoord[i][j][k], 3);
-                //                if (i == j  && j==k && k == 0)
-                //                {
-                //                     x0 = X1;
-                //                     y0 = Y1;
-                //                     z0 = Z1;
-                //                }
-                //                string lorc = StrLorC[i][j][k];
-                //                count++;
-                //                Str.Append(count.ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
-
-                //            }
-                //        }
-                //    }
+   
                 if (XCoord[Station - 1][len1 - 1] != null)
                 {
                     strlast = StrLorC[Station - 1][len1 - 1][0];
@@ -1625,9 +1654,14 @@ namespace SagensVision
 
                 }
                 Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
-
                 StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
-                //}
+                if (Station==4)
+                {
+                    StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
+                    StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
+                }
+                
+
                 return "OK";
             }
             catch (Exception ex)
