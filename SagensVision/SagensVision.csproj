@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="Calibration, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\extro\Calibration-New\Calibration\bin\Debug\Calibration.dll</HintPath>
+      <HintPath>bin\Debug\Calibration.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.BonusSkins.v17.1" />
     <Reference Include="DevExpress.Data.v17.1" />
@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="HWindow_Tool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\extro\halcon控件\bin\Debug\HWindow_Tool.dll</HintPath>
+      <HintPath>bin\Debug\HWindow_Tool.dll</HintPath>
     </Reference>
     <Reference Include="LookForCircleLine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

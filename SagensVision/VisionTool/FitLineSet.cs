@@ -4947,7 +4947,7 @@ namespace SagensVision.VisionTool
             {
                 return;
             }
-            isSelecting = true;
+            isSelecting = true; 
             dataGridView1.ClearSelection();
             dataGridView1.Rows[roiID].Selected = true;
             isSelecting = false;
