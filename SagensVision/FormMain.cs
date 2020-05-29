@@ -27,6 +27,7 @@ namespace SagensVision
         List<double[][]> ZCoord = new List<double[][]>();
         List<string[][]> StrLorC = new List<string[][]>();
         List<double[]> Xorigin = new List<double[]>();
+
         List<double[]> Yorigin = new List<double[]>();
 
         public FormMain()
@@ -413,7 +414,9 @@ namespace SagensVision
                 {
                     ShowAndSaveMsg("Sn Fail！");
                 }
-
+                MyGlobal.globalConfig.zStart = MyGlobal.GoSDK.zStart;
+                MyGlobal.globalConfig.zRange = MyGlobal.GoSDK.zRange;
+                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
             }
             else
             {
@@ -421,8 +424,8 @@ namespace SagensVision
 
             }
             MyGlobal.GoSDK.IsRecSurfaceDataZByte = true;
-            MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
-            MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
+            //MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
+            //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
         }
 
@@ -473,12 +476,12 @@ namespace SagensVision
         private void GoSDK_SurfaceIntensityFinish()
         {
             RecStateCode++;
-            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}");
+            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}" +"{ 亮度数据接收成功 }");
         }
         private void GoSDK_SurfaceZRecFinish()
         {
             RecStateCode++;
-            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}");
+            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}" + "{ 高度数据接收成功 }");
         }
         void GenIntesityProfile(List<SagensSdk.Profile> profile, out HObject Image)
         {
@@ -662,6 +665,7 @@ namespace SagensVision
                     {
                         HObject Height = new HObject();
                         MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
+                        MyGlobal.GoSDK.SurfaceDataZ = null;
                     }
                     else { return "高度值为空"; }
 
@@ -669,6 +673,7 @@ namespace SagensVision
                     if (IntesitySurfacePointZ != null)
                     {
                         MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
+                        MyGlobal.GoSDK.SurfaceDataIntensity = null;
                     }
                     else { return "亮度值为空"; }
 
@@ -676,7 +681,7 @@ namespace SagensVision
 
                     byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
                     MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight,out tempByteImg);
-
+                    MyGlobal.GoSDK.SurfaceDataZByte = null;
                     HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                     tempHeightImg.Dispose();
                     HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
@@ -744,7 +749,7 @@ namespace SagensVision
                 }
                 else
                 {
-                    return "未收到亮度数据";
+                    return "RunSurfae --> 高度数据为空";
                 }
             }
             catch (Exception ex)
@@ -1677,6 +1682,10 @@ namespace SagensVision
         string[] JobName = { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" };
         int Side = 0;
         Stopwatch sp = new Stopwatch();
+
+       
+
+
         public void TcpClientListen_Surface()
         {
             int nSent = 0;
@@ -1712,10 +1721,14 @@ namespace SagensVision
                 while (true)
                 {
                     int len = MyGlobal.sktClient.Receive(buffer);
-
+                    
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
+                    if (MyGlobal.ReceiveMsg.Contains("point"))
+                    {
+                        continue;
+                    }
                     if (len == 0)
                     {
                         ShowAndSaveMsg(string.Format("服务器已断开连接！"));
@@ -1768,27 +1781,34 @@ namespace SagensVision
 
                                 if (MyGlobal.GoSDK.Start(ref Msg))
                                 {
-                                    ShowAndSaveMsg($"打开激光成功！");
+                                    ShowAndSaveMsg($"打开激光成功！----");
+                                    Thread.Sleep(1000);
                                 }
                                 ShowAndSaveMsg(Msg);
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
                             case "Stop":
                                 //关闭激光
+                                
+                                MyGlobal.GoSDK.EnableProfle = false;
+                                sp.Start();
+                                while (MyGlobal.GoSDK.SurfaceDataZ == null || MyGlobal.GoSDK.SurfaceDataIntensity == null)
+                                {
+                                    if (sp.ElapsedMilliseconds  > 10000)
+                                    {
+                                        sp.Reset();
+                                        ShowAndSaveMsg($"图像接收超时！");
+                                        break;
+                                    }
+                                }
+                                sp.Reset();
+
                                 string Msg2 = "扫描结束";
                                 if (MyGlobal.GoSDK.Stop(ref Msg2))
                                 {
                                     ShowAndSaveMsg($"关闭激光成功！");
                                 }
 
-                                MyGlobal.GoSDK.EnableProfle = false;
-                                
-                                sp.Start();
-                                while (recStateCode < 2)
-                                {
-                                    Thread.Sleep(100);
-                                }
-                                recStateCode = 0;
                                 ShowAndSaveMsg(Msg2);
                                 Action RunDetect = () =>
                                 {
@@ -1876,6 +1896,10 @@ namespace SagensVision
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
+                    if (MyGlobal.ReceiveMsg.Contains("point"))
+                    {
+                        continue;
+                    }
                     if (len == 0)
                     {
                         ShowAndSaveMsg(string.Format("服务器已断开连接！"));
@@ -2585,6 +2609,31 @@ namespace SagensVision
             {
                 MyGlobal.imgRotateArr = (int[]) StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
             }
+        }
+
+        private void btn_clearbuffer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            try
+            {
+                for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                {
+                    for (int j = 0; j < MyGlobal.ImageMulti[i].Length; j++)
+                    {
+                        MyGlobal.ImageMulti[i][j].Dispose();
+                    }
+                }
+                MyGlobal.ImageMulti.Clear();
+                for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
+                {
+                    MyGlobal.hWindow_Final[i].ClearWindow();
+                }
+                ShowAndSaveMsg("清理缓存成功！");
+            }
+            catch (Exception ex)
+            {
+                ShowAndSaveMsg("清理缓存失败-->" + ex.Message);
+            }
+            
         }
     }
 }

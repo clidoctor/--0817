@@ -62,6 +62,8 @@ namespace SagensVision
         public double TotalZoffset = 0;
         public int Startpt = 1;//起始点
         public int Count = 0;
+        public double zRange;
+        public double zStart;
     }
 
 

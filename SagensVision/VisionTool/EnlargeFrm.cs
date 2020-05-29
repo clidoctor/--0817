@@ -40,8 +40,8 @@ namespace SagensVision.VisionTool
             HOperatorSet.Threshold(MyGlobal.ImageMulti[MyGlobal.ImageMulti.Count - 1][1], out reg, -20, 50);
             HTuple per, min, max, range;
             HOperatorSet.MinMaxGray(reg, MyGlobal.ImageMulti[MyGlobal.ImageMulti.Count - 1][1],0, out min, out max, out range);
-            double z_byte = MyGlobal.GoSDK.z_byte_resolution;
-            double z_start = MyGlobal.GoSDK.zStart;
+            double z_byte = MyGlobal.GoSDK.z_byte_resolution == 0 ? ((int)255/ MyGlobal.globalConfig.zRange ): MyGlobal.GoSDK.z_byte_resolution;
+            double z_start = MyGlobal.GoSDK.zStart == 0 ? MyGlobal.globalConfig.zStart : MyGlobal.GoSDK.zStart;
             byte[] grayArr = new byte[5];
             grayArr[0] = (byte)Math.Ceiling(((double)min + (double)(range / 5) - z_start) * z_byte);
             grayArr[1] = (byte)Math.Ceiling(((double)min + (double)(range / 4) - z_start) * z_byte);
