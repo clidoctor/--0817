@@ -220,8 +220,8 @@ namespace SagensVision
                     {
                         if (MyGlobal.globalConfig.isChinese)
                         {
-                            sw.Write("AnchorX1" + "\t" + "AnchorY1" + "\t" + "AnchorAngle1" + "\t" + "AnchorX2" + "\t"+ "AnchorY2" + "\t" + "AnchorAngle12" + "\t"+
-                                     "AnchorX3" + "\t" + "AnchorY3" + "\t" + "AnchorAngle3" + "\t" + "AnchorX4" + "\t" + "AnchorY4" + "\t" + "AnchorAngle12" + "\t" + "\r\n");
+                            sw.Write("AnchorX1" + "\t" + "AnchorY1" + "\t" + "AnchorAngle1" + "\t" + "AnchorX2" + "\t"+ "AnchorY2" + "\t" + "AnchorAngle2" + "\t"+
+                                     "AnchorX3" + "\t" + "AnchorY3" + "\t" + "AnchorAngle3" + "\t" + "AnchorX4" + "\t" + "AnchorY4" + "\t" + "AnchorAngle4" + "\t" + "\r\n");
                         }
                         else
                         {                           
@@ -261,6 +261,76 @@ namespace SagensVision
 
             }
         }
+
+        public static void SaveExcelData( string Header, string data,string FileName)
+        {
+            try
+            {
+                string filePath = MyGlobal.DataPath + "Excel\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+                string fileName = filePath + FileName + ".xls";
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                string[] files = Directory.GetFiles(filePath);
+                for (int i = 0; i < files.Length; i++)
+                {
+                    DateTime dt = File.GetCreationTime(files[i]);
+                    TimeSpan ts = DateTime.Now - dt;
+                    if (ts.Days > MyGlobal.globalConfig.SaveDays)
+                    {
+                        File.Delete(files[i]);
+                    }
+                }
+
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                if (!File.Exists(fileName))
+                {
+                    using (StreamWriter sw = File.AppendText(fileName))
+                    {
+                        if (MyGlobal.globalConfig.isChinese)
+                        {
+                            sw.Write(Header);
+                        }                        
+                        sw.Flush();
+                        sw.Close();
+                    }
+                }
+                using (StreamWriter swrite = File.AppendText(fileName))
+                {
+                    //swrite.Write(Height + "\t" + Width + "\t" + Area + "\t" + "\r\n");
+                    swrite.Write(data);
+
+                    //if (MyGlobal.globalConfig.isChinese)
+                    //{
+                    //    //swrite.Write("高度1" + "\t" + Height + "\r\n" + "高度2" + "\t" + Width + "\r\n" + "高度3" + "\t" + Area + "\r\n");
+
+
+                    //}
+                    //else
+                    //{
+                    //    swrite.Write("Height1" + "\t" + "Height2" + "\t" + "Height3" + "\t" + "\r\n");
+                    //    //swrite.Write("Glue Height1" + "\t" + Height + "\r\n" + "Glue Height" + "\t" + Width + "\r\n" + "Glue Area" + "\t" + Area + "\r\n");
+
+                    //}
+                    //swrite.Write("------------------------------------" + "\r\n");
+
+                    swrite.Flush();
+                    swrite.Close();
+                }
+
+            }
+            catch (Exception)
+            {
+
+
+            }
+        }
+
 
         public static void WriteXML(object obj, string fileName)
         {

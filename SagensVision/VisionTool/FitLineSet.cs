@@ -195,7 +195,7 @@ namespace SagensVision.VisionTool
                     case ROIController.EVENT_UPDATE_ROI:
                         RoiIsMoving = true;
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-
+                        ArrayList array = roiController2.ROIList;
                         int currentId = -1; string Name = "";
                         if (dataGridView1.CurrentCell == null)
                         {
@@ -209,7 +209,7 @@ namespace SagensVision.VisionTool
                             Name = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
                         }
 
-                        if (isGenSection)
+                        if (roiList2[Id].Count != array.Count)
                         {
                             
                             roiList2[Id].Add(new ROIRectangle2());
@@ -219,7 +219,7 @@ namespace SagensVision.VisionTool
                         }
                       
                         
-                        ArrayList array = roiController2.ROIList;                       
+                                      
                         int ActiveId = roiController2.getActiveROIIdx();
                         if (array.Count == 1)
                         {
@@ -618,7 +618,7 @@ namespace SagensVision.VisionTool
                 dataGridView1.Rows.Clear();
                 for (int i = 0; i < keys.Length; i++)
                 {
-                    AddToDataGrid(keys[i], fParam[Index].roiP[0].LineOrCircle);
+                    AddToDataGrid(keys[i], fParam[Index].roiP[i].LineOrCircle);
                 }
 
                 if (keys.Length > 0)
@@ -3016,9 +3016,10 @@ namespace SagensVision.VisionTool
                     //}
                 }
                 else
-                {      
-                    //ChangeSide已定位Roi 不用定位          
-                    string ok = FindPoint(Id, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, null, hwindow_final2, true);
+                {
+                    //ChangeSide已定位Roi 不用定位     
+                    HTuple[] original = new HTuple[2];
+                    string ok = FindPoint(Id, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str,out original, null, hwindow_final2, true);
                     if (ok != "OK")
                     {
                         MessageBox.Show(ok);
@@ -3054,6 +3055,14 @@ namespace SagensVision.VisionTool
                 {
                     return "找线区域数量错误";
                 }
+                for (int i = 0; i < Hlines.Count; i++)
+                {
+                    if (Hlines[i].Length == 0)
+                    {
+                        return $"找线区域{i+1}运行失败";
+                    }
+                }
+                
                 //1,4 取中线  2，3取拟合线 
                 HTuple rb1 = (Hlines[0][0].D + Hlines[3][0].D) / 2;
                 HTuple cb1 = (Hlines[0][1].D + Hlines[3][1].D) / 2;
@@ -3164,10 +3173,11 @@ namespace SagensVision.VisionTool
             }
         }
 
-        public string FindPoint(int SideId, HObject IntesityImage, HObject HeightImage, out double[][] RowCoord, out double[][] ColCoord, out double[][] ZCoord, out string[][] StrLineOrCircle, HTuple HomMat3D = null, HWindow_Final hwind = null, bool debug = false,HTuple homMatFix = null)
+        public string FindPoint(int SideId, HObject IntesityImage, HObject HeightImage, out double[][] RowCoord, out double[][] ColCoord, out double[][] ZCoord, out string[][] StrLineOrCircle,out HTuple[] originalPoint, HTuple HomMat3D = null, HWindow_Final hwind = null, bool debug = false,HTuple homMatFix = null)
         {
             //HObject RIntesity = new HObject(), RHeight = new HObject();
             StringBuilder Str = new StringBuilder();
+            originalPoint = new HTuple[2];
             RowCoord = null; ColCoord = null; ZCoord = null; StrLineOrCircle = null;
             try
             {
@@ -3271,10 +3281,11 @@ namespace SagensVision.VisionTool
                         {
                             return "XResolution=0";
                         }
-                        double DisX = fParam[Sid].roiP[i].Yoffset * Math.Sin(lineAngle.D) / Xresolution;
-                        double DisY = fParam[Sid].roiP[i].Yoffset * Math.Cos(lineAngle.D) / Yresolution;
+                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
+
                         double D = Math.Sqrt(DisX * DisX + DisY * DisY);
-                        if (fParam[Sid].roiP[i].Yoffset < 0)
+                        if (fParam[Sid].roiP[i].offset < 0)
                         {
                             D = -D;
                         }
@@ -3283,7 +3294,12 @@ namespace SagensVision.VisionTool
 
                         row = (Rowbg.D + RowEd.D) / 2 - distR;
                         col = (Colbg.D + ColEd.D) / 2 - distC;
-                      
+
+                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+                        row = row - yOffset;
+                        col = col - xOffset;
+
                         if (hwind!=null)
                         {
                             HObject cross1 = new HObject();
@@ -3348,10 +3364,10 @@ namespace SagensVision.VisionTool
                         {
                             return "XResolution = 0";
                         }
-                        double DisX = fParam[Sid].roiP[i].Yoffset * Math.Sin(lineAngle.D) / Xresolution;
-                        double DisY = fParam[Sid].roiP[i].Yoffset * Math.Cos(lineAngle.D) / Yresolution;                        
+                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;                        
                         double D = Math.Sqrt(DisX * DisX + DisY * DisY);
-                        if (fParam[Sid].roiP[i].Yoffset < 0)
+                        if (fParam[Sid].roiP[i].offset < 0)
                         {
                             D = -D;
                         }
@@ -3360,8 +3376,11 @@ namespace SagensVision.VisionTool
 
                         row = (Rb.D + Re.D) / 2 - distR;
                         col = (Cb.D + Ce.D) / 2 - distC;
-                        //row = (Rb.D + Re.D) / 2 + fParam[Sid].roiP[i].Yoffset;
-                        //col = (Cb.D + Ce.D) / 2 + fParam[Sid].roiP[i].Xoffset;
+
+                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+                        row = row - yOffset;
+                        col = col - xOffset;
 
                         if (hwind != null)
                         {
@@ -3692,10 +3711,10 @@ namespace SagensVision.VisionTool
                 //        ZCoord[i][0] = NewZ.TupleMean();
                 //    }
                 //}
+               
+
                 for (int i = 0; i < ZCoord.GetLength(0); i++)
-                {
-                    //if (ZCoord[i][0] == -30)
-                    //{
+                {                    
                         //在当前点附近取圆
                         HObject Circle = new HObject();
                         double radius = fParam[Sid].roiP[i].ZftRad;
@@ -3751,13 +3770,14 @@ namespace SagensVision.VisionTool
                     if (hwind != null)
                     {
                         hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
-                    }
-                    //}
+                    }                    
                 }
-
+                originalPoint[0] = origRow;
+                originalPoint[1] = origCol;
+               
                 if (HomMat3D == null)
                 {
-                    StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
+                    StaticOperate.writeTxt("D:\\Laser3DOrign.txt", Str.ToString());
                 }
                 
                 //RIntesity.Dispose();
@@ -4111,12 +4131,12 @@ namespace SagensVision.VisionTool
                         HOperatorSet.GenContourPolygonXld(out line, row, col);
                         HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
                         HOperatorSet.FitLineContourXld(line, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
-                        Rowbg = Rowbg + fParam[Sid].roiP[i].Yoffset;
+                        Rowbg = Rowbg + fParam[Sid].roiP[i].offset;
                         Colbg = Colbg + fParam[Sid].roiP[i].Xoffset;
                         RowEd = RowEd + fParam[Sid].roiP[i].Yoffset2;
                         ColEd = ColEd + fParam[Sid].roiP[i].Xoffset2;
 
-                        row = (Rowbg.D + RowEd.D) / 2 + fParam[Sid].roiP[i].Yoffset;
+                        row = (Rowbg.D + RowEd.D) / 2 + fParam[Sid].roiP[i].offset;
                         col = (Colbg.D + ColEd.D) / 2 + fParam[Sid].roiP[i].Xoffset;
 
 
@@ -4212,7 +4232,7 @@ namespace SagensVision.VisionTool
 
                         HOperatorSet.GetContourXld(ArcObj, out row, out col);
 
-                        row = row + fParam[Sid].roiP[i].Yoffset;
+                        row = row + fParam[Sid].roiP[i].offset;
 
                         col = col + fParam[Sid].roiP[i].Xoffset;
 
@@ -4533,75 +4553,6 @@ namespace SagensVision.VisionTool
 
         }
 
-        private void textBox_OffsetX_KeyDown(object sender, KeyEventArgs e)
-        {
-            
-            int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            TextBox tb = (TextBox)sender;
-            string index = tb.Text.ToString();
-            //bool ok = Regex.IsMatch(index, @"(?i)^(\-[0-9]{1,}[.][0-9]*)+$") || Regex.IsMatch(index, @"(?i)^(\-[0-9]{1,}[0-9]*)+$") || Regex.IsMatch(index, @"(?i)^([0-9]{1,}[0-9]*)+$") || Regex.IsMatch(index, @"(?i)^(\[0-9]{1,}[0-9]*)+$");
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                double num = double.Parse(index);
-
-                switch (tb.Name)
-                {
-                    case "textBox_SingleOffset":
-                        fParam[SideId].SigleZoffset = num;
-                        break;
-                    case "textBox_totalZ":
-                        MyGlobal.globalConfig.TotalZoffset = num;
-                        break;
-                    case "textBox_Start":
-                        if ((int)num <= 0)
-                        {
-                            num = 1;
-                        }
-                        MyGlobal.globalConfig.Startpt =(int) num;
-                        break;
-
-                }
-             
-                int roiID = dataGridView1.CurrentCell.RowIndex - 1;
-                if (roiID < 0)
-                {
-                    return;
-                }
-
-                switch (tb.Name)
-                {
-                    case "textBox_OffsetX":
-                        fParam[SideId].roiP[roiID].Xoffset = num;
-                        break;
-                    case "textBox_OffsetY":
-                        fParam[SideId].roiP[roiID].Yoffset = num;
-                        break;
-                    case "textBox_OffsetX2":
-                        fParam[SideId].roiP[roiID].Xoffset2 = num;
-                        break;
-                    case "textBox_OffsetY2":
-                        fParam[SideId].roiP[roiID].Yoffset2 = num;
-                        break;
-                    case "textBox_OffsetZ":
-                        fParam[SideId].roiP[roiID].Zoffset = num;
-                        break;
-                    case "textBox_ZFtMax":
-                        fParam[SideId].roiP[roiID].ZftMax = (int)num;
-                        break;
-                    case "textBox_ZFtMin":
-                        fParam[SideId].roiP[roiID].ZftMin = (int)num;
-                        break;
-                    case "textBox_ZFtRad":
-                        fParam[SideId].roiP[roiID].ZftRad = num;
-                        break;
-                    case "textBox_IndEnd2":
-                        //fParam[SideId].roiP[roiID].EndOffSet2 = (int)num;
-                        break;
-                }
-            }
-        }
-
         private void simpleButton8_Click(object sender, EventArgs e)
         {
             //IntersetionCoord intersect = new IntersetionCoord();
@@ -4718,6 +4669,7 @@ namespace SagensVision.VisionTool
         bool isInsert = false;
         private void 插入ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            isGenSection = false;
             if (dataGridView1.CurrentCell == null)
             {
                 return;
@@ -4931,13 +4883,16 @@ namespace SagensVision.VisionTool
                         case "textBox_OffsetY":
                             fParam[SideId].roiP[roiID].Yoffset = num;
                             break;
-                        //case "textBox_OffsetX2":
-                        //    fParam[SideId].MinZ = num;
-                        //    break;
-                        //case "textBox_OffsetY2":
-                        //    fParam[SideId].MaxZ = num;
-                        //    break;
-                        case "textBox_OffsetZ":
+                        case "textBox_Offset":
+                            fParam[SideId].roiP[roiID].offset = num;
+                            break;
+                    //case "textBox_OffsetX2":
+                    //    fParam[SideId].MinZ = num;
+                    //    break;
+                    //case "textBox_OffsetY2":
+                    //    fParam[SideId].MaxZ = num;
+                    //    break;
+                    case "textBox_OffsetZ":
                             fParam[SideId].roiP[roiID].Zoffset = num;
                             break;
                         case "textBox_IndStart1":
@@ -5110,8 +5065,9 @@ namespace SagensVision.VisionTool
                 HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
                 textBox_phi.Text = ((int)deg.D).ToString();
                 textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                //textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
+                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
                 textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
+                textBox_Offset.Text = fParam[SideId].roiP[id].offset.ToString();
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
@@ -5142,7 +5098,7 @@ namespace SagensVision.VisionTool
         {
             try
             {
-               
+                isGenSection = false;
                 if (dataGridView1.CurrentCell == null )
                 {
                     return;
@@ -5185,6 +5141,7 @@ namespace SagensVision.VisionTool
         {
             try
             {
+                isGenSection = false;
                 if (CopyId ==-1)
                 {
                     return;
@@ -5423,6 +5380,7 @@ namespace SagensVision.VisionTool
         public string LineOrCircle = "直线段";
         public double Xoffset = 0;
         public double Yoffset = 0;
+        public double offset = 0;
         public double Zoffset = 0;
         public double Xoffset2 = 0;
         public double Yoffset2 = 0;
