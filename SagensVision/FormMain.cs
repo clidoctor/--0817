@@ -1237,7 +1237,7 @@ namespace SagensVision
                 string strlast = "0;";
                 int len1 = XCoord[Station - 1].GetLength(0);
 
-                //int count = 0;
+                
                 //if (Station > 0)
                 //{
                 //    double x0 =0, y0 =0, z0 =0;                   
