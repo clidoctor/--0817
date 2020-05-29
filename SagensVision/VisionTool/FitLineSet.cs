@@ -4974,6 +4974,7 @@ namespace SagensVision.VisionTool
                     {
                         if (roiController2.ROIList.Count != roiList2[SideId].Count)
                         {
+                            hwindow_final2.viewWindow.notDisplayRoi();
                             roiController2.viewController.ShowAllRoiModel = -1;
                             hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
                         }
@@ -5165,10 +5166,10 @@ namespace SagensVision.VisionTool
                     }
                     else
                     {
-                        roiController2.viewController.ShowAllRoiModel = CopyId + 1;
-                        roiController2.viewController.repaint(CopyId + 1);
+                        roiController2.viewController.ShowAllRoiModel = CopyId;
+                        roiController2.viewController.repaint(CopyId);
                     }
-                    hwindow_final2.viewWindow.setActiveRoi(currentId + 1);
+                    hwindow_final2.viewWindow.setActiveRoi(currentId);
                 }
                 if (roiList[Id].Count > 0)
                 {
