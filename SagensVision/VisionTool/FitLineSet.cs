@@ -54,14 +54,15 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
+            this.MaximizeBox = true;
              CurrentSide = "";
              isSave = true;
              isCloing = false;
             //Init();
-            splitContainerControl1.Panel1.Controls.Add(hwindow_final1);
-            splitContainerControl1.Panel2.Controls.Add(hwindow_final2);
+            splitContainerControl4.Panel1.Controls.Add(hwindow_final2);
+            splitContainerControl6.Panel1.Controls.Add(hwindow_final1);
             hwindow_final1.Dock = DockStyle.Fill;
-            hwindow_final2.Dock = DockStyle.Left;         
+            hwindow_final2.Dock = DockStyle.Fill;         
    
 
 
@@ -176,10 +177,9 @@ namespace SagensVision.VisionTool
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                MessageBox.Show("RoiMove-->" + ex.Message);
             }
         }
         bool RoiIsMoving = false;

@@ -428,7 +428,11 @@ namespace SagensSdk
         public bool IsConnected(ref string errMsg)
         {
             //设置掉线报警
-           return GoSdkWrapper.GoSensor_IsConnected(go_sensor);
+            if (go_sensor == IntPtr.Zero)
+            {
+                return false;
+            }
+            return GoSdkWrapper.GoSensor_IsConnected(go_sensor);
         }
         #endregion
 
@@ -465,7 +469,11 @@ namespace SagensSdk
             set
             {
                 surfaceDataZ = value;
-                SurfaceZRecFinish?.Invoke();
+                if (surfaceDataZ != null)
+                {
+                    SurfaceZRecFinish?.Invoke();
+                }
+                
             }
         }
         public float[] SurfaceDataX
@@ -488,7 +496,11 @@ namespace SagensSdk
             set
             {
                 surfaceDataIntensity = value;
-                SurfaceIntensityRecFinish?.Invoke();
+                if (surfaceDataIntensity != null)
+                {
+                    SurfaceIntensityRecFinish?.Invoke();
+                }
+                
             }
         }
 
