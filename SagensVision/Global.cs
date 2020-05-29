@@ -208,7 +208,7 @@ namespace SagensVision
                     }
                 }
 
-                if (!Directory.Exists(filePath))
+                if (!Directory.Exists(filePath)) 
                 {
                     Directory.CreateDirectory(filePath);
                 }
