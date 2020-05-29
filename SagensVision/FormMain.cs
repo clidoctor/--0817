@@ -27,6 +27,7 @@ namespace SagensVision
         List<double[][]> ZCoord = new List<double[][]>();
         List<string[][]> StrLorC = new List<string[][]>();
         List<double[]> Xorigin = new List<double[]>();
+
         List<double[]> Yorigin = new List<double[]>();
 
         public FormMain()
