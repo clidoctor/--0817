@@ -5065,9 +5065,7 @@ namespace SagensVision.VisionTool
                 HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
                 textBox_phi.Text = ((int)deg.D).ToString();
                 textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
                 textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
-                textBox_Offset.Text = fParam[SideId].roiP[id].offset.ToString();
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();

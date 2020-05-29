@@ -1895,6 +1895,10 @@ namespace SagensVision
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
+                    if (MyGlobal.ReceiveMsg.Contains("point"))
+                    {
+                        continue;
+                    }
                     if (len == 0)
                     {
                         ShowAndSaveMsg(string.Format("服务器已断开连接！"));
