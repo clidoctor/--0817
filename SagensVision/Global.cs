@@ -234,7 +234,7 @@ namespace SagensVision
                 using (StreamWriter swrite = File.AppendText(fileName))
                 {
                     //swrite.Write(Height + "\t" + Width + "\t" + Area + "\t" + "\r\n");
-                    swrite.Write(Height + "\t" + Width + "\t" + Area + "\t" );
+                    swrite.Write(Height + "\t" + Width + "\t" + Area );
 
                     //if (MyGlobal.globalConfig.isChinese)
                     //{

@@ -61,6 +61,22 @@
             this.textBox_Current = new System.Windows.Forms.TextBox();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.comboBox_GetPtType = new System.Windows.Forms.ComboBox();
+            this.checkBox_useLeft = new System.Windows.Forms.CheckBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,6 +92,27 @@
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBoxRoi = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBox_OffsetX = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBox_OffsetY = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox_OffsetZ = new System.Windows.Forms.TextBox();
+            this.textBox_ZFtMax = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox_Offset = new System.Windows.Forms.TextBox();
+            this.textBox_ZFtMin = new System.Windows.Forms.TextBox();
+            this.textBox_ZFtRad = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton13 = new DevExpress.XtraEditors.SimpleButton();
@@ -106,27 +143,6 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.textBox_OffsetX = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox_OffsetY = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox_OffsetZ = new System.Windows.Forms.TextBox();
-            this.textBox_ZFtMax = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox_Offset = new System.Windows.Forms.TextBox();
-            this.textBox_ZFtMin = new System.Windows.Forms.TextBox();
-            this.textBox_ZFtRad = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -136,6 +152,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -350,7 +367,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(907, 74);
+            this.panel1.Size = new System.Drawing.Size(1073, 74);
             this.panel1.TabIndex = 2;
             // 
             // simpleButton1
@@ -448,7 +465,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(907, 345);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1073, 345);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -458,6 +475,7 @@
             // 
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.LightGray;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
+            this.xtraTabPage1.Controls.Add(this.groupBox7);
             this.xtraTabPage1.Controls.Add(this.dataGridView1);
             this.xtraTabPage1.Controls.Add(this.checkBox4);
             this.xtraTabPage1.Controls.Add(this.checkBoxRoi);
@@ -469,8 +487,160 @@
             this.xtraTabPage1.Controls.Add(this.checkBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(901, 316);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1067, 316);
             this.xtraTabPage1.Text = "截取轮廓工具";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label34);
+            this.groupBox7.Controls.Add(this.comboBox_GetPtType);
+            this.groupBox7.Controls.Add(this.checkBox_useLeft);
+            this.groupBox7.Controls.Add(this.label30);
+            this.groupBox7.Controls.Add(this.label31);
+            this.groupBox7.Controls.Add(this.textBox1);
+            this.groupBox7.Controls.Add(this.label32);
+            this.groupBox7.Controls.Add(this.label33);
+            this.groupBox7.Controls.Add(this.label40);
+            this.groupBox7.Controls.Add(this.label41);
+            this.groupBox7.Controls.Add(this.textBox2);
+            this.groupBox7.Controls.Add(this.label42);
+            this.groupBox7.Controls.Add(this.textBox3);
+            this.groupBox7.Controls.Add(this.label43);
+            this.groupBox7.Controls.Add(this.textBox5);
+            this.groupBox7.Location = new System.Drawing.Point(712, 47);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(225, 246);
+            this.groupBox7.TabIndex = 67;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "取点设置";
+            // 
+            // label34
+            // 
+            this.label34.Location = new System.Drawing.Point(17, 22);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(65, 22);
+            this.label34.TabIndex = 92;
+            this.label34.Text = "取点方式";
+            // 
+            // comboBox_GetPtType
+            // 
+            this.comboBox_GetPtType.FormattingEnabled = true;
+            this.comboBox_GetPtType.Items.AddRange(new object[] {
+            "极值",
+            "最高点下降"});
+            this.comboBox_GetPtType.Location = new System.Drawing.Point(88, 20);
+            this.comboBox_GetPtType.Name = "comboBox_GetPtType";
+            this.comboBox_GetPtType.Size = new System.Drawing.Size(100, 22);
+            this.comboBox_GetPtType.TabIndex = 91;
+            this.comboBox_GetPtType.Text = "极值";
+            this.comboBox_GetPtType.SelectedIndexChanged += new System.EventHandler(this.comboBox_GetPtType_SelectedIndexChanged);
+            // 
+            // checkBox_useLeft
+            // 
+            this.checkBox_useLeft.AutoSize = true;
+            this.checkBox_useLeft.Location = new System.Drawing.Point(88, 50);
+            this.checkBox_useLeft.Name = "checkBox_useLeft";
+            this.checkBox_useLeft.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_useLeft.TabIndex = 90;
+            this.checkBox_useLeft.Text = "取左侧";
+            this.checkBox_useLeft.UseVisualStyleBackColor = true;
+            this.checkBox_useLeft.CheckedChanged += new System.EventHandler(this.checkBox_useLeft_CheckedChanged);
+            // 
+            // label30
+            // 
+            this.label30.Location = new System.Drawing.Point(194, 133);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(28, 22);
+            this.label30.TabIndex = 89;
+            this.label30.Text = "mm";
+            // 
+            // label31
+            // 
+            this.label31.Location = new System.Drawing.Point(194, 105);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(28, 22);
+            this.label31.TabIndex = 88;
+            this.label31.Text = "mm";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(88, 102);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 86;
+            this.textBox1.Text = "0";
+            // 
+            // label32
+            // 
+            this.label32.Location = new System.Drawing.Point(18, 136);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(65, 22);
+            this.label32.TabIndex = 87;
+            this.label32.Text = "偏移Y";
+            // 
+            // label33
+            // 
+            this.label33.Location = new System.Drawing.Point(18, 105);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(65, 22);
+            this.label33.TabIndex = 85;
+            this.label33.Text = "偏移X";
+            // 
+            // label40
+            // 
+            this.label40.Location = new System.Drawing.Point(18, 74);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(65, 22);
+            this.label40.TabIndex = 70;
+            this.label40.Text = "Left";
+            // 
+            // label41
+            // 
+            this.label41.Location = new System.Drawing.Point(194, 72);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(28, 22);
+            this.label41.TabIndex = 73;
+            this.label41.Text = "mm";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(88, 130);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 22);
+            this.textBox2.TabIndex = 78;
+            this.textBox2.Text = "0";
+            // 
+            // label42
+            // 
+            this.label42.Location = new System.Drawing.Point(18, 167);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(43, 22);
+            this.label42.TabIndex = 71;
+            this.label42.Text = "Z偏移";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(88, 164);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(100, 22);
+            this.textBox3.TabIndex = 72;
+            this.textBox3.Text = "0";
+            // 
+            // label43
+            // 
+            this.label43.Location = new System.Drawing.Point(194, 164);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(29, 22);
+            this.label43.TabIndex = 74;
+            this.label43.Text = "mm";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(88, 74);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(100, 22);
+            this.textBox5.TabIndex = 69;
+            this.textBox5.Text = "0";
             // 
             // dataGridView1
             // 
@@ -622,12 +792,187 @@
             this.groupBox5.Controls.Add(this.textBox_Offset);
             this.groupBox5.Controls.Add(this.textBox_ZFtMin);
             this.groupBox5.Controls.Add(this.textBox_ZFtRad);
-            this.groupBox5.Location = new System.Drawing.Point(485, 47);
+            this.groupBox5.Location = new System.Drawing.Point(470, 47);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(266, 246);
+            this.groupBox5.Size = new System.Drawing.Size(234, 246);
             this.groupBox5.TabIndex = 61;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "偏移设置";
+            // 
+            // label29
+            // 
+            this.label29.Location = new System.Drawing.Point(197, 84);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(28, 22);
+            this.label29.TabIndex = 89;
+            this.label29.Text = "mm";
+            // 
+            // label28
+            // 
+            this.label28.Location = new System.Drawing.Point(197, 56);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(28, 22);
+            this.label28.TabIndex = 88;
+            this.label28.Text = "mm";
+            // 
+            // textBox_OffsetX
+            // 
+            this.textBox_OffsetX.Location = new System.Drawing.Point(91, 53);
+            this.textBox_OffsetX.Name = "textBox_OffsetX";
+            this.textBox_OffsetX.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetX.TabIndex = 86;
+            this.textBox_OffsetX.Text = "0";
+            this.textBox_OffsetX.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // label27
+            // 
+            this.label27.Location = new System.Drawing.Point(21, 87);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(65, 22);
+            this.label27.TabIndex = 87;
+            this.label27.Text = "偏移Y";
+            // 
+            // label26
+            // 
+            this.label26.Location = new System.Drawing.Point(21, 56);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(65, 22);
+            this.label26.TabIndex = 85;
+            this.label26.Text = "偏移X";
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(197, 177);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(29, 22);
+            this.label25.TabIndex = 84;
+            this.label25.Text = "%";
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(197, 149);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(29, 22);
+            this.label22.TabIndex = 83;
+            this.label22.Text = "%";
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(197, 211);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(29, 22);
+            this.label20.TabIndex = 82;
+            this.label20.Text = "mm";
+            // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(21, 208);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(55, 22);
+            this.label19.TabIndex = 81;
+            this.label19.Text = "滤波半径";
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(21, 177);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(55, 22);
+            this.label15.TabIndex = 80;
+            this.label15.Text = "滤波min";
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(21, 149);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(55, 22);
+            this.label10.TabIndex = 79;
+            this.label10.Text = "滤波max";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(21, 25);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(65, 22);
+            this.label9.TabIndex = 70;
+            this.label9.Text = "偏移";
+            // 
+            // label14
+            // 
+            this.label14.Location = new System.Drawing.Point(197, 23);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(28, 22);
+            this.label14.TabIndex = 73;
+            this.label14.Text = "mm";
+            // 
+            // textBox_OffsetY
+            // 
+            this.textBox_OffsetY.Location = new System.Drawing.Point(91, 81);
+            this.textBox_OffsetY.Name = "textBox_OffsetY";
+            this.textBox_OffsetY.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetY.TabIndex = 78;
+            this.textBox_OffsetY.Text = "0";
+            this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // label11
+            // 
+            this.label11.Location = new System.Drawing.Point(21, 118);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(43, 22);
+            this.label11.TabIndex = 71;
+            this.label11.Text = "Z偏移";
+            // 
+            // textBox_OffsetZ
+            // 
+            this.textBox_OffsetZ.Location = new System.Drawing.Point(91, 115);
+            this.textBox_OffsetZ.Name = "textBox_OffsetZ";
+            this.textBox_OffsetZ.Size = new System.Drawing.Size(100, 22);
+            this.textBox_OffsetZ.TabIndex = 72;
+            this.textBox_OffsetZ.Text = "0";
+            this.textBox_OffsetZ.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // textBox_ZFtMax
+            // 
+            this.textBox_ZFtMax.Location = new System.Drawing.Point(91, 146);
+            this.textBox_ZFtMax.Name = "textBox_ZFtMax";
+            this.textBox_ZFtMax.Size = new System.Drawing.Size(100, 22);
+            this.textBox_ZFtMax.TabIndex = 75;
+            this.textBox_ZFtMax.Text = "0";
+            this.textBox_ZFtMax.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(197, 115);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(29, 22);
+            this.label16.TabIndex = 74;
+            this.label16.Text = "mm";
+            // 
+            // textBox_Offset
+            // 
+            this.textBox_Offset.Location = new System.Drawing.Point(91, 25);
+            this.textBox_Offset.Name = "textBox_Offset";
+            this.textBox_Offset.Size = new System.Drawing.Size(100, 22);
+            this.textBox_Offset.TabIndex = 69;
+            this.textBox_Offset.Text = "0";
+            this.textBox_Offset.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // textBox_ZFtMin
+            // 
+            this.textBox_ZFtMin.Location = new System.Drawing.Point(90, 177);
+            this.textBox_ZFtMin.Name = "textBox_ZFtMin";
+            this.textBox_ZFtMin.Size = new System.Drawing.Size(100, 22);
+            this.textBox_ZFtMin.TabIndex = 76;
+            this.textBox_ZFtMin.Text = "0";
+            this.textBox_ZFtMin.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
+            // textBox_ZFtRad
+            // 
+            this.textBox_ZFtRad.Location = new System.Drawing.Point(89, 208);
+            this.textBox_ZFtRad.Name = "textBox_ZFtRad";
+            this.textBox_ZFtRad.Size = new System.Drawing.Size(100, 22);
+            this.textBox_ZFtRad.TabIndex = 77;
+            this.textBox_ZFtRad.Text = "0";
+            this.textBox_ZFtRad.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // groupBox4
             // 
@@ -637,9 +982,9 @@
             this.groupBox4.Controls.Add(this.simpleButton11);
             this.groupBox4.Controls.Add(this.simpleButton5);
             this.groupBox4.Controls.Add(this.simpleButton7);
-            this.groupBox4.Location = new System.Drawing.Point(757, 54);
+            this.groupBox4.Location = new System.Drawing.Point(943, 47);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(113, 239);
+            this.groupBox4.Size = new System.Drawing.Size(113, 246);
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "拟合直线";
@@ -714,7 +1059,7 @@
             this.groupBox3.Controls.Add(this.textBox_Len);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.textBox_Width);
-            this.groupBox3.Location = new System.Drawing.Point(270, 47);
+            this.groupBox3.Location = new System.Drawing.Point(258, 47);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(209, 246);
             this.groupBox3.TabIndex = 59;
@@ -723,7 +1068,7 @@
             // 
             // label24
             // 
-            this.label24.Location = new System.Drawing.Point(22, 118);
+            this.label24.Location = new System.Drawing.Point(14, 118);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(34, 22);
             this.label24.TabIndex = 28;
@@ -731,7 +1076,7 @@
             // 
             // textBox_phi
             // 
-            this.textBox_phi.Location = new System.Drawing.Point(88, 115);
+            this.textBox_phi.Location = new System.Drawing.Point(80, 115);
             this.textBox_phi.Name = "textBox_phi";
             this.textBox_phi.Size = new System.Drawing.Size(100, 22);
             this.textBox_phi.TabIndex = 29;
@@ -740,7 +1085,7 @@
             // 
             // label23
             // 
-            this.label23.Location = new System.Drawing.Point(22, 180);
+            this.label23.Location = new System.Drawing.Point(14, 180);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(47, 22);
             this.label23.TabIndex = 26;
@@ -748,7 +1093,7 @@
             // 
             // textBox_Col
             // 
-            this.textBox_Col.Location = new System.Drawing.Point(88, 177);
+            this.textBox_Col.Location = new System.Drawing.Point(80, 177);
             this.textBox_Col.Name = "textBox_Col";
             this.textBox_Col.Size = new System.Drawing.Size(100, 22);
             this.textBox_Col.TabIndex = 27;
@@ -757,7 +1102,7 @@
             // 
             // label21
             // 
-            this.label21.Location = new System.Drawing.Point(22, 149);
+            this.label21.Location = new System.Drawing.Point(14, 149);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(47, 22);
             this.label21.TabIndex = 24;
@@ -765,7 +1110,7 @@
             // 
             // textBox_Row
             // 
-            this.textBox_Row.Location = new System.Drawing.Point(88, 146);
+            this.textBox_Row.Location = new System.Drawing.Point(80, 146);
             this.textBox_Row.Name = "textBox_Row";
             this.textBox_Row.Size = new System.Drawing.Size(100, 22);
             this.textBox_Row.TabIndex = 25;
@@ -774,7 +1119,7 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(24, 25);
+            this.label4.Location = new System.Drawing.Point(16, 25);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 22);
             this.label4.TabIndex = 13;
@@ -782,7 +1127,7 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(22, 211);
+            this.label7.Location = new System.Drawing.Point(14, 211);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(60, 22);
             this.label7.TabIndex = 15;
@@ -790,7 +1135,7 @@
             // 
             // textBox_Num
             // 
-            this.textBox_Num.Location = new System.Drawing.Point(88, 22);
+            this.textBox_Num.Location = new System.Drawing.Point(80, 22);
             this.textBox_Num.Name = "textBox_Num";
             this.textBox_Num.Size = new System.Drawing.Size(100, 22);
             this.textBox_Num.TabIndex = 16;
@@ -799,7 +1144,7 @@
             // 
             // textBox_Deg
             // 
-            this.textBox_Deg.Location = new System.Drawing.Point(88, 208);
+            this.textBox_Deg.Location = new System.Drawing.Point(80, 208);
             this.textBox_Deg.Name = "textBox_Deg";
             this.textBox_Deg.Size = new System.Drawing.Size(100, 22);
             this.textBox_Deg.TabIndex = 17;
@@ -808,7 +1153,7 @@
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(22, 56);
+            this.label6.Location = new System.Drawing.Point(14, 56);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(34, 22);
             this.label6.TabIndex = 20;
@@ -816,7 +1161,7 @@
             // 
             // textBox_Len
             // 
-            this.textBox_Len.Location = new System.Drawing.Point(88, 53);
+            this.textBox_Len.Location = new System.Drawing.Point(80, 53);
             this.textBox_Len.Name = "textBox_Len";
             this.textBox_Len.Size = new System.Drawing.Size(100, 22);
             this.textBox_Len.TabIndex = 21;
@@ -825,7 +1170,7 @@
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(22, 87);
+            this.label8.Location = new System.Drawing.Point(14, 87);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(34, 22);
             this.label8.TabIndex = 22;
@@ -833,7 +1178,7 @@
             // 
             // textBox_Width
             // 
-            this.textBox_Width.Location = new System.Drawing.Point(88, 84);
+            this.textBox_Width.Location = new System.Drawing.Point(80, 84);
             this.textBox_Width.Name = "textBox_Width";
             this.textBox_Width.Size = new System.Drawing.Size(100, 22);
             this.textBox_Width.TabIndex = 23;
@@ -888,7 +1233,7 @@
             // 
             this.xtraTabPage2.Controls.Add(this.groupBox2);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(901, 316);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1067, 316);
             this.xtraTabPage2.Text = "找线设置";
             // 
             // splitContainerControl4
@@ -899,7 +1244,7 @@
             this.splitContainerControl4.Panel1.Text = "Panel1";
             this.splitContainerControl4.Panel2.Controls.Add(this.splitContainerControl5);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(1328, 717);
+            this.splitContainerControl4.Size = new System.Drawing.Size(1494, 717);
             this.splitContainerControl4.SplitterPosition = 416;
             this.splitContainerControl4.TabIndex = 3;
             this.splitContainerControl4.Text = "splitContainerControl4";
@@ -914,7 +1259,7 @@
             this.splitContainerControl5.Panel1.Text = "Panel1";
             this.splitContainerControl5.Panel2.Controls.Add(this.splitContainerControl6);
             this.splitContainerControl5.Panel2.Text = "Panel2";
-            this.splitContainerControl5.Size = new System.Drawing.Size(907, 717);
+            this.splitContainerControl5.Size = new System.Drawing.Size(1073, 717);
             this.splitContainerControl5.SplitterPosition = 74;
             this.splitContainerControl5.TabIndex = 0;
             this.splitContainerControl5.Text = "splitContainerControl5";
@@ -928,191 +1273,16 @@
             this.splitContainerControl6.Panel1.Text = "Panel1";
             this.splitContainerControl6.Panel2.Controls.Add(this.xtraTabControl1);
             this.splitContainerControl6.Panel2.Text = "Panel2";
-            this.splitContainerControl6.Size = new System.Drawing.Size(907, 638);
+            this.splitContainerControl6.Size = new System.Drawing.Size(1073, 638);
             this.splitContainerControl6.SplitterPosition = 288;
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
-            // 
-            // label29
-            // 
-            this.label29.Location = new System.Drawing.Point(211, 84);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(28, 22);
-            this.label29.TabIndex = 89;
-            this.label29.Text = "mm";
-            // 
-            // label28
-            // 
-            this.label28.Location = new System.Drawing.Point(211, 56);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(28, 22);
-            this.label28.TabIndex = 88;
-            this.label28.Text = "mm";
-            // 
-            // textBox_OffsetX
-            // 
-            this.textBox_OffsetX.Location = new System.Drawing.Point(105, 53);
-            this.textBox_OffsetX.Name = "textBox_OffsetX";
-            this.textBox_OffsetX.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetX.TabIndex = 86;
-            this.textBox_OffsetX.Text = "0";
-            this.textBox_OffsetX.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // label27
-            // 
-            this.label27.Location = new System.Drawing.Point(35, 87);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(65, 22);
-            this.label27.TabIndex = 87;
-            this.label27.Text = "偏移Y";
-            // 
-            // label26
-            // 
-            this.label26.Location = new System.Drawing.Point(35, 56);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(65, 22);
-            this.label26.TabIndex = 85;
-            this.label26.Text = "偏移X";
-            // 
-            // label25
-            // 
-            this.label25.Location = new System.Drawing.Point(211, 177);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(29, 22);
-            this.label25.TabIndex = 84;
-            this.label25.Text = "%";
-            // 
-            // label22
-            // 
-            this.label22.Location = new System.Drawing.Point(211, 149);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(29, 22);
-            this.label22.TabIndex = 83;
-            this.label22.Text = "%";
-            // 
-            // label20
-            // 
-            this.label20.Location = new System.Drawing.Point(211, 211);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(29, 22);
-            this.label20.TabIndex = 82;
-            this.label20.Text = "mm";
-            // 
-            // label19
-            // 
-            this.label19.Location = new System.Drawing.Point(35, 208);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(55, 22);
-            this.label19.TabIndex = 81;
-            this.label19.Text = "滤波半径";
-            // 
-            // label15
-            // 
-            this.label15.Location = new System.Drawing.Point(35, 177);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(55, 22);
-            this.label15.TabIndex = 80;
-            this.label15.Text = "滤波min";
-            // 
-            // label10
-            // 
-            this.label10.Location = new System.Drawing.Point(35, 149);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(55, 22);
-            this.label10.TabIndex = 79;
-            this.label10.Text = "滤波max";
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(35, 25);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(65, 22);
-            this.label9.TabIndex = 70;
-            this.label9.Text = "偏移";
-            // 
-            // label14
-            // 
-            this.label14.Location = new System.Drawing.Point(211, 23);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(28, 22);
-            this.label14.TabIndex = 73;
-            this.label14.Text = "mm";
-            // 
-            // textBox_OffsetY
-            // 
-            this.textBox_OffsetY.Location = new System.Drawing.Point(105, 81);
-            this.textBox_OffsetY.Name = "textBox_OffsetY";
-            this.textBox_OffsetY.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetY.TabIndex = 78;
-            this.textBox_OffsetY.Text = "0";
-            this.textBox_OffsetY.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // label11
-            // 
-            this.label11.Location = new System.Drawing.Point(35, 118);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(43, 22);
-            this.label11.TabIndex = 71;
-            this.label11.Text = "Z偏移";
-            // 
-            // textBox_OffsetZ
-            // 
-            this.textBox_OffsetZ.Location = new System.Drawing.Point(105, 115);
-            this.textBox_OffsetZ.Name = "textBox_OffsetZ";
-            this.textBox_OffsetZ.Size = new System.Drawing.Size(100, 22);
-            this.textBox_OffsetZ.TabIndex = 72;
-            this.textBox_OffsetZ.Text = "0";
-            this.textBox_OffsetZ.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // textBox_ZFtMax
-            // 
-            this.textBox_ZFtMax.Location = new System.Drawing.Point(105, 146);
-            this.textBox_ZFtMax.Name = "textBox_ZFtMax";
-            this.textBox_ZFtMax.Size = new System.Drawing.Size(100, 22);
-            this.textBox_ZFtMax.TabIndex = 75;
-            this.textBox_ZFtMax.Text = "0";
-            this.textBox_ZFtMax.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(211, 115);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(29, 22);
-            this.label16.TabIndex = 74;
-            this.label16.Text = "mm";
-            // 
-            // textBox_Offset
-            // 
-            this.textBox_Offset.Location = new System.Drawing.Point(105, 25);
-            this.textBox_Offset.Name = "textBox_Offset";
-            this.textBox_Offset.Size = new System.Drawing.Size(100, 22);
-            this.textBox_Offset.TabIndex = 69;
-            this.textBox_Offset.Text = "0";
-            this.textBox_Offset.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // textBox_ZFtMin
-            // 
-            this.textBox_ZFtMin.Location = new System.Drawing.Point(104, 177);
-            this.textBox_ZFtMin.Name = "textBox_ZFtMin";
-            this.textBox_ZFtMin.Size = new System.Drawing.Size(100, 22);
-            this.textBox_ZFtMin.TabIndex = 76;
-            this.textBox_ZFtMin.Text = "0";
-            this.textBox_ZFtMin.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // textBox_ZFtRad
-            // 
-            this.textBox_ZFtRad.Location = new System.Drawing.Point(103, 208);
-            this.textBox_ZFtRad.Name = "textBox_ZFtRad";
-            this.textBox_ZFtRad.Size = new System.Drawing.Size(100, 22);
-            this.textBox_ZFtRad.TabIndex = 77;
-            this.textBox_ZFtRad.Text = "0";
-            this.textBox_ZFtRad.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // FitLineSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1328, 717);
+            this.ClientSize = new System.Drawing.Size(1494, 717);
             this.Controls.Add(this.splitContainerControl4);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -1134,6 +1304,8 @@
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage1.ResumeLayout(false);
             this.xtraTabPage1.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
@@ -1250,5 +1422,21 @@
         private System.Windows.Forms.TextBox textBox_Offset;
         private System.Windows.Forms.TextBox textBox_ZFtMin;
         private System.Windows.Forms.TextBox textBox_ZFtRad;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.ComboBox comboBox_GetPtType;
+        private System.Windows.Forms.CheckBox checkBox_useLeft;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.TextBox textBox5;
     }
 }

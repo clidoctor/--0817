@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
+            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
             this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup(this.components);
             this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
             this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
@@ -680,6 +680,10 @@
             this.dockPanel1.Name = "dockPanel1";
             this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 488);
             this.dockPanel1.Size = new System.Drawing.Size(186, 486);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(186, 627);
+            this.dockPanel1.Size = new System.Drawing.Size(186, 627);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 488);
+            this.dockPanel1.Size = new System.Drawing.Size(186, 486);
             this.dockPanel1.Text = "功能设置";
             // 
             // dockPanel1_Container
@@ -841,6 +845,10 @@
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
             this.dockPanel7.Location = new System.Drawing.Point(0, 486);
             this.dockPanel7.Name = "dockPanel7";
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 160);
+            this.dockPanel7.Size = new System.Drawing.Size(186, 160);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 124);
+            this.dockPanel7.Size = new System.Drawing.Size(186, 124);
             this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 124);
             this.dockPanel7.Size = new System.Drawing.Size(186, 124);
             // 
@@ -993,9 +1001,9 @@
             this.tabbedView1.Documents.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseDocument[] {
             this.document4});
             this.tabbedView1.RootContainer.Element = null;
-            dockingContainer1.Element = this.documentGroup1;
+            dockingContainer2.Element = this.documentGroup1;
             this.tabbedView1.RootContainer.Nodes.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer[] {
-            dockingContainer1});
+            dockingContainer2});
             this.tabbedView1.DocumentActivated += new DevExpress.XtraBars.Docking2010.Views.DocumentEventHandler(this.tabbedView1_DocumentActivated);
             // 
             // timer1
@@ -1011,6 +1019,8 @@
             this.ClientSize = new System.Drawing.Size(1207, 661);
             this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.panelContainer1);
+            this.ClientSize = new System.Drawing.Size(1207, 661);
+            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);

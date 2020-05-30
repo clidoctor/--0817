@@ -48,6 +48,7 @@
             this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.checkButton1 = new DevExpress.XtraEditors.CheckButton();
             this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
             this.trackBarControl1 = new DevExpress.XtraEditors.TrackBarControl();
@@ -56,7 +57,6 @@
             this.textBox_Total = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_Current = new System.Windows.Forms.TextBox();
-            this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
@@ -159,31 +159,35 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(951, 25);
+            this.barDockControlTop.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.barDockControlTop.Size = new System.Drawing.Size(1087, 29);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 539);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 698);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(951, 23);
+            this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.barDockControlBottom.Size = new System.Drawing.Size(1087, 25);
             // 
             // barDockControlLeft
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 25);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 29);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 514);
+            this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 669);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(951, 25);
+            this.barDockControlRight.Location = new System.Drawing.Point(1087, 29);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 514);
+            this.barDockControlRight.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 669);
             // 
             // barButtonItem1
             // 
@@ -214,13 +218,14 @@
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerControl1.Horizontal = false;
             this.splitContainerControl1.IsSplitterFixed = true;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 29);
+            this.splitContainerControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Controls.Add(this.panelControl1);
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(951, 514);
-            this.splitContainerControl1.SplitterPosition = 68;
+            this.splitContainerControl1.Size = new System.Drawing.Size(1087, 669);
+            this.splitContainerControl1.SplitterPosition = 78;
             this.splitContainerControl1.TabIndex = 4;
             this.splitContainerControl1.Text = "splitContainerControl1";
             // 
@@ -237,17 +242,29 @@
             this.panelControl1.Controls.Add(this.textBox_Current);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl1.Location = new System.Drawing.Point(0, 0);
+            this.panelControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(951, 68);
+            this.panelControl1.Size = new System.Drawing.Size(1087, 78);
             this.panelControl1.TabIndex = 0;
+            // 
+            // simpleButton4
+            // 
+            this.simpleButton4.Location = new System.Drawing.Point(179, 18);
+            this.simpleButton4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.simpleButton4.Name = "simpleButton4";
+            this.simpleButton4.Size = new System.Drawing.Size(47, 50);
+            this.simpleButton4.TabIndex = 9;
+            this.simpleButton4.Text = "截面";
+            this.simpleButton4.Click += new System.EventHandler(this.simpleButton4_Click);
             // 
             // checkButton1
             // 
             this.checkButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkButton1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("checkButton1.ImageOptions.Image")));
-            this.checkButton1.Location = new System.Drawing.Point(788, 14);
+            this.checkButton1.Location = new System.Drawing.Point(901, 18);
+            this.checkButton1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkButton1.Name = "checkButton1";
-            this.checkButton1.Size = new System.Drawing.Size(41, 39);
+            this.checkButton1.Size = new System.Drawing.Size(47, 50);
             this.checkButton1.TabIndex = 8;
             this.checkButton1.ToolTip = "记录数据";
             this.checkButton1.CheckedChanged += new System.EventHandler(this.checkButton1_CheckedChanged);
@@ -256,9 +273,10 @@
             // 
             this.simpleButton3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton3.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton3.ImageOptions.Image")));
-            this.simpleButton3.Location = new System.Drawing.Point(835, 14);
+            this.simpleButton3.Location = new System.Drawing.Point(954, 18);
+            this.simpleButton3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.simpleButton3.Name = "simpleButton3";
-            this.simpleButton3.Size = new System.Drawing.Size(41, 39);
+            this.simpleButton3.Size = new System.Drawing.Size(47, 50);
             this.simpleButton3.TabIndex = 7;
             this.simpleButton3.Text = "\r\n";
             this.simpleButton3.ToolTip = "清除数据";
@@ -268,13 +286,14 @@
             // 
             this.trackBarControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBarControl1.EditValue = null;
-            this.trackBarControl1.Location = new System.Drawing.Point(400, 22);
+            this.trackBarControl1.Location = new System.Drawing.Point(457, 28);
+            this.trackBarControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.trackBarControl1.MenuManager = this.barManager1;
             this.trackBarControl1.Name = "trackBarControl1";
             this.trackBarControl1.Properties.LabelAppearance.Options.UseTextOptions = true;
             this.trackBarControl1.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.trackBarControl1.Properties.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBarControl1.Size = new System.Drawing.Size(125, 45);
+            this.trackBarControl1.Size = new System.Drawing.Size(143, 56);
             this.trackBarControl1.TabIndex = 5;
             this.trackBarControl1.ValueChanged += new System.EventHandler(this.trackBarControl1_ValueChanged);
             // 
@@ -283,9 +302,10 @@
             this.simpleButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton2.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.simpleButton2.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton2.ImageOptions.Image")));
-            this.simpleButton2.Location = new System.Drawing.Point(740, 14);
+            this.simpleButton2.Location = new System.Drawing.Point(846, 18);
+            this.simpleButton2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.simpleButton2.Name = "simpleButton2";
-            this.simpleButton2.Size = new System.Drawing.Size(41, 39);
+            this.simpleButton2.Size = new System.Drawing.Size(47, 50);
             this.simpleButton2.TabIndex = 4;
             this.simpleButton2.ToolTip = "下一帧";
             this.simpleButton2.Click += new System.EventHandler(this.simpleButton2_Click);
@@ -295,9 +315,10 @@
             this.simpleButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.simpleButton1.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.simpleButton1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
-            this.simpleButton1.Location = new System.Drawing.Point(692, 14);
+            this.simpleButton1.Location = new System.Drawing.Point(791, 18);
+            this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(41, 39);
+            this.simpleButton1.Size = new System.Drawing.Size(47, 50);
             this.simpleButton1.TabIndex = 3;
             this.simpleButton1.ToolTip = "上一帧";
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
@@ -305,51 +326,46 @@
             // textBox_Total
             // 
             this.textBox_Total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Total.Location = new System.Drawing.Point(621, 23);
+            this.textBox_Total.Location = new System.Drawing.Point(710, 30);
+            this.textBox_Total.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Total.Name = "textBox_Total";
             this.textBox_Total.ReadOnly = true;
-            this.textBox_Total.Size = new System.Drawing.Size(64, 22);
+            this.textBox_Total.Size = new System.Drawing.Size(73, 26);
             this.textBox_Total.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(602, 26);
+            this.label1.Location = new System.Drawing.Point(688, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(12, 14);
+            this.label1.Size = new System.Drawing.Size(14, 18);
             this.label1.TabIndex = 1;
             this.label1.Text = "/";
             // 
             // textBox_Current
             // 
             this.textBox_Current.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Current.Location = new System.Drawing.Point(531, 23);
+            this.textBox_Current.Location = new System.Drawing.Point(607, 30);
+            this.textBox_Current.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Current.Name = "textBox_Current";
-            this.textBox_Current.Size = new System.Drawing.Size(64, 22);
+            this.textBox_Current.Size = new System.Drawing.Size(73, 26);
             this.textBox_Current.TabIndex = 0;
             this.textBox_Current.TextChanged += new System.EventHandler(this.textBox_Current_TextChanged);
             this.textBox_Current.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Current_KeyDown);
             // 
-            // simpleButton4
-            // 
-            this.simpleButton4.Location = new System.Drawing.Point(157, 14);
-            this.simpleButton4.Name = "simpleButton4";
-            this.simpleButton4.Size = new System.Drawing.Size(41, 39);
-            this.simpleButton4.TabIndex = 9;
-            this.simpleButton4.Text = "截面";
-            this.simpleButton4.Click += new System.EventHandler(this.simpleButton4_Click);
-            // 
             // ShowForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(951, 562);
+            this.ClientSize = new System.Drawing.Size(1087, 723);
             this.Controls.Add(this.splitContainerControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "ShowForm";
             this.Text = "ShowForm";
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
