@@ -307,11 +307,11 @@ namespace SagensVision
         private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //dockPanel5.Show();
-            dockPanel4.Show();
-            dockPanel3.Show();
+            //dockPanel4.Show();
+            //dockPanel3.Show();
             //dockPanel5.DockedAsTabbedDocument = true;
-            dockPanel4.DockedAsTabbedDocument = true;
-            dockPanel3.DockedAsTabbedDocument = true;
+            //dockPanel4.DockedAsTabbedDocument = true;
+            //dockPanel3.DockedAsTabbedDocument = true;
             dockPanel8.Show();
             dockPanel8.DockedAsTabbedDocument = true;
         }
