@@ -47,7 +47,7 @@
             // l1
             // 
             this.l1.Location = new System.Drawing.Point(112, 39);
-            this.l1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.l1.Margin = new System.Windows.Forms.Padding(4);
             this.l1.Maximum = new decimal(new int[] {
             360,
             0,
@@ -60,7 +60,7 @@
             // t2
             // 
             this.t2.Location = new System.Drawing.Point(112, 90);
-            this.t2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.t2.Margin = new System.Windows.Forms.Padding(4);
             this.t2.Maximum = new decimal(new int[] {
             360,
             0,
@@ -73,7 +73,7 @@
             // r3
             // 
             this.r3.Location = new System.Drawing.Point(112, 139);
-            this.r3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.r3.Margin = new System.Windows.Forms.Padding(4);
             this.r3.Maximum = new decimal(new int[] {
             360,
             0,
@@ -86,7 +86,7 @@
             // d4
             // 
             this.d4.Location = new System.Drawing.Point(112, 189);
-            this.d4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.d4.Margin = new System.Windows.Forms.Padding(4);
             this.d4.Maximum = new decimal(new int[] {
             360,
             0,
@@ -99,47 +99,47 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(64, 41);
+            this.label1.Location = new System.Drawing.Point(22, 41);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(22, 15);
+            this.label1.Size = new System.Drawing.Size(82, 15);
             this.label1.TabIndex = 4;
-            this.label1.Text = "左";
+            this.label1.Text = "第一条边：";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(64, 92);
+            this.label2.Location = new System.Drawing.Point(22, 92);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(22, 15);
+            this.label2.Size = new System.Drawing.Size(82, 15);
             this.label2.TabIndex = 5;
-            this.label2.Text = "上";
+            this.label2.Text = "第二条边：";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(64, 141);
+            this.label3.Location = new System.Drawing.Point(22, 141);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(22, 15);
+            this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 6;
-            this.label3.Text = "右";
+            this.label3.Text = "第三条边：";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(64, 191);
+            this.label4.Location = new System.Drawing.Point(22, 193);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(22, 15);
+            this.label4.Size = new System.Drawing.Size(82, 15);
             this.label4.TabIndex = 7;
-            this.label4.Text = "下";
+            this.label4.Text = "第四条边：";
             // 
             // btn_save
             // 
             this.btn_save.Location = new System.Drawing.Point(356, 186);
-            this.btn_save.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_save.Margin = new System.Windows.Forms.Padding(4);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(100, 29);
             this.btn_save.TabIndex = 8;
@@ -162,7 +162,7 @@
             this.Controls.Add(this.t2);
             this.Controls.Add(this.l1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ImgRotateFrm";
             this.Text = "ImgRotateFrm";
             this.Load += new System.EventHandler(this.ImgRotateFrm_Load);
