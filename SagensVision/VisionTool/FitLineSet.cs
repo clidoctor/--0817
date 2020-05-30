@@ -21,6 +21,7 @@ namespace SagensVision.VisionTool
 {
     public partial class FitLineSet : DevExpress.XtraEditors.XtraForm
     {
+        int test = 0;
         int CurrentIndex = 0;
         HWindow_Final hwindow_final1 = new HWindow_Final();
         HWindow_Final hwindow_final2 = new HWindow_Final();
