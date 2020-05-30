@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
+            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
             this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup(this.components);
             this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
             this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
@@ -350,7 +350,7 @@
             this.bar2.DockCol = 0;
             this.bar2.DockRow = 0;
             this.bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
-            this.bar2.FloatLocation = new System.Drawing.Point(142, 211);
+            this.bar2.FloatLocation = new System.Drawing.Point(177, 140);
             this.bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barSubItem3, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem5, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
@@ -678,11 +678,7 @@
             this.dockPanel1.ID = new System.Guid("19d979f9-0ad1-47f3-b52e-156227f70c6c");
             this.dockPanel1.Location = new System.Drawing.Point(0, 0);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 488);
-            this.dockPanel1.Size = new System.Drawing.Size(186, 486);
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(186, 627);
-            this.dockPanel1.Size = new System.Drawing.Size(186, 627);
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 488);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(186, 486);
             this.dockPanel1.Size = new System.Drawing.Size(186, 486);
             this.dockPanel1.Text = "功能设置";
             // 
@@ -845,11 +841,7 @@
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
             this.dockPanel7.Location = new System.Drawing.Point(0, 486);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 160);
-            this.dockPanel7.Size = new System.Drawing.Size(186, 160);
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 124);
-            this.dockPanel7.Size = new System.Drawing.Size(186, 124);
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 124);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 124);
             this.dockPanel7.Size = new System.Drawing.Size(186, 124);
             // 
             // dockPanel7_Container
@@ -918,11 +910,11 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel1.Controls.Add(this.label6, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.label5, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.label4, 2, 0);
@@ -940,9 +932,9 @@
             // label6
             // 
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(651, 0);
+            this.label6.Location = new System.Drawing.Point(678, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(157, 29);
+            this.label6.Size = new System.Drawing.Size(130, 29);
             this.label6.TabIndex = 4;
             this.label6.Text = "第四条边";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -950,9 +942,9 @@
             // label5
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(489, 0);
+            this.label5.Location = new System.Drawing.Point(543, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(156, 29);
+            this.label5.Size = new System.Drawing.Size(129, 29);
             this.label5.TabIndex = 3;
             this.label5.Text = "第三条边";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -960,9 +952,9 @@
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(327, 0);
+            this.label4.Location = new System.Drawing.Point(273, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(156, 29);
+            this.label4.Size = new System.Drawing.Size(264, 29);
             this.label4.TabIndex = 2;
             this.label4.Text = "轨迹";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -970,9 +962,9 @@
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(165, 0);
+            this.label3.Location = new System.Drawing.Point(138, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(156, 29);
+            this.label3.Size = new System.Drawing.Size(129, 29);
             this.label3.TabIndex = 1;
             this.label3.Text = "第二条边";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -982,7 +974,7 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(156, 29);
+            this.label2.Size = new System.Drawing.Size(129, 29);
             this.label2.TabIndex = 0;
             this.label2.Text = "第一条边";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1001,9 +993,9 @@
             this.tabbedView1.Documents.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseDocument[] {
             this.document4});
             this.tabbedView1.RootContainer.Element = null;
-            dockingContainer2.Element = this.documentGroup1;
+            dockingContainer1.Element = this.documentGroup1;
             this.tabbedView1.RootContainer.Nodes.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer[] {
-            dockingContainer2});
+            dockingContainer1});
             this.tabbedView1.DocumentActivated += new DevExpress.XtraBars.Docking2010.Views.DocumentEventHandler(this.tabbedView1_DocumentActivated);
             // 
             // timer1
@@ -1017,9 +1009,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1207, 661);
-            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.panelContainer1);
-            this.ClientSize = new System.Drawing.Size(1207, 661);
             this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
@@ -1140,12 +1130,6 @@
         private DevExpress.XtraBars.Docking.DockPanel dockPanel8;
         private DevExpress.XtraBars.Docking.ControlContainer dockPanel8_Container;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup documentGroup1;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.Document document4;
         private DevExpress.XtraEditors.SimpleButton simpleButton1;
@@ -1154,6 +1138,12 @@
         private DevExpress.XtraBars.BarCheckItem barCheckItem2;
         private DevExpress.XtraBars.BarButtonItem barButtonItem11;
         private DevExpress.XtraBars.BarButtonItem btn_clearbuffer;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
     }
 }
 

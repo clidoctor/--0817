@@ -22,13 +22,17 @@ namespace SagensVision
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
 
-        List<double[][]> XCoord = new List<double[][]>();
-        List<double[][]> YCoord = new List<double[][]>();
-        List<double[][]> ZCoord = new List<double[][]>();
-        List<string[][]> StrLorC = new List<string[][]>();
-        List<double[]> Xorigin = new List<double[]>();
+        public static List<double[][]> XCoord = new List<double[][]>();
+        public static List<double[][]> YCoord = new List<double[][]>();
+        public static List<double[][]> ZCoord = new List<double[][]>();
+        public static List<string[][]> StrLorC = new List<string[][]>();
+        public static List<double[]> Xorigin = new List<double[]>();
 
-        List<double[]> Yorigin = new List<double[]>();
+        public static List<double[]> Yorigin = new List<double[]>();
+
+        public static List<string[]> NameOrigin = new List<string[]>();
+
+        public static List<IntersetionCoord> AnchorList = new List<IntersetionCoord>();
 
         public FormMain()
         {
@@ -108,6 +112,7 @@ namespace SagensVision
             MyGlobal.hWindow_Final[1].hWindowControl.HMouseUp += OnHMouseUp1;
             MyGlobal.hWindow_Final[2].hWindowControl.HMouseUp += OnHMouseUp2;
             MyGlobal.hWindow_Final[3].hWindowControl.HMouseUp += OnHMouseUp3;
+            ShowProfile.hWindowControl.HMouseUp += OnHMouseUp4;
 
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
@@ -133,11 +138,23 @@ namespace SagensVision
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
         }
+
+        
+
         private int MouseClickCnt = 0;
         private int MouseClickCnt1 = 0;
         private int MouseClickCnt2 = 0;
         private int MouseClickCnt3 = 0;
-
+        private int MouseClickCnt4 = 0;
+        private void OnHMouseUp4(object sender, HMouseEventArgs e)
+        {
+            MouseClickCnt4++;
+            if (MouseClickCnt4 == 2)
+            {
+                //Task
+                MouseClickCnt4 = 0;
+            }
+        }
         private void OnHMouseUp(object sender, EventArgs e)
         {
             MouseClickCnt++;
@@ -224,6 +241,7 @@ namespace SagensVision
                 HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
                 IntersetionCoord intersect = new IntersetionCoord();
                 string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
+                AnchorList.Add(intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
                 MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
@@ -650,6 +668,10 @@ namespace SagensVision
 
                     }
                     MyGlobal.ImageMulti.Clear();
+                    for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
+                    {
+                        MyGlobal.hWindow_Final[i].ClearWindow();
+                    }
 
                 }
 
@@ -662,6 +684,7 @@ namespace SagensVision
                     SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
                     HObject tempHeightImg, tempInteImg, tempByteImg;
                     HObject HeightImage, IntensityImage, byteImg;
+                    HObject ZoomHeightImg, ZoomIntensityImg;
                     if (SurfacePointZ != null)
                     {
                         HObject Height = new HObject();
@@ -685,21 +708,26 @@ namespace SagensVision
                     MyGlobal.GoSDK.SurfaceDataZByte = null;
                     HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                     tempHeightImg.Dispose();
+                    HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
+                    HeightImage.Dispose();
                     HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                     tempInteImg.Dispose();
+                    HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
                     HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
                     tempByteImg.Dispose();
 
                     HObject rgbImg;
+                    HObject zoomRgbImg;
                     PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
-
+                    HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                    rgbImg.Dispose();
                     if (MyGlobal.isShowHeightImg)
                     {
                         MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
                     }
                     else
                     {
-                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rgbImg);
+                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg);
                     }
 
 
@@ -708,13 +736,14 @@ namespace SagensVision
                     if (Station == 1)
                         saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-                    StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
-                    StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                    StaticOperate.SaveImage(rgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                    StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
+                    StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                    StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
                     
-                    string OK = RunSide(Station, IntensityImage, HeightImage);
-                    HObject[] temp = { IntensityImage, HeightImage };
+                    string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
+                    HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
                     MyGlobal.ImageMulti.Add(temp);
+
 
                     //double[][] x, y, z;string[][] Strlorc;
                     //string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z,out Strlorc, HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
@@ -744,7 +773,8 @@ namespace SagensVision
                     //    }
                     //    StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
                     //}
-                    rgbImg.Dispose();
+                    zoomRgbImg.Dispose();
+                    
                     byteImg.Dispose();
                     return OK;
                 }
@@ -772,6 +802,8 @@ namespace SagensVision
                 StrLorC.Clear();
                 Xorigin.Clear();
                 Yorigin.Clear();
+                NameOrigin.Clear();
+                AnchorList.Clear();
             }
             if (MyGlobal.ImageMulti.Count == 0)
             {
@@ -1330,6 +1362,7 @@ namespace SagensVision
                 
                 Yorigin.Add(original[0]);
                 Xorigin.Add(original[1]);
+                NameOrigin.Add(flset.fParam[Station - 1].DicPointName.ToArray());
                 if (Station!=4)
                 {
                     return "OK";
@@ -1771,6 +1804,7 @@ namespace SagensVision
                             {
                                 MyGlobal.hWindow_Final[i].ClearWindow();
                             }
+                            ShowProfile.ClearWindow();
                         }
                         ok = Encoding.UTF8.GetBytes(ReturnStr + "_OK");
                         ng = Encoding.UTF8.GetBytes(ReturnStr + "_NG");
@@ -2498,7 +2532,7 @@ namespace SagensVision
                     {
                         HObject rgbImg;
                         HOperatorSet.ReadImage(out rgbImg, namesB[i]);
-
+                       
                         MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
                         rgbImg.Dispose();
                     }
@@ -2601,6 +2635,7 @@ namespace SagensVision
             MouseClickCnt1 = 0;
             MouseClickCnt2 = 0;
             MouseClickCnt3 = 0;
+            MouseClickCnt4 = 0;
         }
 
 

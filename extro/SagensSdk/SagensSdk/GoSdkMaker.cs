@@ -228,7 +228,7 @@ namespace SagensSdk
                         {
                             for (int k = 0; k < surfaceWidth; k++)
                             {
-                                surfaceData[j*surfaceWidth +k ] = surfacePoints[j * surfaceWidth + k] == -32768 ? -100 : (float)(ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]);
+                                surfaceData[j*surfaceWidth +k ] = surfacePoints[j * surfaceWidth + k] == -32768 ? -12 : (float)(ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]);
                                 surfaceDataX[j * surfaceWidth + k] = (float)(ctx.xOffset + ctx.xResolution * k);
                                 surfaceDataY[j * surfaceWidth + k] = (float)(ctx.yOffset + ctx.yResolution * j);
                                 if (IsRecSurfaceDataZByte)
@@ -281,7 +281,7 @@ namespace SagensSdk
                         for (int j = 0; j < points.Length; j++)
                         {
                             profile[j].x = (float)(ctx.xOffset + ctx.xResolution * j);
-                            profile[j].z = points[j] == -32768 ? -30 : (float)(ctx.zOffset + ctx.zResolution * points[j]);
+                            profile[j].z = points[j] == -32768 ? -12 : (float)(ctx.zOffset + ctx.zResolution * points[j]);
                         }
                         mProfile.points = profile;
                         isRecProfileZ = true;
