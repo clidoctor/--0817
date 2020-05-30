@@ -28,7 +28,15 @@ namespace SagensVision.VisionTool
         private void OnGetIdxDelegate(string idx)
         {
             byte[] buffer = new byte[128];
-            MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("current_idx"));
+            try
+            {
+                MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("current_idx"));
+            }
+            catch (Exception)
+            {
+                
+            }
+            
             ThreadPool.QueueUserWorkItem(delegate
             {
                 while (!MyGlobal.ReceiveMsg.Contains("point"))
