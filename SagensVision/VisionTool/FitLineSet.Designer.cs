@@ -61,22 +61,17 @@
             this.textBox_Current = new System.Windows.Forms.TextBox();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label34 = new System.Windows.Forms.Label();
             this.comboBox_GetPtType = new System.Windows.Forms.ComboBox();
             this.checkBox_useLeft = new System.Windows.Forms.CheckBox();
-            this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label32 = new System.Windows.Forms.Label();
+            this.textBox_xDist = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label42 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label43 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox_downDist = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -113,13 +108,12 @@
             this.textBox_Offset = new System.Windows.Forms.TextBox();
             this.textBox_ZFtMin = new System.Windows.Forms.TextBox();
             this.textBox_ZFtRad = new System.Windows.Forms.TextBox();
+            this.simpleButton7 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton13 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton12 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton11 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
-            this.simpleButton7 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label24 = new System.Windows.Forms.Label();
             this.textBox_phi = new System.Windows.Forms.TextBox();
@@ -367,7 +361,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1073, 74);
+            this.panel1.Size = new System.Drawing.Size(968, 74);
             this.panel1.TabIndex = 2;
             // 
             // simpleButton1
@@ -465,7 +459,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(1073, 345);
+            this.xtraTabControl1.Size = new System.Drawing.Size(968, 345);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -475,11 +469,14 @@
             // 
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.LightGray;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
+            this.xtraTabPage1.AutoScroll = true;
+            this.xtraTabPage1.Controls.Add(this.simpleButton6);
             this.xtraTabPage1.Controls.Add(this.groupBox7);
             this.xtraTabPage1.Controls.Add(this.dataGridView1);
             this.xtraTabPage1.Controls.Add(this.checkBox4);
             this.xtraTabPage1.Controls.Add(this.checkBoxRoi);
             this.xtraTabPage1.Controls.Add(this.groupBox5);
+            this.xtraTabPage1.Controls.Add(this.simpleButton7);
             this.xtraTabPage1.Controls.Add(this.groupBox4);
             this.xtraTabPage1.Controls.Add(this.groupBox3);
             this.xtraTabPage1.Controls.Add(this.simpleButton10);
@@ -487,26 +484,29 @@
             this.xtraTabPage1.Controls.Add(this.checkBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1067, 316);
+            this.xtraTabPage1.Size = new System.Drawing.Size(962, 316);
             this.xtraTabPage1.Text = "截取轮廓工具";
+            // 
+            // simpleButton6
+            // 
+            this.simpleButton6.Location = new System.Drawing.Point(800, 10);
+            this.simpleButton6.Name = "simpleButton6";
+            this.simpleButton6.Size = new System.Drawing.Size(75, 23);
+            this.simpleButton6.TabIndex = 14;
+            this.simpleButton6.Text = "保存参数";
+            this.simpleButton6.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.label34);
             this.groupBox7.Controls.Add(this.comboBox_GetPtType);
             this.groupBox7.Controls.Add(this.checkBox_useLeft);
-            this.groupBox7.Controls.Add(this.label30);
             this.groupBox7.Controls.Add(this.label31);
-            this.groupBox7.Controls.Add(this.textBox1);
-            this.groupBox7.Controls.Add(this.label32);
+            this.groupBox7.Controls.Add(this.textBox_xDist);
             this.groupBox7.Controls.Add(this.label33);
             this.groupBox7.Controls.Add(this.label40);
             this.groupBox7.Controls.Add(this.label41);
-            this.groupBox7.Controls.Add(this.textBox2);
-            this.groupBox7.Controls.Add(this.label42);
-            this.groupBox7.Controls.Add(this.textBox3);
-            this.groupBox7.Controls.Add(this.label43);
-            this.groupBox7.Controls.Add(this.textBox5);
+            this.groupBox7.Controls.Add(this.textBox_downDist);
             this.groupBox7.Location = new System.Drawing.Point(712, 47);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(225, 246);
@@ -546,14 +546,6 @@
             this.checkBox_useLeft.UseVisualStyleBackColor = true;
             this.checkBox_useLeft.CheckedChanged += new System.EventHandler(this.checkBox_useLeft_CheckedChanged);
             // 
-            // label30
-            // 
-            this.label30.Location = new System.Drawing.Point(194, 133);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(28, 22);
-            this.label30.TabIndex = 89;
-            this.label30.Text = "mm";
-            // 
             // label31
             // 
             this.label31.Location = new System.Drawing.Point(194, 105);
@@ -562,21 +554,14 @@
             this.label31.TabIndex = 88;
             this.label31.Text = "mm";
             // 
-            // textBox1
+            // textBox_xDist
             // 
-            this.textBox1.Location = new System.Drawing.Point(88, 102);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 86;
-            this.textBox1.Text = "0";
-            // 
-            // label32
-            // 
-            this.label32.Location = new System.Drawing.Point(18, 136);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(65, 22);
-            this.label32.TabIndex = 87;
-            this.label32.Text = "偏移Y";
+            this.textBox_xDist.Location = new System.Drawing.Point(88, 102);
+            this.textBox_xDist.Name = "textBox_xDist";
+            this.textBox_xDist.Size = new System.Drawing.Size(100, 22);
+            this.textBox_xDist.TabIndex = 86;
+            this.textBox_xDist.Text = "0";
+            this.textBox_xDist.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // label33
             // 
@@ -584,7 +569,7 @@
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(65, 22);
             this.label33.TabIndex = 85;
-            this.label33.Text = "偏移X";
+            this.label33.Text = "X方向距离";
             // 
             // label40
             // 
@@ -592,7 +577,7 @@
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(65, 22);
             this.label40.TabIndex = 70;
-            this.label40.Text = "Left";
+            this.label40.Text = "下降距离";
             // 
             // label41
             // 
@@ -602,45 +587,14 @@
             this.label41.TabIndex = 73;
             this.label41.Text = "mm";
             // 
-            // textBox2
+            // textBox_downDist
             // 
-            this.textBox2.Location = new System.Drawing.Point(88, 130);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 22);
-            this.textBox2.TabIndex = 78;
-            this.textBox2.Text = "0";
-            // 
-            // label42
-            // 
-            this.label42.Location = new System.Drawing.Point(18, 167);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(43, 22);
-            this.label42.TabIndex = 71;
-            this.label42.Text = "Z偏移";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(88, 164);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 22);
-            this.textBox3.TabIndex = 72;
-            this.textBox3.Text = "0";
-            // 
-            // label43
-            // 
-            this.label43.Location = new System.Drawing.Point(194, 164);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(29, 22);
-            this.label43.TabIndex = 74;
-            this.label43.Text = "mm";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(88, 74);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 22);
-            this.textBox5.TabIndex = 69;
-            this.textBox5.Text = "0";
+            this.textBox_downDist.Location = new System.Drawing.Point(88, 74);
+            this.textBox_downDist.Name = "textBox_downDist";
+            this.textBox_downDist.Size = new System.Drawing.Size(100, 22);
+            this.textBox_downDist.TabIndex = 69;
+            this.textBox_downDist.Text = "0";
+            this.textBox_downDist.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // dataGridView1
             // 
@@ -974,29 +928,27 @@
             this.textBox_ZFtRad.Text = "0";
             this.textBox_ZFtRad.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
+            // simpleButton7
+            // 
+            this.simpleButton7.Location = new System.Drawing.Point(712, 10);
+            this.simpleButton7.Name = "simpleButton7";
+            this.simpleButton7.Size = new System.Drawing.Size(75, 23);
+            this.simpleButton7.TabIndex = 24;
+            this.simpleButton7.Text = "Run";
+            this.simpleButton7.Click += new System.EventHandler(this.simpleButton7_Click);
+            // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.simpleButton6);
             this.groupBox4.Controls.Add(this.simpleButton13);
             this.groupBox4.Controls.Add(this.simpleButton12);
             this.groupBox4.Controls.Add(this.simpleButton11);
             this.groupBox4.Controls.Add(this.simpleButton5);
-            this.groupBox4.Controls.Add(this.simpleButton7);
             this.groupBox4.Location = new System.Drawing.Point(943, 47);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(113, 246);
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "拟合直线";
-            // 
-            // simpleButton6
-            // 
-            this.simpleButton6.Location = new System.Drawing.Point(23, 208);
-            this.simpleButton6.Name = "simpleButton6";
-            this.simpleButton6.Size = new System.Drawing.Size(75, 23);
-            this.simpleButton6.TabIndex = 14;
-            this.simpleButton6.Text = "保存参数";
-            this.simpleButton6.Click += new System.EventHandler(this.button2_Click);
             // 
             // simpleButton13
             // 
@@ -1033,15 +985,6 @@
             this.simpleButton5.TabIndex = 58;
             this.simpleButton5.Text = "偏移起点1";
             this.simpleButton5.Click += new System.EventHandler(this.simpleButton5_Click_1);
-            // 
-            // simpleButton7
-            // 
-            this.simpleButton7.Location = new System.Drawing.Point(23, 176);
-            this.simpleButton7.Name = "simpleButton7";
-            this.simpleButton7.Size = new System.Drawing.Size(75, 23);
-            this.simpleButton7.TabIndex = 24;
-            this.simpleButton7.Text = "Run";
-            this.simpleButton7.Click += new System.EventHandler(this.simpleButton7_Click);
             // 
             // groupBox3
             // 
@@ -1233,7 +1176,7 @@
             // 
             this.xtraTabPage2.Controls.Add(this.groupBox2);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1067, 316);
+            this.xtraTabPage2.Size = new System.Drawing.Size(962, 316);
             this.xtraTabPage2.Text = "找线设置";
             // 
             // splitContainerControl4
@@ -1244,8 +1187,8 @@
             this.splitContainerControl4.Panel1.Text = "Panel1";
             this.splitContainerControl4.Panel2.Controls.Add(this.splitContainerControl5);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(1494, 717);
-            this.splitContainerControl4.SplitterPosition = 416;
+            this.splitContainerControl4.Size = new System.Drawing.Size(1327, 717);
+            this.splitContainerControl4.SplitterPosition = 354;
             this.splitContainerControl4.TabIndex = 3;
             this.splitContainerControl4.Text = "splitContainerControl4";
             // 
@@ -1259,7 +1202,7 @@
             this.splitContainerControl5.Panel1.Text = "Panel1";
             this.splitContainerControl5.Panel2.Controls.Add(this.splitContainerControl6);
             this.splitContainerControl5.Panel2.Text = "Panel2";
-            this.splitContainerControl5.Size = new System.Drawing.Size(1073, 717);
+            this.splitContainerControl5.Size = new System.Drawing.Size(968, 717);
             this.splitContainerControl5.SplitterPosition = 74;
             this.splitContainerControl5.TabIndex = 0;
             this.splitContainerControl5.Text = "splitContainerControl5";
@@ -1271,9 +1214,10 @@
             this.splitContainerControl6.Location = new System.Drawing.Point(0, 0);
             this.splitContainerControl6.Name = "splitContainerControl6";
             this.splitContainerControl6.Panel1.Text = "Panel1";
+            this.splitContainerControl6.Panel2.AutoScroll = true;
             this.splitContainerControl6.Panel2.Controls.Add(this.xtraTabControl1);
             this.splitContainerControl6.Panel2.Text = "Panel2";
-            this.splitContainerControl6.Size = new System.Drawing.Size(1073, 638);
+            this.splitContainerControl6.Size = new System.Drawing.Size(968, 638);
             this.splitContainerControl6.SplitterPosition = 288;
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
@@ -1282,7 +1226,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1494, 717);
+            this.ClientSize = new System.Drawing.Size(1327, 717);
             this.Controls.Add(this.splitContainerControl4);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -1426,17 +1370,11 @@
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.ComboBox comboBox_GetPtType;
         private System.Windows.Forms.CheckBox checkBox_useLeft;
-        private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TextBox textBox_xDist;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label41;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox_downDist;
     }
 }
