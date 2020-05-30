@@ -233,14 +233,14 @@ namespace SagensVision
                 double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
                 HTuple deg = 0;
                 HOperatorSet.TupleDeg(intersect.Angle, out deg);
-                string AnchorX = Math.Round(intersect.Col, 3).ToString(); string AnchorY = Math.Round(intersect.Row, 3).ToString();
+                string AnchorX = Math.Round(intersect.Col*Xresolution, 3).ToString(); string AnchorY = Math.Round(intersect.Row*Yresolution, 3).ToString();
                 if (Side == 4)
                 {
                     StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
                 }
                 else
                 {
-                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString());
+                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString()+  "\t" );
                 }
                 return OK;
             }

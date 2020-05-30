@@ -628,6 +628,14 @@ namespace SagensVision.VisionTool
                     textBox_Width.Text = ((int)fParam[Index].roiP[0].Len2).ToString();
                     textBox_Row.Text = ((int)fParam[Index].roiP[0].CenterRow).ToString();
                     textBox_Col.Text = ((int)fParam[Index].roiP[0].CenterCol).ToString();
+                    textBox_Offset.Text = ((int)fParam[Index].roiP[0].offset).ToString();
+                    textBox_OffsetX.Text = ((int)fParam[Index].roiP[0].Xoffset).ToString();
+                    textBox_OffsetY.Text = ((int)fParam[Index].roiP[0].Yoffset).ToString();
+                    textBox_OffsetZ.Text = ((int)fParam[Index].roiP[0].Zoffset).ToString();
+                    textBox_ZFtMax.Text = (fParam[Index].roiP[0].ZftMax).ToString();
+                    textBox_ZFtMin.Text = (fParam[Index].roiP[0].ZftMin).ToString();
+                    textBox_ZFtRad.Text = (fParam[Index].roiP[0].ZftRad).ToString();
+                    
                     HTuple deg = new HTuple();
                     HOperatorSet.TupleDeg(fParam[Index].roiP[0].phi, out deg);
                     textBox_phi.Text = ((int)deg.D).ToString();
@@ -1152,9 +1160,14 @@ namespace SagensVision.VisionTool
             {
                 //IntersetionCoord intersect = new IntersetionCoord();
                 string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                if (ok!="OK")
+                {
+                    MessageBox.Show(ok);
+                }
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    MyGlobal.flset2.intersectCoordList[Id].Angle, intersection.Row, intersection.Col, intersection.Angle, out homMaxFix);
+                MyGlobal.flset2.intersectCoordList[Id].Angle, intersection.Row, intersection.Col, intersection.Angle, out homMaxFix);
+            
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
                 {
@@ -3054,13 +3067,13 @@ namespace SagensVision.VisionTool
                 }
                 if (Hlines.Count != 4)
                 {
-                    return "找线区域数量错误";
+                    return "定位找线区域数量错误";
                 }
                 for (int i = 0; i < Hlines.Count; i++)
                 {
                     if (Hlines[i].Length == 0)
                     {
-                        return $"找线区域{i + 1}运行失败";
+                        return $"定位找线区域{i + 1}运行失败";
                     }
                 }
 
@@ -3218,7 +3231,15 @@ namespace SagensVision.VisionTool
                         }
                         //Debug.WriteLine(Num);
                         HTuple row1, col1; HTuple anchor, anchorc;
-                        string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                        if (fParam[Sid].roiP[i].SelectedType == 0)
+                        {
+                            string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                        }
+                        else
+                        {
+                            //取最高点下降
+                            string ok = Fit(Sid + 1, out row1, out col1, hwind);
+                        }
 
 
                         row = row.TupleConcat(row1);
@@ -3834,7 +3855,16 @@ namespace SagensVision.VisionTool
                         }
                         Debug.WriteLine(Num);
                         HTuple row1, col1; HTuple anchor, anchorc;
-                        string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                        if (fParam[Sid].roiP[i].SelectedType==0)
+                        {
+                            string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                        }
+                        else
+                        {
+                            //取最高点下降
+                            string ok = Fit(Sid + 1, out row1, out col1, hwind);
+                        }
+                        
 
 
                         row = row.TupleConcat(row1);
@@ -5076,6 +5106,9 @@ namespace SagensVision.VisionTool
                 textBox_phi.Text = ((int)deg.D).ToString();
                 textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
                 textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
+                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
+                textBox_Offset.Text = fParam[SideId].roiP[id].offset.ToString();
+
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
@@ -5244,6 +5277,21 @@ namespace SagensVision.VisionTool
                 throw;
             }
         }
+
+        private void comboBox_GetPtType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            int currentId = CurrentRowIndex;
+            if (currentId !=-1)
+            {
+                fParam[Id].roiP[currentId].SelectedType = comboBox1.SelectedIndex;
+            }
+        }
+
+        private void checkBox_useLeft_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class ParamPath
@@ -5399,6 +5447,14 @@ namespace SagensVision.VisionTool
         public int ZftMax = 0;
         public int ZftMin = 0;
         public double ZftRad = 0;
+        /// <summary>
+        ///  0 极值 1 最高点下降
+        /// </summary>
+        public int SelectedType = 0;
+        /// <summary>
+        /// 取左侧值
+        /// </summary>
+        public bool useLeft = true;
 
         public RoiParam Clone()
         {
