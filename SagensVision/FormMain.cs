@@ -33,7 +33,7 @@ namespace SagensVision
         public FormMain()
         {
 
-            InitializeComponent();
+            InitializeComponent(); 
             Init();
             // Handling the QueryControl event that will populate all automatically generated Documents     
         }
