@@ -17,6 +17,8 @@ namespace SagensVision
         {
             InitializeComponent();
             Run = new RunOff(dmmy);
+            if(File.Exists("pathName.txt"))
+                tb_PathName.Text = File.ReadAllText("pathName.txt");
         }
        
         string path = "";
@@ -30,11 +32,15 @@ namespace SagensVision
         //选择离线数据存储路径
         private void btn_select_Click(object sender, EventArgs e)
         {
+          
             path = "";
             try
             {
-                if (tb_PathName != null)
+                if (tb_PathName.Text != "")
                 {
+                    if (File.Exists("pathName.txt"))
+                        File.Delete("pathName.txt");
+                    StaticOperate.writeTxt("pathName.txt", tb_PathName.Text);
                     path = tb_PathName.Text;
                     listBox1.Items.Clear();
                     string[] ImportpathfileNames = Directory.GetDirectories(path);
