@@ -1669,8 +1669,23 @@ namespace SagensVision
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
+
+                    HObject regpot;
+                    HOperatorSet.GenRegionPoints(out regpot, new HTuple(xcoord), new HTuple(ycoord));
+                    HObject ImageConst;
+                    HOperatorSet.GenImageConst(out ImageConst, "byte", 500, 500);
+                    ShowProfile.HobjectToHimage(ImageConst);
+                    ShowProfile.viewWindow.displayHobject(regpot,"green",true);
+                    for (int i = 0; i < sigleTitle.Length; i++)
+                    {
+                        ShowProfile.viewWindow.dispMessage(sigleTitle[i], "red", xcoord[i], ycoord[i]);
+                        ShowAndSaveMsg(xcoord[i] + "-" + ycoord[i]);
+                    }
+                    regpot.Dispose();
+                    ImageConst.Dispose();
                 }
                 
+
 
                 return "OK";
             }
@@ -1901,7 +1916,7 @@ namespace SagensVision
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
-                    if (MyGlobal.ReceiveMsg.Contains("point"))
+                    if (MyGlobal.ReceiveMsg.Contains("POS"))
                     {
                         continue;
                     }

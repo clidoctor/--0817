@@ -54,8 +54,8 @@
             this.barButtonItem8 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem5 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem9 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
             this.barCheckItem1 = new DevExpress.XtraBars.BarCheckItem();
+            this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
             this.barCheckItem2 = new DevExpress.XtraBars.BarCheckItem();
             this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             this.btn_clearbuffer = new DevExpress.XtraBars.BarButtonItem();
@@ -425,6 +425,11 @@
             this.barButtonItem9.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barButtonItem9.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem9_ItemClick);
             // 
+            // barCheckItem1
+            // 
+            this.barCheckItem1.Id = 20;
+            this.barCheckItem1.Name = "barCheckItem1";
+            // 
             // barButtonItem10
             // 
             this.barButtonItem10.Caption = "离线测试";
@@ -434,11 +439,6 @@
             this.barButtonItem10.Name = "barButtonItem10";
             this.barButtonItem10.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barButtonItem10.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem10_ItemClick);
-            // 
-            // barCheckItem1
-            // 
-            this.barCheckItem1.Id = 20;
-            this.barCheckItem1.Name = "barCheckItem1";
             // 
             // barCheckItem2
             // 
@@ -682,6 +682,8 @@
             this.dockPanel1.Size = new System.Drawing.Size(186, 486);
             this.dockPanel1.OriginalSize = new System.Drawing.Size(186, 627);
             this.dockPanel1.Size = new System.Drawing.Size(186, 627);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 488);
+            this.dockPanel1.Size = new System.Drawing.Size(186, 486);
             this.dockPanel1.Text = "功能设置";
             // 
             // dockPanel1_Container
@@ -845,6 +847,8 @@
             this.dockPanel7.Name = "dockPanel7";
             this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 160);
             this.dockPanel7.Size = new System.Drawing.Size(186, 160);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 124);
+            this.dockPanel7.Size = new System.Drawing.Size(186, 124);
             this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 124);
             this.dockPanel7.Size = new System.Drawing.Size(186, 124);
             // 
@@ -1012,7 +1016,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1379, 850);
+            this.ClientSize = new System.Drawing.Size(1207, 661);
+            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.panelContainer1);
             this.ClientSize = new System.Drawing.Size(1207, 661);
             this.Controls.Add(this.dockPanel2);
