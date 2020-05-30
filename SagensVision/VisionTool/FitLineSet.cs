@@ -54,15 +54,14 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
-            this.MaximizeBox = true;
              CurrentSide = "";
              isSave = true;
              isCloing = false;
             //Init();
-            splitContainerControl4.Panel1.Controls.Add(hwindow_final2);
-            splitContainerControl6.Panel1.Controls.Add(hwindow_final1);
+            splitContainerControl1.Panel1.Controls.Add(hwindow_final1);
+            splitContainerControl1.Panel2.Controls.Add(hwindow_final2);
             hwindow_final1.Dock = DockStyle.Fill;
-            hwindow_final2.Dock = DockStyle.Fill;         
+            hwindow_final2.Dock = DockStyle.Left;         
    
 
 
@@ -177,9 +176,10 @@ namespace SagensVision.VisionTool
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("RoiMove-->" + ex.Message);
+
+                throw;
             }
         }
         bool RoiIsMoving = false;
@@ -4947,7 +4947,7 @@ namespace SagensVision.VisionTool
             {
                 return;
             }
-            isSelecting = true; 
+            isSelecting = true;
             dataGridView1.ClearSelection();
             dataGridView1.Rows[roiID].Selected = true;
             isSelecting = false;
@@ -4974,7 +4974,6 @@ namespace SagensVision.VisionTool
                     {
                         if (roiController2.ROIList.Count != roiList2[SideId].Count)
                         {
-                            hwindow_final2.viewWindow.notDisplayRoi();
                             roiController2.viewController.ShowAllRoiModel = -1;
                             hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
                         }
@@ -5066,7 +5065,9 @@ namespace SagensVision.VisionTool
                 HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
                 textBox_phi.Text = ((int)deg.D).ToString();
                 textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
+                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
                 textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
+                textBox_Offset.Text = fParam[SideId].roiP[id].offset.ToString();
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
@@ -5164,10 +5165,10 @@ namespace SagensVision.VisionTool
                     }
                     else
                     {
-                        roiController2.viewController.ShowAllRoiModel = CopyId;
-                        roiController2.viewController.repaint(CopyId);
+                        roiController2.viewController.ShowAllRoiModel = CopyId + 1;
+                        roiController2.viewController.repaint(CopyId + 1);
                     }
-                    hwindow_final2.viewWindow.setActiveRoi(currentId);
+                    hwindow_final2.viewWindow.setActiveRoi(currentId + 1);
                 }
                 if (roiList[Id].Count > 0)
                 {
