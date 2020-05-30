@@ -24,10 +24,24 @@ namespace SagensVision.VisionTool
 
         private void EnlargeFrm_Load(object sender, EventArgs e)
         {
-        
             WindowState = FormWindowState.Maximized;
 
             hWindow_Final1.HobjectToHimage(img);
+            if (FormMain.Yorigin.Count > 0 && FormMain.Yorigin[idx].Length > 0)
+            {
+                HObject cross;
+                HOperatorSet.GenCrossContourXld(out cross, new HTuple(FormMain.Yorigin[idx],FormMain.AnchorList[idx].Row), new HTuple(FormMain.Xorigin[idx], FormMain.AnchorList[idx].Col), 26, 1.5);
+                hWindow_Final1.viewWindow.displayHobject(cross);
+                cross.Dispose();
+                for (int j = 0; j < FormMain.NameOrigin[idx].Length; j++)
+                {
+                    hWindow_Final1.viewWindow.dispMessage(FormMain.NameOrigin[idx][j], "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);
+                }
+                hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Row.ToString(), "blue", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
+                hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Col.ToString(), "blue", FormMain.AnchorList[idx].Row+80, FormMain.AnchorList[idx].Col);
+
+            }
+
             if (!MyGlobal.isShowHeightImg)
             {
                 hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
