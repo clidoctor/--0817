@@ -23,6 +23,7 @@ namespace SagensVision.VisionTool
             this.Controls.Add(calib);
             calib.Dock = DockStyle.Fill;
             calib.GetRobotIdxDelegate += OnGetIdxDelegate;
+            this.MaximizeBox = false;
         }
 
         private void OnGetIdxDelegate(string idx)
