@@ -30,7 +30,7 @@ namespace SagensVision.VisionTool
             byte[] buffer = new byte[128];
             try
             {
-                MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("current_idx"));
+                MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("POS"));
             }
             catch (Exception)
             {
@@ -39,7 +39,7 @@ namespace SagensVision.VisionTool
             
             ThreadPool.QueueUserWorkItem(delegate
             {
-                while (!MyGlobal.ReceiveMsg.Contains("point"))
+                while (!MyGlobal.ReceiveMsg.Contains("POS"))
                 {
                     Thread.Sleep(100);
                 }

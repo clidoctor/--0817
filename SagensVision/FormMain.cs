@@ -33,7 +33,7 @@ namespace SagensVision
         public FormMain()
         {
 
-            InitializeComponent();
+            InitializeComponent(); 
             Init();
             // Handling the QueryControl event that will populate all automatically generated Documents     
         }
@@ -383,6 +383,7 @@ namespace SagensVision
         VisionTool.Display3D show3D = new VisionTool.Display3D();
         private void FormMain_Load(object sender, EventArgs e)
         {
+
             if (File.Exists(MyGlobal.imgRotatePath))
             {
                 MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
@@ -1725,7 +1726,7 @@ namespace SagensVision
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
-                    if (MyGlobal.ReceiveMsg.Contains("point"))
+                    if (MyGlobal.ReceiveMsg.Contains("POS"))
                     {
                         continue;
                     }

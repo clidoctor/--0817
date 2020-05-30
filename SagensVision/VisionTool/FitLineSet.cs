@@ -3741,8 +3741,8 @@ namespace SagensVision.VisionTool
                                 return "高度滤波区域无有效z值";
                             }
                             HTuple Zgreater = Zpt[greaterId];
-                            HTuple maxPer = fParam[Sid].roiP[i].ZftMax;
-                            HTuple minPer = fParam[Sid].roiP[i].ZftMin;
+                            HTuple maxPer = fParam[Sid].roiP[i].ZftMax/100;
+                            HTuple minPer = fParam[Sid].roiP[i].ZftMin/100;
 
                             int imax = (int)maxPer.D * Zgreater.Length;
                             int imin = (int)minPer.D * Zgreater.Length;
@@ -4886,6 +4886,15 @@ namespace SagensVision.VisionTool
                         break;
                     case "textBox_Offset":
                         fParam[SideId].roiP[roiID].offset = num;
+                        break;
+                    case "textBox_ZFtMax":
+                        fParam[SideId].roiP[roiID].ZftMax =(int) num;
+                        break;
+                    case "textBox_ZFtMin":
+                        fParam[SideId].roiP[roiID].ZftMin = (int)num;
+                        break;
+                    case "textBox_ZFtRad":
+                        fParam[SideId].roiP[roiID].ZftRad = num;
                         break;
                     //case "textBox_OffsetX2":
                     //    fParam[SideId].MinZ = num;
