@@ -54,14 +54,15 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
+            this.MaximizeBox = true;
              CurrentSide = "";
              isSave = true;
              isCloing = false;
             //Init();
-            splitContainerControl1.Panel1.Controls.Add(hwindow_final1);
-            splitContainerControl1.Panel2.Controls.Add(hwindow_final2);
+            splitContainerControl4.Panel1.Controls.Add(hwindow_final2);
+            splitContainerControl6.Panel1.Controls.Add(hwindow_final1);
             hwindow_final1.Dock = DockStyle.Fill;
-            hwindow_final2.Dock = DockStyle.Left;         
+            hwindow_final2.Dock = DockStyle.Fill;         
    
 
 
@@ -176,10 +177,9 @@ namespace SagensVision.VisionTool
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                MessageBox.Show("RoiMove-->" + ex.Message);
             }
         }
         bool RoiIsMoving = false;
@@ -5065,9 +5065,7 @@ namespace SagensVision.VisionTool
                 HOperatorSet.TupleDeg(fParam[SideId].roiP[id].phi, out deg);
                 textBox_phi.Text = ((int)deg.D).ToString();
                 textBox_Deg.Text = fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
                 textBox_OffsetY.Text = fParam[SideId].roiP[id].Yoffset.ToString();
-                textBox_Offset.Text = fParam[SideId].roiP[id].offset.ToString();
                 textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
                 textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
