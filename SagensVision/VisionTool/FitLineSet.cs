@@ -54,6 +54,7 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
+            
             this.MaximizeBox = true;
              CurrentSide = "";
              isSave = true;
@@ -197,7 +198,7 @@ namespace SagensVision.VisionTool
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                         ArrayList array = roiController2.ROIList;
                         int currentId = -1; string Name = "";
-                        if (dataGridView1.CurrentCell == null)
+                        if (dataGridView1.CurrentCell == null || CurrentRowIndex==-1)
                         {
                             currentId = 0;
                         }
@@ -640,6 +641,10 @@ namespace SagensVision.VisionTool
                     HOperatorSet.TupleDeg(fParam[Index].roiP[0].phi, out deg);
                     textBox_phi.Text = ((int)deg.D).ToString();
                     textBox_Deg.Text = fParam[Index].roiP[0].AngleOfProfile.ToString();
+                    checkBox_useLeft.Checked = fParam[Index].roiP[0].useLeft;
+                    textBox_downDist.Text = fParam[Index].roiP[0].TopDownDist.ToString();
+                    textBox_xDist.Text = fParam[Index].roiP[0].xDist.ToString();
+                    comboBox_GetPtType.SelectedIndex = 0;
                 }
 
                 RoiIsMoving = false;
@@ -672,7 +677,32 @@ namespace SagensVision.VisionTool
                 //button11_Click(sender, e);
                 int Id = Convert.ToInt32(SideName.Substring(4, 1));
                 HTuple row, col; HTuple anchor, anchorc;
-                FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                int roiID = -1;
+                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                {
+
+                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    {
+                        roiID++;
+                        if (roiID == CurrentIndex)
+                        {
+                            break;
+                        }
+                    }
+                    if (roiID == CurrentIndex)
+                    {
+                        roiID = i;
+                        break;
+                    }
+                }
+                if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
+                {
+                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+                else
+                {
+                    FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
             }
         }
         void GetRowCol(ProfilePoint[] point, out double[] Row, out double[] Col)
@@ -1252,8 +1282,33 @@ namespace SagensVision.VisionTool
 
                 int Id = Convert.ToInt32(SideName.Substring(4, 1));
                 HTuple row, col; HTuple anchor, anchorc;
-                FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                //FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                int roiID = -1;
+                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                {
 
+                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    {
+                        roiID++;
+                        if (roiID == CurrentIndex)
+                        {
+                            break;
+                        }
+                    }
+                    if (roiID == CurrentIndex)
+                    {
+                        roiID = i;
+                        break;
+                    }
+                }
+                if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
+                {
+                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+                else
+                {
+                    FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
                 //if (trackBarValue1<trackBarValue2)
                 //{
                 //    HTuple row2, col2;
@@ -1624,7 +1679,9 @@ namespace SagensVision.VisionTool
                     //HTuple colEnd = fParam[Id].BeLeft ? mZCol - 500 : mZCol + 500;
 
                     //取最左
-                    HTuple maxZ = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
+                    HTuple maxZ = temp_2.TupleMin();
+
+                    //HTuple maxZ = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
                     HTuple mZRowId = col.TupleFindFirst(maxZ);
                     HTuple mZRow = row[mZRowId];
                     HTuple rowStart = mZRow.D - 500;
@@ -1706,6 +1763,233 @@ namespace SagensVision.VisionTool
             }
 
         }
+
+
+        /// <summary>
+        /// 由轮廓拟合点
+        /// </summary>
+        /// <param name="SideId">边序号 从1 开始</param>
+        /// <param name="LastR">输出行坐标</param>
+        /// <param name="LastC">输出列坐标</param>
+        /// <param name="hwnd">输入窗体（可选）</param>
+        /// <returns></returns>
+        public string FindMaxPtFallDown(int SideId, int ProfileId, out HTuple LastR, out HTuple LastC, out HTuple AnchorR, out HTuple AnchorC, HWindow_Final hwnd = null, bool ShowFeatures = false, bool UseFit = false)
+        {
+            LastR = new HTuple(); LastC = new HTuple(); AnchorR = new HTuple(); AnchorC = new HTuple();
+            try
+            {
+                HTuple row, col;
+                ShowProfile(ProfileId, out row, out col, hwnd);
+
+                int Id = SideId - 1;
+                if (RArray == null || RArray[ProfileId].Length == 0)
+                {
+                    return "RArray is NULL";
+                }
+
+                //除去 -30 *200 的点
+                HTuple eq30_1 = row.TupleEqualElem(-6000 - 0 + 150);
+                HTuple eqId_1 = eq30_1.TupleFind(1);
+                HTuple temp_1 = row.TupleRemove(eqId_1);
+                HTuple temp_2 = col.TupleRemove(eqId_1);
+
+                if (roiList[Id].Count == 0)
+                {
+                    return "roiList is Null";
+                }
+
+                //取最左 作为初步锚定点
+                HTuple maxZCol = true ? temp_2.TupleMin() : temp_2.TupleMax();
+
+                //HTuple maxZCol = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
+                HTuple mZRowId = col.TupleFindFirst(maxZCol);
+                HTuple mZRow = row[mZRowId];
+
+
+                int roiID = -1;
+                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                {
+
+                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    {
+                        roiID++;
+                        if (roiID == ProfileId)
+                        {
+                            break;
+                        }
+                    }
+                    if (roiID == ProfileId)
+                    {
+                        roiID = i;
+                        break;
+                    }
+                }
+                // 锚定 Roi
+                HTuple RoiCoord = roiList[Id][roiID].getModelData();
+                double R1 = RoiCoord[0] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;
+                double C1 = RoiCoord[1] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
+                double R2 = RoiCoord[2] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;
+                double C2 = RoiCoord[3] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
+
+                //生成矩形框
+                HObject Rec = new HObject();
+                HOperatorSet.GenRectangle1(out Rec, R1, C1, R2, C2);
+                if (hwnd != null && ShowFeatures)
+                {
+
+                    hwnd.viewWindow.displayHobject(Rec, "green");
+
+                }
+
+
+                //求矩形区域内轮廓 极值
+                HTuple ColLess = temp_2.TupleLessElem(C2);
+                HTuple ColGreater = temp_2.TupleGreaterElem(C1);
+                HTuple sub = ColLess.TupleSub(ColGreater);
+                HTuple IntersetID = sub.TupleFind(0);
+                //HTuple IntersetID = eq0.TupleFind(1);
+                if (IntersetID == -1)
+                {
+                    return "区域内 无有效点";
+                }
+                HTuple RowNew = temp_1[IntersetID];
+                HTuple ColNew = temp_2[IntersetID];
+
+                //最高点下降
+
+                //取最上
+                HTuple maxZ = RowNew.TupleMin();
+                HTuple mZColId = RowNew.TupleFindFirst(maxZ);
+                HTuple mZCol = ColNew[mZColId];
+                double xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                HTuple rowStart = maxZ.D + fParam[Id].roiP[roiID].TopDownDist * 200;
+                HTuple rowEnd = rowStart;
+                HTuple colStart = mZCol;
+                double dist =  fParam[Id].roiP[roiID].xDist==0 ? 300: fParam[Id].roiP[roiID].xDist * 200;
+                HTuple colEnd = fParam[Id].roiP[roiID].useLeft ? mZCol - dist : mZCol + dist;
+
+                //取最左
+                //HTuple maxZ = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
+                //HTuple mZRowId = col.TupleFindFirst(maxZ);
+                //HTuple mZRow = row[mZRowId];
+                //HTuple rowStart = mZRow.D - 500;
+                //HTuple rowEnd = mZRow.D + 500;
+                //HTuple colStart = maxZ.D + fParam[Id].UpDownDist;
+                //HTuple colEnd = maxZ.D + fParam[Id].UpDownDist;
+
+                //求交点
+                HObject Line = new HObject(); HObject Profile = new HObject(); HObject Intersect = new HObject();
+                HOperatorSet.GenContourPolygonXld(out Line, rowStart.TupleConcat(rowEnd), colStart.TupleConcat(colEnd));
+                HOperatorSet.GenContourPolygonXld(out Profile, row, col);
+                HTuple IntersecR, intersecC, isOver;
+                HOperatorSet.IntersectionContoursXld(Profile, Line, "mutual", out IntersecR, out intersecC, out isOver);
+                if (hwnd != null && ShowFeatures)
+                {
+                    hwnd.viewWindow.displayHobject(Line, "green");
+
+                }
+                if (IntersecR.Length == 0)
+                {
+                    return "Ignore";
+
+                }
+                if (IntersecR.Length > 1)
+                {
+                    //取最上
+                    HTuple minC = fParam[Id].roiP[roiID].useLeft ? intersecC.TupleMin() : intersecC.TupleMax();
+                    HTuple minCid = intersecC.TupleFindFirst(minC);
+
+
+                    LastR = LastR.TupleConcat(IntersecR[minCid]);
+                    LastC = LastC.TupleConcat(minC);
+
+                    ////取最左
+                    //HTuple minR = IntersecR.TupleMin();
+                    //HTuple minRid = IntersecR.TupleFindFirst(minR);
+
+
+                    //LastR = LastR.TupleConcat(IntersecR[minRid]);
+                    //LastC = LastC.TupleConcat(minR);
+                }
+                else
+                {
+                    //取最上
+                    LastR = LastR.TupleConcat(IntersecR);
+                    LastC = LastC.TupleConcat(intersecC);
+
+                    //取最左
+
+                }
+                HObject cross = new HObject();
+                HOperatorSet.GenCrossContourXld(out cross, IntersecR, intersecC, 6, 0);
+                if (hwnd != null && ProfileId == 1)
+                {
+                    hwnd.viewWindow.displayHobject(cross, "green");
+                }
+
+
+                if (LastR.Length == 0)
+                {
+                    return "Ignore";
+                }
+                HTuple Max = LastR.TupleMax();
+                HTuple maxId = LastR.TupleFindFirst(Max);
+
+                LastC = LastC[maxId];
+                LastR = Max;
+                AnchorR = LastR;
+                AnchorC = LastC;
+                if (hwnd != null && ShowFeatures)
+                {
+                    HObject cross1 = new HObject();
+                    HOperatorSet.GenCrossContourXld(out cross1, LastR, LastC, 10, 0);
+                    hwnd.viewWindow.displayHobject(cross1, "green");
+
+                }
+
+                if (LastR.Length == 0)
+                {
+                    return "Ignore";
+
+                    //return "FindMaxPt fail";
+                }
+                //HOperatorSet.TupleGenSequence(0, LastR.Length - 1, 1, out LastR);
+                HTuple PtID = new HTuple();
+                HOperatorSet.TupleGreaterEqualElem(col, LastC, out PtID);
+                PtID = PtID.TupleFindFirst(1);
+                LastR = Row[ProfileId][PtID];
+                LastC = CArray[ProfileId][PtID];
+                //LastR = ProfileId;
+                //if (MyGlobal.globalConfig.dataContext.xResolution != 0)
+                //{
+                //    LastC = LastC / 200 / MyGlobal.globalConfig.dataContext.xResolution;
+                //}
+                //else
+                //{
+                //    LastC = LastC / 200 / 0.007;
+                //}
+
+                if (hwnd != null)
+                {
+                    HObject cross1 = new HObject();
+                    HOperatorSet.GenCrossContourXld(out cross1, LastR, LastC, 10, 0);
+                    HOperatorSet.SetColor(hwindow_final2.HWindowHalconID, "red");
+                    HOperatorSet.DispObj(cross1, hwindow_final2.HWindowHalconID);
+
+                }
+
+
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+
+                return "FindMaxPt error" + ex.Message;
+            }
+
+        }
+
+
 
 
         /// <summary>
@@ -2252,7 +2536,33 @@ namespace SagensVision.VisionTool
                 //button11_Click(sender, e);
                 int Id = Convert.ToInt32(SideName.Substring(4, 1));
                 HTuple row, col; HTuple anchor, anchorc;
-                FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                //FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                int roiID = -1;
+                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                {
+
+                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    {
+                        roiID++;
+                        if (roiID == CurrentIndex)
+                        {
+                            break;
+                        }
+                    }
+                    if (roiID == CurrentIndex)
+                    {
+                        roiID = i;
+                        break;
+                    }
+                }
+                if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
+                {
+                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+                else
+                {
+                    FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
             }
         }
 
@@ -2275,7 +2585,32 @@ namespace SagensVision.VisionTool
             //button11_Click(sender, e);
             int Id = Convert.ToInt32(SideName.Substring(4, 1));
             HTuple row, col; HTuple anchor, anchorc;
-            FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+            int roiID = -1;
+            for (int i = 0; i < fParam[Id].roiP.Count; i++)
+            {
+
+                for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                {
+                    roiID++;
+                    if (roiID == CurrentIndex)
+                    {
+                        break;
+                    }
+                }
+                if (roiID == CurrentIndex)
+                {
+                    roiID = i;
+                    break;
+                }
+            }
+            if (fParam[Id -1].roiP[roiID].SelectedType == 0)
+            {
+                FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+            }
+            else
+            {
+                FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+            }
 
         }
         bool ShowSection = false;
@@ -3238,7 +3573,8 @@ namespace SagensVision.VisionTool
                         else
                         {
                             //取最高点下降
-                            string ok = Fit(Sid + 1, out row1, out col1, hwind);
+                            string ok = FindMaxPtFallDown(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+
                         }
 
 
@@ -3862,9 +4198,9 @@ namespace SagensVision.VisionTool
                         else
                         {
                             //取最高点下降
-                            string ok = Fit(Sid + 1, out row1, out col1, hwind);
+                            string ok = FindMaxPtFallDown(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
                         }
-                        
+
 
 
                         row = row.TupleConcat(row1);
@@ -4926,6 +5262,12 @@ namespace SagensVision.VisionTool
                     case "textBox_ZFtRad":
                         fParam[SideId].roiP[roiID].ZftRad = num;
                         break;
+                    case "textBox_downDist":
+                        fParam[SideId].roiP[roiID].TopDownDist = num;
+                        break;
+                    case "textBox_xDist":
+                        fParam[SideId].roiP[roiID].xDist = num;
+                        break;
                     //case "textBox_OffsetX2":
                     //    fParam[SideId].MinZ = num;
                     //    break;
@@ -5066,9 +5408,20 @@ namespace SagensVision.VisionTool
                 }
 
                 CurrentIndex = pID;
+                CurrentRowIndex = roiID;
                 textBox_Current.Text = CurrentIndex.ToString();
                 HTuple row, col; HTuple anchor, anchorc;
-                FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                //FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+
+                if (fParam[SideId].roiP[CurrentRowIndex].SelectedType == 0)
+                {
+                    FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+                else
+                {
+                    FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+
                 //string[] color = {"red","blue","green", "lime green", "black" };
                 //if (row.Length != 0)
                 //{
@@ -5120,7 +5473,11 @@ namespace SagensVision.VisionTool
                 comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
                 //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
                 //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
-                CurrentRowIndex = roiID;
+                checkBox_useLeft.Checked = fParam[SideId].roiP[id].useLeft;
+                textBox_downDist.Text = fParam[SideId].roiP[id].TopDownDist.ToString();
+                textBox_xDist.Text = fParam[SideId].roiP[id].xDist.ToString();
+                comboBox_GetPtType.SelectedIndex = fParam[SideId].roiP[id].SelectedType;
+               
                 RoiIsMoving = false;
             }
             catch (Exception)
@@ -5284,13 +5641,18 @@ namespace SagensVision.VisionTool
             int currentId = CurrentRowIndex;
             if (currentId !=-1)
             {
-                fParam[Id].roiP[currentId].SelectedType = comboBox1.SelectedIndex;
+                fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
             }
         }
 
         private void checkBox_useLeft_CheckedChanged(object sender, EventArgs e)
         {
-
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            int currentId = CurrentRowIndex;
+            if (currentId != -1)
+            {
+                fParam[Id].roiP[currentId].useLeft = checkBox_useLeft.Checked ;
+            }
         }
     }
 
@@ -5447,6 +5809,9 @@ namespace SagensVision.VisionTool
         public int ZftMax = 0;
         public int ZftMin = 0;
         public double ZftRad = 0;
+        public double TopDownDist = 0;
+        public double xDist = 0;
+
         /// <summary>
         ///  0 极值 1 最高点下降
         /// </summary>

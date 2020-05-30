@@ -401,7 +401,6 @@ namespace SagensVision
         VisionTool.Display3D show3D = new VisionTool.Display3D();
         private void FormMain_Load(object sender, EventArgs e)
         {
-
             if (File.Exists(MyGlobal.imgRotatePath))
             {
                 MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
@@ -1367,167 +1366,172 @@ namespace SagensVision
                 {
                     return "OK";
                 }
-                #region 除去起始位重复部分 并均分 
-                for (int i = 0; i < Station; i++)
-                {
-                    HTuple firstPt, order, last, lastPt, Grater, GraterId = new HTuple(); string first = "";
-                    HTuple ResultX = new HTuple(), ResultY = new HTuple(), ResultZ = new HTuple(), ResultLorC = new HTuple();
-                    switch (i)
-                    {
-                        case 0:
-                            if (Station == 4) //Y1<Y4
-                            {
 
-                                ResultY = YCoord[i][0];//第一段
-                                ResultX = XCoord[i][0];//第一段
-                                ResultZ = ZCoord[i][0];//第一段
-                                ResultLorC = StrLorC[i][0];//第一段
+                #region 重复点
+                //#region 除去起始位重复部分 并均分 
+                //for (int i = 0; i < Station; i++)
+                //{
+                //    HTuple firstPt, order, last, lastPt, Grater, GraterId = new HTuple(); string first = "";
+                //    HTuple ResultX = new HTuple(), ResultY = new HTuple(), ResultZ = new HTuple(), ResultLorC = new HTuple();
+                //    switch (i)
+                //    {
+                //        case 0:
+                //            if (Station == 4) //Y1<Y4
+                //            {
 
-                                if (ResultY.Length == 0)
-                                {
-                                    break;
-                                }
-                                firstPt = ResultY[0];//第一点
-                                order = YCoord[3].GetLength(0) - 1;
-                                last = YCoord[3][order];//第四边最后段
-                                lastPt = last[last.Length - 1];//最后一点
-                                Grater = ResultY.TupleGreaterEqualElem(lastPt);//大于第四条不重叠部分
-                                GraterId = Grater.TupleFind(1);
-                                if (GraterId == -1)
-                                {
-                                    break;
-                                }
-                                ResultY = ResultY[GraterId];
-                                ResultX = ResultX[GraterId];
-                                ResultZ = ResultZ[GraterId];
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC[GraterId];
-                                ResultLorC[0] = first;
+                //                ResultY = YCoord[i][0];//第一段
+                //                ResultX = XCoord[i][0];//第一段
+                //                ResultZ = ZCoord[i][0];//第一段
+                //                ResultLorC = StrLorC[i][0];//第一段
 
-                            }
+                //                if (ResultY.Length == 0)
+                //                {
+                //                    break;
+                //                }
+                //                firstPt = ResultY[0];//第一点
+                //                order = YCoord[3].GetLength(0) - 1;
+                //                last = YCoord[3][order];//第四边最后段
+                //                lastPt = last[last.Length - 1];//最后一点
+                //                Grater = ResultY.TupleGreaterEqualElem(lastPt);//大于第四条不重叠部分
+                //                GraterId = Grater.TupleFind(1);
+                //                if (GraterId == -1)
+                //                {
+                //                    break;
+                //                }
+                //                ResultY = ResultY[GraterId];
+                //                ResultX = ResultX[GraterId];
+                //                ResultZ = ResultZ[GraterId];
+                //                //首位 
+                //                first = ResultLorC[0];
+                //                ResultLorC = ResultLorC[GraterId];
+                //                ResultLorC[0] = first;
 
-                            break;
-                        case 1:
-                            if (Station >= 2) //X2>X1
-                            {
+                //            }
 
-                                ResultX = XCoord[i][0];//第一段
-                                ResultY = YCoord[i][0];//第一段
-                                ResultZ = ZCoord[i][0];//第一段
-                                ResultLorC = StrLorC[i][0];//第一段
+                //            break;
+                //        case 1:
+                //            if (Station >= 2) //X2>X1
+                //            {
 
-                                if (ResultX.Length == 0)
-                                {
-                                    break;
-                                }
-                                firstPt = ResultX[0];//第一点
-                                order = XCoord[0].GetLength(0) - 1;
-                                last = XCoord[0][order];//第1边最后段
-                                lastPt = last[last.Length - 1];//最后一点
-                                Grater = ResultX.TupleLessEqualElem(lastPt);//小于第一条不重叠部分
-                                GraterId = Grater.TupleFind(1);
-                                if (GraterId == -1)
-                                {
-                                    break;
-                                }
-                                ResultY = ResultY[GraterId];
-                                ResultX = ResultX[GraterId];
-                                ResultZ = ResultZ[GraterId];
+                //                ResultX = XCoord[i][0];//第一段
+                //                ResultY = YCoord[i][0];//第一段
+                //                ResultZ = ZCoord[i][0];//第一段
+                //                ResultLorC = StrLorC[i][0];//第一段
 
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC[GraterId];
-                                ResultLorC[0] = first;
-                            }
-                            break;
-                        case 2:
-                            if (Station >= 3) //Y3>Y2
-                            {
+                //                if (ResultX.Length == 0)
+                //                {
+                //                    break;
+                //                }
+                //                firstPt = ResultX[0];//第一点
+                //                order = XCoord[0].GetLength(0) - 1;
+                //                last = XCoord[0][order];//第1边最后段
+                //                lastPt = last[last.Length - 1];//最后一点
+                //                Grater = ResultX.TupleLessEqualElem(lastPt);//小于第一条不重叠部分
+                //                GraterId = Grater.TupleFind(1);
+                //                if (GraterId == -1)
+                //                {
+                //                    break;
+                //                }
+                //                ResultY = ResultY[GraterId];
+                //                ResultX = ResultX[GraterId];
+                //                ResultZ = ResultZ[GraterId];
 
-                                ResultY = YCoord[i][0];//第一段
-                                ResultX = XCoord[i][0];//第一段
-                                ResultZ = ZCoord[i][0];//第一段
-                                ResultLorC = StrLorC[i][0];//第一段
+                //                //首位 
+                //                first = ResultLorC[0];
+                //                ResultLorC = ResultLorC[GraterId];
+                //                ResultLorC[0] = first;
+                //            }
+                //            break;
+                //        case 2:
+                //            if (Station >= 3) //Y3>Y2
+                //            {
 
-                                if (ResultY.Length == 0)
-                                {
-                                    break;
-                                }
+                //                ResultY = YCoord[i][0];//第一段
+                //                ResultX = XCoord[i][0];//第一段
+                //                ResultZ = ZCoord[i][0];//第一段
+                //                ResultLorC = StrLorC[i][0];//第一段
 
-                                firstPt = ResultY[0];//第一点
-                                order = YCoord[1].GetLength(0) - 1;
-                                last = YCoord[1][order];//第2边最后段
-                                lastPt = last[last.Length - 1];//最后一点
-                                Grater = ResultY.TupleLessEqualElem(lastPt);//不重叠部分
-                                GraterId = Grater.TupleFind(1);
-                                if (GraterId == -1)
-                                {
-                                    break;
-                                }
-                                ResultY = ResultY[GraterId];
-                                ResultX = ResultX[GraterId];
-                                ResultZ = ResultZ[GraterId];
+                //                if (ResultY.Length == 0)
+                //                {
+                //                    break;
+                //                }
 
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC[GraterId];
-                                ResultLorC[0] = first;
-                            }
-                            break;
-                        case 3:
-                            if (Station >= 4) //X4<X3
-                            {
+                //                firstPt = ResultY[0];//第一点
+                //                order = YCoord[1].GetLength(0) - 1;
+                //                last = YCoord[1][order];//第2边最后段
+                //                lastPt = last[last.Length - 1];//最后一点
+                //                Grater = ResultY.TupleLessEqualElem(lastPt);//不重叠部分
+                //                GraterId = Grater.TupleFind(1);
+                //                if (GraterId == -1)
+                //                {
+                //                    break;
+                //                }
+                //                ResultY = ResultY[GraterId];
+                //                ResultX = ResultX[GraterId];
+                //                ResultZ = ResultZ[GraterId];
 
-                                ResultX = XCoord[i][0];//第一段
-                                ResultY = YCoord[i][0];//第一段
-                                ResultZ = ZCoord[i][0];//第一段
-                                ResultLorC = StrLorC[i][0];//第一段
+                //                //首位 
+                //                first = ResultLorC[0];
+                //                ResultLorC = ResultLorC[GraterId];
+                //                ResultLorC[0] = first;
+                //            }
+                //            break;
+                //        case 3:
+                //            if (Station >= 4) //X4<X3
+                //            {
 
-                                if (ResultX.Length == 0)
-                                {
-                                    break;
-                                }
-                                firstPt = ResultX[0];//第一点
-                                order = XCoord[2].GetLength(0) - 1;
-                                last = XCoord[2][order];//第3边最后段
-                                lastPt = last[last.Length - 1];//最后一点
-                                Grater = ResultX.TupleGreaterEqualElem(lastPt);//不重叠部分
-                                GraterId = Grater.TupleFind(1);
-                                if (GraterId == -1)
-                                {
-                                    break;
-                                }
-                                ResultY = ResultY[GraterId];
-                                ResultX = ResultX[GraterId];
-                                ResultZ = ResultZ[GraterId];
+                //                ResultX = XCoord[i][0];//第一段
+                //                ResultY = YCoord[i][0];//第一段
+                //                ResultZ = ZCoord[i][0];//第一段
+                //                ResultLorC = StrLorC[i][0];//第一段
 
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC[GraterId];
-                                ResultLorC[0] = first;
-                            }
-                            break;
-                    }
-                    if (GraterId.Length != 0 && GraterId.D == -1)
-                    {
-                        //XCoord[i][0] = null;
-                        //YCoord[i][0] = null;
-                        //ZCoord[i][0] = null;
-                        //StrLorC[i][0] = null;
+                //                if (ResultX.Length == 0)
+                //                {
+                //                    break;
+                //                }
+                //                firstPt = ResultX[0];//第一点
+                //                order = XCoord[2].GetLength(0) - 1;
+                //                last = XCoord[2][order];//第3边最后段
+                //                lastPt = last[last.Length - 1];//最后一点
+                //                Grater = ResultX.TupleGreaterEqualElem(lastPt);//不重叠部分
+                //                GraterId = Grater.TupleFind(1);
+                //                if (GraterId == -1)
+                //                {
+                //                    break;
+                //                }
+                //                ResultY = ResultY[GraterId];
+                //                ResultX = ResultX[GraterId];
+                //                ResultZ = ResultZ[GraterId];
 
-                        ////return string.Format("第{0}边,第一段重合点数过多", i + 1);
-                    }
-                    else if (GraterId.Length != 0)
-                    {
-                        XCoord[i][0] = ResultX;
-                        YCoord[i][0] = ResultY;
-                        ZCoord[i][0] = ResultZ;
-                        StrLorC[i][0] = ResultLorC;
-                    }
+                //                //首位 
+                //                first = ResultLorC[0];
+                //                ResultLorC = ResultLorC[GraterId];
+                //                ResultLorC[0] = first;
+                //            }
+                //            break;
+                //    }
+                //    if (GraterId.Length != 0 && GraterId.D == -1)
+                //    {
+                //        XCoord[i][0] = null;
+                //        YCoord[i][0] = null;
+                //        ZCoord[i][0] = null;
+                //        StrLorC[i][0] = null;
 
-                }
+                //        return string.Format("第{0}边,第一段重合点数过多", i + 1);
+                //    }
+                //    else if (GraterId.Length != 0)
+                //    {
+                //        XCoord[i][0] = ResultX;
+                //        YCoord[i][0] = ResultY;
+                //        ZCoord[i][0] = ResultZ;
+                //        StrLorC[i][0] = ResultLorC;
+                //    }
+
+                //}
+                //#endregion
                 #endregion
+
+
 
                 Dictionary<int, string> everySeg = new Dictionary<int, string>();
                 double[] xcoord, ycoord, zcoord; string[] keypt;
@@ -1774,7 +1778,7 @@ namespace SagensVision
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
-                    if (MyGlobal.ReceiveMsg.Contains("POS"))
+                    if (MyGlobal.ReceiveMsg.Contains("point"))
                     {
                         continue;
                     }

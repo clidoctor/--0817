@@ -17,8 +17,11 @@ namespace SagensVision
         {
             InitializeComponent();
             Run = new RunOff(dmmy);
-            if(File.Exists("pathName.txt"))
+            if (File.Exists("pathName.txt"))
+            {
                 tb_PathName.Text = File.ReadAllText("pathName.txt");
+                folderBrowserDialog1.SelectedPath = tb_PathName.Text;
+            }
         }
        
         string path = "";
@@ -32,7 +35,6 @@ namespace SagensVision
         //选择离线数据存储路径
         private void btn_select_Click(object sender, EventArgs e)
         {
-          
             path = "";
             try
             {
@@ -150,6 +152,9 @@ namespace SagensVision
             path = "";
             try
             {
+                //if (tb_PathName.Text != "")
+                //    folderBrowserDialog1.SelectedPath = tb_PathName.Text;
+               
                 listBox1.Items.Clear();
                 if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
