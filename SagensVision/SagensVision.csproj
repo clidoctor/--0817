@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="HWindow_Tool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\HWindow_Tool.dll</HintPath>
+      <HintPath>..\..\新建文件夹 (2)\halcon控件\bin\Debug\HWindow_Tool.dll</HintPath>
     </Reference>
     <Reference Include="LookForCircleLine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
