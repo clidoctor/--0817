@@ -3437,6 +3437,16 @@ namespace SagensVision.VisionTool
                 HTuple re1 = (Hlines[0][2].D + Hlines[3][2].D) / 2;
                 HTuple ce1 = (Hlines[0][3].D + Hlines[3][3].D) / 2;
 
+                //取1 4 中点
+                HTuple midR = (rb1.D + re1.D) / 2;
+                HTuple midC = (cb1.D + ce1.D) / 2;
+                HObject crossMid = new HObject();
+                HOperatorSet.GenCrossContourXld(out crossMid, midR, midC, 30, 0.5);
+                rb1 = midR.D;
+                re1 = midR.D;
+                cb1 = 0;
+                ce1 = 5000;
+
                 HObject contHorizon = new HObject();
                 HOperatorSet.GenContourPolygonXld(out contHorizon, rb1.TupleConcat(re1), cb1.TupleConcat(ce1));
 
@@ -3453,20 +3463,27 @@ namespace SagensVision.VisionTool
                 HOperatorSet.IntersectionLines(rb1, cb1, re1, ce1, rb2, cb2, re2, ce2, out Row, out Col, out isOver);
                 if (hwnd != null)
                 {
-                    hwnd.viewWindow.displayHobject(contHorizon, "red");
-                    hwnd.viewWindow.displayHobject(contVer, "red");
+                    //hwnd.viewWindow.displayHobject(contHorizon, "red");
+                    hwnd.viewWindow.displayHobject(crossMid, "red");
                     HObject Cross = new HObject();
                     HOperatorSet.GenCrossContourXld(out Cross, Row, Col, 30, 0.5);
                     hwnd.viewWindow.displayHobject(contVer, "blue");
                     hwnd.viewWindow.displayHobject(Cross, "red");
-                    string Rowstr = (Math.Round(Row.D, 3)).ToString();
-                    string Colstr = (Math.Round(Col.D, 3)).ToString();
+                    
+
+                    double xResolution = MyGlobal.globalConfig.dataContext.xResolution;
+                    double yResolution = MyGlobal.globalConfig.dataContext.yResolution;
+                    HTuple row1 = Row.D * xResolution;
+                    HTuple col1 = Col.D * yResolution;
+
+                    string Rowstr = (Math.Round(row1.D, 3)).ToString();
+                    string Colstr = (Math.Round(col1.D, 3)).ToString();
                     string Anglestr = (Math.Round(Angle.D, 3)).ToString();
 
                     hwnd.viewWindow.dispMessage(Rowstr, "red", Row, Col + 100);
                     hwnd.viewWindow.dispMessage(Colstr, "red", Row.D + 50, Col + 100);
-                    hwnd.viewWindow.dispMessage(Anglestr, "red", Row.D - 50, Col + 100);
-
+                    hwnd.viewWindow.dispMessage(Anglestr, "red", Row.D + 100, Col + 100);
+                  
                 }
                 intersectCoord.Row = Row.D;
                 intersectCoord.Col = Col.D;

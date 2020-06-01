@@ -25,26 +25,32 @@ namespace SagensVision.VisionTool
         private void EnlargeFrm_Load(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Maximized;
-
+            this.MinimizeBox = false;
             hWindow_Final1.HobjectToHimage(img);
             if (FormMain.Yorigin.Count > idx && FormMain.Yorigin[idx].Length > 0)
             {
                 HObject cross;
                 HOperatorSet.GenCrossContourXld(out cross, new HTuple(FormMain.Yorigin[idx],FormMain.AnchorList[idx].Row), new HTuple(FormMain.Xorigin[idx], FormMain.AnchorList[idx].Col), 26, 1.5);
-                hWindow_Final1.viewWindow.displayHobject(cross);
+                hWindow_Final1.viewWindow.displayHobject(cross,"green");
                 cross.Dispose();
                 for (int j = 0; j < FormMain.NameOrigin[idx].Length; j++)
                 {
                     hWindow_Final1.viewWindow.dispMessage(FormMain.NameOrigin[idx][j], "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);
                 }
-                hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Row.ToString(), "blue", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
-                hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Col.ToString(), "blue", FormMain.AnchorList[idx].Row+80, FormMain.AnchorList[idx].Col);
+                if (FormMain.AnchorList[idx].Row !=0 || FormMain.AnchorList[idx].Col != 0)
+                {
+                    hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Row.ToString(), "red", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Col.ToString(), "red", FormMain.AnchorList[idx].Row+80, FormMain.AnchorList[idx].Col);
+                    
+                }
 
             }
 
             if (!MyGlobal.isShowHeightImg)
             {
                 hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
+                hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
+                //OnHMouseUp(sender, null);
             }
         }
 
@@ -65,11 +71,18 @@ namespace SagensVision.VisionTool
             PseudoColor.markColor(pictureBox1, pictureBox2, grayArr, z_byte ,z_start);
             reg.Dispose();
             hWindow_Final1.hWindowControl.HMouseUp -= OnHMouseUp;
+            hWindow_Final1.hWindowControl.HMouseWheel -= OnHMouseUp;
         }
 
         private void EnlargeFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
             pictureBox1.Image = null;
+        }
+
+        private void EnlargeFrm_SizeChanged(object sender, EventArgs e)
+        {
+            hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
+            hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
         }
     }
 }
