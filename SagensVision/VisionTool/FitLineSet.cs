@@ -5341,6 +5341,7 @@ namespace SagensVision.VisionTool
         bool isSelecting = false;
         private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
         {
+           
             if (dataGridView1.CurrentCell == null || RoiIsMoving || isSelecting)
             {
                 return;
@@ -5351,8 +5352,16 @@ namespace SagensVision.VisionTool
                 return;
             }
             isSelecting = true;
-            dataGridView1.ClearSelection();
-            dataGridView1.Rows[roiID].Selected = true;
+            if (SelectAll)
+            {
+               
+            }
+            else
+            {
+                dataGridView1.ClearSelection();
+                dataGridView1.Rows[roiID].Selected = true;
+            }
+            
             isSelecting = false;
             try
             {
