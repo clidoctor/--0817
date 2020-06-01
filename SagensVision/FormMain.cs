@@ -22,6 +22,8 @@ namespace SagensVision
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
 
+        private string test = "This is a test";
+
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
         public static List<double[][]> ZCoord = new List<double[][]>();
