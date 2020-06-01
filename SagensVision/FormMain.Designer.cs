@@ -494,7 +494,7 @@
             // 
             // barHeaderItem1
             // 
-            this.barHeaderItem1.Caption = "深圳鼎晟自动化有限公司  版本1.0.0.4";
+            this.barHeaderItem1.Caption = "深圳鼎晟自动化有限公司  版本1.0.0.5";
             this.barHeaderItem1.Id = 2;
             this.barHeaderItem1.Name = "barHeaderItem1";
             // 
@@ -504,15 +504,15 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(1207, 24);
+            this.barDockControlTop.Size = new System.Drawing.Size(1379, 24);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 634);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 823);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(1207, 27);
+            this.barDockControlBottom.Size = new System.Drawing.Size(1379, 27);
             // 
             // barDockControlLeft
             // 
@@ -520,15 +520,15 @@
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 610);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 799);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(1207, 24);
+            this.barDockControlRight.Location = new System.Drawing.Point(1379, 24);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 610);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 799);
             // 
             // barLargeButtonItem1
             // 
@@ -602,10 +602,10 @@
             this.dockPanel2.Controls.Add(this.dockPanel2_Container);
             this.dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
             this.dockPanel2.ID = new System.Guid("2a08fcca-ef38-4a4b-aefa-fdffbb3950c6");
-            this.dockPanel2.Location = new System.Drawing.Point(1003, 24);
+            this.dockPanel2.Location = new System.Drawing.Point(1175, 24);
             this.dockPanel2.Name = "dockPanel2";
             this.dockPanel2.OriginalSize = new System.Drawing.Size(204, 469);
-            this.dockPanel2.Size = new System.Drawing.Size(204, 610);
+            this.dockPanel2.Size = new System.Drawing.Size(204, 799);
             this.dockPanel2.Text = "消息栏";
             // 
             // dockPanel2_Container
@@ -613,7 +613,7 @@
             this.dockPanel2_Container.Controls.Add(this.xtraTabControl1);
             this.dockPanel2_Container.Location = new System.Drawing.Point(5, 23);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(195, 583);
+            this.dockPanel2_Container.Size = new System.Drawing.Size(195, 772);
             this.dockPanel2_Container.TabIndex = 0;
             // 
             // xtraTabControl1
@@ -622,7 +622,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(195, 583);
+            this.xtraTabControl1.Size = new System.Drawing.Size(195, 772);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
@@ -632,13 +632,13 @@
             this.xtraTabPage1.Controls.Add(this.simpleButton1);
             this.xtraTabPage1.Controls.Add(this.textBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(189, 554);
+            this.xtraTabPage1.Size = new System.Drawing.Size(189, 743);
             this.xtraTabPage1.Text = "工位信息";
             // 
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.simpleButton1.Location = new System.Drawing.Point(0, 530);
+            this.simpleButton1.Location = new System.Drawing.Point(0, 719);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(189, 24);
@@ -654,7 +654,7 @@
             this.textBox1.Location = new System.Drawing.Point(3, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(188, 527);
+            this.textBox1.Size = new System.Drawing.Size(188, 716);
             this.textBox1.TabIndex = 0;
             // 
             // panelContainer1
@@ -667,7 +667,7 @@
             this.panelContainer1.Location = new System.Drawing.Point(0, 24);
             this.panelContainer1.Name = "panelContainer1";
             this.panelContainer1.OriginalSize = new System.Drawing.Size(186, 275);
-            this.panelContainer1.Size = new System.Drawing.Size(186, 610);
+            this.panelContainer1.Size = new System.Drawing.Size(186, 799);
             this.panelContainer1.Text = "panelContainer1";
             // 
             // dockPanel1
@@ -678,8 +678,8 @@
             this.dockPanel1.ID = new System.Guid("19d979f9-0ad1-47f3-b52e-156227f70c6c");
             this.dockPanel1.Location = new System.Drawing.Point(0, 0);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 378);
-            this.dockPanel1.Size = new System.Drawing.Size(186, 486);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(186, 486);
+            this.dockPanel1.Size = new System.Drawing.Size(186, 637);
             this.dockPanel1.Text = "功能设置";
             // 
             // dockPanel1_Container
@@ -687,7 +687,7 @@
             this.dockPanel1_Container.Controls.Add(this.navBarControl1);
             this.dockPanel1_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel1_Container.Name = "dockPanel1_Container";
-            this.dockPanel1_Container.Size = new System.Drawing.Size(177, 458);
+            this.dockPanel1_Container.Size = new System.Drawing.Size(177, 609);
             this.dockPanel1_Container.TabIndex = 0;
             // 
             // navBarControl1
@@ -716,7 +716,7 @@
             this.navBarControl1.Name = "navBarControl1";
             this.navBarControl1.OptionsNavPane.ExpandedWidth = 177;
             this.navBarControl1.PaintStyleKind = DevExpress.XtraNavBar.NavBarViewKind.ExplorerBar;
-            this.navBarControl1.Size = new System.Drawing.Size(177, 458);
+            this.navBarControl1.Size = new System.Drawing.Size(177, 609);
             this.navBarControl1.TabIndex = 0;
             this.navBarControl1.Text = "功能菜单";
             // 
@@ -839,10 +839,10 @@
             this.dockPanel7.Dock = DevExpress.XtraBars.Docking.DockingStyle.Fill;
             this.dockPanel7.FloatVertical = true;
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
-            this.dockPanel7.Location = new System.Drawing.Point(0, 486);
+            this.dockPanel7.Location = new System.Drawing.Point(0, 637);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 96);
-            this.dockPanel7.Size = new System.Drawing.Size(186, 124);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 124);
+            this.dockPanel7.Size = new System.Drawing.Size(186, 162);
             // 
             // dockPanel7_Container
             // 
@@ -851,7 +851,7 @@
             this.dockPanel7_Container.Controls.Add(this.label1);
             this.dockPanel7_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel7_Container.Name = "dockPanel7_Container";
-            this.dockPanel7_Container.Size = new System.Drawing.Size(177, 97);
+            this.dockPanel7_Container.Size = new System.Drawing.Size(177, 135);
             this.dockPanel7_Container.TabIndex = 0;
             // 
             // label_TotalNum
@@ -895,7 +895,7 @@
             this.dockPanel8_Container.Controls.Add(this.panel1);
             this.dockPanel8_Container.Location = new System.Drawing.Point(0, 0);
             this.dockPanel8_Container.Name = "dockPanel8_Container";
-            this.dockPanel8_Container.Size = new System.Drawing.Size(811, 590);
+            this.dockPanel8_Container.Size = new System.Drawing.Size(983, 779);
             this.dockPanel8_Container.TabIndex = 0;
             // 
             // panel1
@@ -904,7 +904,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(811, 590);
+            this.panel1.Size = new System.Drawing.Size(983, 779);
             this.panel1.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -926,15 +926,15 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(811, 590);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(983, 779);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label6
             // 
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(678, 0);
+            this.label6.Location = new System.Drawing.Point(819, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(130, 29);
+            this.label6.Size = new System.Drawing.Size(161, 38);
             this.label6.TabIndex = 4;
             this.label6.Text = "第四条边";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -942,9 +942,9 @@
             // label5
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(543, 0);
+            this.label5.Location = new System.Drawing.Point(656, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(129, 29);
+            this.label5.Size = new System.Drawing.Size(157, 38);
             this.label5.TabIndex = 3;
             this.label5.Text = "第三条边";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -952,9 +952,9 @@
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(273, 0);
+            this.label4.Location = new System.Drawing.Point(329, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(264, 29);
+            this.label4.Size = new System.Drawing.Size(321, 38);
             this.label4.TabIndex = 2;
             this.label4.Text = "轨迹";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -962,9 +962,9 @@
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(138, 0);
+            this.label3.Location = new System.Drawing.Point(166, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(129, 29);
+            this.label3.Size = new System.Drawing.Size(157, 38);
             this.label3.TabIndex = 1;
             this.label3.Text = "第二条边";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -974,7 +974,7 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(129, 29);
+            this.label2.Size = new System.Drawing.Size(157, 38);
             this.label2.TabIndex = 0;
             this.label2.Text = "第一条边";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1008,7 +1008,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1207, 661);
+            this.ClientSize = new System.Drawing.Size(1379, 850);
             this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.panelContainer1);
             this.Controls.Add(this.barDockControlLeft);

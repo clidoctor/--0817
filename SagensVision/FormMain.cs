@@ -428,6 +428,9 @@ namespace SagensVision
             {
                 ShowAndSaveMsg("Sensor连接成功！");
                 MyGlobal.globalConfig.dataContext = MyGlobal.GoSDK.context;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 0.7;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution /3.5;
+
                 if (!SecretKey.License.SnOk)
                 {
                     ShowAndSaveMsg("Sn Fail！");

@@ -678,22 +678,23 @@ namespace SagensVision.VisionTool
                 int Id = Convert.ToInt32(SideName.Substring(4, 1));
                 HTuple row, col; HTuple anchor, anchorc;
                 int roiID = -1;
-                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                for (int i = 0; i < fParam[Id -1].roiP.Count; i++)
                 {
 
-                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    for (int j = 0; j < fParam[Id -1].roiP[i].NumOfSection; j++)
                     {
                         roiID++;
-                        if (roiID == CurrentIndex)
+                        if (roiID == CurrentIndex -1)
                         {
                             break;
                         }
                     }
-                    if (roiID == CurrentIndex)
+                    if (roiID == CurrentIndex -1)
                     {
                         roiID = i;
                         break;
                     }
+                    
                 }
                 if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
@@ -1284,22 +1285,23 @@ namespace SagensVision.VisionTool
                 HTuple row, col; HTuple anchor, anchorc;
                 //FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
                 int roiID = -1;
-                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                for (int i = 0; i < fParam[Id - 1].roiP.Count; i++)
                 {
 
-                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    for (int j = 0; j < fParam[Id - 1].roiP[i].NumOfSection; j++)
                     {
                         roiID++;
-                        if (roiID == CurrentIndex)
+                        if (roiID == CurrentIndex - 1)
                         {
                             break;
                         }
                     }
-                    if (roiID == CurrentIndex)
+                    if (roiID == CurrentIndex - 1)
                     {
                         roiID = i;
                         break;
                     }
+
                 }
                 if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
@@ -1422,13 +1424,17 @@ namespace SagensVision.VisionTool
                     return;
                 }
 
+                //分辨率 x 0.007--0.01    y 0.035 -- 0.05
+
                 double xResolution = MyGlobal.globalConfig.dataContext.xResolution;
                 double yResolution = MyGlobal.globalConfig.dataContext.yResolution;
                 HTuple SeqC = new HTuple();
                 double s1 = Math.Abs(Math.Cos(Phi[ProfileId][4]));
                 double s2 = Math.Abs(Math.Sin(Phi[ProfileId][4]));
                 double scale = 0;
-                //if (s1 >= s2)
+
+                
+
                 if (s1 >= s2)
                 {
                     scale = xResolution / s1;
@@ -1454,7 +1460,7 @@ namespace SagensVision.VisionTool
                 {
                     HObject contour = new HObject();
                     HOperatorSet.GenRegionPoints(out contour, row, col);
-                    hwindow_final1.viewWindow.displayHobject(contour, "red");
+                    hwindow_final1.viewWindow.displayHobject(contour, "red",true);
                 }
 
 
@@ -2538,22 +2544,23 @@ namespace SagensVision.VisionTool
                 HTuple row, col; HTuple anchor, anchorc;
                 //FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
                 int roiID = -1;
-                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                for (int i = 0; i < fParam[Id - 1].roiP.Count; i++)
                 {
 
-                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    for (int j = 0; j < fParam[Id - 1].roiP[i].NumOfSection; j++)
                     {
                         roiID++;
-                        if (roiID == CurrentIndex)
+                        if (roiID == CurrentIndex - 1)
                         {
                             break;
                         }
                     }
-                    if (roiID == CurrentIndex)
+                    if (roiID == CurrentIndex - 1)
                     {
                         roiID = i;
                         break;
                     }
+
                 }
                 if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
@@ -2586,22 +2593,23 @@ namespace SagensVision.VisionTool
             int Id = Convert.ToInt32(SideName.Substring(4, 1));
             HTuple row, col; HTuple anchor, anchorc;
             int roiID = -1;
-            for (int i = 0; i < fParam[Id].roiP.Count; i++)
+            for (int i = 0; i < fParam[Id - 1].roiP.Count; i++)
             {
 
-                for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                for (int j = 0; j < fParam[Id - 1].roiP[i].NumOfSection; j++)
                 {
                     roiID++;
-                    if (roiID == CurrentIndex)
+                    if (roiID == CurrentIndex - 1)
                     {
                         break;
                     }
                 }
-                if (roiID == CurrentIndex)
+                if (roiID == CurrentIndex - 1)
                 {
                     roiID = i;
                     break;
                 }
+
             }
             if (fParam[Id -1].roiP[roiID].SelectedType == 0)
             {
@@ -5072,6 +5080,7 @@ namespace SagensVision.VisionTool
             roiList[Id].Insert(currentId, rec);
 
             hwindow_final1.viewWindow.notDisplayRoi();
+            hwindow_final2.viewWindow.notDisplayRoi();
 
             if (roiList2[Id].Count > 0)
             {
@@ -5083,6 +5092,7 @@ namespace SagensVision.VisionTool
                 }
                 else
                 {
+                    hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
                     roiController2.viewController.ShowAllRoiModel = currentId + 1;
                     roiController2.viewController.repaint(currentId + 1);
                 }
@@ -5552,17 +5562,18 @@ namespace SagensVision.VisionTool
                 roiList[Id].Insert(currentId + 1, CopyTemp);
 
                 hwindow_final1.viewWindow.notDisplayRoi();
-
+                hwindow_final2.viewWindow.notDisplayRoi();
                 if (roiList2[Id].Count > 0)
                 {
                     if (SelectAll)
                     {
-                        hwindow_final2.viewWindow.notDisplayRoi();
+                        //hwindow_final2.viewWindow.notDisplayRoi();
                         roiController2.viewController.ShowAllRoiModel = -1;
                         hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
                     }
                     else
                     {
+                        hwindow_final2.viewWindow.displayROI(ref roiList2[Id]);
                         roiController2.viewController.ShowAllRoiModel = CopyId + 1;
                         roiController2.viewController.repaint(CopyId + 1);
                     }
