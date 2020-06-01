@@ -5121,7 +5121,7 @@ namespace SagensVision.VisionTool
             RoiParam RP = new RoiParam();
             RP = fParam[Id].roiP[currentId].Clone();
             //新位置的
-            HTuple NewCoord = CopyTemp2.getModelData();
+            HTuple NewCoord = temp2.getModelData();
             RP.CenterRow = NewCoord[0]; RP.CenterCol = NewCoord[1];
             fParam[Id].roiP.Insert(currentId, RP);
             fParam[Id].roiP[currentId].LineOrCircle = comboBox2.SelectedItem.ToString();
