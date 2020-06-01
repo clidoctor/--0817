@@ -78,8 +78,9 @@ namespace SagensVision.VisionTool
             comboBox1.SelectedIndex = 0;
             ParamPath.ParaName = comboBox1.SelectedItem.ToString();
             CurrentSide = "";
-            hwindow_final1.viewWindow.setEditModel(false);
-            hwindow_final2.viewWindow.setEditModel(false);
+            hwindow_final1.viewWindow.setEditModel(true);
+            hwindow_final2.viewWindow.setEditModel(true);
+            checkBoxRoi.Checked = true;
             ChangeSide();
         }
 
@@ -3282,7 +3283,16 @@ namespace SagensVision.VisionTool
                 }
 
                 HTuple Zpoint = new HTuple(); HTuple HRow = new HTuple(); HTuple HRarray = new HTuple(); HTuple HCarray = new HTuple();
-                HOperatorSet.GetGrayval(HeightImage, Rarray1, Carray1, out Zpoint);
+                try
+                {
+                    HOperatorSet.GetGrayval(HeightImage, Rarray1, Carray1, out Zpoint);
+                }
+                catch (Exception )
+                {
+
+                    return "GenProfileCoord error: 区域位于图像之外";
+                }
+                
                 HRarray = Rarray1; HCarray = Carray1;
                 int m = 0;
 
@@ -3389,7 +3399,8 @@ namespace SagensVision.VisionTool
                 CurrentIndex = 1;
                 trackBarControl1.Properties.Maximum = Total;
                 trackBarControl1.Properties.Minimum = 1;
-
+                trackBarControl1.Value = 1;
+                trackBarControl1_ValueChanged(sender, e);
             }
             catch (Exception)
             {
@@ -5330,6 +5341,7 @@ namespace SagensVision.VisionTool
         bool isSelecting = false;
         private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
         {
+           
             if (dataGridView1.CurrentCell == null || RoiIsMoving || isSelecting)
             {
                 return;
@@ -5340,8 +5352,16 @@ namespace SagensVision.VisionTool
                 return;
             }
             isSelecting = true;
-            dataGridView1.ClearSelection();
-            dataGridView1.Rows[roiID].Selected = true;
+            if (SelectAll)
+            {
+               
+            }
+            else
+            {
+                dataGridView1.ClearSelection();
+                dataGridView1.Rows[roiID].Selected = true;
+            }
+            
             isSelecting = false;
             try
             {
