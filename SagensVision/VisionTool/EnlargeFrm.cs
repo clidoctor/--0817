@@ -27,7 +27,7 @@ namespace SagensVision.VisionTool
             WindowState = FormWindowState.Maximized;
 
             hWindow_Final1.HobjectToHimage(img);
-            if (FormMain.Yorigin.Count > 0 && FormMain.Yorigin[idx].Length > 0)
+            if (FormMain.Yorigin.Count > idx && FormMain.Yorigin[idx].Length > 0)
             {
                 HObject cross;
                 HOperatorSet.GenCrossContourXld(out cross, new HTuple(FormMain.Yorigin[idx],FormMain.AnchorList[idx].Row), new HTuple(FormMain.Xorigin[idx], FormMain.AnchorList[idx].Col), 26, 1.5);

@@ -703,11 +703,19 @@ namespace SagensVision
                     }
                     else { return "亮度值为空"; }
 
-                   
 
                     byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
-                    MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight,out tempByteImg);
+                    MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
                     MyGlobal.GoSDK.SurfaceDataZByte = null;
+
+
+                    if (Station < 4)//给运动机构信号，执行下一次扫描
+                    {
+                        MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
+                    }
+                    
+
+                    
                     HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                     tempHeightImg.Dispose();
                     HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
@@ -718,64 +726,41 @@ namespace SagensVision
                     HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
                     tempByteImg.Dispose();
 
-                    HObject rgbImg;
-                    HObject zoomRgbImg;
-                    PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
-                    HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
-                    rgbImg.Dispose();
+                    
                     if (MyGlobal.isShowHeightImg)
                     {
                         MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
                     }
-                    else
-                    {
-                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg);
-                    }
-
-
+                    
 
 
                     if (Station == 1)
                         saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-                    StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
-                    StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                    StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                    ThreadPool.QueueUserWorkItem(delegate
+                    {
+                        HObject rgbImg;
+                        HObject zoomRgbImg;
+                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        rgbImg.Dispose();
+                        if (!MyGlobal.isShowHeightImg)
+                        {
+                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
+                            this.Invoke(asd);
+                        }
+                        StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
+                        StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                        StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                        zoomRgbImg.Dispose();
+                    }); 
+                    
                     
                     string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
                     HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
                     MyGlobal.ImageMulti.Add(temp);
 
-
-                    //double[][] x, y, z;string[][] Strlorc;
-                    //string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z,out Strlorc, HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
-                    //XCoord.Add(x);
-                    //YCoord.Add(y);
-                    //ZCoord.Add(z);
-                    //StrLorC.Add(Strlorc);
-                    //int count = 0;
-                    //if (Station > 0)
-                    //{
-                    //    //写入到文本
-                    //    StringBuilder Str = new StringBuilder();
-                    //    for (int i = 0; i < Station; i++)
-                    //    {
-                    //        for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                    //        {
-                    //            for (int k = 0; k < XCoord[i][j].Length; k++)
-                    //            {
-                    //                double X1 = Math.Round(XCoord[i][j][k], 3);
-                    //                double Y1 = Math.Round(YCoord[i][j][k], 3);
-                    //                double Z1 = Math.Round(ZCoord[i][j][k], 3);
-                    //                string lorc = StrLorC[i][j][k];
-                    //                count++;
-                    //                Str.Append(count.ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
-                    //            }
-                    //        }
-                    //    }
-                    //    StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
-                    //}
-                    zoomRgbImg.Dispose();
+                    
                     
                     byteImg.Dispose();
                     return OK;
@@ -1869,17 +1854,15 @@ namespace SagensVision
                                 ShowAndSaveMsg(Msg2);
                                 Action RunDetect = () =>
                                 {
-                                    //string ok1 = Run(Side);
+                                    sp.Restart();
                                     string ok1 = RunSuface(Side);
-
-                                    //byte[] SaveSend = new byte[128];
-
+                                    sp.Stop();
+                                    ShowAndSaveMsg(sp.ElapsedMilliseconds.ToString());
                                     if (ok1 != "OK")
                                     {
                                         ShowAndSaveMsg(ok1);
                                         if (Side == 4)
                                         {
-                                            //SaveSend = Encoding.UTF8.GetBytes("SAVE_NG");
                                             ShowAndSaveMsg("输出点位失败！");
                                             MyGlobal.sktClient.Send(ng);
                                         }
@@ -1889,7 +1872,6 @@ namespace SagensVision
                                     {
                                         if (Side == 4)
                                         {
-                                            //SaveSend = Encoding.UTF8.GetBytes("SAVE_OK");
                                             ShowAndSaveMsg("输出点位成功！");
                                             MyGlobal.sktClient.Send(ok);
                                         }
@@ -1897,7 +1879,7 @@ namespace SagensVision
                                 };
 
                                 this.Invoke(RunDetect);
-                                nSent = MyGlobal.sktClient.Send(ok);
+                                
                                 break;
 
                         }
