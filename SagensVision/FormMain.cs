@@ -1338,13 +1338,26 @@ namespace SagensVision
             {
                 double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
                 string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc,out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[Station - 1]);
-                if (OK != "OK")
+
+                if (x == null)
                 {
-                    return "第" + Station + "边" + OK;
+                    x = new double[2][];
                 }
-                if (x[0] == null)
+                if (y == null)
                 {
-                    return "第" + Station + "边未找到边";
+                    y = new double[2][];
+                }
+                if (z == null)
+                {
+                    z = new double[2][];
+                }
+                if (original[0] == null)
+                {
+                    original[0] = new HTuple();
+                }
+                if (original[1] == null)
+                {
+                    original[1] = new HTuple();
                 }
 
                 XCoord.Add(x);
@@ -1355,6 +1368,14 @@ namespace SagensVision
                 Yorigin.Add(original[0]);
                 Xorigin.Add(original[1]);
                 NameOrigin.Add(flset.fParam[Station - 1].DicPointName.ToArray());
+                if (OK != "OK")
+                {
+                    return "第" + Station + "边" + OK;
+                }
+                if (x[0] == null)
+                {
+                    return "第" + Station + "边未找到边";
+                }
                 if (Station!=4)
                 {
                     return "OK";

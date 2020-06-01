@@ -31,14 +31,18 @@ namespace SagensVision.VisionTool
             {
                 HObject cross;
                 HOperatorSet.GenCrossContourXld(out cross, new HTuple(FormMain.Yorigin[idx],FormMain.AnchorList[idx].Row), new HTuple(FormMain.Xorigin[idx], FormMain.AnchorList[idx].Col), 26, 1.5);
-                hWindow_Final1.viewWindow.displayHobject(cross);
+                hWindow_Final1.viewWindow.displayHobject(cross,"green");
                 cross.Dispose();
                 for (int j = 0; j < FormMain.NameOrigin[idx].Length; j++)
                 {
                     hWindow_Final1.viewWindow.dispMessage(FormMain.NameOrigin[idx][j], "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);
                 }
-                hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Row.ToString(), "blue", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
-                hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Col.ToString(), "blue", FormMain.AnchorList[idx].Row+80, FormMain.AnchorList[idx].Col);
+                if (FormMain.AnchorList[idx].Row !=0 || FormMain.AnchorList[idx].Col != 0)
+                {
+                    hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Row.ToString(), "red", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Col.ToString(), "red", FormMain.AnchorList[idx].Row+80, FormMain.AnchorList[idx].Col);
+                    
+                }
 
             }
 
