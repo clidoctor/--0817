@@ -1720,7 +1720,7 @@ namespace SagensVision
                 this.recordYCoord = ycoord;
                 this.recordSigleTitle = sigleTitle;
             }
-            if (recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
+            if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null ||  recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
             {
                 return;
             }

@@ -80,6 +80,7 @@
             this.Text = "EnlargeFrm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EnlargeFrm_FormClosing);
             this.Load += new System.EventHandler(this.EnlargeFrm_Load);
+            this.SizeChanged += new System.EventHandler(this.EnlargeFrm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

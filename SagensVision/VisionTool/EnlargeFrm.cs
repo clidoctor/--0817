@@ -25,7 +25,7 @@ namespace SagensVision.VisionTool
         private void EnlargeFrm_Load(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Maximized;
-
+            this.MinimizeBox = false;
             hWindow_Final1.HobjectToHimage(img);
             if (FormMain.Yorigin.Count > idx && FormMain.Yorigin[idx].Length > 0)
             {
@@ -45,6 +45,8 @@ namespace SagensVision.VisionTool
             if (!MyGlobal.isShowHeightImg)
             {
                 hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
+                hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
+                //OnHMouseUp(sender, null);
             }
         }
 
@@ -65,11 +67,18 @@ namespace SagensVision.VisionTool
             PseudoColor.markColor(pictureBox1, pictureBox2, grayArr, z_byte ,z_start);
             reg.Dispose();
             hWindow_Final1.hWindowControl.HMouseUp -= OnHMouseUp;
+            hWindow_Final1.hWindowControl.HMouseWheel -= OnHMouseUp;
         }
 
         private void EnlargeFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
             pictureBox1.Image = null;
+        }
+
+        private void EnlargeFrm_SizeChanged(object sender, EventArgs e)
+        {
+            hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
+            hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
         }
     }
 }
