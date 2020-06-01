@@ -1,0 +1,183 @@
+﻿using HalconDotNet;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+
+namespace SagensSdk
+{
+    public class StaticTool
+    {
+        public static void WriteSerializable(string filepath,object data)
+        {
+            BinaryFormatter binaryFomat = new BinaryFormatter();
+            using (FileStream fs = new FileStream(filepath, FileMode.Create))
+            {
+                binaryFomat.Serialize(fs, data);
+                fs.Dispose();
+            }
+        }
+
+        public static object ReadSerializable(string filepath, Type type)
+        {
+            BinaryFormatter binaryFomat = new BinaryFormatter();
+            object obj;
+            using (FileStream fs = new FileStream(filepath,FileMode.OpenOrCreate))
+            {
+                obj = binaryFomat.Deserialize(fs);
+                fs.Dispose();
+            }
+            return obj;
+        }
+
+
+        public static void GetUnlineRunImg(SurfaceZSaveDat ssd, SurfaceIntensitySaveDat sid, double zStart, double z_byte_resolution, out HObject zoomHeightImg, out HObject zoomIntensityImg, out HObject zoomRgbImg)
+        {
+            HObject heightImg, intensityImg, byteImg, rgbImg;
+            GenHeightImg(ssd, zStart, z_byte_resolution, out heightImg, out byteImg);
+            GenIntensityImg(sid, out intensityImg);
+
+            PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+            byteImg.Dispose();
+            HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+            rgbImg.Dispose();
+            HOperatorSet.ZoomImageFactor(heightImg, out zoomHeightImg, 0.7, 3.5, "constant");
+            heightImg.Dispose();
+            HOperatorSet.ZoomImageFactor(intensityImg, out zoomIntensityImg, 0.7, 3.5, "constant");
+            intensityImg.Dispose();
+            GC.Collect();
+        }
+
+        public static void GenHeightImg(SurfaceZSaveDat ssd, double zStart,double z_byte_resolution,out HObject heightImg,out HObject byteImg)
+        {
+            int width = ssd.width;
+            int height = ssd.height;
+            float[] surfaceData = new float[height * width];
+            byte[] surfaceDataZByte = new byte[height * width];
+            for (int j = 0; j < height; j++)
+            {
+                for (int k = 0; k < width; k++)
+                {
+                    surfaceData[j * width + k] = ssd.points[j * width + k] == -32768 ? -12 : (float)(ssd.offset.z + ssd.resolution.z * ssd.points[j * width + k]);  
+                    if (ssd.points[j * width + k] != -32768)
+                    {
+                        surfaceDataZByte[j * width + k] = (byte)Math.Ceiling(((ssd.offset.z + ssd.resolution.z * ssd.points[j * width + k]) - zStart) * z_byte_resolution);
+                    }
+                    else
+                    {
+                        surfaceDataZByte[j * width + k] = 0;
+                    }
+                    
+                }
+            }
+            
+            GenHalconImage(surfaceData, width, height,out heightImg);
+            GenHalconImage(surfaceDataZByte, width, height,out byteImg);
+            GC.Collect();
+
+        }
+        public static void GenHeightImg(SurfaceZSaveDat ssd,out HObject heightImg)
+        {
+            int width = ssd.width;
+            int height = ssd.height;
+            float[] surfaceData = new float[height * width];
+            for (int j = 0; j < height; j++)
+            {
+                for (int k = 0; k < width; k++)
+                {
+                    surfaceData[j * width + k] = ssd.points[j * width + k] == -32768 ? -12 : (float)(ssd.offset.z + ssd.resolution.z * ssd.points[j * width + k]);
+                }
+            }
+            heightImg = GenHalconImage(surfaceData, width, height);
+            GC.Collect();
+        }
+
+        public static void GenIntensityImg(SurfaceIntensitySaveDat sid,out HObject intensityImg)
+        {
+            intensityImg = GenHalconImage(sid.points, sid.width, sid.height);
+            GC.Collect();
+        }
+
+        private static HObject GenHalconImage(object pointsArr, long width, long height)
+        {
+            HObject image = null;
+            try
+            {
+                string typeName = pointsArr.GetType().Name;
+                string type = "";
+                switch (typeName)
+                {
+                    case "Double[]":
+                        type = "real";
+                        break;
+                    case "Byte[]":
+                        type = "byte";
+                        break;
+                    case "Single[]":
+                        type = "real";
+
+                        break;
+                    default:
+                        //image = null;
+                        return image;
+                }
+                GCHandle hObject = GCHandle.Alloc(pointsArr, GCHandleType.Pinned);
+                IntPtr pObject = hObject.AddrOfPinnedObject();
+                if (hObject.IsAllocated)
+                    hObject.Free();
+                image = new HObject();
+                HOperatorSet.GenImage1(out image, type, width, height, pObject);
+                return image;
+            }
+            catch
+            {
+                return image;
+            }
+        }
+        private static void GenHalconImage(object pointsArr, long width, long height, out HObject image)
+        {
+            string typeName = pointsArr.GetType().Name;
+            string type = "";
+            int size = -1;
+            switch (typeName)
+            {
+                case "Double[]":
+                    type = "real";
+                    size = Marshal.SizeOf(typeof(double));
+                    double[] potArr1 = (double[])pointsArr;
+
+                    IntPtr ptImage = Marshal.AllocHGlobal(size * potArr1.Length);
+                    Marshal.Copy(potArr1, 0, ptImage, potArr1.Length);
+                    HOperatorSet.GenImage1(out image, type, width, height, ptImage);
+                    Marshal.FreeHGlobal(ptImage);
+                    break;
+                case "Byte[]":
+                    type = "byte";
+                    size = Marshal.SizeOf(typeof(byte));
+                    byte[] potArr2 = (byte[])pointsArr;
+
+                    IntPtr ptImage1 = Marshal.AllocHGlobal(size * potArr2.Length);
+                    Marshal.Copy(potArr2, 0, ptImage1, potArr2.Length);
+                    HOperatorSet.GenImage1(out image, type, width, height, ptImage1);
+                    Marshal.FreeHGlobal(ptImage1);
+                    break;
+                case "Single[]":
+                    type = "real";
+                    size = Marshal.SizeOf(typeof(float));
+                    float[] potArr3 = (float[])pointsArr;
+
+                    IntPtr ptImage3 = Marshal.AllocHGlobal(size * potArr3.Length);
+                    Marshal.Copy(potArr3, 0, ptImage3, potArr3.Length);
+                    HOperatorSet.GenImage1(out image, type, width, height, ptImage3);
+                    Marshal.FreeHGlobal(ptImage3);
+                    break;
+                default:
+                    image = null;
+                    break;
+            }
+        }
+    }
+}

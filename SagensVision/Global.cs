@@ -29,6 +29,8 @@ namespace SagensVision
         public static string fileName2 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "1.shm";
         public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "imgRotate.txt";
 
+        public static string SaveDatFileDirectory = "data\\datfile\\";
+
         public static SagensSdk.GoSdkMaker GoSDK = new GoSdkMaker();
         
         public static Socket sktServer;

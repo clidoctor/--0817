@@ -151,7 +151,7 @@ namespace SagensSdk
         #endregion
         private int OnData(DataContext ctx, IntPtr sys, IntPtr data)
         {
-          
+            
             if (!SecretKey.License.SnOk)
             {
                 string errMsg = "";
@@ -215,15 +215,27 @@ namespace SagensSdk
                         float[] surfaceDataY = new float[surfaceWidth * surfaceHeight];
                         byte[] surfaceDataZByte = new byte[surfaceWidth * surfaceHeight];
 
+                        //保存Kdat
                         if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy))
                         {
                             Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
                             Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
                             GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
-                            GoSdkWrapper.SaveSufaceToFile($"SaveKdatDirectoy/{DateTime.Now.ToFileTimeUtc().ToString()}.kdat", ref insurface, false);
+                            GoSdkWrapper.SaveSufaceToFile($"{SaveKdatDirectoy}/{DateTime.Now.ToFileTimeUtc().ToString()}.kdat", ref insurface, false);
                         }
 
                         Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
+
+                        //保存dat
+                        if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
+                        {
+                            PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                            PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                            SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset,width = (int)surfaceWidth,height = (int)surfaceHeight };
+                            StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_H.dat", ssd);
+                        }
+
+
                         for (int j = 0; j < surfaceHeight; j++)
                         {
                             for (int k = 0; k < surfaceWidth; k++)
@@ -260,6 +272,11 @@ namespace SagensSdk
                         byte[] intensityArr = new byte[surfaceWidth * surfaceHeight];
                         Marshal.Copy(intensityPtr, intensityArr, 0, intensityArr.Length);
                         SurfaceDataIntensity = intensityArr;
+                        if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
+                        {
+                            SurfaceIntensitySaveDat ssd = new SurfaceIntensitySaveDat() { points = intensityArr, width = (int)surfaceWidth, height = (int)surfaceHeight };
+                            StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_I.dat", ssd);
+                        }
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_RESAMPLED_PROFILE:
                         if (!EnableProfle)
@@ -535,6 +552,9 @@ namespace SagensSdk
 
         public string SaveKdatDirectoy { set; get; }
 
+        public string SaveDatFileDirectory { set; get; }
+        public string RunSide { set; get; }
+
         #region 生成Halcon图像
         public void GenHalconImage(object pointsArr, long width, long height, out HObject image)
         {
@@ -749,5 +769,30 @@ namespace SagensSdk
         public ushort id;
         public double value;
     }
-     
+
+    [Serializable]
+    public class SurfaceZSaveDat
+    {
+        public short[] points;
+        public PointMsg resolution;
+        public PointMsg offset;
+        public int width;
+        public int height;
+    }
+    [Serializable]
+    public struct PointMsg
+    {
+        public double x;
+        public double y;
+        public double z;
+    }
+
+    [Serializable]
+    public class SurfaceIntensitySaveDat
+    {
+        public byte[] points;
+        public int width;
+        public int height;
+    }
+   
 }

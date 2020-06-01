@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,6 +64,8 @@
     <Compile Include="GoSdkMaker.cs" />
     <Compile Include="GoSdkWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PseudoColor.cs" />
+    <Compile Include="StaticTool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

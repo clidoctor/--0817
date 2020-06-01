@@ -44,10 +44,18 @@ namespace SagensVision.VisionTool
                 {
                     Thread.Sleep(100);
                 }
-                string[] msgArr = MyGlobal.ReceiveMsg.Split(',');
+                try
+                {
+                    string[] msgArr = MyGlobal.ReceiveMsg.Split(',');
 
-                calib.SetValue(idx, msgArr);
-                MyGlobal.ReceiveMsg = "";
+                    calib.SetValue(idx, msgArr);
+                    MyGlobal.ReceiveMsg = "";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("接收数据异常：" + ex.Message);
+                }
+                
             });
         }
 
