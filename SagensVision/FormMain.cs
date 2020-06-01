@@ -146,12 +146,15 @@ namespace SagensVision
         private int MouseClickCnt2 = 0;
         private int MouseClickCnt3 = 0;
         private int MouseClickCnt4 = 0;
+
+        private bool ShowMsg = false;
         private void OnHMouseUp4(object sender, HMouseEventArgs e)
         {
             MouseClickCnt4++;
             if (MouseClickCnt4 == 2)
             {
-                //Task
+                ShowProfileToWindow(null, null, null, false, ShowMsg);
+                ShowMsg = !ShowMsg;
                 MouseClickCnt4 = 0;
             }
         }
@@ -1691,19 +1694,7 @@ namespace SagensVision
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
 
-                    HObject regpot;
-                    HOperatorSet.GenRegionPoints(out regpot, new HTuple(xcoord), new HTuple(ycoord));
-                    HObject ImageConst;
-                    HOperatorSet.GenImageConst(out ImageConst, "byte", 500, 500);
-                    ShowProfile.HobjectToHimage(ImageConst);
-                    ShowProfile.viewWindow.displayHobject(regpot,"green",true);
-                    for (int i = 0; i < sigleTitle.Length; i++)
-                    {
-                        ShowProfile.viewWindow.dispMessage(sigleTitle[i], "red", xcoord[i], ycoord[i]);
-                        ShowAndSaveMsg(xcoord[i] + "-" + ycoord[i]);
-                    }
-                    regpot.Dispose();
-                    ImageConst.Dispose();
+                    ShowProfileToWindow(xcoord, ycoord, sigleTitle, true, true);
                 }
                 
 
@@ -1715,6 +1706,38 @@ namespace SagensVision
 
                 return "RunSide error :" + ex.Message;
             }
+        }
+
+
+        private double[] recordXCoord; double[] recordYCoord;string[] recordSigleTitle;
+        public void ShowProfileToWindow(double[] xcoord,double[] ycoord,string[] sigleTitle,bool isRun,bool showMsg)
+        {
+            if (isRun)
+            {
+                this.recordXCoord = xcoord;
+                this.recordYCoord = ycoord;
+                this.recordSigleTitle = sigleTitle;
+            }
+            if (recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
+            {
+                return;
+            }
+            HObject regpot;
+            HOperatorSet.GenRegionPoints(out regpot, new HTuple(recordXCoord), new HTuple(recordYCoord));
+            HObject ImageConst;
+            HOperatorSet.GenImageConst(out ImageConst, "byte", 500, 500);
+            ShowProfile.HobjectToHimage(ImageConst);
+            ShowProfile.viewWindow.displayHobject(regpot, "green", true);
+            if (showMsg)
+            {
+                for (int i = 0; i < recordSigleTitle.Length; i++)
+                {
+                    ShowProfile.viewWindow.dispMessage(recordSigleTitle[i], "red", recordXCoord[i], recordYCoord[i]);
+                    ShowAndSaveMsg(recordXCoord[i] + "-" + recordYCoord[i]);
+                }
+            }
+            regpot.Dispose();
+            ImageConst.Dispose();
         }
 
 
