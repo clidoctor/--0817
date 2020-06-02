@@ -708,9 +708,9 @@ namespace SagensVision
                         ////
                         ////生成并显示伪彩色图
                         rgbImg.Dispose();
-                        //PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
-                        //HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
                         ////
 
 
