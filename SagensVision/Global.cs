@@ -38,7 +38,7 @@ namespace SagensVision
         public static GlobalConfig globalConfig = new GlobalConfig();
 
      
-        public static bool isShowHeightImg = false;
+        public static bool isShowHeightImg = true;
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
         public static bool sktOK = false;
@@ -129,7 +129,7 @@ namespace SagensVision
                 Directory.CreateDirectory(path + FormMain.saveImageTime);
             }
             string filePath = path + FormMain.saveImageTime + "\\" + Product ;
-            HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
+           HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
 
 
         }
