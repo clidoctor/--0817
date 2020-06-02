@@ -1596,7 +1596,7 @@ namespace SagensVision
                 return;
             }
             HObject regpot;
-            HOperatorSet.GenCrossContourXld(out regpot, new HTuple(recordXCoord)*10, new HTuple(recordYCoord) * 10, 16, 0.5);
+            HOperatorSet.GenCrossContourXld(out regpot, new HTuple(recordXCoord) * 10, new HTuple(recordYCoord) * 10, 16, 0.5);
             HObject ImageConst;
             HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
             ShowProfile.HobjectToHimage(ImageConst);
