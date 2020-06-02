@@ -361,11 +361,11 @@ namespace SagensVision
             dockPanel2.Show();
             dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
 
-            dockPanel4.Show();
-            dockPanel3.Show();
+            //dockPanel4.Show();
+            //dockPanel3.Show();
             //dockPanel5.Show();
-            dockPanel4.DockedAsTabbedDocument = true;
-            dockPanel3.DockedAsTabbedDocument = true;
+            //dockPanel4.DockedAsTabbedDocument = true;
+            //dockPanel3.DockedAsTabbedDocument = true;
             //dockPanel5.DockedAsTabbedDocument = true;
             bar2.Reset();
             bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
