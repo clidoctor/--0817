@@ -705,12 +705,14 @@ namespace SagensVision
                         byteImg.Dispose();
                         HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
 
-
-                        //生成并显示伪彩色图
+                        ////
+                        ////生成并显示伪彩色图
                         rgbImg.Dispose();
-                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+                        //PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        //HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        ////
+
 
                         if (!MyGlobal.isShowHeightImg)
                         {
@@ -729,7 +731,7 @@ namespace SagensVision
 
                         if (MyGlobal.isShowHeightImg)
                         {
-                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
+                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
                         }
                         if (Station == 1)
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -739,7 +741,10 @@ namespace SagensVision
                         {
                             StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                             StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                            StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                            if (zoomRgbImg.IsInitialized())
+                            {
+                                StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                            }
                             isSaveImgOK = true;
                         });
 
