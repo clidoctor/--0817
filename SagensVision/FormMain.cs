@@ -780,7 +780,7 @@ namespace SagensVision
 
                         if (MyGlobal.isShowHeightImg)
                         {
-                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
+                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
                         }
                         if (Station == 1)
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
