@@ -4115,7 +4115,7 @@ namespace SagensVision.VisionTool
 
                 for (int i = 0; i < ZCoord.GetLength(0); i++)
                 {
-                    //在当前点附近取圆
+                    //在当前点附近取圆 
                     HObject Circle = new HObject();
                     double radius = fParam[Sid].roiP[i].ZftRad;
                     if (ZCoord[i][0] < -10 && radius == 0)
