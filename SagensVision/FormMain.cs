@@ -2248,12 +2248,17 @@ namespace SagensVision
 
                 string[] HeightStr = { "Side1H.tiff", "Side2H.tiff", "Side3H.tiff", "Side4H.tiff" };
                 string[] Intensity = { "Side1I.tiff", "Side2I.tiff", "Side3I.tiff", "Side4I.tiff" };
+                string[] RBG = { "Side1B.tiff", "Side2B.tiff", "Side3B.tiff", "Side4B.tiff" };
 
                 for (int i = 0; i < 4; i++)
                 {
                     HObject[] image = new HObject[2];
 
-                    HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + Intensity[i]);
+                    if (MyGlobal.isShowHeightImg)
+                        HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + Intensity[i]);
+                    else
+                        HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + RBG[i]);
+
                     HOperatorSet.ReadImage(out image[1], ImagePath + "\\" + HeightStr[i]);
                     MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
                     MyGlobal.ImageMulti.Add(image);
