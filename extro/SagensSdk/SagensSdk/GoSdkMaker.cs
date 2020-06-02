@@ -338,7 +338,7 @@ namespace SagensSdk
                 isRecProfileZ = false;
             }
             GoSdkWrapper.GoDestroy(data);
-            //GC.Collect();
+            GC.Collect();
             return 1;
         }
 

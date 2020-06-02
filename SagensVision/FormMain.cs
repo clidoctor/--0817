@@ -274,7 +274,7 @@ namespace SagensVision
             }
         }
 
-      
+
 
         #region 窗口按钮
 
@@ -547,7 +547,7 @@ namespace SagensVision
                     SurfaceHeight = profile.Count;
                     float[] SurfacePointZ = new float[SurfaceWidth * SurfaceHeight];
 
-                    
+
                     HObject HeightImage = new HObject(); HObject IntensityImage = new HObject();
 
                     GenIntesityProfile(profile, out IntensityImage);
@@ -648,6 +648,7 @@ namespace SagensVision
                     for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
                     {
                         MyGlobal.hWindow_Final[i].ClearWindow();
+                        MyGlobal.hWindow_Final[i].Image.Dispose();
                     }
 
                 }
@@ -708,9 +709,9 @@ namespace SagensVision
                         ////
                         ////生成并显示伪彩色图
                         rgbImg.Dispose();
-                        //PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
-                        //HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
                         ////
 
 
@@ -742,21 +743,15 @@ namespace SagensVision
                         {
                             StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                             StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                            if (zoomRgbImg.IsInitialized())
-                            {
-                                StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
-                            }
+                            StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
                             isSaveImgOK = true;
                         });
 
 
                         string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
-
-                        HObject[] temp = { MyGlobal.hWindow_Final[Side-1].Image, ZoomHeightImg };
+                        HObject[] temp = { MyGlobal.hWindow_Final[Side - 1].Image, ZoomHeightImg };
                         MyGlobal.ImageMulti.Add(temp);
 
-
-                        
                         while (!isSaveImgOK)//等待图片保存完成
                         {
 
@@ -1773,7 +1768,7 @@ namespace SagensVision
                         StrOrginalData.Append(xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         //test
-                        pix.Append( Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        pix.Append(Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
 
                     if (Station == 4 && i == xcoord.Length - 1)
@@ -1813,7 +1808,7 @@ namespace SagensVision
 
                     ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
                 }
-                
+
 
 
                 return "OK";
@@ -1826,8 +1821,8 @@ namespace SagensVision
         }
 
 
-        private double[] recordXCoord; double[] recordYCoord;double[] recordZCoord;  string[] recordSigleTitle;
-        public void ShowProfileToWindow(double[] xcoord,double[] ycoord,double[] zcoord, string[] sigleTitle,bool isRun,bool showMsg)
+        private double[] recordXCoord; double[] recordYCoord; double[] recordZCoord; string[] recordSigleTitle;
+        public void ShowProfileToWindow(double[] xcoord, double[] ycoord, double[] zcoord, string[] sigleTitle, bool isRun, bool showMsg)
         {
             if (isRun)
             {
@@ -1836,7 +1831,7 @@ namespace SagensVision
                 this.recordZCoord = zcoord;
                 this.recordSigleTitle = sigleTitle;
             }
-            if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null ||  recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
+            if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null || recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
             {
                 return;
             }
@@ -1872,37 +1867,38 @@ namespace SagensVision
             int nSent = 0;
             //while (true)
             //{
+
+
+            MyGlobal.sktClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPAddress ip = IPAddress.Parse(MyGlobal.globalConfig.MotorIpAddress);
             try
             {
+                MyGlobal.sktClient.Connect(ip, MyGlobal.globalConfig.MotorPort);
+                ShowAndSaveMsg(string.Format("已连接{0}:{1}", MyGlobal.globalConfig.MotorIpAddress, MyGlobal.globalConfig.MotorPort.ToString()));
+                TcpIsConnect = true;
+                MyGlobal.sktOK = true;
+            }
+            catch (Exception ex)
+            {
+                ShowAndSaveMsg(string.Format("连接服务器失败！" + ex.Message));
+                TcpIsConnect = false;
+                MyGlobal.sktOK = false;
+                return;
+            }
 
-                MyGlobal.sktClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPAddress ip = IPAddress.Parse(MyGlobal.globalConfig.MotorIpAddress);
+
+            byte[] buffer = new byte[128];
+            byte[] ok = new byte[128];
+            byte[] ng = new byte[128];
+            //Sendmsg = "Chat|ok";
+
+            //ok = Encoding.UTF8.GetBytes(Sendmsg);
+            while (true)
+            {
                 try
                 {
-                    MyGlobal.sktClient.Connect(ip, MyGlobal.globalConfig.MotorPort);
-                    ShowAndSaveMsg(string.Format("已连接{0}:{1}", MyGlobal.globalConfig.MotorIpAddress, MyGlobal.globalConfig.MotorPort.ToString()));
-                    TcpIsConnect = true;
-                    MyGlobal.sktOK = true;
-                }
-                catch (Exception ex)
-                {
-                    ShowAndSaveMsg(string.Format("连接服务器失败！" + ex.Message));
-                    TcpIsConnect = false;
-                    MyGlobal.sktOK = false;
-                    return;
-                }
-
-
-                byte[] buffer = new byte[128];
-                byte[] ok = new byte[128];
-                byte[] ng = new byte[128];
-                //Sendmsg = "Chat|ok";
-
-                //ok = Encoding.UTF8.GetBytes(Sendmsg);
-                while (true)
-                {
                     int len = MyGlobal.sktClient.Receive(buffer);
-                    
+
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
@@ -1929,7 +1925,7 @@ namespace SagensVision
                             Side = Convert.ToInt32(MyGlobal.ReceiveMsg.Substring(0, 1));
                             ReturnStr = MyGlobal.ReceiveMsg.Remove(0, 1);
                         }
-                        
+
                         if (MyGlobal.ReceiveMsg.Contains("1"))
                         {
                             for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
@@ -1967,7 +1963,7 @@ namespace SagensVision
                                     ShowAndSaveMsg($"切换作业 {JobName[Side - 1]} 成功！");
                                 }
                                 string Msg = "开始扫描:" + Side.ToString();
-                                
+
                                 if (!Directory.Exists(MyGlobal.GoSDK.SaveDatFileDirectory))
                                 {
                                     Directory.CreateDirectory(MyGlobal.GoSDK.SaveDatFileDirectory);
@@ -1994,7 +1990,7 @@ namespace SagensVision
                                 sp.Start();
                                 while (MyGlobal.GoSDK.SurfaceDataZ == null || MyGlobal.GoSDK.SurfaceDataIntensity == null)
                                 {
-                                    if (sp.ElapsedMilliseconds  > 10000)
+                                    if (sp.ElapsedMilliseconds > 10000)
                                     {
                                         sp.Reset();
                                         ShowAndSaveMsg($"图像接收超时！");
@@ -2040,19 +2036,20 @@ namespace SagensVision
                                 };
 
                                 this.Invoke(RunDetect);
-                                
+
                                 break;
 
                         }
-
                     }
+
+                }
+                catch (Exception ex)
+                {
+                    ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message);
                 }
 
             }
-            catch (Exception ex)
-            {
-                ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message);
-            }
+
             //}
         }
 
@@ -2406,7 +2403,7 @@ namespace SagensVision
 
         }
 
-      
+
         private void tabbedView1_DocumentActivated(object sender, DevExpress.XtraBars.Docking2010.Views.DocumentEventArgs e)
         {
             //if (tabbedView1.ActiveDocument.Caption == document6.Caption)
@@ -2512,7 +2509,7 @@ namespace SagensVision
                 {
                     ShowAndSaveMsg(OK);
                 }
-                if (OK == "OK" && i ==3)
+                if (OK == "OK" && i == 3)
                 {
                     MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
                 }
@@ -2615,7 +2612,7 @@ namespace SagensVision
                         HObject[] image = new HObject[2];
 
                         HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg;
-                        
+
                         SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
 
                         SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
@@ -2694,13 +2691,13 @@ namespace SagensVision
                         {
                             HOperatorSet.ReadImage(out image[0], namesB[i]);
                         }
-                        
+
                         HOperatorSet.ReadImage(out image[1], namesH[i]);
 
                         MyGlobal.ImageMulti.Add(image);
-                       
+
                         MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
-                      
+
                     }
                 }
 
@@ -2709,7 +2706,7 @@ namespace SagensVision
             }
         }
 
-      
+
         double total = 0;
         double ng = 0;
         double Per = 0;
@@ -2803,7 +2800,7 @@ namespace SagensVision
             imgrotatefrm.Show();
             if (File.Exists(MyGlobal.imgRotatePath))
             {
-                MyGlobal.imgRotateArr = (int[]) StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
+                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
             }
         }
 
@@ -2829,7 +2826,7 @@ namespace SagensVision
             {
                 ShowAndSaveMsg("清理缓存失败-->" + ex.Message);
             }
-            
+
         }
     }
 }
