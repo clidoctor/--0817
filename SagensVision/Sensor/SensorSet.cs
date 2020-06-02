@@ -43,14 +43,22 @@ namespace SagensVision.Sensor
                 string ip = textBox1.Text.ToString();
                 string Error = "连接成功！";
                 bool OK = MyGlobal.GoSDK.connect(ip, ref Error);
-                if (OK)
-                {
-                    MyGlobal.globalConfig.dataContext = MyGlobal.GoSDK.context;
-                }
+                
 
                 if (OK)
                 {
-                    MyGlobal.globalConfig.dataContext = MyGlobal.GoSDK.context;
+
+                    MyGlobal.globalConfig.dataContext.serialNumber = MyGlobal.GoSDK.context.serialNumber;
+                    MyGlobal.globalConfig.dataContext.xOffset = MyGlobal.GoSDK.context.xOffset;
+                    MyGlobal.globalConfig.dataContext.yOffset = MyGlobal.GoSDK.context.yOffset;
+                    MyGlobal.globalConfig.dataContext.zOffset = MyGlobal.GoSDK.context.zOffset;
+                    MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution;
+                    MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution;
+                    MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
+
+
+                    MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 0.7;
+                    MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 3.5;
                     StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
                 }
                 MessageBox.Show(Error);
