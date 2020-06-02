@@ -55,9 +55,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\GoSaveSurfaceGraphic.dll</HintPath>
     </Reference>
-    <Reference Include="halcondotnet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
+    <Reference Include="halcondotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Projects\MyHalocnWindow-0912\MyHalocnWindow\bin\Debug\halcondotnet.dll</HintPath>
+      <HintPath>bin\Debug\halcondotnetxl.dll</HintPath>
     </Reference>
     <Reference Include="HWindow_Tool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,10 +66,6 @@
     <Reference Include="LookForCircleLine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\LookForCircleLine0312\LookForCircleLine\LookForCircleLine\bin\Debug\LookForCircleLine.dll</HintPath>
-    </Reference>
-    <Reference Include="Matching, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Test\Matching\Matching\bin\Debug\Matching.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>

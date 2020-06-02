@@ -274,58 +274,7 @@ namespace SagensVision
             }
         }
 
-        string RunDetect(int Index, HObject Image)
-        {
-            try
-            {
-
-                //string pre = FindMax[Index].PreHandle(Image, out ScaleImage);
-                //if (pre!="OK")
-                //{
-                //    return pre;
-                //}
-                HObject ScaleImage = new HObject();
-                if (!MyGlobal.mAssistant[Index].PreHandle(Image, MyGlobal.mAssistant[Index].PreHandleRoi, out ScaleImage))
-                {
-                    return "预处理失败！";
-                }
-                HOperatorSet.WriteImage(ScaleImage, "tiff", 0, MyGlobal.ModelPath + (Index).ToString() + "CurrentPreHandle.tiff");
-                MyGlobal.mAssistant[Index].SetImageToAssistant(Image);
-                bool Ok = MyGlobal.mAssistant[Index].detectShapeModel();
-                if (!Ok)
-                {
-                    return "匹配失败！";
-                }
-
-                HXLD MatchXLD = MyGlobal.mAssistant[Index].getDetectionResults();
-                MyGlobal.tResult[Index] = MyGlobal.mAssistant[Index].getMatchingResults();
-                MyGlobal.hWindow_Final[Index].HobjectToHimage(ScaleImage);
-                MyGlobal.hWindow_Final[Index].viewWindow.displayHobject(MatchXLD, "red");
-
-                HTuple maxZ = new HTuple();
-
-                //StaticOperate.SaveExcelData(Index,  result.Max[0].D.ToString(),result.Max[1].D.ToString(),result.Max[2].D.ToString());
-                //if (result.DetectOK)
-                //{
-                //    ShowAndSaveMsg("检测OK！");
-                //}
-                //else
-                //{
-                //    ShowAndSaveMsg("检测NG！");
-                //}
-
-                //数据统计
-                //WriteToTable(Index, result.Max[0].D, result.Max[1].D, result.Max[2].D, result.DetectOK);
-                return "OK";
-            }
-            catch (Exception ex)
-            {
-
-                return "RunDetect Error" + ex.Message;
-            }
-
-
-        }
+      
 
         #region 窗口按钮
 
@@ -2457,56 +2406,7 @@ namespace SagensVision
 
         }
 
-        public void loadMathParam()
-        {
-            string[] path2 = { MyGlobal.fileName1.Replace(".shm", ".roi"), MyGlobal.fileName2.Replace(".shm", ".roi") };
-            string[] path3 = { MyGlobal.fileName1.Replace(".shm", ".xml"), MyGlobal.fileName2.Replace(".shm", ".xml") };
-
-            for (int i = 0; i < 2; i++)
-            {
-                MyGlobal.parameterSet[i] = new MatchingModule.MatchingParam();
-                if (File.Exists(path2[i]))
-                {
-                    if (File.Exists(path3[i]))
-                    {
-                        MyGlobal.parameterSet[i] = (MatchingModule.MatchingParam)StaticOperate.ReadXML(path3[i], MyGlobal.parameterSet[0].GetType());
-                    }
-
-                    MyGlobal.mAssistant[i] = new MatchingModule.MatchingAssistant(MyGlobal.parameterSet[i]);
-                    List<ViewWindow.Model.ROI> roilist = new List<ViewWindow.Model.ROI>();
-                    HWindow_Final temp = new HWindow_Final();
-                    temp.viewWindow.loadROI(path2[i], out roilist);
-                    MyGlobal.mAssistant[i].PreHandleRoi = roilist[0];
-                    MyGlobal.mAssistant[i].Roi = roilist[1];
-                }
-                else
-                {
-                    MyGlobal.mAssistant[i] = new MatchingModule.MatchingAssistant(MyGlobal.parameterSet[i]);
-                }
-                //path3 = MyGlobal.fileName1.Replace(".shm", ".xml");
-
-
-                string fileName = MyGlobal.ModelPath + i.ToString() + ".shm";
-                if (File.Exists(fileName))
-                {
-                    if (MyGlobal.mAssistant[i].loadShapeModel(fileName))
-                    {
-                        ShowAndSaveMsg("模板" + i.ToString() + "加载成功....");
-                    }
-                    else
-                    {
-                        ShowAndSaveMsg("模板" + i.ToString() + "加载失败....");
-                    }
-                }
-                else
-                {
-                    ShowAndSaveMsg("模板" + i.ToString() + "未找到....");
-                }
-            }
-
-
-        }
-
+      
         private void tabbedView1_DocumentActivated(object sender, DevExpress.XtraBars.Docking2010.Views.DocumentEventArgs e)
         {
             //if (tabbedView1.ActiveDocument.Caption == document6.Caption)
@@ -2800,28 +2700,7 @@ namespace SagensVision
             }
         }
 
-        private void navBarItem13_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
-        {
-            //FindMax[1].ShowDialog();
-        }
-        //Matching.Form1 match2 = new Matching.Form1(MyGlobal.fileName2);
-        private void navBarItem6_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
-        {
-            //string fileName = MyGlobal.ModelPath + "1.shm";
-            //Matching.Form1 match = new Matching.Form1(fileName);
-            //match.ShowDialog();
-
-            string path2 = MyGlobal.fileName2.Replace(".shm", ".roi");
-            List<ViewWindow.Model.ROI> roilist = new List<ViewWindow.Model.ROI>();
-            if (File.Exists(path2))
-            {
-                HWindow_Final temp = new HWindow_Final();
-                temp.viewWindow.loadROI(path2, out roilist);
-                MyGlobal.mAssistant[1].PreHandleRoi = roilist[0];
-                MyGlobal.mAssistant[1].Roi = roilist[1];
-            }
-            //match2.ShowDialog();
-        }
+      
         double total = 0;
         double ng = 0;
         double Per = 0;
