@@ -699,13 +699,20 @@ namespace SagensVision
                 if (MyGlobal.GoSDK.SurfaceDataZ != null)
                 {
 
-                    float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                     long SurfaceWidth, SurfaceHeight;
                     SurfaceWidth = MyGlobal.GoSDK.surfaceWidth;
                     SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
                     HObject tempHeightImg, tempInteImg, tempByteImg;
                     HObject HeightImage, IntensityImage, byteImg;
                     HObject ZoomHeightImg, ZoomIntensityImg;
+
+                    float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
+                    byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
+                    byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
+                    if (Station < 4)//给运动机构信号，执行下一次扫描
+                    {
+                        MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
+                    }
                     if (SurfacePointZ != null)
                     {
                         HObject Height = new HObject();
@@ -714,7 +721,6 @@ namespace SagensVision
                     }
                     else { return "高度值为空"; }
 
-                    byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
                     if (IntesitySurfacePointZ != null)
                     {
                         MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
@@ -723,15 +729,9 @@ namespace SagensVision
                     else { return "亮度值为空"; }
 
 
-                    byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
                     MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
                     MyGlobal.GoSDK.SurfaceDataZByte = null;
-
-
-                    if (Station < 4)//给运动机构信号，执行下一次扫描
-                    {
-                        MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
-                    }
+                    
                     bool threadARunFinish = false;
 
                     HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
@@ -790,8 +790,6 @@ namespace SagensVision
                     string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
                     HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
                     MyGlobal.ImageMulti.Add(temp);
-
-
                     
                     byteImg.Dispose();
                     return OK;
@@ -823,11 +821,6 @@ namespace SagensVision
                 NameOrigin.Clear();
                 AnchorList.Clear();
 
-                //for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
-                //{
-                //    MyGlobal.hWindow_Final[i].ClearWindow();
-                //}
-                //ShowProfile.ClearWindow();
             }
             if (MyGlobal.ImageMulti.Count == 0)
             {
@@ -839,42 +832,7 @@ namespace SagensVision
             {
                 return Ok;
             }
-            // double[][] x, y, z; string[][] LorC;
-            //string OK = RunFindPoint(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], out x, out y, out z,out LorC, HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
-            // if (OK!="OK")
-            // {
-            //     return OK;
-            // }
-            // XCoord.Add(x);
-            // YCoord.Add(y);
-            // ZCoord.Add(z);
-            // StrLorC.Add(LorC);
-            // int count = 0;
-            // if (Station > 0 && XCoord.Count == Station)
-            // {
-            //     //写入到文本
-            //     StringBuilder Str = new StringBuilder();
-            //     for (int i = 0; i < Station; i++)
-            //     {
-            //         for (int j = 0; j < XCoord[i].GetLength(0); j++)
-            //         {
-            //             for (int k = 0; k < XCoord[i][j].Length; k++)
-            //             {
-            //                 double X1 = Math.Round(XCoord[i][j][k], 3);
-            //                 double Y1 = Math.Round(YCoord[i][j][k], 3);
-            //                 double Z1 = Math.Round(ZCoord[i][j][k], 3);
-            //                 string lorc = StrLorC[i][j][k];
-            //                 count++;
-            //                 Str.Append(count.ToString() + ","+ X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") +","+ lorc + "\r\n");
-            //             }
-            //         }
-            //     }
-            //     StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
-            // }
-            // else
-            // {
-            //     OK = "第" + (Station - 1).ToString()+ "边 点位获取失败";
-            // }
+            
             return Ok;
         }
 
@@ -1412,173 +1370,7 @@ namespace SagensVision
                 {
                     return "OK";
                 }
-
-                #region 重复点
-                //#region 除去起始位重复部分 并均分 
-                //for (int i = 0; i < Station; i++)
-                //{
-                //    HTuple firstPt, order, last, lastPt, Grater, GraterId = new HTuple(); string first = "";
-                //    HTuple ResultX = new HTuple(), ResultY = new HTuple(), ResultZ = new HTuple(), ResultLorC = new HTuple();
-                //    switch (i)
-                //    {
-                //        case 0:
-                //            if (Station == 4) //Y1<Y4
-                //            {
-
-                //                ResultY = YCoord[i][0];//第一段
-                //                ResultX = XCoord[i][0];//第一段
-                //                ResultZ = ZCoord[i][0];//第一段
-                //                ResultLorC = StrLorC[i][0];//第一段
-
-                //                if (ResultY.Length == 0)
-                //                {
-                //                    break;
-                //                }
-                //                firstPt = ResultY[0];//第一点
-                //                order = YCoord[3].GetLength(0) - 1;
-                //                last = YCoord[3][order];//第四边最后段
-                //                lastPt = last[last.Length - 1];//最后一点
-                //                Grater = ResultY.TupleGreaterEqualElem(lastPt);//大于第四条不重叠部分
-                //                GraterId = Grater.TupleFind(1);
-                //                if (GraterId == -1)
-                //                {
-                //                    break;
-                //                }
-                //                ResultY = ResultY[GraterId];
-                //                ResultX = ResultX[GraterId];
-                //                ResultZ = ResultZ[GraterId];
-                //                //首位 
-                //                first = ResultLorC[0];
-                //                ResultLorC = ResultLorC[GraterId];
-                //                ResultLorC[0] = first;
-
-                //            }
-
-                //            break;
-                //        case 1:
-                //            if (Station >= 2) //X2>X1
-                //            {
-
-                //                ResultX = XCoord[i][0];//第一段
-                //                ResultY = YCoord[i][0];//第一段
-                //                ResultZ = ZCoord[i][0];//第一段
-                //                ResultLorC = StrLorC[i][0];//第一段
-
-                //                if (ResultX.Length == 0)
-                //                {
-                //                    break;
-                //                }
-                //                firstPt = ResultX[0];//第一点
-                //                order = XCoord[0].GetLength(0) - 1;
-                //                last = XCoord[0][order];//第1边最后段
-                //                lastPt = last[last.Length - 1];//最后一点
-                //                Grater = ResultX.TupleLessEqualElem(lastPt);//小于第一条不重叠部分
-                //                GraterId = Grater.TupleFind(1);
-                //                if (GraterId == -1)
-                //                {
-                //                    break;
-                //                }
-                //                ResultY = ResultY[GraterId];
-                //                ResultX = ResultX[GraterId];
-                //                ResultZ = ResultZ[GraterId];
-
-                //                //首位 
-                //                first = ResultLorC[0];
-                //                ResultLorC = ResultLorC[GraterId];
-                //                ResultLorC[0] = first;
-                //            }
-                //            break;
-                //        case 2:
-                //            if (Station >= 3) //Y3>Y2
-                //            {
-
-                //                ResultY = YCoord[i][0];//第一段
-                //                ResultX = XCoord[i][0];//第一段
-                //                ResultZ = ZCoord[i][0];//第一段
-                //                ResultLorC = StrLorC[i][0];//第一段
-
-                //                if (ResultY.Length == 0)
-                //                {
-                //                    break;
-                //                }
-
-                //                firstPt = ResultY[0];//第一点
-                //                order = YCoord[1].GetLength(0) - 1;
-                //                last = YCoord[1][order];//第2边最后段
-                //                lastPt = last[last.Length - 1];//最后一点
-                //                Grater = ResultY.TupleLessEqualElem(lastPt);//不重叠部分
-                //                GraterId = Grater.TupleFind(1);
-                //                if (GraterId == -1)
-                //                {
-                //                    break;
-                //                }
-                //                ResultY = ResultY[GraterId];
-                //                ResultX = ResultX[GraterId];
-                //                ResultZ = ResultZ[GraterId];
-
-                //                //首位 
-                //                first = ResultLorC[0];
-                //                ResultLorC = ResultLorC[GraterId];
-                //                ResultLorC[0] = first;
-                //            }
-                //            break;
-                //        case 3:
-                //            if (Station >= 4) //X4<X3
-                //            {
-
-                //                ResultX = XCoord[i][0];//第一段
-                //                ResultY = YCoord[i][0];//第一段
-                //                ResultZ = ZCoord[i][0];//第一段
-                //                ResultLorC = StrLorC[i][0];//第一段
-
-                //                if (ResultX.Length == 0)
-                //                {
-                //                    break;
-                //                }
-                //                firstPt = ResultX[0];//第一点
-                //                order = XCoord[2].GetLength(0) - 1;
-                //                last = XCoord[2][order];//第3边最后段
-                //                lastPt = last[last.Length - 1];//最后一点
-                //                Grater = ResultX.TupleGreaterEqualElem(lastPt);//不重叠部分
-                //                GraterId = Grater.TupleFind(1);
-                //                if (GraterId == -1)
-                //                {
-                //                    break;
-                //                }
-                //                ResultY = ResultY[GraterId];
-                //                ResultX = ResultX[GraterId];
-                //                ResultZ = ResultZ[GraterId];
-
-                //                //首位 
-                //                first = ResultLorC[0];
-                //                ResultLorC = ResultLorC[GraterId];
-                //                ResultLorC[0] = first;
-                //            }
-                //            break;
-                //    }
-                //    if (GraterId.Length != 0 && GraterId.D == -1)
-                //    {
-                //        XCoord[i][0] = null;
-                //        YCoord[i][0] = null;
-                //        ZCoord[i][0] = null;
-                //        StrLorC[i][0] = null;
-
-                //        return string.Format("第{0}边,第一段重合点数过多", i + 1);
-                //    }
-                //    else if (GraterId.Length != 0)
-                //    {
-                //        XCoord[i][0] = ResultX;
-                //        YCoord[i][0] = ResultY;
-                //        ZCoord[i][0] = ResultZ;
-                //        StrLorC[i][0] = ResultLorC;
-                //    }
-
-                //}
-                //#endregion
-                #endregion
-
-
-
+                
                 Dictionary<int, string> everySeg = new Dictionary<int, string>();
                 double[] xcoord, ycoord, zcoord; string[] keypt;
                 int totalNum = 0;
@@ -1778,7 +1570,7 @@ namespace SagensVision
                 return;
             }
             HObject regpot;
-            HOperatorSet.GenCrossContourXld(out regpot, new HTuple(recordXCoord) , new HTuple(recordYCoord),16,0.5 );
+            HOperatorSet.GenCrossContourXld(out regpot, new HTuple(recordXCoord), new HTuple(recordYCoord), 16, 0.5);
             HObject ImageConst;
             HOperatorSet.GenImageConst(out ImageConst, "byte", 500, 500);
             ShowProfile.HobjectToHimage(ImageConst);
