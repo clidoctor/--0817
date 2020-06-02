@@ -705,94 +705,124 @@ namespace SagensVision
                     HObject tempHeightImg, tempInteImg, tempByteImg;
                     HObject HeightImage, IntensityImage, byteImg;
                     HObject ZoomHeightImg, ZoomIntensityImg;
-
-                    float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
-                    byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
-                    byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
-                    if (Station < 4)//给运动机构信号，执行下一次扫描
-                    {
-                        MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
-                    }
-                    if (SurfacePointZ != null)
-                    {
-                        HObject Height = new HObject();
-                        MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
-                        MyGlobal.GoSDK.SurfaceDataZ = null;
-                    }
-                    else { return "高度值为空"; }
-
-                    if (IntesitySurfacePointZ != null)
-                    {
-                        MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
-                        MyGlobal.GoSDK.SurfaceDataIntensity = null;
-                    }
-                    else { return "亮度值为空"; }
-
-
-                    MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
-                    MyGlobal.GoSDK.SurfaceDataZByte = null;
-                    
-                    bool threadARunFinish = false;
-
-                    HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
-                    tempByteImg.Dispose();
+                    HObject rgbImg;
                     HObject zoomRgbImg;
+
+                    HOperatorSet.GenEmptyObj(out tempHeightImg);
+                    HOperatorSet.GenEmptyObj(out tempInteImg);
+                    HOperatorSet.GenEmptyObj(out tempByteImg);
+                    HOperatorSet.GenEmptyObj(out HeightImage);
+                    HOperatorSet.GenEmptyObj(out IntensityImage);
+                    HOperatorSet.GenEmptyObj(out byteImg);
+                    HOperatorSet.GenEmptyObj(out ZoomHeightImg);
+                    HOperatorSet.GenEmptyObj(out ZoomIntensityImg);
+                    HOperatorSet.GenEmptyObj(out rgbImg);
                     HOperatorSet.GenEmptyObj(out zoomRgbImg);
-                    ThreadPool.QueueUserWorkItem(delegate
+                    try
                     {
-                        HObject rgbImg;//生成并显示伪彩色图
+                       
+
+                        float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
+                        byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
+                        byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
+
+                        if (SurfacePointZ != null)
+                        {
+                            tempHeightImg.Dispose();
+                            MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
+                            MyGlobal.GoSDK.SurfaceDataZ = null;
+                        }
+                        else { return "高度值为空"; }
+
+                        if (IntesitySurfacePointZ != null)
+                        {
+                            tempInteImg.Dispose();
+                            MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
+                            MyGlobal.GoSDK.SurfaceDataIntensity = null;
+                        }
+                        else { return "亮度值为空"; }
+
+                        tempByteImg.Dispose();
+                        MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
+                        MyGlobal.GoSDK.SurfaceDataZByte = null;
+
+                        byteImg.Dispose();
+                        HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
+
+                        //关闭激光
+                        if (Side < 4)//给运动机构信号，执行下一次扫描
+                        {
+                            MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
+                        }
+
+                        //生成并显示伪彩色图
+                        rgbImg.Dispose();
                         PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
                         HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
-                        rgbImg.Dispose();
+                        
                         if (!MyGlobal.isShowHeightImg)
                         {
                             Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
                             this.Invoke(asd);
                         }
-                        threadARunFinish = true;
-                    });
+                        HeightImage.Dispose();
+                        HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        ZoomHeightImg.Dispose();
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
 
-                    
-                    HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
-                    tempHeightImg.Dispose();
-                    HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
-                    HeightImage.Dispose();
-                    HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
-                    tempInteImg.Dispose();
-                    HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
-                    
+                        IntensityImage.Dispose();
+                        HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        ZoomIntensityImg.Dispose();
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
 
-                    
-                    if (MyGlobal.isShowHeightImg)
-                    {
-                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
-                    }
-                    
-
-
-                    if (Station == 1)
-                        saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-                    ThreadPool.QueueUserWorkItem(delegate
-                    {
-                        while (!threadARunFinish)
+                        if (MyGlobal.isShowHeightImg)
                         {
-                            //等待伪彩色图接收完毕
+                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
                         }
-                        StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
-                        StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                        StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                        if (Station == 1)
+                            saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                        bool isSaveImgOK = false;
+                        ThreadPool.QueueUserWorkItem(delegate
+                        {
+                            StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
+                            StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                            StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                            isSaveImgOK = true;
+                            zoomRgbImg.Dispose();
+                        });
+
+
+                        string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
+                        HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
+                        MyGlobal.ImageMulti.Add(temp);
+                        while (!isSaveImgOK)//等待图片保存完成
+                        {
+
+                        }
+                        return OK;
+                    }
+                    catch (Exception ex)
+                    {
+                        return "RunSurfae --> " + ex.Message;
+                    }
+                    finally
+                    {
+                        tempByteImg.Dispose();
                         zoomRgbImg.Dispose();
-                    }); 
-                    
-                    
-                    string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
-                    HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
-                    MyGlobal.ImageMulti.Add(temp);
-                    
-                    byteImg.Dispose();
-                    return OK;
+                        rgbImg.Dispose();
+                        byteImg.Dispose();
+
+                        tempHeightImg.Dispose();
+                        HeightImage.Dispose();
+                        ZoomHeightImg.Dispose();
+
+                        tempInteImg.Dispose();
+                        IntensityImage.Dispose();
+                        ZoomIntensityImg.Dispose();
+
+                    }
                 }
                 else
                 {
@@ -1709,8 +1739,8 @@ namespace SagensVision
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
                             case "Stop":
-                                //关闭激光
                                 
+
                                 MyGlobal.GoSDK.EnableProfle = false;
                                 sp.Start();
                                 while (MyGlobal.GoSDK.SurfaceDataZ == null || MyGlobal.GoSDK.SurfaceDataIntensity == null)
@@ -1729,6 +1759,9 @@ namespace SagensVision
                                 {
                                     ShowAndSaveMsg($"关闭激光成功！");
                                 }
+
+                              
+
 
                                 ShowAndSaveMsg(Msg2);
                                 Action RunDetect = () =>
@@ -2374,9 +2407,9 @@ namespace SagensVision
                         HObject zoomRgbImg;
 
                         SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
-                        
+
                         SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
-                        StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255/MyGlobal.globalConfig.zRange, out image[1], out image[0], out zoomRgbImg);
+                        StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out image[1], out image[0], out zoomRgbImg);
 
 
                         MyGlobal.ImageMulti.Add(image);
@@ -2457,8 +2490,6 @@ namespace SagensVision
                             MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
                             rgbImg.Dispose();
                         }
-
-
                     }
                 }
 

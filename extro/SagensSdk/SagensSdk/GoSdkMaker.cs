@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using GoVision3D.SaveLoad;
+using System.Diagnostics;
 
 namespace SagensSdk
 {
@@ -198,6 +199,7 @@ namespace SagensSdk
                      
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_SURFACE:
+
                         SurfaceMsgZ = dataObj;
                         ctx.xResolution = (double)GoSdkWrapper.GoSurfaceMsg_XResolution(SurfaceMsgZ) / 1000000;
                         ctx.zResolution = (double)GoSdkWrapper.GoSurfaceMsg_ZResolution(SurfaceMsgZ) / 1000000;
@@ -262,7 +264,6 @@ namespace SagensSdk
                         this.surfaceDataY = surfaceDataY;
                         this.SurfaceDataZ = surfaceData;
                         
-
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_SURFACE_INTENSITY:
                         SurfaceMsgIntensity = dataObj;
