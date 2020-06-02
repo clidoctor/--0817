@@ -155,7 +155,7 @@ namespace SagensVision
             MouseClickCnt4++;
             if (MouseClickCnt4 == 2)
             {
-                ShowProfileToWindow(null, null, null, false, ShowMsg);
+                ShowProfileToWindow(null, null, null, null, false, ShowMsg);
                 ShowMsg = !ShowMsg;
                 MouseClickCnt4 = 0;
             }
@@ -359,11 +359,11 @@ namespace SagensVision
             dockPanel2.Show();
             dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
 
-            dockPanel4.Show();
-            dockPanel3.Show();
+            //dockPanel4.Show();
+            //dockPanel3.Show();
             //dockPanel5.Show();
-            dockPanel4.DockedAsTabbedDocument = true;
-            dockPanel3.DockedAsTabbedDocument = true;
+            //dockPanel4.DockedAsTabbedDocument = true;
+            //dockPanel3.DockedAsTabbedDocument = true;
             //dockPanel5.DockedAsTabbedDocument = true;
             bar2.Reset();
             bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
@@ -597,7 +597,7 @@ namespace SagensVision
                     SurfaceHeight = profile.Count;
                     float[] SurfacePointZ = new float[SurfaceWidth * SurfaceHeight];
 
-
+                    
                     HObject HeightImage = new HObject(); HObject IntensityImage = new HObject();
 
                     GenIntesityProfile(profile, out IntensityImage);
@@ -705,100 +705,125 @@ namespace SagensVision
                 if (MyGlobal.GoSDK.SurfaceDataZ != null)
                 {
 
-                    float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                     long SurfaceWidth, SurfaceHeight;
                     SurfaceWidth = MyGlobal.GoSDK.surfaceWidth;
                     SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
                     HObject tempHeightImg, tempInteImg, tempByteImg;
                     HObject HeightImage, IntensityImage, byteImg;
                     HObject ZoomHeightImg, ZoomIntensityImg;
-                    if (SurfacePointZ != null)
-                    {
-                        HObject Height = new HObject();
-                        MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
-                        MyGlobal.GoSDK.SurfaceDataZ = null;
-                    }
-                    else { return "高度值为空"; }
-
-                    byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
-                    if (IntesitySurfacePointZ != null)
-                    {
-                        MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
-                        MyGlobal.GoSDK.SurfaceDataIntensity = null;
-                    }
-                    else { return "亮度值为空"; }
-
-
-                    byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
-                    MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
-                    MyGlobal.GoSDK.SurfaceDataZByte = null;
-
-
-                    if (Station < 4)//给运动机构信号，执行下一次扫描
-                    {
-                        MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
-                    }
-                    bool threadARunFinish = false;
-
-                    HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
-                    tempByteImg.Dispose();
+                    HObject rgbImg;
                     HObject zoomRgbImg;
+
+                    HOperatorSet.GenEmptyObj(out tempHeightImg);
+                    HOperatorSet.GenEmptyObj(out tempInteImg);
+                    HOperatorSet.GenEmptyObj(out tempByteImg);
+                    HOperatorSet.GenEmptyObj(out HeightImage);
+                    HOperatorSet.GenEmptyObj(out IntensityImage);
+                    HOperatorSet.GenEmptyObj(out byteImg);
+                    HOperatorSet.GenEmptyObj(out ZoomHeightImg);
+                    HOperatorSet.GenEmptyObj(out ZoomIntensityImg);
+                    HOperatorSet.GenEmptyObj(out rgbImg);
                     HOperatorSet.GenEmptyObj(out zoomRgbImg);
-
-                    HObject rgbImg;//生成并显示伪彩色图
-                    PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
-                    zoomRgbImg.Dispose();
-                    HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
-                    rgbImg.Dispose();
-                    if (!MyGlobal.isShowHeightImg)
+                    try
                     {
-                        Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
-                        this.Invoke(asd);
-                    }
-                    threadARunFinish = true;
 
 
-                    HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
-                    tempHeightImg.Dispose();
-                    HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
-                    HeightImage.Dispose();
-                    HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
-                    tempInteImg.Dispose();
-                    HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
-
-
-
-                    if (MyGlobal.isShowHeightImg)
-                    {
-                        MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
-                    }
-
-
-
-                    if (Station == 1)
-                        saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-                    ThreadPool.QueueUserWorkItem(delegate
-                    {
-                        while (!threadARunFinish)
+                        float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
+                        byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
+                        byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
+                        isLastImgRecOK = true;
+                        if (SurfacePointZ != null)
                         {
-                            //等待伪彩色图接收完毕
+                            tempHeightImg.Dispose();
+                            MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
+                            MyGlobal.GoSDK.SurfaceDataZ = null;
                         }
-                        StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
-                        StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                        StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                        else { return "高度值为空"; }
+
+                        if (IntesitySurfacePointZ != null)
+                        {
+                            tempInteImg.Dispose();
+                            MyGlobal.GoSDK.GenHalconImage(IntesitySurfacePointZ, SurfaceWidth, SurfaceHeight, out tempInteImg);
+                            MyGlobal.GoSDK.SurfaceDataIntensity = null;
+                        }
+                        else { return "亮度值为空"; }
+
+                        tempByteImg.Dispose();
+                        MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
+                        MyGlobal.GoSDK.SurfaceDataZByte = null;
+
+                        byteImg.Dispose();
+                        HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
+
+
+                        //生成并显示伪彩色图
+                        rgbImg.Dispose();
+                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
-                    });
+                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+
+                        if (!MyGlobal.isShowHeightImg)
+                        {
+                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
+                            this.Invoke(asd);
+                        }
+                        HeightImage.Dispose();
+                        HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        ZoomHeightImg.Dispose();
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
+
+                        IntensityImage.Dispose();
+                        HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        ZoomIntensityImg.Dispose();
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
+
+                        if (MyGlobal.isShowHeightImg)
+                        {
+                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
+                        }
+                        if (Station == 1)
+                            saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                        bool isSaveImgOK = false;
+                        ThreadPool.QueueUserWorkItem(delegate
+                        {
+                            StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
+                            StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                            StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                            isSaveImgOK = true;
+                            zoomRgbImg.Dispose();
+                        });
 
 
-                    string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
-                    HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
-                    MyGlobal.ImageMulti.Add(temp);
+                        string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
+                        HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
+                        MyGlobal.ImageMulti.Add(temp);
+                        while (!isSaveImgOK)//等待图片保存完成
+                        {
 
+                        }
+                        return OK;
+                    }
+                    catch (Exception ex)
+                    {
+                        return "RunSurfae --> " + ex.Message;
+                    }
+                    finally
+                    {
+                        tempByteImg.Dispose();
+                        zoomRgbImg.Dispose();
+                        rgbImg.Dispose();
+                        byteImg.Dispose();
 
+                        tempHeightImg.Dispose();
+                        HeightImage.Dispose();
+                        ZoomHeightImg.Dispose();
 
-                    byteImg.Dispose();
-                    return OK;
+                        tempInteImg.Dispose();
+                        IntensityImage.Dispose();
+                        ZoomIntensityImg.Dispose();
+
+                    }
                 }
                 else
                 {
@@ -827,11 +852,6 @@ namespace SagensVision
                 NameOrigin.Clear();
                 AnchorList.Clear();
 
-                //for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
-                //{
-                //    MyGlobal.hWindow_Final[i].ClearWindow();
-                //}
-                //ShowProfile.ClearWindow();
             }
             if (MyGlobal.ImageMulti.Count == 0)
             {
@@ -1818,9 +1838,9 @@ namespace SagensVision
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
 
-                    ShowProfileToWindow(xcoord, ycoord, sigleTitle, true, true);
+                    ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
                 }
-
+                
 
 
                 return "OK";
@@ -1833,30 +1853,31 @@ namespace SagensVision
         }
 
 
-        private double[] recordXCoord; double[] recordYCoord; string[] recordSigleTitle;
-        public void ShowProfileToWindow(double[] xcoord, double[] ycoord, string[] sigleTitle, bool isRun, bool showMsg)
+        private double[] recordXCoord; double[] recordYCoord;double[] recordZCoord;  string[] recordSigleTitle;
+        public void ShowProfileToWindow(double[] xcoord,double[] ycoord,double[] zcoord, string[] sigleTitle,bool isRun,bool showMsg)
         {
             if (isRun)
             {
                 this.recordXCoord = xcoord;
                 this.recordYCoord = ycoord;
+                this.recordZCoord = zcoord;
                 this.recordSigleTitle = sigleTitle;
             }
-            if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null || recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
+            if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null ||  recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
             {
                 return;
             }
             HObject regpot;
-            HOperatorSet.GenRegionPoints(out regpot, new HTuple(recordXCoord), new HTuple(recordYCoord));
+            HOperatorSet.GenRegionPoints(out regpot, new HTuple(recordXCoord) * 10, new HTuple(recordYCoord) * 10);
             HObject ImageConst;
-            HOperatorSet.GenImageConst(out ImageConst, "byte", 500, 500);
+            HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
             ShowProfile.HobjectToHimage(ImageConst);
             ShowProfile.viewWindow.displayHobject(regpot, "green", true);
             if (showMsg)
             {
                 for (int i = 0; i < recordSigleTitle.Length; i++)
                 {
-                    ShowProfile.viewWindow.dispMessage(recordSigleTitle[i], "red", recordXCoord[i], recordYCoord[i]);
+                    ShowProfile.viewWindow.dispMessage($"{recordSigleTitle[i]} +({recordZCoord[i]})", "blue", recordXCoord[i] * 10, recordYCoord[i] * 10);
                 }
             }
             regpot.Dispose();
@@ -1871,7 +1892,7 @@ namespace SagensVision
         Stopwatch sp = new Stopwatch();
 
 
-
+        private bool isLastImgRecOK = true;
 
         public void TcpClientListen_Surface()
         {
@@ -1908,7 +1929,7 @@ namespace SagensVision
                 while (true)
                 {
                     int len = MyGlobal.sktClient.Receive(buffer);
-
+                    
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
@@ -1935,7 +1956,7 @@ namespace SagensVision
                             Side = Convert.ToInt32(MyGlobal.ReceiveMsg.Substring(0, 1));
                             ReturnStr = MyGlobal.ReceiveMsg.Remove(0, 1);
                         }
-
+                        
                         if (MyGlobal.ReceiveMsg.Contains("1"))
                         {
                             for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
@@ -1960,7 +1981,10 @@ namespace SagensVision
                                     MyGlobal.GoSDK.ProfileList.Clear();
 
                                 }
+                                while (!isLastImgRecOK)
+                                {
 
+                                }
                                 //打开激光
                                 MyGlobal.GoSDK.EnableProfle = false;
                                 string Cutjob = "切换作业";
@@ -1970,7 +1994,7 @@ namespace SagensVision
                                     ShowAndSaveMsg($"切换作业 {JobName[Side - 1]} 成功！");
                                 }
                                 string Msg = "开始扫描:" + Side.ToString();
-
+                                
                                 if (!Directory.Exists(MyGlobal.GoSDK.SaveDatFileDirectory))
                                 {
                                     Directory.CreateDirectory(MyGlobal.GoSDK.SaveDatFileDirectory);
@@ -1986,13 +2010,18 @@ namespace SagensVision
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
                             case "Stop":
+                                isLastImgRecOK = false;
                                 //关闭激光
+                                if (Side < 4)//给运动机构信号，执行下一次扫描
+                                {
+                                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
+                                }
 
                                 MyGlobal.GoSDK.EnableProfle = false;
                                 sp.Start();
                                 while (MyGlobal.GoSDK.SurfaceDataZ == null || MyGlobal.GoSDK.SurfaceDataIntensity == null)
                                 {
-                                    if (sp.ElapsedMilliseconds > 10000)
+                                    if (sp.ElapsedMilliseconds  > 10000)
                                     {
                                         sp.Reset();
                                         ShowAndSaveMsg($"图像接收超时！");
@@ -2006,6 +2035,9 @@ namespace SagensVision
                                 {
                                     ShowAndSaveMsg($"关闭激光成功！");
                                 }
+
+
+
 
                                 ShowAndSaveMsg(Msg2);
                                 Action RunDetect = () =>
@@ -2035,7 +2067,7 @@ namespace SagensVision
                                 };
 
                                 this.Invoke(RunDetect);
-
+                                
                                 break;
 
                         }
@@ -2280,14 +2312,14 @@ namespace SagensVision
                                     MyGlobal.GoSDK.Stop(ref Msg2);
                                     ShowAndSaveMsg(Msg2);
                                     Action RunDetect = () =>
-                                    {
-                                        string ok1 = Run(0);
-                                        if (ok1 != "OK")
-                                        {
-                                            ShowAndSaveMsg(ok1);
-                                        }
+                                     {
+                                         string ok1 = Run(0);
+                                         if (ok1 != "OK")
+                                         {
+                                             ShowAndSaveMsg(ok1);
+                                         }
 
-                                    };
+                                     };
                                     this.Invoke(RunDetect);
 
                                     nSent = MyGlobal.sktClient.Send(ok);
@@ -2488,12 +2520,17 @@ namespace SagensVision
 
                 string[] HeightStr = { "Side1H.tiff", "Side2H.tiff", "Side3H.tiff", "Side4H.tiff" };
                 string[] Intensity = { "Side1I.tiff", "Side2I.tiff", "Side3I.tiff", "Side4I.tiff" };
+                string[] RBG = { "Side1B.tiff", "Side2B.tiff", "Side3B.tiff", "Side4B.tiff" };
 
                 for (int i = 0; i < 4; i++)
                 {
                     HObject[] image = new HObject[2];
 
-                    HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + Intensity[i]);
+                    if (MyGlobal.isShowHeightImg)
+                        HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + Intensity[i]);
+                    else
+                        HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + RBG[i]);
+
                     HOperatorSet.ReadImage(out image[1], ImagePath + "\\" + HeightStr[i]);
                     MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
                     MyGlobal.ImageMulti.Add(image);
@@ -2618,72 +2655,121 @@ namespace SagensVision
                 {
                     return;
                 }
-                int orderi = 0; int orderh = 0; int orderB = 0;
-                foreach (var item in openfile.FileNames)
+
+                if (Path.GetExtension(openfile.FileNames[0]) == ".dat")
                 {
-                    for (int i = orderi; i < namesH.Length; i++)
+                    int orderi = 0; int orderh = 0;
+                    foreach (var item in openfile.FileNames)
                     {
-                        for (int j = 0; j < 4; j++)
+                        if (item.Contains("H.dat"))
                         {
-                            if (item.Contains((j + 1).ToString() + "I.tiff"))
-                            {
-                                namesI[i] = item;
-                                orderi = i + 1;
-                                sidelist.Add(j + 1);
-                                break;
-                            }
+                            namesH[orderh] = item;
+                            orderh++;
                         }
-                        break;
-                    }
-                    for (int i = orderh; i < namesH.Length; i++)
-                    {
-                        for (int j = 0; j < 4; j++)
+                        else if (item.Contains("I.dat"))
                         {
-                            if (item.Contains((j + 1).ToString() + "H.tiff"))
-                            {
-                                namesH[i] = item;
-                                orderh = i + 1;
-                                break;
-                            }
+                            namesI[orderi] = item;
+                            orderi++;
                         }
-                        break;
+                    }
+                    if (namesH[0] == null)
+                    {
+                        return;
                     }
 
-                    if (item.Contains("B.tiff"))
+                    for (int i = 0; i < namesH.Length; i++)
                     {
-                        namesB[orderB] = item;
-                        orderB++;
+                        HObject[] image = new HObject[2];
+                        HObject zoomRgbImg;
+
+                        SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
+
+                        SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
+                        StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out image[1], out image[0], out zoomRgbImg);
+
+
+                        MyGlobal.ImageMulti.Add(image);
+                        if (MyGlobal.isShowHeightImg)
+                        {
+                            MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                        }
+                        else
+                        {
+                            MyGlobal.hWindow_Final[i].HobjectToHimage(zoomRgbImg);
+                        }
+                        zoomRgbImg.Dispose();
+                        GC.Collect();
                     }
                 }
-
-
-                if (namesH[0] == null)
+                else
                 {
-                    return;
-                }
-                for (int i = 0; i < namesH.Length; i++)
-                {
-                    HObject[] image = new HObject[2];
-
-                    HOperatorSet.ReadImage(out image[0], namesI[i]);
-                    HOperatorSet.ReadImage(out image[1], namesH[i]);
-
-                    MyGlobal.ImageMulti.Add(image);
-                    if (MyGlobal.isShowHeightImg || namesB == null)
+                    int orderi = 0; int orderh = 0; int orderB = 0;
+                    foreach (var item in openfile.FileNames)
                     {
-                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                        for (int i = orderi; i < namesH.Length; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (item.Contains((j + 1).ToString() + "I.tiff"))
+                                {
+                                    namesI[i] = item;
+                                    orderi = i + 1;
+                                    sidelist.Add(j + 1);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        for (int i = orderh; i < namesH.Length; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (item.Contains((j + 1).ToString() + "H.tiff"))
+                                {
+                                    namesH[i] = item;
+                                    orderh = i + 1;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+
+                        if (item.Contains("B.tiff"))
+                        {
+                            namesB[orderB] = item;
+                            orderB++;
+                        }
                     }
-                    else
+
+
+                    if (namesH[0] == null)
                     {
-                        HObject rgbImg;
-                        HOperatorSet.ReadImage(out rgbImg, namesB[i]);
-
-                        MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
-                        rgbImg.Dispose();
+                        return;
                     }
+                    for (int i = 0; i < namesH.Length; i++)
+                    {
+                        HObject[] image = new HObject[2];
 
+                        HOperatorSet.ReadImage(out image[0], namesI[i]);
+                        HOperatorSet.ReadImage(out image[1], namesH[i]);
 
+                        MyGlobal.ImageMulti.Add(image);
+                        if (MyGlobal.isShowHeightImg || namesB == null)
+                        {
+                            MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                        }
+                        else
+                        {
+                            HObject rgbImg;
+                            HOperatorSet.ReadImage(out rgbImg, namesB[i]);
+
+                            MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
+                            rgbImg.Dispose();
+                        }
+                    }
                 }
+
+
 
             }
         }
@@ -2803,7 +2889,7 @@ namespace SagensVision
             imgrotatefrm.Show();
             if (File.Exists(MyGlobal.imgRotatePath))
             {
-                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
+                MyGlobal.imgRotateArr = (int[]) StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
             }
         }
 
@@ -2829,7 +2915,7 @@ namespace SagensVision
             {
                 ShowAndSaveMsg("清理缓存失败-->" + ex.Message);
             }
-
+            
         }
     }
 }
