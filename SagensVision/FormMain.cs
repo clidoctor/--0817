@@ -817,11 +817,9 @@ namespace SagensVision
 
                         tempHeightImg.Dispose();
                         HeightImage.Dispose();
-                        ZoomHeightImg.Dispose();
 
                         tempInteImg.Dispose();
                         IntensityImage.Dispose();
-                        ZoomIntensityImg.Dispose();
 
                     }
                 }
@@ -1687,11 +1685,14 @@ namespace SagensVision
                 StringBuilder StrOrginalHeader = new StringBuilder();
                 StringBuilder StrOrginalData = new StringBuilder();
                 StringBuilder StrAxisData = new StringBuilder();
+                //test
+                StringBuilder pix = new StringBuilder();
+
 
                 string saveTime = DateTime.Now.ToString("HHmmss");
 
                 int Start = MyGlobal.globalConfig.Startpt;
-                double[] OrginalX1 = orginalR; double[] OrginalY1 = orginalC;
+                double[] OrginalX1 = orginalC; double[] OrginalY1 = orginalR;
 
 
 
@@ -1767,6 +1768,12 @@ namespace SagensVision
                     double xorigin = (OrginalX1[start] - PixC) * Xresolution;
                     double yorigin = (OrginalY1[start] - PixR) * Yresolution;
 
+                    //test
+                    double Pix_x = OrginalX1[start] * Xresolution;
+                    double Pix_y = OrginalY1[start] * Yresolution;
+
+
+
                     double Xrelative = X1 - AxisC;
                     double Yrelative = Y1 - AxisR;
 
@@ -1797,6 +1804,8 @@ namespace SagensVision
                         StrOrginalHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
                         StrOrginalData.Append(saveTime + "\t" + xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(saveTime + "\t" + Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        //test
+                        pix.Append(saveTime + "\t" + Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
                     else
                     {
@@ -1804,6 +1813,8 @@ namespace SagensVision
                         StrOrginalHeader.Append(sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
                         StrOrginalData.Append(xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        //test
+                        pix.Append( Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
 
                     if (Station == 4 && i == xcoord.Length - 1)
@@ -1811,6 +1822,8 @@ namespace SagensVision
                         StrOrginalHeader.Append("\r\n");
                         StrOrginalData.Append("\r\n");
                         StrAxisData.Append("\r\n");
+                        //test
+                        pix.Append("\r\n");
                     }
                 }
                 string strlast = "0;";
@@ -1837,6 +1850,7 @@ namespace SagensVision
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
+                    StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), pix.ToString(), "pix");
 
                     ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
                 }
