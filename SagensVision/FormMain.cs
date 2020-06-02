@@ -477,7 +477,7 @@ namespace SagensVision
 
         void ConnectTcp()
         {
-            MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen);
+            MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen_Surface);
             MyGlobal.thdWaitForClientAndMessage.IsBackground = true;
 
             MyGlobal.thdWaitForClientAndMessage.Name = "以太网通信线程";
@@ -791,13 +791,23 @@ namespace SagensVision
                             StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
                             StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
                             isSaveImgOK = true;
-                            zoomRgbImg.Dispose();
                         });
 
 
                         string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
-                        HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
-                        MyGlobal.ImageMulti.Add(temp);
+                        if (MyGlobal.isShowHeightImg)
+                        {
+                            HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
+                            MyGlobal.ImageMulti.Add(temp);
+                            zoomRgbImg.Dispose();
+                        }
+                        else
+                        {
+                            HObject[] temp = { zoomRgbImg, ZoomHeightImg };
+                            MyGlobal.ImageMulti.Add(temp);
+                            ZoomIntensityImg.Dispose();
+                        }
+                        
                         while (!isSaveImgOK)//等待图片保存完成
                         {
 
@@ -811,17 +821,14 @@ namespace SagensVision
                     finally
                     {
                         tempByteImg.Dispose();
-                        zoomRgbImg.Dispose();
                         rgbImg.Dispose();
                         byteImg.Dispose();
 
                         tempHeightImg.Dispose();
                         HeightImage.Dispose();
-                        ZoomHeightImg.Dispose();
 
                         tempInteImg.Dispose();
                         IntensityImage.Dispose();
-                        ZoomIntensityImg.Dispose();
 
                     }
                 }
@@ -2680,24 +2687,27 @@ namespace SagensVision
                     for (int i = 0; i < namesH.Length; i++)
                     {
                         HObject[] image = new HObject[2];
-                        HObject zoomRgbImg;
 
+                        HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg;
+                        
                         SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
 
                         SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
-                        StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out image[1], out image[0], out zoomRgbImg);
+                        StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg);
 
-
-                        MyGlobal.ImageMulti.Add(image);
-                        if (MyGlobal.isShowHeightImg)
+                        image[1] = zoomHeightImg;
+                        if (!MyGlobal.isShowHeightImg)
                         {
-                            MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                            image[0] = zoomRgbImg;
+                            zoomIntensityImg.Dispose();
                         }
                         else
                         {
-                            MyGlobal.hWindow_Final[i].HobjectToHimage(zoomRgbImg);
+                            image[0] = zoomIntensityImg;
+                            zoomRgbImg.Dispose();
                         }
-                        zoomRgbImg.Dispose();
+                        MyGlobal.ImageMulti.Add(image);
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
                         GC.Collect();
                     }
                 }
@@ -2750,22 +2760,21 @@ namespace SagensVision
                     {
                         HObject[] image = new HObject[2];
 
-                        HOperatorSet.ReadImage(out image[0], namesI[i]);
-                        HOperatorSet.ReadImage(out image[1], namesH[i]);
-
-                        MyGlobal.ImageMulti.Add(image);
                         if (MyGlobal.isShowHeightImg || namesB == null)
                         {
-                            MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                            HOperatorSet.ReadImage(out image[0], namesI[i]);
                         }
                         else
                         {
-                            HObject rgbImg;
-                            HOperatorSet.ReadImage(out rgbImg, namesB[i]);
-
-                            MyGlobal.hWindow_Final[i].HobjectToHimage(rgbImg);
-                            rgbImg.Dispose();
+                            HOperatorSet.ReadImage(out image[0], namesB[i]);
                         }
+                        
+                        HOperatorSet.ReadImage(out image[1], namesH[i]);
+
+                        MyGlobal.ImageMulti.Add(image);
+                       
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                      
                     }
                 }
 
