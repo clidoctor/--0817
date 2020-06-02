@@ -712,11 +712,6 @@ namespace SagensVision
                         zoomRgbImg.Dispose();
                         HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
 
-                        if (!MyGlobal.isShowHeightImg)
-                        {
-                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
-                            this.Invoke(asd);
-                        }
                         HeightImage.Dispose();
                         HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
@@ -729,8 +724,14 @@ namespace SagensVision
 
                         if (MyGlobal.isShowHeightImg)
                         {
-                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(IntensityImage);
+                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
                         }
+                        else
+                        {
+                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
+                            this.Invoke(asd);
+                        }
+
                         if (Station == 1)
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
@@ -745,18 +746,11 @@ namespace SagensVision
 
 
                         string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
-                        if (MyGlobal.isShowHeightImg)
-                        {
-                            HObject[] temp = { ZoomIntensityImg, ZoomHeightImg };
-                            MyGlobal.ImageMulti.Add(temp);
-                            zoomRgbImg.Dispose();
-                        }
-                        else
-                        {
-                            HObject[] temp = { zoomRgbImg, ZoomHeightImg };
-                            MyGlobal.ImageMulti.Add(temp);
-                            ZoomIntensityImg.Dispose();
-                        }
+
+                        HObject[] temp = { MyGlobal.hWindow_Final[Side-1].Image, ZoomHeightImg };
+                        MyGlobal.ImageMulti.Add(temp);
+
+
                         
                         while (!isSaveImgOK)//等待图片保存完成
                         {
@@ -773,13 +767,14 @@ namespace SagensVision
                         tempByteImg.Dispose();
                         rgbImg.Dispose();
                         byteImg.Dispose();
+                        zoomRgbImg.Dispose();
 
                         tempHeightImg.Dispose();
                         HeightImage.Dispose();
 
                         tempInteImg.Dispose();
                         IntensityImage.Dispose();
-
+                        ZoomIntensityImg.Dispose();
                     }
                 }
                 else
@@ -2511,6 +2506,15 @@ namespace SagensVision
                 if (OK != "OK")
                 {
                     ShowAndSaveMsg(OK);
+                }
+                if (OK == "OK" && i ==3)
+                {
+                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
+                }
+                else
+                {
+                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_NG"));
+
                 }
             }
 
