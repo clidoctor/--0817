@@ -27,7 +27,7 @@ namespace SagensVision.VisionTool
             WindowState = FormWindowState.Maximized;
             this.MinimizeBox = false;
             hWindow_Final1.HobjectToHimage(img);
-            if (FormMain.Yorigin.Count > idx && FormMain.Yorigin[idx].Length > 0)
+            if (FormMain.Yorigin.Count > (idx) && FormMain.Yorigin[idx].Length > 0)
             {
                 HObject cross;
                 HOperatorSet.GenCrossContourXld(out cross, new HTuple(FormMain.Yorigin[idx],FormMain.AnchorList[idx].Row), new HTuple(FormMain.Xorigin[idx], FormMain.AnchorList[idx].Col), 26, 1.5);
@@ -39,9 +39,10 @@ namespace SagensVision.VisionTool
                 }
                 if (FormMain.AnchorList[idx].Row !=0 || FormMain.AnchorList[idx].Col != 0)
                 {
-                    hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Row.ToString(), "red", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
-                    hWindow_Final1.viewWindow.dispMessage(FormMain.AnchorList[idx].Col.ToString(), "red", FormMain.AnchorList[idx].Row+80, FormMain.AnchorList[idx].Col);
-                    
+                    hWindow_Final1.viewWindow.dispMessage("Y:"+ FormMain.AnchorList[idx].Row.ToString(), "red", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage("X:" + FormMain.AnchorList[idx].Col.ToString(), "red", FormMain.AnchorList[idx].Row+60, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage("Rad:" + FormMain.AnchorList[idx].Angle.ToString(), "red", FormMain.AnchorList[idx].Row+120, FormMain.AnchorList[idx].Col);
+
                 }
 
             }
@@ -56,12 +57,12 @@ namespace SagensVision.VisionTool
 
         private void OnHMouseUp(object sender, HMouseEventArgs e)
         {
-            HObject reg;
-            HOperatorSet.Threshold(MyGlobal.ImageMulti[MyGlobal.ImageMulti.Count - 1][1], out reg, -20, 50);
-            HTuple per, min, max, range;
-            HOperatorSet.MinMaxGray(reg, MyGlobal.ImageMulti[MyGlobal.ImageMulti.Count - 1][1],0, out min, out max, out range);
             double z_byte = MyGlobal.GoSDK.z_byte_resolution == 0 ? ((int)255/ MyGlobal.globalConfig.zRange ): MyGlobal.GoSDK.z_byte_resolution;
             double z_start = MyGlobal.GoSDK.zStart == 0 ? MyGlobal.globalConfig.zStart : MyGlobal.GoSDK.zStart;
+            HObject reg;
+            HOperatorSet.Threshold(MyGlobal.ImageMulti[idx][1], out reg, z_start, 50);
+            HTuple per, min, max, range;
+            HOperatorSet.MinMaxGray(reg, MyGlobal.ImageMulti[idx][1],0, out min, out max, out range);
             byte[] grayArr = new byte[5];
             grayArr[0] = (byte)Math.Ceiling(((double)min + (double)(range / 5) - z_start) * z_byte);
             grayArr[1] = (byte)Math.Ceiling(((double)min + (double)(range / 4) - z_start) * z_byte);

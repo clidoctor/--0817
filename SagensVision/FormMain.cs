@@ -155,7 +155,7 @@ namespace SagensVision
             MouseClickCnt4++;
             if (MouseClickCnt4 == 2)
             {
-                ShowProfileToWindow(null, null, null, false, ShowMsg);
+                ShowProfileToWindow(null, null, null, null, false, ShowMsg);
                 ShowMsg = !ShowMsg;
                 MouseClickCnt4 = 0;
             }
@@ -725,7 +725,7 @@ namespace SagensVision
                         float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                         byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
                         byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
-
+                        isLastImgRecOK = true;
                         if (SurfacePointZ != null)
                         {
                             tempHeightImg.Dispose();
@@ -749,12 +749,7 @@ namespace SagensVision
                         byteImg.Dispose();
                         HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
 
-                        //关闭激光
-                        if (Side < 4)//给运动机构信号，执行下一次扫描
-                        {
-                            MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
-                        }
-
+                        
                         //生成并显示伪彩色图
                         rgbImg.Dispose();
                         PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
@@ -1571,7 +1566,7 @@ namespace SagensVision
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
 
-                    ShowProfileToWindow(xcoord, ycoord, sigleTitle, true, true);
+                    ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
                 }
                 
 
@@ -1586,13 +1581,14 @@ namespace SagensVision
         }
 
 
-        private double[] recordXCoord; double[] recordYCoord;string[] recordSigleTitle;
-        public void ShowProfileToWindow(double[] xcoord,double[] ycoord,string[] sigleTitle,bool isRun,bool showMsg)
+        private double[] recordXCoord; double[] recordYCoord;double[] recordZCoord;  string[] recordSigleTitle;
+        public void ShowProfileToWindow(double[] xcoord,double[] ycoord,double[] zcoord, string[] sigleTitle,bool isRun,bool showMsg)
         {
             if (isRun)
             {
                 this.recordXCoord = xcoord;
                 this.recordYCoord = ycoord;
+                this.recordZCoord = zcoord;
                 this.recordSigleTitle = sigleTitle;
             }
             if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null ||  recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
@@ -1600,16 +1596,16 @@ namespace SagensVision
                 return;
             }
             HObject regpot;
-            HOperatorSet.GenCrossContourXld(out regpot, new HTuple(recordXCoord), new HTuple(recordYCoord), 16, 0.5);
+            HOperatorSet.GenCrossContourXld(out regpot, new HTuple(recordXCoord)*10, new HTuple(recordYCoord) * 10, 16, 0.5);
             HObject ImageConst;
-            HOperatorSet.GenImageConst(out ImageConst, "byte", 500, 500);
+            HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
             ShowProfile.HobjectToHimage(ImageConst);
             ShowProfile.viewWindow.displayHobject(regpot, "green", true);
             if (showMsg)
             {
                 for (int i = 0; i < recordSigleTitle.Length; i++)
                 {
-                    ShowProfile.viewWindow.dispMessage(recordSigleTitle[i], "red", recordXCoord[i], recordYCoord[i]);
+                    ShowProfile.viewWindow.dispMessage($"{recordSigleTitle[i]} +({recordZCoord[i]})", "blue", recordXCoord[i] * 10, recordYCoord[i] * 10);
                 }
             }
             regpot.Dispose();
@@ -1623,8 +1619,8 @@ namespace SagensVision
         int Side = 0;
         Stopwatch sp = new Stopwatch();
 
-       
 
+        private bool isLastImgRecOK = true;
 
         public void TcpClientListen_Surface()
         {
@@ -1713,7 +1709,10 @@ namespace SagensVision
                                     MyGlobal.GoSDK.ProfileList.Clear();
 
                                 }
+                                while (!isLastImgRecOK)
+                                {
 
+                                }
                                 //打开激光
                                 MyGlobal.GoSDK.EnableProfle = false;
                                 string Cutjob = "切换作业";
@@ -1739,7 +1738,12 @@ namespace SagensVision
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
                             case "Stop":
-                                
+                                isLastImgRecOK = false;
+                                //关闭激光
+                                if (Side < 4)//给运动机构信号，执行下一次扫描
+                                {
+                                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
+                                }
 
                                 MyGlobal.GoSDK.EnableProfle = false;
                                 sp.Start();
