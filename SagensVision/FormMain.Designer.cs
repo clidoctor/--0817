@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
-            this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup();
-            this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.document2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.document1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager();
+            this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup(this.components);
+            this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.dockPanel5 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel5_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.dockPanel4 = new DevExpress.XtraBars.Docking.DockPanel();
@@ -44,7 +45,7 @@
             this.dockPanel6_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.dockPanel3 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel3_Container = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.barSubItem3 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
@@ -113,9 +114,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager();
-            this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView();
-            this.timer1 = new System.Windows.Forms.Timer();
+            this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
+            this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panelContainer1 = new DevExpress.XtraBars.Docking.DockPanel();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
@@ -853,7 +854,7 @@
             this.dockPanel7.Location = new System.Drawing.Point(0, 791);
             this.dockPanel7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(213, 201);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 201);
             this.dockPanel7.Size = new System.Drawing.Size(186, 201);
             // 
             // dockPanel7_Container
@@ -1024,7 +1025,7 @@
             this.panelContainer1.Controls.Add(this.dockPanel7);
             this.panelContainer1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             this.panelContainer1.FloatSize = new System.Drawing.Size(133, 328);
-            this.panelContainer1.ID = new System.Guid("f6ef7ec4-c1e8-4d8b-811c-2bb13bdba3f8");
+            this.panelContainer1.ID = new System.Guid("f3fa4cb3-fcf1-4b6e-a12a-87c482ccdb7e");
             this.panelContainer1.Location = new System.Drawing.Point(0, 30);
             this.panelContainer1.Name = "panelContainer1";
             this.panelContainer1.OriginalSize = new System.Drawing.Size(186, 275);
