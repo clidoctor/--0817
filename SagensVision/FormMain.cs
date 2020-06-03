@@ -22,6 +22,9 @@ namespace SagensVision
 {
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
+
+
+
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
         public static List<double[][]> ZCoord = new List<double[][]>();
@@ -400,8 +403,8 @@ namespace SagensVision
                 MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 0.7;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 3.5;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 1;
 
                 if (!SecretKey.License.SnOk)
                 {
@@ -629,10 +632,6 @@ namespace SagensVision
                     YCoord.Clear();
                     ZCoord.Clear();
                     StrLorC.Clear();
-                    Xorigin.Clear();
-                    Yorigin.Clear();
-                    NameOrigin.Clear();
-                    AnchorList.Clear();
                     MyGlobal.globalConfig.Count++;
 
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
@@ -743,7 +742,7 @@ namespace SagensVision
                         {
                             StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                             StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                            //StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                            StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
                             isSaveImgOK = true;
                         });
 
@@ -760,7 +759,6 @@ namespace SagensVision
                     }
                     catch (Exception ex)
                     {
-                        isLastImgRecOK = true;
                         return "RunSurfae --> " + ex.Message;
                     }
                     finally
@@ -780,7 +778,6 @@ namespace SagensVision
                 }
                 else
                 {
-                    isLastImgRecOK = true;
                     return "RunSurfae --> 高度数据为空";
                 }
             }
@@ -1603,9 +1600,9 @@ namespace SagensVision
                         }
                         //if (i == 89)
                         //{
-                        //    Debug.WriteLine("Xcoord" + i+"j"+j);
+                        //    Debug.WriteLine("xcoord" + i+"j"+j);
                         //}
-                        //Debug.WriteLine("Xcoord" + i + "j" + j);
+                        //Debug.WriteLine("xcoord" + i + "j" + j);
                         for (int k = 0; k < XCoord[i][j].Length; k++)
                         {
                             if (k > 0)
@@ -1632,6 +1629,8 @@ namespace SagensVision
                             }
                             ind++;
                         }
+
+
                     }
 
                 }
@@ -1671,7 +1670,7 @@ namespace SagensVision
                     //{
                     //    Debug.WriteLine("xcoord" + i);
                     //}
-                    Debug.WriteLine("xcoord" + i);
+                    //Debug.WriteLine(i);
                     int start = Start;
                     if (Start - 1 + i >= xcoord.Length)
                     {
@@ -2455,7 +2454,7 @@ namespace SagensVision
                         HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + RBG[i]);
 
                     HOperatorSet.ReadImage(out image[1], ImagePath + "\\" + HeightStr[i]);
-                    //MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                    MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
                     MyGlobal.ImageMulti.Add(image);
 
                 }
@@ -2511,15 +2510,15 @@ namespace SagensVision
                 {
                     ShowAndSaveMsg(OK);
                 }
-                //if (OK == "OK" && i == 3)
-                //{
-                //    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
-                //}
-                //else
-                //{
-                //    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_NG"));
+                if (OK == "OK" && i == 3)
+                {
+                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
+                }
+                else
+                {
+                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_NG"));
 
-                //}
+                }
             }
 
             //for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
@@ -2544,7 +2543,6 @@ namespace SagensVision
         }
 
         List<int> sidelist = new List<int>();
-        
         private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //打开图片
@@ -2565,7 +2563,6 @@ namespace SagensVision
                     }
 
                 }
-
                 MyGlobal.ImageMulti.Clear();
                 sidelist.Clear();
                 int len = openfile.FileNames.Length;
@@ -2683,16 +2680,10 @@ namespace SagensVision
                     {
                         return;
                     }
-
-                   
-
                     for (int i = 0; i < namesH.Length; i++)
                     {
                         HObject[] image = new HObject[2];
-                        HOperatorSet.GenEmptyObj(out image[0]);
-                        HOperatorSet.GenEmptyObj(out image[1]);
-                        image[0].Dispose();
-                        image[1].Dispose();
+
                         if (MyGlobal.isShowHeightImg || namesB == null)
                         {
                             HOperatorSet.ReadImage(out image[0], namesI[i]);
@@ -2768,21 +2759,11 @@ namespace SagensVision
             flset.ShowDialog();
         }
 
-        public static bool runOffLineFrmTag = false;
-
         private void barButtonItem10_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if(runOffLineFrmTag == false)
-            {
-                runOffLineFrmTag = true;
-                OfflineFrm OffFram = new OfflineFrm();
-                OffFram.Run = new OfflineFrm.RunOff(RunOffline);
-                OffFram.Show();
-            }
-            else
-            {
-                MessageBox.Show("离线Frm已打开！");
-            }
+            OfflineFrm OffFram = new OfflineFrm();
+            OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+            OffFram.Show();
 
         }
 
@@ -2835,14 +2816,11 @@ namespace SagensVision
                         MyGlobal.ImageMulti[i][j].Dispose();
                     }
                 }
-             
                 MyGlobal.ImageMulti.Clear();
                 for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
                 {
                     MyGlobal.hWindow_Final[i].ClearWindow();
                 }
-               
-                GC.Collect();
                 ShowAndSaveMsg("清理缓存成功！");
             }
             catch (Exception ex)
