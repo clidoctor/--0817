@@ -176,6 +176,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "OfflineFrm";
             this.Text = "离线测试";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OfflineFrm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.listBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
