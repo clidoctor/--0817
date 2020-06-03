@@ -34,7 +34,7 @@ namespace SagensVision.VisionTool
                 textBox_HeightMax.Text = MyGlobal.globalConfig.HeightMax.ToString();
                 textBox_HeightMin.Text = MyGlobal.globalConfig.HeightMin.ToString();
                 textBox_Start.Text = MyGlobal.globalConfig.Startpt.ToString();
-                textBox_totalZ.Text = MyGlobal.globalConfig.TotalZoffset.ToString();
+                textBox_totalZ.Text = MyGlobal.globalConfig.TotalZoffset.ToString();                
                 textBox_xOffset.Text = MyGlobal.globalConfig.gbParam[0].Xoffset.ToString();
                 textBox_yOffset.Text = MyGlobal.globalConfig.gbParam[0].Yoffset.ToString();
 

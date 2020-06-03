@@ -141,6 +141,7 @@ namespace SagensVision
             //match.load = new Matching.Form1.LoadParam(loadMathParam);
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+            gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
         }
 
 
@@ -800,7 +801,7 @@ namespace SagensVision
         }
 
 
-        private string RunOutLine(int Station, int id)
+        private string RunOutLine(int Station, int id,bool SaveBase = false)
         {
 
             if (Station == 1)
@@ -819,7 +820,7 @@ namespace SagensVision
             {
                 return "加载高度图和亮度图 Ng";
             }
-            string Ok = RunSide(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1]);
+            string Ok = RunSide(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], SaveBase);
 
             if (Ok != "OK")
             {
@@ -1776,6 +1777,11 @@ namespace SagensVision
                 if (SaveBase)
                 {
                     StaticOperate.WriteXML(ZCoord, MyGlobal.BaseTxtPath);
+                    //读取Z值基准高度】
+                    if (File.Exists(MyGlobal.BaseTxtPath))
+                    {
+                        MyGlobal.ZCoord = (List<double[][]>)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(List<double[][]>));
+                    }
                 }
                 if (Station == 4)
                 {
@@ -2471,11 +2477,15 @@ namespace SagensVision
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    string OK = RunOutLine(i + 1, i);
+                    string OK = RunOutLine(i + 1, i,true);
                     if (OK != "OK")
                     {
                         ShowAndSaveMsg(OK);
                         break;
+                    }
+                    if (i==3)
+                    {
+                        ShowAndSaveMsg(OK);
                     }
                 }
             }
@@ -2550,7 +2560,7 @@ namespace SagensVision
             openfile.Multiselect = true;
             if (openfile.ShowDialog() == DialogResult.OK)
             {
-
+                ShowProfile.ClearWindow();
                 for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                 {
                     for (int j = 0; j < 2; j++)
@@ -2848,6 +2858,11 @@ namespace SagensVision
                 ShowAndSaveMsg("清理缓存失败-->" + ex.Message);
             }
 
+        }
+        VisionTool.GlobalParam gbParamSet = new VisionTool.GlobalParam(); 
+        private void navBarItem5_LinkPressed_1(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
+        {
+            gbParamSet.ShowDialog();
         }
     }
 }

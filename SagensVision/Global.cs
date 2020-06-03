@@ -70,6 +70,13 @@ namespace SagensVision
         public double HeightMin = 0;//最小高度
         public double HeightMax = 0;
         public GlobalParam[] gbParam = new GlobalParam[4];
+        public GlobalConfig()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                gbParam[i] = new GlobalParam();
+            }
+        }
     }
 
     public class GlobalParam

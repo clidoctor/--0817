@@ -4277,7 +4277,7 @@ namespace SagensVision.VisionTool
                             {
                                 hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
                             }
-                            return msg + $"高度{0}超出范围" + ZCoord[i][0];
+                            return msg + $"高度{0}超出范围" + Math.Round(ZCoord[i][0],3);
                         }
                     }
                     
