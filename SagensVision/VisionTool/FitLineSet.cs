@@ -699,10 +699,20 @@ namespace SagensVision.VisionTool
                 }
                 if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
-                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                   
+                    if (fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fParam[Id - 1].roiP[roiID].xDist != 0)
+                    {
+                        //极值点下降
+                        FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    }
+                    else
+                    {
+                        FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    }
                 }
                 else
                 {
+                    
                     FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
                 }
             }
@@ -1306,7 +1316,16 @@ namespace SagensVision.VisionTool
                 }
                 if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
-                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    if (fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fParam[Id - 1].roiP[roiID].xDist != 0)
+                    {
+                        FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    }
+                    else
+                    {
+                        FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    }
+
+                        
                 }
                 else
                 {
@@ -1862,12 +1881,51 @@ namespace SagensVision.VisionTool
                 HTuple RowNew = temp_1[IntersetID];
                 HTuple ColNew = temp_2[IntersetID];
 
+                HTuple maxZ = new HTuple();HTuple mZCol = new HTuple();
                 //最高点下降
+                if (fParam[Id].roiP[roiID].SelectedType==1)
+                {
+                    //取最上
+                    maxZ = RowNew.TupleMin();
+                    HTuple mZColId = RowNew.TupleFindFirst(maxZ);
+                    mZCol = ColNew[mZColId];
+                }
+                else
+                {
+                    //取极值
+                    int deg = fParam[Id].roiP[roiID].AngleOfProfile;
+                    GetInflection(RowNew, ColNew, deg, out maxZ, out mZCol, hwnd, true, true, true, ShowFeatures);
 
-                //取最上
-                HTuple maxZ = RowNew.TupleMin();
-                HTuple mZColId = RowNew.TupleFindFirst(maxZ);
-                HTuple mZCol = ColNew[mZColId];
+                    if (maxZ.Length == 0)
+                    {
+                        return "Ignore";
+                    }
+                    HTuple Max1 = maxZ.TupleMax();
+                    HTuple maxId1 = maxZ.TupleFindFirst(Max1);
+
+                    mZCol = mZCol[maxId1];
+                    maxZ = Max1;
+      
+                    if (hwnd != null && ShowFeatures)
+                    {
+                        HObject cross2 = new HObject();
+                        HOperatorSet.GenCrossContourXld(out cross2, maxZ, mZCol, 10, 0);
+                        hwnd.viewWindow.displayHobject(cross2, "green");
+
+                    }
+
+                    if (maxZ.Length == 0)
+                    {
+                        return "Ignore";
+
+                        //return "FindMaxPt fail";
+                    }
+                }
+               
+               
+
+
+
                 double xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                 HTuple rowStart = maxZ.D + fParam[Id].roiP[roiID].TopDownDist * 200;
                 HTuple rowEnd = rowStart;
@@ -1903,7 +1961,17 @@ namespace SagensVision.VisionTool
                 if (IntersecR.Length > 1)
                 {
                     //取最上
-                    HTuple minC = fParam[Id].roiP[roiID].useLeft ? intersecC.TupleMin() : intersecC.TupleMax();
+                    //取距离 极值或最高点最近的点
+                    HTuple distMin = new HTuple();
+                    for (int i = 0; i < intersecC.Length; i++)
+                    {
+                        double innerDis = Math.Abs(intersecC[i].D - mZCol.D);
+                        distMin = distMin.TupleConcat(innerDis);
+                    }
+                    HTuple minDist = distMin.TupleMin();
+                    HTuple minId = distMin.TupleFindFirst(minDist);
+                    HTuple minC = intersecC[minId];
+                    //HTuple minC = fParam[Id].roiP[roiID].useLeft ? intersecC.TupleMin() : intersecC.TupleMax();
                     HTuple minCid = intersecC.TupleFindFirst(minC);
 
 
@@ -2565,7 +2633,15 @@ namespace SagensVision.VisionTool
                 }
                 if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
-                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    if (fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fParam[Id - 1].roiP[roiID].xDist != 0)
+                    {
+                        FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    }
+                    else
+                    {
+                        FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    }
+                   
                 }
                 else
                 {
@@ -2614,7 +2690,15 @@ namespace SagensVision.VisionTool
             }
             if (fParam[Id - 1].roiP[roiID].SelectedType == 0)
             {
-                FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                if (fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fParam[Id - 1].roiP[roiID].xDist != 0)
+                {
+                    FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+                else
+                {
+                    FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                }
+                
             }
             else
             {
@@ -3609,7 +3693,15 @@ namespace SagensVision.VisionTool
                         HTuple row1, col1; HTuple anchor, anchorc;
                         if (fParam[Sid].roiP[i].SelectedType == 0)
                         {
-                            string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                            if (fParam[Sid].roiP[i].TopDownDist != 0 && fParam[Sid].roiP[i].xDist != 0)
+                            {
+                                string ok = FindMaxPtFallDown(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                            }
+                            else
+                            {
+                                string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                            }
+                           
                         }
                         else
                         {
@@ -4235,7 +4327,15 @@ namespace SagensVision.VisionTool
                         HTuple row1, col1; HTuple anchor, anchorc;
                         if (fParam[Sid].roiP[i].SelectedType == 0)
                         {
-                            string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                            if (fParam[Sid].roiP[i].TopDownDist != 0 && fParam[Sid].roiP[i].xDist != 0)
+                            {
+                                string ok = FindMaxPtFallDown(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+                            }
+                            else
+                            {
+                                string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
+
+                            }
                         }
                         else
                         {
@@ -5468,7 +5568,16 @@ namespace SagensVision.VisionTool
 
                 if (fParam[SideId].roiP[CurrentRowIndex].SelectedType == 0)
                 {
-                    FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    if (fParam[SideId].roiP[CurrentRowIndex].TopDownDist != 0 && fParam[SideId].roiP[CurrentRowIndex].xDist != 0)
+                    {
+                        FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+
+                    }
+                    else
+                    {
+                        FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+
+                    }
                 }
                 else
                 {
