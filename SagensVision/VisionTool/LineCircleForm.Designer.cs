@@ -40,6 +40,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "LineCircleForm";
             this.Text = "LineCircleForm";
+            this.TransparencyKey = System.Drawing.Color.White;
             this.ResumeLayout(false);
 
         }

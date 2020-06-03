@@ -65,7 +65,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(510, 458);
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(489, 128);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(99, 18);
@@ -75,6 +76,8 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(67, 460);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
@@ -92,6 +95,7 @@
             // 
             // cb_runMode
             // 
+            this.cb_runMode.ForeColor = System.Drawing.Color.Black;
             this.cb_runMode.Location = new System.Drawing.Point(613, 86);
             this.cb_runMode.Margin = new System.Windows.Forms.Padding(4);
             this.cb_runMode.Name = "cb_runMode";
@@ -109,9 +113,11 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.White;
             this.groupBox1.Controls.Add(this.simpleButton2);
             this.groupBox1.Controls.Add(this.sBtn_next);
             this.groupBox1.Controls.Add(this.sBtn_pathImport);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.sBtn_pathSelect);
             this.groupBox1.Controls.Add(this.tb_PathName);
             this.groupBox1.Controls.Add(this.cb_runMode);
@@ -162,16 +168,18 @@
             // 
             // OfflineFrm
             // 
+            this.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(236)))), ((int)(((byte)(239)))));
+            this.Appearance.ForeColor = System.Drawing.Color.White;
+            this.Appearance.Options.UseBackColor = true;
+            this.Appearance.Options.UseForeColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 559);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.tb_checkNum);
             this.Controls.Add(this.tb_FileNum);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "OfflineFrm";
