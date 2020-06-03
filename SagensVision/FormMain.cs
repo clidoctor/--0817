@@ -716,19 +716,19 @@ namespace SagensVision
                         rgbImg.Dispose();
                         PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 1, 1, "constant");
                         ////
 
 
                         HeightImage.Dispose();
                         HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 1, "constant");
 
                         IntensityImage.Dispose();
                         HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomIntensityImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 1, "constant");
 
                         if (MyGlobal.isShowHeightImg)
                         {
@@ -791,8 +791,11 @@ namespace SagensVision
             }
             catch (Exception ex)
             {
+                return "RunSurfae Exception -->" + ex.Message;
+            }
+            finally
+            {
                 isLastImgRecOK = true;
-                return ex.Message;
             }
         }
 
@@ -1946,7 +1949,7 @@ namespace SagensVision
                                 if (MyGlobal.GoSDK.Start(ref Msg))
                                 {
                                     ShowAndSaveMsg($"打开激光成功！----");
-                                    Thread.Sleep(1000);
+                                    Thread.Sleep(100);
                                 }
                                 ShowAndSaveMsg(Msg);
                                 nSent = MyGlobal.sktClient.Send(ok);
