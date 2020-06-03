@@ -71,6 +71,11 @@ namespace SagensVision
             {
                 Directory.CreateDirectory(MyGlobal.DataPath);
             }
+            //读取Z值基准高度】
+            if (File.Exists(MyGlobal.BaseTxtPath))
+            {
+                MyGlobal.ZCoord = (List<double[][]>) StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(List<double[][]>));
+            }
 
             string dbcreate = SQLiteHelper.NewDbFile();
             if (dbcreate == "OK")
@@ -817,42 +822,7 @@ namespace SagensVision
             {
                 return Ok;
             }
-            // double[][] x, y, z; string[][] LorC;
-            //string OK = RunFindPoint(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], out x, out y, out z,out LorC, HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
-            // if (OK!="OK")
-            // {
-            //     return OK;
-            // }
-            // XCoord.Add(x);
-            // YCoord.Add(y);
-            // ZCoord.Add(z);
-            // StrLorC.Add(LorC);
-            // int count = 0;
-            // if (Station > 0 && XCoord.Count == Station)
-            // {
-            //     //写入到文本
-            //     StringBuilder Str = new StringBuilder();
-            //     for (int i = 0; i < Station; i++)
-            //     {
-            //         for (int j = 0; j < XCoord[i].GetLength(0); j++)
-            //         {
-            //             for (int k = 0; k < XCoord[i][j].Length; k++)
-            //             {
-            //                 double X1 = Math.Round(XCoord[i][j][k], 3);
-            //                 double Y1 = Math.Round(YCoord[i][j][k], 3);
-            //                 double Z1 = Math.Round(ZCoord[i][j][k], 3);
-            //                 string lorc = StrLorC[i][j][k];
-            //                 count++;
-            //                 Str.Append(count.ToString() + ","+ X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") +","+ lorc + "\r\n");
-            //             }
-            //         }
-            //     }
-            //     StaticOperate.writeTxt("D:\\Laser3D.txt", Str.ToString());
-            // }
-            // else
-            // {
-            //     OK = "第" + (Station - 1).ToString()+ "边 点位获取失败";
-            // }
+           
             return Ok;
         }
 
@@ -1342,7 +1312,7 @@ namespace SagensVision
             }
         }
 
-        private string RunSide(int Station, HObject IntensityImage, HObject HeightImage)
+        private string RunSide(int Station, HObject IntensityImage, HObject HeightImage,bool SaveBase = false)
         {
             try
             {
@@ -1800,6 +1770,10 @@ namespace SagensVision
                     Directory.CreateDirectory("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d");
                 }
                 StaticOperate.writeTxt("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d\\Laser3D_1.txt", Str.ToString());
+                if (SaveBase)
+                {
+                    StaticOperate.WriteXML(ZCoord, MyGlobal.BaseTxtPath);
+                }
                 if (Station == 4)
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
@@ -2452,7 +2426,7 @@ namespace SagensVision
                         HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + RBG[i]);
 
                     HOperatorSet.ReadImage(out image[1], ImagePath + "\\" + HeightStr[i]);
-                    //MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                    MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
                     MyGlobal.ImageMulti.Add(image);
 
                 }
@@ -2487,6 +2461,30 @@ namespace SagensVision
             }
 
         }
+
+        public void RunBaseHeight()
+        {
+            try
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    string OK = RunOutLine(i + 1, i);
+                    if (OK != "OK")
+                    {
+                        ShowAndSaveMsg(OK);
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ShowAndSaveMsg("RunOffline :" + ex.Message);
+            }
+
+        }
+
+
         private void barButtonItem9_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //手动测试
