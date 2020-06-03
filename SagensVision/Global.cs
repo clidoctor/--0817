@@ -27,6 +27,7 @@ namespace SagensVision
         public static string fileName1 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "0.shm";
         public static string fileName2 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "1.shm";
         public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "imgRotate.txt";
+        public static string BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" +"BaseHeight.xml";
 
         public static string SaveDatFileDirectory = "data\\datfile\\";
 
@@ -47,6 +48,7 @@ namespace SagensVision
         public static FitLineSet flset2 = new FitLineSet("Fix");
         public static List<HObject[]> ImageMulti = new List<HObject[]>();
         public static int[] imgRotateArr = new int[4];
+        public static List<double[][]> ZCoord = new List<double[][]>();//z值基准高度
     }
 
     public  class GlobalConfig
@@ -58,13 +60,30 @@ namespace SagensVision
         public  string MotorIpAddress = "127.0.0.1";
         public  int MotorPort = 8080;
         public DataContext dataContext = new DataContext();
-        public double TotalZoffset = 0;
+        public double TotalZoffset = 0;//整体Z
         public int Startpt = 1;//起始点
         public int Count = 0;
-        public double zRange;
+        public double zRange;//扫描z范围
         public double zStart;
+        public double Color_min = 0;
+        public double Color_max = 0;//颜色区间
+        public double HeightMin = 0;//最小高度
+        public double HeightMax = 0;
+        public GlobalParam[] gbParam = new GlobalParam[4];
+        public GlobalConfig()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                gbParam[i] = new GlobalParam();
+            }
+        }
     }
 
+    public class GlobalParam
+    {
+       public double Xoffset = 0;
+       public double Yoffset = 0;
+    }
 
     public static class StaticOperate
     {

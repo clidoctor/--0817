@@ -1240,7 +1240,7 @@ namespace SagensVision.VisionTool
             LoadToUI(Id);
             RoiIsMoving = false;
             textBox_SingleOffset.Text = fParam[Id].SigleZoffset.ToString();
-            textBox_Total.Text = MyGlobal.globalConfig.TotalZoffset.ToString();
+            //textBox_Total.Text = MyGlobal.globalConfig.TotalZoffset.ToString();
             RArray = null;
             CArray = null;
             Row = null;
@@ -4142,6 +4142,9 @@ namespace SagensVision.VisionTool
                         //HOperatorSet.AffineTransPoint3d(HomMat3D, row, col,zcoord, out row, out col,out zcoord);
                         HOperatorSet.AffineTransPoint2d(HomMat3D, row, col, out row, out col);
                         zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalConfig.TotalZoffset;
+                        row = row + MyGlobal.globalConfig.gbParam[Sid].Xoffset;
+                        col = col + MyGlobal.globalConfig.gbParam[Sid].Yoffset;
+
                     }
 
                     for (int n = 0; n < row.Length; n++)
@@ -4264,6 +4267,20 @@ namespace SagensVision.VisionTool
                     {
                         hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
                     }
+
+                    //判断 Z 值高度
+                    if (MyGlobal.ZCoord.Count !=0)
+                    {
+                        if (ZCoord[i][0] - MyGlobal.ZCoord[Sid][i][0] > MyGlobal.globalConfig.HeightMax || ZCoord[i][0] - MyGlobal.ZCoord[Sid][i][0] < MyGlobal.globalConfig.HeightMin)
+                        {
+                            if (hwind != null)
+                            {
+                                hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
+                            }
+                            return msg + $"高度{0}超出范围" + Math.Round(ZCoord[i][0],3);
+                        }
+                    }
+                    
                 }
 
 
@@ -4383,10 +4400,41 @@ namespace SagensVision.VisionTool
                         HOperatorSet.FitLineContourXld(line, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
                         HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
 
+                       
+                       
+
+                        HTuple lineAngle;
+                        HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
+                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+
+                        if (Xresolution == 0)
+                        {
+                            return "XResolution=0";
+                        }
+                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
+
+                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                        if (fParam[Sid].roiP[i].offset < 0)
+                        {
+                            D = -D;
+                        }
+                        double distR = D * Math.Cos(lineAngle.D);
+                        double distC = D * Math.Sin(lineAngle.D);
+
+                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+
+                        Rowbg = Rowbg.D - distR + yOffset;
+                        RowEd = RowEd.D - distR + yOffset;
+                        Colbg = Colbg.D - distC + xOffset;
+                        ColEd = ColEd.D - distC + xOffset;
+
                         HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
                         HLines.Add(lineCoord);
-                        row = (Rowbg.D + RowEd.D) / 2 + fParam[Sid].roiP[i].Yoffset;
-                        col = (Colbg.D + ColEd.D) / 2 + fParam[Sid].roiP[i].Xoffset;
+                        row = (Rowbg.D + RowEd.D) / 2 ;
+                        col = (Colbg.D + ColEd.D) / 2 ;
 
                         if (hwind != null)
                         {
@@ -4438,15 +4486,44 @@ namespace SagensVision.VisionTool
                     {
                         HObject ArcObj = new HObject();
                         HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
-                        HTuple Rb, Cb, Re, Ce, Nr1, Nc1, Ptorder;
-                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, 0, 5, 2, out Rb, out Cb, out Re, out Ce, out Nr1, out Nc1, out Ptorder);
-                        HOperatorSet.GenContourPolygonXld(out ArcObj, Rb.TupleConcat(Re), Cb.TupleConcat(Ce));
+                        HTuple Rowbg, Colbg, RowEd, ColEd, Nr1, Nc1, Ptorder;
+                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr1, out Nc1, out Ptorder);
+                        HOperatorSet.GenContourPolygonXld(out ArcObj, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
 
-                        HTuple lineCoord = Rb.TupleConcat(Cb).TupleConcat(Re).TupleConcat(Ce);
+
+                        HTuple lineAngle;
+                        HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
+                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+
+                        if (Xresolution == 0)
+                        {
+                            return "XResolution=0";
+                        }
+                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
+
+                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                        if (fParam[Sid].roiP[i].offset < 0)
+                        {
+                            D = -D;
+                        }
+                        double distR = D * Math.Cos(lineAngle.D);
+                        double distC = D * Math.Sin(lineAngle.D);
+
+                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+
+                        Rowbg = Rowbg.D - distR + yOffset;
+                        RowEd = RowEd.D - distR + yOffset;
+                        Colbg = Colbg.D - distC + xOffset;
+                        ColEd = ColEd.D - distC + xOffset;
+
+                       
+                        row = (Rowbg.D + RowEd.D) / 2 ;
+                        col = (Colbg.D + ColEd.D) / 2 ;
+                        HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
                         HLines.Add(lineCoord);
-
-                        row = (Rb.D + Re.D) / 2 + fParam[Sid].roiP[i].Yoffset;
-                        col = (Cb.D + Ce.D) / 2 + fParam[Sid].roiP[i].Xoffset;
 
                         if (hwind != null)
                         {
@@ -5361,15 +5438,15 @@ namespace SagensVision.VisionTool
                     case "textBox_SingleOffset":
                         fParam[SideId].SigleZoffset = num;
                         break;
-                    case "textBox_totalZ":
-                        MyGlobal.globalConfig.TotalZoffset = num;
-                        break;
-                    case "textBox_Start":
-                        if ((int)num <= 0)
-                        {
-                            num = 1;
-                        }
-                        MyGlobal.globalConfig.Startpt = (int)num;
+                    //case "textBox_totalZ":
+                    //    MyGlobal.globalConfig.TotalZoffset = num;
+                    //    break;
+                    //case "textBox_Start":
+                    //    if ((int)num <= 0)
+                    //    {
+                    //        num = 1;
+                    //    }
+                    //    MyGlobal.globalConfig.Startpt = (int)num;
                         break;
                     case "textBox_OffsetX2":
                         fParam[SideId].MinZ = num;
@@ -5385,17 +5462,39 @@ namespace SagensVision.VisionTool
                 {
                     return;
                 }
-
+                int count = dataGridView1.SelectedCells.Count;
+                List<int> rowInd = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                    if (!rowInd.Contains(Ind))
+                    {
+                        rowInd.Add(Ind);
+                    }
+                }
+                
                 switch (tb.Name)
                 {
                     case "textBox_OffsetX":
-                        fParam[SideId].roiP[roiID].Xoffset = num;
+                        for (int i = 0; i < rowInd.Count; i++)
+                        {
+                            fParam[SideId].roiP[rowInd[i]].Xoffset = num;
+                        }
+                        
                         break;
                     case "textBox_OffsetY":
-                        fParam[SideId].roiP[roiID].Yoffset = num;
+                        for (int i = 0; i < rowInd.Count; i++)
+                        {
+                            fParam[SideId].roiP[rowInd[i]].Yoffset = num;
+                        }
+                       
                         break;
                     case "textBox_Offset":
-                        fParam[SideId].roiP[roiID].offset = num;
+                        for (int i = 0; i < rowInd.Count; i++)
+                        {
+                            fParam[SideId].roiP[rowInd[i]].offset = num;
+                        }
+                        
                         break;
                     case "textBox_ZFtMax":
                         fParam[SideId].roiP[roiID].ZftMax = (int)num;
