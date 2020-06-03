@@ -179,5 +179,10 @@ namespace SagensVision
               }
 
         }
+
+        private void OfflineFrm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            FormMain.runOffLineFrmTag = false;
+        }
     }
 }

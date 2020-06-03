@@ -208,6 +208,12 @@
     <Compile Include="VisionTool\Fixcs.Designer.cs">
       <DependentUpon>Fixcs.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\GlobalParam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\GlobalParam.Designer.cs">
+      <DependentUpon>GlobalParam.cs</DependentUpon>
+    </Compile>
     <Compile Include="VisionTool\ImgRotateFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -295,6 +301,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\Fixcs.resx">
       <DependentUpon>Fixcs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\GlobalParam.resx">
+      <DependentUpon>GlobalParam.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\ImgRotateFrm.resx">
       <DependentUpon>ImgRotateFrm.cs</DependentUpon>
