@@ -403,8 +403,8 @@ namespace SagensVision
                 MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 0.7;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 3.5;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 1;
 
                 if (!SecretKey.License.SnOk)
                 {
@@ -648,7 +648,6 @@ namespace SagensVision
                     for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
                     {
                         MyGlobal.hWindow_Final[i].ClearWindow();
-                        MyGlobal.hWindow_Final[i].Image.Dispose();
                     }
 
                 }
@@ -711,19 +710,19 @@ namespace SagensVision
                         rgbImg.Dispose();
                         PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                         zoomRgbImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 1, 1, "constant");
                         ////
 
 
                         HeightImage.Dispose();
                         HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 1, "constant");
 
                         IntensityImage.Dispose();
                         HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomIntensityImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 0.7, 3.5, "constant");
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 1, "constant");
 
                         if (MyGlobal.isShowHeightImg)
                         {
@@ -784,8 +783,11 @@ namespace SagensVision
             }
             catch (Exception ex)
             {
-
-                return ex.Message;
+                return "RunSurfae Exception -->" + ex.Message;
+            }
+            finally
+            {
+                isLastImgRecOK = true;
             }
         }
 
@@ -1895,10 +1897,9 @@ namespace SagensVision
             //ok = Encoding.UTF8.GetBytes(Sendmsg);
             while (true)
             {
+                int len = MyGlobal.sktClient.Receive(buffer);
                 try
                 {
-                    int len = MyGlobal.sktClient.Receive(buffer);
-
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
@@ -1973,7 +1974,7 @@ namespace SagensVision
                                 if (MyGlobal.GoSDK.Start(ref Msg))
                                 {
                                     ShowAndSaveMsg($"打开激光成功！----");
-                                    Thread.Sleep(1000);
+                                    Thread.Sleep(100);
                                 }
                                 ShowAndSaveMsg(Msg);
                                 nSent = MyGlobal.sktClient.Send(ok);
