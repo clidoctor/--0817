@@ -824,7 +824,6 @@
             this.navBarItem6.Name = "navBarItem6";
             this.navBarItem6.SmallImage = ((System.Drawing.Image)(resources.GetObject("navBarItem6.SmallImage")));
             this.navBarItem6.Visible = false;
-            this.navBarItem6.LinkPressed += new DevExpress.XtraNavBar.NavBarLinkEventHandler(this.navBarItem6_LinkPressed);
             // 
             // navBarItem9
             // 

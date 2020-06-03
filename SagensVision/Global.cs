@@ -10,7 +10,6 @@ using SagensSdk;
 using System.Net.Sockets;
 using System.Xml;
 using System.Xml.Serialization;
-using MatchingModule;
 using ChoiceTech.Halcon.Control;
 using System.Net;
 using System.Threading;
@@ -38,10 +37,8 @@ namespace SagensVision
         public static string ReceiveMsg = "";
         public static GlobalConfig globalConfig = new GlobalConfig();
 
-        public static MatchingAssistant[] mAssistant = new MatchingAssistant[2];
-        public static MatchingParam[] parameterSet =new MatchingParam[2];
-        public static MatchingResult[] tResult = new MatchingResult[2];
-        public static bool isShowHeightImg = false;
+     
+        public static bool isShowHeightImg = true;
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
         public static bool sktOK = false;
@@ -132,7 +129,7 @@ namespace SagensVision
                 Directory.CreateDirectory(path + FormMain.saveImageTime);
             }
             string filePath = path + FormMain.saveImageTime + "\\" + Product ;
-            HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
+           HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
 
 
         }
