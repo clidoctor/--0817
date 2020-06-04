@@ -409,8 +409,8 @@ namespace SagensVision
                 MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 4;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 1;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
 
                 if (!SecretKey.License.SnOk)
                 {
@@ -723,12 +723,12 @@ namespace SagensVision
                         HeightImage.Dispose();
                         HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 4, 1, "constant");
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 4, "constant");
 
                         IntensityImage.Dispose();
                         HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomIntensityImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 4, 1, "constant");
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 4, "constant");
 
                         //if (MyGlobal.isShowHeightImg)
                         //{
@@ -1926,11 +1926,15 @@ namespace SagensVision
                         switch (ReturnStr)
                         {
                             case "Start":
+                                Stopwatch sp1 = new Stopwatch();
+                                sp.Start();
                                 if (MyGlobal.GoSDK.ProfileList != null)
                                 {
                                     MyGlobal.GoSDK.ProfileList.Clear();
 
                                 }
+
+
                                 while (!isLastImgRecOK)
                                 {
 
@@ -1957,6 +1961,8 @@ namespace SagensVision
                                     Thread.Sleep(100);
                                 }
                                 ShowAndSaveMsg(Msg);
+                                sp.Stop();
+                                ShowAndSaveMsg(" Start space time:--->"+ sp.ElapsedMilliseconds.ToString());
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
                             case "Stop":
@@ -2519,15 +2525,15 @@ namespace SagensVision
                 {
                     ShowAndSaveMsg(OK);
                 }
-                if (OK == "OK" && i == 3)
-                {
-                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
-                }
-                else
-                {
-                    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_NG"));
+                //if (OK == "OK" && i == 3)
+                //{
+                //    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
+                //}
+                //else
+                //{
+                //    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_NG"));
 
-                }
+                //}
             }
 
             //for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
