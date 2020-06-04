@@ -23,7 +23,7 @@ namespace SagensVision
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
 
-
+        public static bool runOffLineFrmTag = false;
 
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
