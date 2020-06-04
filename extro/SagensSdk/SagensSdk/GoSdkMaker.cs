@@ -218,6 +218,8 @@ namespace SagensSdk
                         byte[] surfaceDataZByte = new byte[surfaceWidth * surfaceHeight];
 
                         //保存Kdat
+                        Stopwatch sp = new Stopwatch();
+                        sp.Start();
                         if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy))
                         {
                             Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
@@ -236,7 +238,9 @@ namespace SagensSdk
                             SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset,width = (int)surfaceWidth,height = (int)surfaceHeight };
                             StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_H.dat", ssd);
                         }
-
+                        sp.Stop();
+                        long b = sp.ElapsedMilliseconds;
+                        sp.Start();
 
                         for (int j = 0; j < surfaceHeight; j++)
                         {
@@ -245,19 +249,21 @@ namespace SagensSdk
                                 surfaceData[j*surfaceWidth +k ] = surfacePoints[j * surfaceWidth + k] == -32768 ? -12 : (float)(ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]);
                                 surfaceDataX[j * surfaceWidth + k] = (float)(ctx.xOffset + ctx.xResolution * k);
                                 surfaceDataY[j * surfaceWidth + k] = (float)(ctx.yOffset + ctx.yResolution * j);
-                                if (IsRecSurfaceDataZByte)
-                                {
-                                    if (surfacePoints[j * surfaceWidth + k] != -32768)
-                                    {
-                                        surfaceDataZByte[j * surfaceWidth + k] = (byte)Math.Ceiling(((ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]) - zStart) * z_byte_resolution);
-                                    }
-                                    else
-                                    {
-                                        surfaceDataZByte[j * surfaceWidth + k] = 0;
-                                    }
-                                }
+                                //if (IsRecSurfaceDataZByte)
+                                //{
+                                //    if (surfacePoints[j * surfaceWidth + k] != -32768)
+                                //    {
+                                //        surfaceDataZByte[j * surfaceWidth + k] = (byte)Math.Ceiling(((ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]) - zStart) * z_byte_resolution);
+                                //    }
+                                //    else
+                                //    {
+                                //        surfaceDataZByte[j * surfaceWidth + k] = 0;
+                                //    }
+                                //}
                             }
                         }
+                        sp.Stop();
+                        long a = sp.ElapsedMilliseconds;
 
                         this.SurfaceDataZByte = surfaceDataZByte;
                         this.surfaceDataX = surfaceDataX;

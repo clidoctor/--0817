@@ -409,7 +409,7 @@ namespace SagensVision
                 MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 4;
                 MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 1;
 
                 if (!SecretKey.License.SnOk)
@@ -686,7 +686,7 @@ namespace SagensVision
 
                         float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                         byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
-                        byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
+                        //byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
                         isLastImgRecOK = true;
                         if (SurfacePointZ != null)
                         {
@@ -704,41 +704,41 @@ namespace SagensVision
                         }
                         else { return "亮度值为空"; }
 
-                        tempByteImg.Dispose();
-                        MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
-                        MyGlobal.GoSDK.SurfaceDataZByte = null;
+                        //tempByteImg.Dispose();
+                        //MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
+                        //MyGlobal.GoSDK.SurfaceDataZByte = null;
 
-                        byteImg.Dispose();
-                        HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        //byteImg.Dispose();
+                        //HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
 
                         ////
                         ////生成并显示伪彩色图
-                        rgbImg.Dispose();
-                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
-                        zoomRgbImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 1, 1, "constant");
+                        //rgbImg.Dispose();
+                        //PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+                        //zoomRgbImg.Dispose();
+                        //HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 4, 1, "constant");
                         ////
 
 
                         HeightImage.Dispose();
                         HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 1, "constant");
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 4, 1, "constant");
 
                         IntensityImage.Dispose();
                         HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomIntensityImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 1, "constant");
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 4, 1, "constant");
 
-                        if (MyGlobal.isShowHeightImg)
-                        {
+                        //if (MyGlobal.isShowHeightImg)
+                        //{
                             MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
-                        }
-                        else
-                        {
-                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
-                            this.Invoke(asd);
-                        }
+                        //}
+                        //else
+                        //{
+                        //    Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
+                        //    this.Invoke(asd);
+                        //}
 
                         if (Station == 1)
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -748,7 +748,7 @@ namespace SagensVision
                         {
                             StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
                             StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                            StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                            //StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
                             isSaveImgOK = true;
                         });
 
@@ -1978,6 +1978,7 @@ namespace SagensVision
                                         break;
                                     }
                                 }
+                                ShowAndSaveMsg($"接收图像耗时-->{sp.ElapsedMilliseconds}");
                                 sp.Reset();
 
                                 string Msg2 = "扫描结束";
