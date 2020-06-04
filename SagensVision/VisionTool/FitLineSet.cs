@@ -1239,7 +1239,7 @@ namespace SagensVision.VisionTool
             RoiIsMoving = true;
             LoadToUI(Id);
             RoiIsMoving = false;
-            textBox_SingleOffset.Text = fParam[Id].SigleZoffset.ToString();
+            //textBox_SingleOffset.Text = fParam[Id].SigleZoffset.ToString();
             //textBox_Total.Text = MyGlobal.globalConfig.TotalZoffset.ToString();
             RArray = null;
             CArray = null;
@@ -1498,8 +1498,7 @@ namespace SagensVision.VisionTool
         {
             if (trackBarValue1 < trackBarValue2 && RArray.GetLength(0) > 0)
             {
-                textBox_Start.Text = trackBarValue1.ToString();
-                textBox_End.Text = trackBarValue2.ToString();
+                
 
                 if (trackBarValue1 < trackBarValue2)
                 {
@@ -1534,7 +1533,7 @@ namespace SagensVision.VisionTool
         private void cb_LorR_CheckedChanged(object sender, EventArgs e)
         {
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            fParam[Id].BeLeft = cb_LorR.Checked;
+            //fParam[Id].BeLeft = cb_LorR.Checked;
         }
 
         private void textBox_Start_TextChanged(object sender, EventArgs e)
@@ -3751,6 +3750,16 @@ namespace SagensVision.VisionTool
                         hwind.viewWindow.displayHobject(Cross, "green", false);
 
                     }
+
+
+                    int Clipping = 0;
+                    int iNum = row.Length;
+                    int clipping = (int)fParam[Sid].roiP[i].ClippingPer / 100;
+                    Clipping = iNum  * clipping;
+                    if (Clipping == iNum /2)
+                    {
+                        Clipping = iNum / 2 - 1;
+                    }
                     //直线段拟合
                     if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
                     {
@@ -3760,7 +3769,7 @@ namespace SagensVision.VisionTool
 
 
                         HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
-                        HOperatorSet.FitLineContourXld(line, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
+                        HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
                         HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
                         HTuple lineAngle;
                         HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
@@ -3843,7 +3852,7 @@ namespace SagensVision.VisionTool
                         HObject ArcObj = new HObject();
                         HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
                         HTuple Rb, Cb, Re, Ce, Nr1, Nc1, Ptorder;
-                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, 0, 5, 2, out Rb, out Cb, out Re, out Ce, out Nr1, out Nc1, out Ptorder);
+                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, Clipping, 5, 2, out Rb, out Cb, out Re, out Ce, out Nr1, out Nc1, out Ptorder);
                         HOperatorSet.GenContourPolygonXld(out ArcObj, Rb.TupleConcat(Re), Cb.TupleConcat(Ce));
 
                         HTuple lineAngle;
@@ -4388,6 +4397,15 @@ namespace SagensVision.VisionTool
                         hwind.viewWindow.displayHobject(Cross, "green", false);
 
                     }
+
+                    int Clipping = 0;
+                    int iNum = row.Length;
+                    double clipping = fParam[Sid].roiP[i].ClippingPer/100;
+                    Clipping = (int)(iNum * clipping);
+                    if (Clipping == iNum / 2)
+                    {
+                        Clipping = iNum / 2 - 1;
+                    }
                     //直线段拟合
                     if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
                     {
@@ -4395,9 +4413,8 @@ namespace SagensVision.VisionTool
                         HOperatorSet.GenContourPolygonXld(out line, row, col);
 
 
-
                         HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
-                        HOperatorSet.FitLineContourXld(line, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
+                        HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
                         HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
 
                        
@@ -4487,7 +4504,7 @@ namespace SagensVision.VisionTool
                         HObject ArcObj = new HObject();
                         HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
                         HTuple Rowbg, Colbg, RowEd, ColEd, Nr1, Nc1, Ptorder;
-                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, 0, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr1, out Nc1, out Ptorder);
+                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr1, out Nc1, out Ptorder);
                         HOperatorSet.GenContourPolygonXld(out ArcObj, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
 
 
@@ -5511,9 +5528,19 @@ namespace SagensVision.VisionTool
                     case "textBox_xDist":
                         fParam[SideId].roiP[roiID].xDist = num;
                         break;
-                    //case "textBox_OffsetX2":
-                    //    fParam[SideId].MinZ = num;
-                    //    break;
+                    case "textBox_Clipping":
+                        if (num>50)
+                        {
+                            textBox_Clipping.Text = "50";
+                            num = 50;
+                        }
+                        if (num<0)
+                        {
+                            textBox_Clipping.Text = "0";
+                            num = 0;
+                        }
+                        fParam[SideId].roiP[roiID].ClippingPer = num;
+                        break;
                     //case "textBox_OffsetY2":
                     //    fParam[SideId].MaxZ = num;
                     //    break;
@@ -5723,12 +5750,11 @@ namespace SagensVision.VisionTool
                 textBox_OffsetX.Text = fParam[SideId].roiP[id].Xoffset.ToString();
                 textBox_Offset.Text = fParam[SideId].roiP[id].offset.ToString();
 
-                textBox_OffsetX2.Text = fParam[SideId].roiP[id].Xoffset2.ToString();
-                textBox_OffsetY2.Text = fParam[SideId].roiP[id].Yoffset2.ToString();
                 textBox_OffsetZ.Text = fParam[SideId].roiP[id].Zoffset.ToString();
                 textBox_ZFtMax.Text = fParam[SideId].roiP[id].ZftMax.ToString();
                 textBox_ZFtMin.Text = fParam[SideId].roiP[id].ZftMin.ToString();
                 textBox_ZFtRad.Text = fParam[SideId].roiP[id].ZftRad.ToString();
+                textBox_Clipping.Text = fParam[SideId].roiP[id].ClippingPer.ToString();
                 //textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
 
                 comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
@@ -6073,7 +6099,7 @@ namespace SagensVision.VisionTool
         public double ZftRad = 0;
         public double TopDownDist = 0;
         public double xDist = 0;
-
+        public double ClippingPer = 0;//忽略点百分比
         /// <summary>
         ///  0 极值 1 最高点下降
         /// </summary>
