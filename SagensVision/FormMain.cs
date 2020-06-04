@@ -22,6 +22,9 @@ namespace SagensVision
 {
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
+
+        public static bool runOffLineFrmTag = false;
+
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
         public static List<double[][]> ZCoord = new List<double[][]>();
@@ -405,8 +408,8 @@ namespace SagensVision
                 MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 0.7;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 3.5;
+                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
 
                 if (!SecretKey.License.SnOk)
                 {
@@ -634,10 +637,6 @@ namespace SagensVision
                     YCoord.Clear();
                     ZCoord.Clear();
                     StrLorC.Clear();
-                    Xorigin.Clear();
-                    Yorigin.Clear();
-                    NameOrigin.Clear();
-                    AnchorList.Clear();
                     MyGlobal.globalConfig.Count++;
 
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
@@ -686,7 +685,7 @@ namespace SagensVision
 
                         float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                         byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
-                        byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
+                        //byte[] surfaceDataZByte = MyGlobal.GoSDK.SurfaceDataZByte;
                         isLastImgRecOK = true;
                         if (SurfacePointZ != null)
                         {
@@ -704,41 +703,41 @@ namespace SagensVision
                         }
                         else { return "亮度值为空"; }
 
-                        tempByteImg.Dispose();
-                        MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
-                        MyGlobal.GoSDK.SurfaceDataZByte = null;
+                        //tempByteImg.Dispose();
+                        //MyGlobal.GoSDK.GenHalconImage(surfaceDataZByte, SurfaceWidth, SurfaceHeight, out tempByteImg);
+                        //MyGlobal.GoSDK.SurfaceDataZByte = null;
 
-                        byteImg.Dispose();
-                        HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        //byteImg.Dispose();
+                        //HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
 
                         ////
                         ////生成并显示伪彩色图
-                        rgbImg.Dispose();
-                        PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
-                        zoomRgbImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 1, 1, "constant");
+                        //rgbImg.Dispose();
+                        //PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
+                        //zoomRgbImg.Dispose();
+                        //HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 4, 1, "constant");
                         ////
 
 
                         HeightImage.Dispose();
                         HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 1, "constant");
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 4, "constant");
 
                         IntensityImage.Dispose();
                         HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
                         ZoomIntensityImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 1, "constant");
+                        HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 4, "constant");
 
-                        if (MyGlobal.isShowHeightImg)
-                        {
+                        //if (MyGlobal.isShowHeightImg)
+                        //{
                             MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
-                        }
-                        else
-                        {
-                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
-                            this.Invoke(asd);
-                        }
+                        //}
+                        //else
+                        //{
+                        //    Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
+                        //    this.Invoke(asd);
+                        //}
 
                         if (Station == 1)
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -765,7 +764,6 @@ namespace SagensVision
                     }
                     catch (Exception ex)
                     {
-                        isLastImgRecOK = true;
                         return "RunSurfae --> " + ex.Message;
                     }
                     finally
@@ -785,7 +783,6 @@ namespace SagensVision
                 }
                 else
                 {
-                    isLastImgRecOK = true;
                     return "RunSurfae --> 高度数据为空";
                 }
             }
@@ -1573,9 +1570,9 @@ namespace SagensVision
                         }
                         //if (i == 89)
                         //{
-                        //    Debug.WriteLine("Xcoord" + i+"j"+j);
+                        //    Debug.WriteLine("xcoord" + i+"j"+j);
                         //}
-                        //Debug.WriteLine("Xcoord" + i + "j" + j);
+                        //Debug.WriteLine("xcoord" + i + "j" + j);
                         for (int k = 0; k < XCoord[i][j].Length; k++)
                         {
                             if (k > 0)
@@ -1602,6 +1599,8 @@ namespace SagensVision
                             }
                             ind++;
                         }
+
+
                     }
 
                 }
@@ -1641,7 +1640,7 @@ namespace SagensVision
                     //{
                     //    Debug.WriteLine("xcoord" + i);
                     //}
-                    Debug.WriteLine("xcoord" + i);
+                    //Debug.WriteLine(i);
                     int start = Start;
                     if (Start - 1 + i >= xcoord.Length)
                     {
@@ -1926,11 +1925,15 @@ namespace SagensVision
                         switch (ReturnStr)
                         {
                             case "Start":
+                                Stopwatch sp1 = new Stopwatch();
+                                sp.Start();
                                 if (MyGlobal.GoSDK.ProfileList != null)
                                 {
                                     MyGlobal.GoSDK.ProfileList.Clear();
 
                                 }
+
+
                                 while (!isLastImgRecOK)
                                 {
 
@@ -1957,6 +1960,8 @@ namespace SagensVision
                                     Thread.Sleep(100);
                                 }
                                 ShowAndSaveMsg(Msg);
+                                sp.Stop();
+                                ShowAndSaveMsg(" Start space time:--->"+ sp.ElapsedMilliseconds.ToString());
                                 nSent = MyGlobal.sktClient.Send(ok);
                                 break;
                             case "Stop":
@@ -1978,6 +1983,7 @@ namespace SagensVision
                                         break;
                                     }
                                 }
+                                ShowAndSaveMsg($"接收图像耗时-->{sp.ElapsedMilliseconds}");
                                 sp.Reset();
 
                                 string Msg2 = "扫描结束";
@@ -2551,7 +2557,6 @@ namespace SagensVision
         }
 
         List<int> sidelist = new List<int>();
-        
         private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //打开图片
@@ -2572,7 +2577,6 @@ namespace SagensVision
                     }
 
                 }
-
                 MyGlobal.ImageMulti.Clear();
                 sidelist.Clear();
                 int len = openfile.FileNames.Length;
@@ -2690,16 +2694,10 @@ namespace SagensVision
                     {
                         return;
                     }
-
-                   
-
                     for (int i = 0; i < namesH.Length; i++)
                     {
                         HObject[] image = new HObject[2];
-                        HOperatorSet.GenEmptyObj(out image[0]);
-                        HOperatorSet.GenEmptyObj(out image[1]);
-                        image[0].Dispose();
-                        image[1].Dispose();
+
                         if (MyGlobal.isShowHeightImg || namesB == null)
                         {
                             HOperatorSet.ReadImage(out image[0], namesI[i]);
@@ -2775,21 +2773,11 @@ namespace SagensVision
             flset.ShowDialog();
         }
 
-        public static bool runOffLineFrmTag = false;
-
         private void barButtonItem10_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            if(runOffLineFrmTag == false)
-            {
-                runOffLineFrmTag = true;
-                OfflineFrm OffFram = new OfflineFrm();
-                OffFram.Run = new OfflineFrm.RunOff(RunOffline);
-                OffFram.Show();
-            }
-            else
-            {
-                MessageBox.Show("离线Frm已打开！");
-            }
+            OfflineFrm OffFram = new OfflineFrm();
+            OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+            OffFram.Show();
 
         }
 
@@ -2842,14 +2830,11 @@ namespace SagensVision
                         MyGlobal.ImageMulti[i][j].Dispose();
                     }
                 }
-             
                 MyGlobal.ImageMulti.Clear();
                 for (int i = 0; i < MyGlobal.hWindow_Final.Length; i++)
                 {
                     MyGlobal.hWindow_Final[i].ClearWindow();
                 }
-               
-                GC.Collect();
                 ShowAndSaveMsg("清理缓存成功！");
             }
             catch (Exception ex)

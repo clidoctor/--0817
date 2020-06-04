@@ -57,8 +57,8 @@ namespace SagensVision.Sensor
                     MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                    MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 0.7;
-                    MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 3.5;
+                    MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                    MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
                     StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
                 }
                 MessageBox.Show(Error);
