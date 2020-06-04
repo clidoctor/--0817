@@ -121,7 +121,6 @@ namespace SagensVision
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
 
-
             if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
             {
                 MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
