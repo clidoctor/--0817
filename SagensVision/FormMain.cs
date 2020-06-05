@@ -526,6 +526,8 @@ namespace SagensVision
                     StrLorC.Clear();
                     Xorigin.Clear();
                     Yorigin.Clear();
+                    NameOrigin.Clear();
+                    AnchorList.Clear();
                     MyGlobal.globalConfig.Count++;
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
 
@@ -637,6 +639,11 @@ namespace SagensVision
                     YCoord.Clear();
                     ZCoord.Clear();
                     StrLorC.Clear();
+                    Xorigin.Clear();
+                    Yorigin.Clear();
+                    NameOrigin.Clear();
+                    AnchorList.Clear();
+
                     MyGlobal.globalConfig.Count++;
 
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
