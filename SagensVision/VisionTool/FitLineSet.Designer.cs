@@ -45,7 +45,7 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.checkBox_Near = new System.Windows.Forms.CheckBox();
+            this.checkBox_Far = new System.Windows.Forms.CheckBox();
             this.checkBox_midPt = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -311,7 +311,7 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.checkBox_Near);
+            this.groupBox7.Controls.Add(this.checkBox_Far);
             this.groupBox7.Controls.Add(this.checkBox_midPt);
             this.groupBox7.Controls.Add(this.label2);
             this.groupBox7.Controls.Add(this.label1);
@@ -332,16 +332,16 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
             // 
-            // checkBox_Near
+            // checkBox_Far
             // 
-            this.checkBox_Near.AutoSize = true;
-            this.checkBox_Near.Location = new System.Drawing.Point(21, 50);
-            this.checkBox_Near.Name = "checkBox_Near";
-            this.checkBox_Near.Size = new System.Drawing.Size(62, 18);
-            this.checkBox_Near.TabIndex = 97;
-            this.checkBox_Near.Text = "最近点";
-            this.checkBox_Near.UseVisualStyleBackColor = true;
-            this.checkBox_Near.CheckedChanged += new System.EventHandler(this.checkBox_Near_CheckedChanged);
+            this.checkBox_Far.AutoSize = true;
+            this.checkBox_Far.Location = new System.Drawing.Point(21, 50);
+            this.checkBox_Far.Name = "checkBox_Far";
+            this.checkBox_Far.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_Far.TabIndex = 97;
+            this.checkBox_Far.Text = "最远点";
+            this.checkBox_Far.UseVisualStyleBackColor = true;
+            this.checkBox_Far.CheckedChanged += new System.EventHandler(this.checkBox_Near_CheckedChanged);
             // 
             // checkBox_midPt
             // 
@@ -1222,6 +1222,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_Clipping;
         private System.Windows.Forms.CheckBox checkBox_midPt;
-        private System.Windows.Forms.CheckBox checkBox_Near;
+        private System.Windows.Forms.CheckBox checkBox_Far;
     }
 }

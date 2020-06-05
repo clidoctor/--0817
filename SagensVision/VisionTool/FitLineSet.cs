@@ -644,7 +644,7 @@ namespace SagensVision.VisionTool
                     textBox_Deg.Text = fParam[Index].roiP[0].AngleOfProfile.ToString();
                     checkBox_useLeft.Checked = fParam[Index].roiP[0].useLeft;
                     checkBox_midPt.Checked = fParam[Index].roiP[0].useMidPt;
-                    checkBox_Near.Checked = fParam[Index].roiP[0].useNear;
+                    checkBox_Far.Checked = fParam[Index].roiP[0].useNear;
                     textBox_downDist.Text = fParam[Index].roiP[0].TopDownDist.ToString();
                     textBox_xDist.Text = fParam[Index].roiP[0].xDist.ToString();
                     comboBox_GetPtType.SelectedIndex = 0;
@@ -3877,7 +3877,13 @@ namespace SagensVision.VisionTool
                     if (hwind != null && debug)
                     {
                         HObject Cross = new HObject();
+                        //HObject contour = new HObject();
+                        //HOperatorSet.GenContourPolygonXld(out contour, row, col);
+                        //HOperatorSet.SmoothContoursXld(contour, out contour, 15);
+                        //HTuple rowSmooth, colSmooth;
+                        //HOperatorSet.GetContourXld(contour, out rowSmooth, out colSmooth);
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
+                        hwind.viewWindow.displayHobject(Cross, "green", false);
 
                         hwind.viewWindow.displayHobject(Cross, "green", false);
 
@@ -4548,6 +4554,11 @@ namespace SagensVision.VisionTool
                     if (hwind != null && debug)
                     {
                         HObject Cross = new HObject();
+                        //HObject contour = new HObject();
+                        //HOperatorSet.GenContourPolygonXld(out contour, row, col);
+                        //HOperatorSet.SmoothContoursXld(contour, out contour, 9);
+                        //HTuple rowSmooth, colSmooth;
+                        //HOperatorSet.GetContourXld(contour, out rowSmooth, out colSmooth);
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
                         hwind.viewWindow.displayHobject(Cross, "green", false);
 
@@ -5917,7 +5928,7 @@ namespace SagensVision.VisionTool
                 //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
                 checkBox_useLeft.Checked = fParam[SideId].roiP[id].useLeft;
                 checkBox_midPt.Checked = fParam[SideId].roiP[id].useMidPt;
-                checkBox_Near.Checked = fParam[SideId].roiP[0].useNear;
+                checkBox_Far.Checked = fParam[SideId].roiP[0].useNear;
                 textBox_downDist.Text = fParam[SideId].roiP[id].TopDownDist.ToString();
                 textBox_xDist.Text = fParam[SideId].roiP[id].xDist.ToString();
                 comboBox_GetPtType.SelectedIndex = fParam[SideId].roiP[id].SelectedType;
@@ -6089,11 +6100,11 @@ namespace SagensVision.VisionTool
                 fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
                 if (fParam[Id].roiP[currentId].SelectedType ==1)
                 {
-                    checkBox_Near.Visible = true;
+                    checkBox_Far.Visible = true;
                 }
                 else
                 {
-                    checkBox_Near.Visible = false;
+                    checkBox_Far.Visible = false;
                 }
             }
         }
@@ -6124,7 +6135,7 @@ namespace SagensVision.VisionTool
             int currentId = CurrentRowIndex;
             if (currentId != -1)
             {
-                fParam[Id].roiP[currentId].useNear = checkBox_Near.Checked;
+                fParam[Id].roiP[currentId].useNear = !checkBox_Far.Checked;
             }
         }
     }
