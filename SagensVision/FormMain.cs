@@ -124,7 +124,6 @@ namespace SagensVision
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
 
-
             if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
             {
                 MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
@@ -527,6 +526,8 @@ namespace SagensVision
                     StrLorC.Clear();
                     Xorigin.Clear();
                     Yorigin.Clear();
+                    NameOrigin.Clear();
+                    AnchorList.Clear();
                     MyGlobal.globalConfig.Count++;
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
 
@@ -638,6 +639,11 @@ namespace SagensVision
                     YCoord.Clear();
                     ZCoord.Clear();
                     StrLorC.Clear();
+                    Xorigin.Clear();
+                    Yorigin.Clear();
+                    NameOrigin.Clear();
+                    AnchorList.Clear();
+
                     MyGlobal.globalConfig.Count++;
 
                     label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();

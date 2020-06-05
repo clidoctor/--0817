@@ -643,6 +643,8 @@ namespace SagensVision.VisionTool
                     textBox_phi.Text = ((int)deg.D).ToString();
                     textBox_Deg.Text = fParam[Index].roiP[0].AngleOfProfile.ToString();
                     checkBox_useLeft.Checked = fParam[Index].roiP[0].useLeft;
+                    checkBox_midPt.Checked = fParam[Index].roiP[0].useMidPt;
+                    checkBox_Near.Checked = fParam[Index].roiP[0].useNear;
                     textBox_downDist.Text = fParam[Index].roiP[0].TopDownDist.ToString();
                     textBox_xDist.Text = fParam[Index].roiP[0].xDist.ToString();
                     comboBox_GetPtType.SelectedIndex = 0;
@@ -1855,14 +1857,20 @@ namespace SagensVision.VisionTool
                 double C1 = RoiCoord[1] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
                 double R2 = RoiCoord[2] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;
                 double C2 = RoiCoord[3] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
+                if (C1<0)
+                {
+                    C1 = 0;
+                }
 
                 //生成矩形框
-                HObject Rec = new HObject();
-                HOperatorSet.GenRectangle1(out Rec, R1, C1, R2, C2);
+                HObject left = new HObject();
+                HObject right = new HObject();
+                HOperatorSet.GenRegionLine(out left, 0, C1, 1000, C1);
+                HOperatorSet.GenRegionLine(out right, 0, C2, 1000, C2);
                 if (hwnd != null && ShowFeatures)
                 {
-
-                    hwnd.viewWindow.displayHobject(Rec, "green");
+                    hwnd.viewWindow.displayHobject(left, "green");
+                    hwnd.viewWindow.displayHobject(right, "green");
 
                 }
 
@@ -1960,14 +1968,14 @@ namespace SagensVision.VisionTool
                 if (IntersecR.Length > 1)
                 {
                     //取最上
-                    //取距离 极值或最高点最近的点
+                    //取距离 极值或最高点 最近的点/最远点
                     HTuple distMin = new HTuple();
                     for (int i = 0; i < intersecC.Length; i++)
                     {
                         double innerDis = Math.Abs(intersecC[i].D - mZCol.D);
                         distMin = distMin.TupleConcat(innerDis);
                     }
-                    HTuple minDist = distMin.TupleMin();
+                    HTuple minDist = fParam[Id].roiP[roiID].useNear ?  distMin.TupleMin(): distMin.TupleMax();
                     HTuple minId = distMin.TupleFindFirst(minDist);
                     HTuple minC = intersecC[minId];
                     //HTuple minC = fParam[Id].roiP[roiID].useLeft ? intersecC.TupleMin() : intersecC.TupleMax();
@@ -2013,6 +2021,22 @@ namespace SagensVision.VisionTool
                 LastR = Max;
                 AnchorR = LastR;
                 AnchorC = LastC;
+
+
+                ////启用中间点
+                //if (fParam[Id].roiP[roiID].useMidPt)
+                //{
+                //    HTuple EdgeCol = fParam[Id].roiP[roiID].useLeft ? temp_2.TupleMin() : temp_2.TupleMax();
+                //    HTuple EdgColId = temp_2.TupleFindFirst(EdgeCol);
+                //    HTuple EdgegRow = temp_1[EdgColId];
+                //    //取中间点
+                //    HTuple midR = (LastR + EdgegRow) / 2;
+                //    HTuple midC = (LastC + EdgeCol) / 2;
+                //    LastR = midR;
+                //    LastC = midC;
+                //}
+
+
                 if (hwnd != null && ShowFeatures)
                 {
                     HObject cross1 = new HObject();
@@ -2042,6 +2066,7 @@ namespace SagensVision.VisionTool
                 //{
                 //    LastC = LastC / 200 / 0.007;
                 //}
+
 
                 if (hwnd != null)
                 {
@@ -2138,13 +2163,20 @@ namespace SagensVision.VisionTool
                 double R2 = RoiCoord[2] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;
                 double C2 = RoiCoord[3] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
 
+                if (C1 < 0)
+                {
+                    C1 = 0;
+                }
+
                 //生成矩形框
-                HObject Rec = new HObject();
-                HOperatorSet.GenRectangle1(out Rec, R1, C1, R2, C2);
+                HObject left = new HObject();
+                HObject right = new HObject();
+                HOperatorSet.GenRegionLine(out left, 0, C1, 1000, C1);
+                HOperatorSet.GenRegionLine(out right, 0, C2, 1000, C2);
                 if (hwnd != null && ShowFeatures)
                 {
-
-                    hwnd.viewWindow.displayHobject(Rec, "green");
+                    hwnd.viewWindow.displayHobject(left, "green");
+                    hwnd.viewWindow.displayHobject(right, "green");
 
                 }
 
@@ -2175,6 +2207,21 @@ namespace SagensVision.VisionTool
                 LastR = Max;
                 AnchorR = LastR;
                 AnchorC = LastC;
+
+                ////启用中间点
+                //if (fParam[Id].roiP[roiID].useMidPt)
+                //{
+                //    HTuple EdgeCol = fParam[Id].roiP[roiID].useLeft ? temp_2.TupleMin() : temp_2.TupleMax();
+                //    HTuple EdgColId = temp_2.TupleFindFirst(EdgeCol);
+                //    HTuple EdgegRow = temp_1[EdgColId];
+                //    //取中间点
+                //    HTuple midR = (LastR + EdgegRow) / 2;
+                //    HTuple midC = (LastC + EdgeCol) / 2;
+                //    LastR = midR;
+                //    LastC = midC;
+                //}
+
+
                 if (hwnd != null && ShowFeatures)
                 {
                     HObject cross = new HObject();
@@ -2186,15 +2233,13 @@ namespace SagensVision.VisionTool
                 if (LastR.Length == 0)
                 {
                     return "Ignore";
-
-                    //return "FindMaxPt fail";
                 }
-                //HOperatorSet.TupleGenSequence(0, LastR.Length - 1, 1, out LastR);
                 HTuple PtID = new HTuple();
                 HOperatorSet.TupleGreaterEqualElem(col, LastC, out PtID);
                 PtID = PtID.TupleFindFirst(1);
                 LastR = Row[ProfileId][PtID];
                 LastC = CArray[ProfileId][PtID];
+
                 //LastR = ProfileId;
                 //if (MyGlobal.globalConfig.dataContext.xResolution != 0)
                 //{
@@ -2319,6 +2364,81 @@ namespace SagensVision.VisionTool
 
         }
 
+        public string FindEdge(int SideId, int ProfileId, out HTuple EdgeR, out HTuple EdgeC,  HWindow_Final hwnd = null, bool ShowFeatures = false)
+        {
+            EdgeR = new HTuple(); EdgeC = new HTuple(); 
+            try
+            {
+                HTuple row, col;
+                ShowProfile(ProfileId, out row, out col, hwnd);
+
+                int Id = SideId - 1;
+                if (RArray == null || RArray[ProfileId].Length == 0)
+                {
+                    return "RArray is NULL";
+                }
+        
+                if (roiList[Id].Count == 0)
+                {
+                    return "FindEdge error roiList is Null";
+                }
+                int roiID = -1;
+                for (int i = 0; i < fParam[Id].roiP.Count; i++)
+                {
+
+                    for (int j = 0; j < fParam[Id].roiP[i].NumOfSection; j++)
+                    {
+                        roiID++;
+                        if (roiID == ProfileId)
+                        {
+                            break;
+                        }
+                    }
+                    if (roiID == ProfileId)
+                    {
+                        roiID = i;
+                        break;
+                    }
+                }
+
+                EdgeC = fParam[Id].roiP[roiID].useLeft ? col.TupleMin() : col.TupleMax();
+                HTuple mZRowId = col.TupleFindFirst(EdgeC);
+                EdgeR = row[mZRowId];
+
+                if (hwnd != null && ShowFeatures)
+                {
+                    HObject cross = new HObject();
+                    HOperatorSet.GenCrossContourXld(out cross, EdgeR, EdgeC, 10, 0);
+                    hwnd.viewWindow.displayHobject(cross, "green");
+
+                }
+
+                HTuple PtID = new HTuple();
+                HOperatorSet.TupleGreaterEqualElem(col, EdgeC, out PtID);
+                PtID = PtID.TupleFindFirst(1);
+                EdgeR = Row[ProfileId][PtID];
+                EdgeC = CArray[ProfileId][PtID];
+
+                if (hwnd != null)
+                {
+                    HObject cross1 = new HObject();
+                    HOperatorSet.GenCrossContourXld(out cross1, EdgeR, EdgeC, 10, 0);
+                    HOperatorSet.SetColor(hwindow_final2.HWindowHalconID, "green");
+                    HOperatorSet.DispObj(cross1, hwindow_final2.HWindowHalconID);
+                }
+
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+
+                return "FindEdge error" + ex.Message;
+            }
+
+        }
+
+
+
 
         /// <summary>
         /// 获取极大值或极小值
@@ -2356,10 +2476,21 @@ namespace SagensVision.VisionTool
                 HOperatorSet.DerivateFunct1d(hv_SmoothedFunction, "first", out hv_Derivative);
                 HOperatorSet.ZeroCrossingsFunct1d(hv_Derivative, out hv_ZeroCrossings);
                 HTuple hv_indCol = ((hv_ZeroCrossings.TupleString(".0f"))).TupleNumber();
+
                 if (hv_indCol.Length == 0)
                 {
-                    hv_colout = new HTuple();
-                    hv_rowout = new HTuple();
+                    //if (UseLeft)
+                    //{
+                    //    hv_colout = cols.TupleMin();
+                    //    HTuple minId = cols.TupleFind(hv_colout);
+                    //    hv_rowout = rows[minId];
+                    //}
+                    //else
+                    //{
+                        hv_colout = new HTuple();
+                        hv_rowout = new HTuple();
+                    //}                   
+
                     return "OK";
                 }
                 HOperatorSet.GetYValueFunct1d(hv_SmoothedFunction, hv_ZeroCrossings, "constant",
@@ -3040,6 +3171,9 @@ namespace SagensVision.VisionTool
                     return "GenSection截面在图像之外";
                 }
 
+                row = row[lessId2];
+                col = col[lessId2];
+
                 //且 行列大于零
                 HTuple lessId3, lessId4;
                 HOperatorSet.TupleGreaterElem(col, 0, out lessId3);
@@ -3545,7 +3679,7 @@ namespace SagensVision.VisionTool
                 HObject contVer = new HObject();
                 HOperatorSet.GenContourPolygonXld(out contVer, rb2.TupleConcat(re2), cb2.TupleConcat(ce2));
                 HTuple Row, Col, Angle;
-                HOperatorSet.AngleLx(rb2, cb2, rb1, cb2, out Angle);
+                HOperatorSet.AngleLx(rb2, cb2, re2, ce2, out Angle);
                 HTuple isOver;
                 //HOperatorSet.IntersectionContoursXld(contHorizon, contVer, "mutual", out Row, out Col, out isOver);
                 HOperatorSet.IntersectionLines(rb1, cb1, re1, ce1, rb2, cb2, re2, ce2, out Row, out Col, out isOver);
@@ -3681,7 +3815,7 @@ namespace SagensVision.VisionTool
                         Debug.WriteLine(i);
                     }
                     HTuple row = new HTuple(), col = new HTuple();
-
+                    HTuple edgeRow = new HTuple();HTuple edgeCol = new HTuple();//边缘点
                     for (int j = Num; j < Add + fParam[Sid].roiP[i].NumOfSection; j++)
                     {
                         if (Num == 99)
@@ -3689,7 +3823,7 @@ namespace SagensVision.VisionTool
                             Debug.WriteLine(Num);
                         }
                         //Debug.WriteLine(Num);
-                        HTuple row1, col1; HTuple anchor, anchorc;
+                        HTuple row1, col1; HTuple anchor, anchorc;HTuple edgeR1, edgeC1;
                         if (fParam[Sid].roiP[i].SelectedType == 0)
                         {
                             if (fParam[Sid].roiP[i].TopDownDist != 0 && fParam[Sid].roiP[i].xDist != 0)
@@ -3708,26 +3842,24 @@ namespace SagensVision.VisionTool
                             string ok = FindMaxPtFallDown(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
 
                         }
-
+                        if (fParam[Sid].roiP[i].useMidPt)
+                        {
+                            //取边缘点
+                            string ok = FindEdge(Sid + 1, j, out edgeR1, out edgeC1);
+                            edgeRow = edgeRow.TupleConcat(edgeR1);
+                            edgeCol = edgeCol.TupleConcat(edgeC1);
+                        }
 
                         row = row.TupleConcat(row1);
                         col = col.TupleConcat(col1);
+                        
                         Num++;
                     }
 
                     string msg = "";
                     if (hwind != null)
                     {
-
-                        //foreach (var item in fParam[Sid].DicPointName)
-                        //{
-                        //    if (item.Value == i)
-                        //    {
-                        //        msg = item.Key;
-                        //    }
-                        //}
-                        msg = fParam[Sid].DicPointName[i];
-
+                       msg = fParam[Sid].DicPointName[i];
                     }
 
                     if (row.Length < 2)
@@ -3749,6 +3881,12 @@ namespace SagensVision.VisionTool
 
                         hwind.viewWindow.displayHobject(Cross, "green", false);
 
+                        if (fParam[Sid].roiP[i].useMidPt)
+                        {
+                            HObject Cross1 = new HObject();
+                            HOperatorSet.GenCrossContourXld(out Cross1, edgeRow, edgeCol, 5, 0.5);
+                            hwind.viewWindow.displayHobject(Cross1, "green", false);
+                        }
                     }
 
 
@@ -3761,18 +3899,34 @@ namespace SagensVision.VisionTool
                         Clipping = iNum / 2 - 1;
                     }
                     //直线段拟合
-                    if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
-                    {
+                    //if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
+                    //{
                         HObject line = new HObject();
                         HOperatorSet.GenContourPolygonXld(out line, row, col);
-
-
 
                         HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
                         HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
                         HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
-                        HTuple lineAngle;
-                        HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
+                    HTuple lineAngle;
+                    HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
+                    HObject lineEdge = new HObject();
+                    if (fParam[Sid].roiP[i].useMidPt)
+                    {                        
+                        HOperatorSet.GenContourPolygonXld(out lineEdge, edgeRow, edgeCol);
+                        HTuple Rowbg1, Colbg1, RowEd1, ColEd1, Nr1, Nc1, Dist1;
+                        HOperatorSet.FitLineContourXld(lineEdge, "tukey", -1, Clipping, 5, 2, out Rowbg1, out Colbg1, out RowEd1, out ColEd1, out Nr1, out Nc1, out Dist1);
+                        HOperatorSet.GenContourPolygonXld(out lineEdge, Rowbg1.TupleConcat(RowEd1), Colbg1.TupleConcat(ColEd1));
+
+                        HTuple midRbg = (Rowbg + Rowbg1) / 2;
+                        HTuple midRed = (RowEd + RowEd1) / 2;
+                        HTuple midCbg = (Colbg + Colbg1) / 2;
+                        HTuple midCed = (ColEd + ColEd1) / 2;
+                        Rowbg = midRbg;
+                        RowEd = midRed;
+                        Colbg = midCbg;
+                        ColEd = midCed;
+                    }
+                      
 
                         double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                         double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
@@ -3844,59 +3998,61 @@ namespace SagensVision.VisionTool
                         if (hwind != null && debug)
                         {
                             hwind.viewWindow.displayHobject(line, "red");
-                        }
-                        siglePart = line;
+                            hwind.viewWindow.displayHobject(lineEdge, "red");
+
                     }
-                    else
-                    {
-                        HObject ArcObj = new HObject();
-                        HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
-                        HTuple Rb, Cb, Re, Ce, Nr1, Nc1, Ptorder;
-                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, Clipping, 5, 2, out Rb, out Cb, out Re, out Ce, out Nr1, out Nc1, out Ptorder);
-                        HOperatorSet.GenContourPolygonXld(out ArcObj, Rb.TupleConcat(Re), Cb.TupleConcat(Ce));
+                    siglePart = line;
+                    //}
+                    //else
+                    //{
+                    //    HObject ArcObj = new HObject();
+                    //    HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
+                    //    HTuple Rb, Cb, Re, Ce, Nr1, Nc1, Ptorder;
+                    //    HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, Clipping, 5, 2, out Rb, out Cb, out Re, out Ce, out Nr1, out Nc1, out Ptorder);
+                    //    HOperatorSet.GenContourPolygonXld(out ArcObj, Rb.TupleConcat(Re), Cb.TupleConcat(Ce));
 
-                        HTuple lineAngle;
-                        HOperatorSet.AngleLx(Rb, Cb, Re, Ce, out lineAngle);
-                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+                    //    HTuple lineAngle;
+                    //    HOperatorSet.AngleLx(Rb, Cb, Re, Ce, out lineAngle);
+                    //    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                    //    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
 
-                        if (Xresolution == 0)
-                        {
-                            return "XResolution = 0";
-                        }
-                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
-                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
-                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
-                        if (fParam[Sid].roiP[i].offset < 0)
-                        {
-                            D = -D;
-                        }
-                        double distR = D * Math.Cos(lineAngle.D);
-                        double distC = D * Math.Sin(lineAngle.D);
+                    //    if (Xresolution == 0)
+                    //    {
+                    //        return "XResolution = 0";
+                    //    }
+                    //    double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                    //    double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
+                    //    double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                    //    if (fParam[Sid].roiP[i].offset < 0)
+                    //    {
+                    //        D = -D;
+                    //    }
+                    //    double distR = D * Math.Cos(lineAngle.D);
+                    //    double distC = D * Math.Sin(lineAngle.D);
 
-                        row = (Rb.D + Re.D) / 2 - distR;
-                        col = (Cb.D + Ce.D) / 2 - distC;
+                    //    row = (Rb.D + Re.D) / 2 - distR;
+                    //    col = (Cb.D + Ce.D) / 2 - distC;
 
-                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
-                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
-                        row = row - yOffset;
-                        col = col - xOffset;
+                    //    double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                    //    double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+                    //    row = row - yOffset;
+                    //    col = col - xOffset;
 
-                        if (hwind != null)
-                        {
-                            HObject CrossArc = new HObject();
-                            HOperatorSet.GenCrossContourXld(out CrossArc, row, col, 30, 0.5);
-                            hwind.viewWindow.displayHobject(CrossArc, "blue");
-                        }
-                        if (hwind != null && debug)
-                        {
+                    //    if (hwind != null)
+                    //    {
+                    //        HObject CrossArc = new HObject();
+                    //        HOperatorSet.GenCrossContourXld(out CrossArc, row, col, 30, 0.5);
+                    //        hwind.viewWindow.displayHobject(CrossArc, "blue");
+                    //    }
+                    //    if (hwind != null && debug)
+                    //    {
 
-                            hwind.viewWindow.displayHobject(ArcObj, "red");
-                            hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
-                        }
+                    //        hwind.viewWindow.displayHobject(ArcObj, "red");
+                    //        hwind.viewWindow.dispMessage(msg, "blue", row.D, col.D);
+                    //    }
 
-                        siglePart = ArcObj;
-                    }
+                    //    siglePart = ArcObj;
+                    //}
 
 
 
@@ -3924,10 +4080,8 @@ namespace SagensVision.VisionTool
 
                         return "偏移点" + msg + "设置在图像之外";
                     }
-                    //
 
-
-
+                    #region MyRegion
                     ////除去 -100 的点
                     //HTuple eq100 = new HTuple();
                     //HOperatorSet.TupleLessElem(zcoord, -5, out eq100);
@@ -4133,7 +4287,8 @@ namespace SagensVision.VisionTool
                     //    return "单边设置 区域重复点数过大";
                     //}
                     #endregion 单边去重
-
+                    #endregion
+                    //
 
                     if (hwind != null && debug == false)
                     {
@@ -5761,6 +5916,8 @@ namespace SagensVision.VisionTool
                 //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
                 //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
                 checkBox_useLeft.Checked = fParam[SideId].roiP[id].useLeft;
+                checkBox_midPt.Checked = fParam[SideId].roiP[id].useMidPt;
+                checkBox_Near.Checked = fParam[SideId].roiP[0].useNear;
                 textBox_downDist.Text = fParam[SideId].roiP[id].TopDownDist.ToString();
                 textBox_xDist.Text = fParam[SideId].roiP[id].xDist.ToString();
                 comboBox_GetPtType.SelectedIndex = fParam[SideId].roiP[id].SelectedType;
@@ -5930,6 +6087,14 @@ namespace SagensVision.VisionTool
             if (currentId != -1)
             {
                 fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
+                if (fParam[Id].roiP[currentId].SelectedType ==1)
+                {
+                    checkBox_Near.Visible = true;
+                }
+                else
+                {
+                    checkBox_Near.Visible = false;
+                }
             }
         }
 
@@ -5940,6 +6105,26 @@ namespace SagensVision.VisionTool
             if (currentId != -1)
             {
                 fParam[Id].roiP[currentId].useLeft = checkBox_useLeft.Checked;
+            }
+        }
+
+        private void checkBox_midPt_CheckedChanged(object sender, EventArgs e)
+        {
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            int currentId = CurrentRowIndex;
+            if (currentId != -1)
+            {
+                fParam[Id].roiP[currentId].useMidPt = checkBox_midPt.Checked;
+            }
+        }
+
+        private void checkBox_Near_CheckedChanged(object sender, EventArgs e)
+        {
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            int currentId = CurrentRowIndex;
+            if (currentId != -1)
+            {
+                fParam[Id].roiP[currentId].useNear = checkBox_Near.Checked;
             }
         }
     }
@@ -6108,6 +6293,14 @@ namespace SagensVision.VisionTool
         /// 取左侧值
         /// </summary>
         public bool useLeft = true;
+        /// <summary>
+        /// 取中间点
+        /// </summary>
+        public bool useMidPt = false;
+        /// <summary>
+        /// 取最近点还是最远点
+        /// </summary>
+        public bool useNear = false;
 
         public RoiParam Clone()
         {

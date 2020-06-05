@@ -45,6 +45,11 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.checkBox_Near = new System.Windows.Forms.CheckBox();
+            this.checkBox_midPt = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox_Clipping = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
             this.comboBox_GetPtType = new System.Windows.Forms.ComboBox();
             this.checkBox_useLeft = new System.Windows.Forms.CheckBox();
@@ -119,9 +124,6 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox_Clipping = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -309,6 +311,8 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.checkBox_Near);
+            this.groupBox7.Controls.Add(this.checkBox_midPt);
             this.groupBox7.Controls.Add(this.label2);
             this.groupBox7.Controls.Add(this.label1);
             this.groupBox7.Controls.Add(this.textBox_Clipping);
@@ -327,6 +331,53 @@
             this.groupBox7.TabIndex = 67;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
+            // 
+            // checkBox_Near
+            // 
+            this.checkBox_Near.AutoSize = true;
+            this.checkBox_Near.Location = new System.Drawing.Point(21, 50);
+            this.checkBox_Near.Name = "checkBox_Near";
+            this.checkBox_Near.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_Near.TabIndex = 97;
+            this.checkBox_Near.Text = "最近点";
+            this.checkBox_Near.UseVisualStyleBackColor = true;
+            this.checkBox_Near.CheckedChanged += new System.EventHandler(this.checkBox_Near_CheckedChanged);
+            // 
+            // checkBox_midPt
+            // 
+            this.checkBox_midPt.AutoSize = true;
+            this.checkBox_midPt.Location = new System.Drawing.Point(156, 50);
+            this.checkBox_midPt.Name = "checkBox_midPt";
+            this.checkBox_midPt.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_midPt.TabIndex = 96;
+            this.checkBox_midPt.Text = "中间点";
+            this.checkBox_midPt.UseVisualStyleBackColor = true;
+            this.checkBox_midPt.CheckedChanged += new System.EventHandler(this.checkBox_midPt_CheckedChanged);
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(194, 161);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(29, 22);
+            this.label2.TabIndex = 95;
+            this.label2.Text = "%";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(18, 164);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 22);
+            this.label1.TabIndex = 94;
+            this.label1.Text = "忽略点";
+            // 
+            // textBox_Clipping
+            // 
+            this.textBox_Clipping.Location = new System.Drawing.Point(88, 161);
+            this.textBox_Clipping.Name = "textBox_Clipping";
+            this.textBox_Clipping.Size = new System.Drawing.Size(100, 22);
+            this.textBox_Clipping.TabIndex = 93;
+            this.textBox_Clipping.Text = "0";
+            this.textBox_Clipping.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // label34
             // 
@@ -362,7 +413,7 @@
             // 
             // label31
             // 
-            this.label31.Location = new System.Drawing.Point(194, 105);
+            this.label31.Location = new System.Drawing.Point(194, 130);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(28, 22);
             this.label31.TabIndex = 88;
@@ -370,7 +421,7 @@
             // 
             // textBox_xDist
             // 
-            this.textBox_xDist.Location = new System.Drawing.Point(88, 102);
+            this.textBox_xDist.Location = new System.Drawing.Point(88, 127);
             this.textBox_xDist.Name = "textBox_xDist";
             this.textBox_xDist.Size = new System.Drawing.Size(100, 22);
             this.textBox_xDist.TabIndex = 86;
@@ -379,7 +430,7 @@
             // 
             // label33
             // 
-            this.label33.Location = new System.Drawing.Point(18, 105);
+            this.label33.Location = new System.Drawing.Point(18, 130);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(65, 22);
             this.label33.TabIndex = 85;
@@ -387,7 +438,7 @@
             // 
             // label40
             // 
-            this.label40.Location = new System.Drawing.Point(18, 74);
+            this.label40.Location = new System.Drawing.Point(18, 99);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(65, 22);
             this.label40.TabIndex = 70;
@@ -395,7 +446,7 @@
             // 
             // label41
             // 
-            this.label41.Location = new System.Drawing.Point(194, 72);
+            this.label41.Location = new System.Drawing.Point(194, 97);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(28, 22);
             this.label41.TabIndex = 73;
@@ -403,7 +454,7 @@
             // 
             // textBox_downDist
             // 
-            this.textBox_downDist.Location = new System.Drawing.Point(88, 74);
+            this.textBox_downDist.Location = new System.Drawing.Point(88, 99);
             this.textBox_downDist.Name = "textBox_downDist";
             this.textBox_downDist.Size = new System.Drawing.Size(100, 22);
             this.textBox_downDist.TabIndex = 69;
@@ -1036,31 +1087,6 @@
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
             // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(18, 139);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 22);
-            this.label1.TabIndex = 94;
-            this.label1.Text = "忽略点";
-            // 
-            // textBox_Clipping
-            // 
-            this.textBox_Clipping.Location = new System.Drawing.Point(88, 136);
-            this.textBox_Clipping.Name = "textBox_Clipping";
-            this.textBox_Clipping.Size = new System.Drawing.Size(100, 22);
-            this.textBox_Clipping.TabIndex = 93;
-            this.textBox_Clipping.Text = "0";
-            this.textBox_Clipping.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(194, 136);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 22);
-            this.label2.TabIndex = 95;
-            this.label2.Text = "%";
-            // 
             // FitLineSet
             // 
             this.Appearance.ForeColor = System.Drawing.Color.White;
@@ -1195,5 +1221,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_Clipping;
+        private System.Windows.Forms.CheckBox checkBox_midPt;
+        private System.Windows.Forms.CheckBox checkBox_Near;
     }
 }
