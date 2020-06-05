@@ -22,9 +22,6 @@ namespace SagensVision
 {
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
     {
-
-        public static bool runOffLineFrmTag = false;
-
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
         public static List<double[][]> ZCoord = new List<double[][]>();
@@ -2789,11 +2786,20 @@ namespace SagensVision
             flset.ShowDialog();
         }
 
+        public static bool runOffLineFrmTag = false;
         private void barButtonItem10_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            OfflineFrm OffFram = new OfflineFrm();
-            OffFram.Run = new OfflineFrm.RunOff(RunOffline);
-            OffFram.Show();
+            if (runOffLineFrmTag == false)
+            {
+                runOffLineFrmTag = true;
+                OfflineFrm OffFram = new OfflineFrm();
+                OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+                OffFram.Show();
+            }
+            else
+            {
+                MessageBox.Show("离线Frm已打开！");
+            }
 
         }
 
