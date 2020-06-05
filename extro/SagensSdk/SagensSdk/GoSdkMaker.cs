@@ -249,17 +249,17 @@ namespace SagensSdk
                                 surfaceData[j*surfaceWidth +k ] = surfacePoints[j * surfaceWidth + k] == -32768 ? -12 : (float)(ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]);
                                 surfaceDataX[j * surfaceWidth + k] = (float)(ctx.xOffset + ctx.xResolution * k);
                                 surfaceDataY[j * surfaceWidth + k] = (float)(ctx.yOffset + ctx.yResolution * j);
-                                //if (IsRecSurfaceDataZByte)
-                                //{
-                                //    if (surfacePoints[j * surfaceWidth + k] != -32768)
-                                //    {
-                                //        surfaceDataZByte[j * surfaceWidth + k] = (byte)Math.Ceiling(((ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]) - zStart) * z_byte_resolution);
-                                //    }
-                                //    else
-                                //    {
-                                //        surfaceDataZByte[j * surfaceWidth + k] = 0;
-                                //    }
-                                //}
+                                if (IsRecSurfaceDataZByte)
+                                {
+                                    if (surfacePoints[j * surfaceWidth + k] != -32768)
+                                    {
+                                        surfaceDataZByte[j * surfaceWidth + k] = (byte)Math.Ceiling(((ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]) - zStart) * z_byte_resolution);
+                                    }
+                                    else
+                                    {
+                                        surfaceDataZByte[j * surfaceWidth + k] = 0;
+                                    }
+                                }
                             }
                         }
                         sp.Stop();

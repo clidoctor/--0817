@@ -98,6 +98,7 @@
             this.navBarItem10 = new DevExpress.XtraNavBar.NavBarItem();
             this.navBarItem12 = new DevExpress.XtraNavBar.NavBarItem();
             this.navBarItem11 = new DevExpress.XtraNavBar.NavBarItem();
+            this.navBarItem5 = new DevExpress.XtraNavBar.NavBarItem();
             this.navBarItem6 = new DevExpress.XtraNavBar.NavBarItem();
             this.navBarItem9 = new DevExpress.XtraNavBar.NavBarItem();
             this.navBarItem4 = new DevExpress.XtraNavBar.NavBarItem();
@@ -118,7 +119,6 @@
             this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.navBarItem5 = new DevExpress.XtraNavBar.NavBarItem();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -445,7 +445,9 @@
             // 
             // barCheckItem2
             // 
+            this.barCheckItem2.BindableChecked = true;
             this.barCheckItem2.Caption = "显示亮度图";
+            this.barCheckItem2.Checked = true;
             this.barCheckItem2.Id = 21;
             this.barCheckItem2.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItem2.ImageOptions.Image")));
             this.barCheckItem2.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barCheckItem2.ImageOptions.LargeImage")));
@@ -821,6 +823,13 @@
             this.navBarItem11.SmallImage = ((System.Drawing.Image)(resources.GetObject("navBarItem11.SmallImage")));
             this.navBarItem11.LinkPressed += new DevExpress.XtraNavBar.NavBarLinkEventHandler(this.navBarItem11_LinkPressed);
             // 
+            // navBarItem5
+            // 
+            this.navBarItem5.Caption = "全局参数设置";
+            this.navBarItem5.Name = "navBarItem5";
+            this.navBarItem5.SmallImage = ((System.Drawing.Image)(resources.GetObject("navBarItem5.SmallImage")));
+            this.navBarItem5.LinkPressed += new DevExpress.XtraNavBar.NavBarLinkEventHandler(this.navBarItem5_LinkPressed_1);
+            // 
             // navBarItem6
             // 
             this.navBarItem6.Caption = "模板设置(工位二)";
@@ -1020,13 +1029,6 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // navBarItem5
-            // 
-            this.navBarItem5.Caption = "全局参数设置";
-            this.navBarItem5.Name = "navBarItem5";
-            this.navBarItem5.SmallImage = ((System.Drawing.Image)(resources.GetObject("navBarItem5.SmallImage")));
-            this.navBarItem5.LinkPressed += new DevExpress.XtraNavBar.NavBarLinkEventHandler(this.navBarItem5_LinkPressed_1);
             // 
             // FormMain
             // 
