@@ -124,6 +124,8 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox_SmoothCont = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -311,6 +313,8 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label12);
+            this.groupBox7.Controls.Add(this.textBox_SmoothCont);
             this.groupBox7.Controls.Add(this.checkBox_Far);
             this.groupBox7.Controls.Add(this.checkBox_midPt);
             this.groupBox7.Controls.Add(this.label2);
@@ -1087,6 +1091,23 @@
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
             // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(18, 193);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(65, 22);
+            this.label12.TabIndex = 99;
+            this.label12.Text = "滤波系数";
+            // 
+            // textBox_SmoothCont
+            // 
+            this.textBox_SmoothCont.Location = new System.Drawing.Point(88, 193);
+            this.textBox_SmoothCont.Name = "textBox_SmoothCont";
+            this.textBox_SmoothCont.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SmoothCont.TabIndex = 98;
+            this.textBox_SmoothCont.Text = "0";
+            this.textBox_SmoothCont.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
             // FitLineSet
             // 
             this.Appearance.ForeColor = System.Drawing.Color.White;
@@ -1223,5 +1244,7 @@
         private System.Windows.Forms.TextBox textBox_Clipping;
         private System.Windows.Forms.CheckBox checkBox_midPt;
         private System.Windows.Forms.CheckBox checkBox_Far;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox_SmoothCont;
     }
 }

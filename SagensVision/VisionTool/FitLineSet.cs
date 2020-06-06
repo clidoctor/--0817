@@ -647,6 +647,8 @@ namespace SagensVision.VisionTool
                     checkBox_Far.Checked = fParam[Index].roiP[0].useNear;
                     textBox_downDist.Text = fParam[Index].roiP[0].TopDownDist.ToString();
                     textBox_xDist.Text = fParam[Index].roiP[0].xDist.ToString();
+                    textBox_Clipping.Text = fParam[Index].roiP[0].ClippingPer.ToString();
+                    textBox_SmoothCont.Text = fParam[Index].roiP[0].SmoothCont.ToString();
                     comboBox_GetPtType.SelectedIndex = 0;
                 }
 
@@ -1211,7 +1213,7 @@ namespace SagensVision.VisionTool
                 }
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                MyGlobal.flset2.intersectCoordList[Id].Angle, intersection.Row, intersection.Col, intersection.Angle, out homMaxFix);
+                0, intersection.Row, intersection.Col, 0, out homMaxFix);
 
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
@@ -1265,7 +1267,7 @@ namespace SagensVision.VisionTool
                 string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    intersectCoordList[Id].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
+                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
                 MyGlobal.flset2.intersectCoordList[Id] = intersect;
             }
             catch (Exception)
@@ -1451,20 +1453,24 @@ namespace SagensVision.VisionTool
                 double xResolution = MyGlobal.globalConfig.dataContext.xResolution;
                 double yResolution = MyGlobal.globalConfig.dataContext.yResolution;
                 HTuple SeqC = new HTuple();
-                double s1 = Math.Abs(Math.Cos(Phi[ProfileId][4]));
-                double s2 = Math.Abs(Math.Sin(Phi[ProfileId][4]));
+                //double s1 = Math.Abs(Math.Cos(Phi[ProfileId][4]));
+                //double s2 = Math.Abs(Math.Sin(Phi[ProfileId][4]));
+
+                double s1 = Math.Cos(Phi[ProfileId][4]);
+                double s2 = Math.Sin(Phi[ProfileId][4]);
+
                 double scale = 0;
 
+                scale = xResolution * s1 + yResolution * s2;
 
-
-                if (s1 >= s2)
-                {
-                    scale = xResolution / s1;
-                }
-                else
-                {
-                    scale = yResolution * s2;
-                }
+                //if (s1 >= s2)
+                //{
+                //    scale = xResolution / s1;
+                //}
+                //else
+                //{
+                //    scale = yResolution * s2;
+                //}
 
                 //double scale = xResolution * Math.Cos(Phi[CurrentIndex - 1][4]) + yResolution * Math.Sin(Phi[CurrentIndex - 1][4]);
                 scale = Math.Abs(scale);
@@ -3815,7 +3821,7 @@ namespace SagensVision.VisionTool
                         Debug.WriteLine(i);
                     }
                     HTuple row = new HTuple(), col = new HTuple();
-                    HTuple edgeRow = new HTuple();HTuple edgeCol = new HTuple();//边缘点
+                    HTuple edgeRow = new HTuple(); HTuple edgeCol = new HTuple();//边缘点
                     for (int j = Num; j < Add + fParam[Sid].roiP[i].NumOfSection; j++)
                     {
                         if (Num == 99)
@@ -3823,7 +3829,7 @@ namespace SagensVision.VisionTool
                             Debug.WriteLine(Num);
                         }
                         //Debug.WriteLine(Num);
-                        HTuple row1, col1; HTuple anchor, anchorc;HTuple edgeR1, edgeC1;
+                        HTuple row1, col1; HTuple anchor, anchorc; HTuple edgeR1, edgeC1;
                         if (fParam[Sid].roiP[i].SelectedType == 0)
                         {
                             if (fParam[Sid].roiP[i].TopDownDist != 0 && fParam[Sid].roiP[i].xDist != 0)
@@ -3834,7 +3840,7 @@ namespace SagensVision.VisionTool
                             {
                                 string ok = FindMaxPt(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
                             }
-                           
+
                         }
                         else
                         {
@@ -3852,14 +3858,14 @@ namespace SagensVision.VisionTool
 
                         row = row.TupleConcat(row1);
                         col = col.TupleConcat(col1);
-                        
+
                         Num++;
                     }
 
                     string msg = "";
                     if (hwind != null)
                     {
-                       msg = fParam[Sid].DicPointName[i];
+                        msg = fParam[Sid].DicPointName[i];
                     }
 
                     if (row.Length < 2)
@@ -3874,17 +3880,33 @@ namespace SagensVision.VisionTool
                         continue;
                     }
                     HObject siglePart = new HObject();
+                    
+
+
+                    int Clipping = 0;
+                    int iNum = row.Length;
+                    double clipping = (double)fParam[Sid].roiP[i].ClippingPer / 100;
+                    Clipping = (int)(iNum * clipping);
+                    if (Clipping == iNum / 2)
+                    {
+                        Clipping = iNum / 2 - 1;
+                    }
+
+                    HTuple lineAngle;
+                    //取Roi角度
+                    lineAngle = 1.571 - fParam[Sid].roiP[i].phi;
+                    double angle1 = 1.571 + fParam[Sid].roiP[i].phi;
+                    double Smoothcont = fParam[Sid].roiP[i].SmoothCont;
+                    string IgnoreStr = IgnorPoint(row, col, angle1, Smoothcont, out row, out col);
+                    if (IgnoreStr != "OK")
+                    {
+                        return "忽略点处理失败" + IgnoreStr;
+                    }
+
                     if (hwind != null && debug)
                     {
                         HObject Cross = new HObject();
-                        //HObject contour = new HObject();
-                        //HOperatorSet.GenContourPolygonXld(out contour, row, col);
-                        //HOperatorSet.SmoothContoursXld(contour, out contour, 15);
-                        //HTuple rowSmooth, colSmooth;
-                        //HOperatorSet.GetContourXld(contour, out rowSmooth, out colSmooth);
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "green", false);
-
                         hwind.viewWindow.displayHobject(Cross, "green", false);
 
                         if (fParam[Sid].roiP[i].useMidPt)
@@ -3896,28 +3918,19 @@ namespace SagensVision.VisionTool
                     }
 
 
-                    int Clipping = 0;
-                    int iNum = row.Length;
-                    int clipping = (int)fParam[Sid].roiP[i].ClippingPer / 100;
-                    Clipping = iNum  * clipping;
-                    if (Clipping == iNum /2)
-                    {
-                        Clipping = iNum / 2 - 1;
-                    }
                     //直线段拟合
                     //if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
                     //{
-                        HObject line = new HObject();
-                        HOperatorSet.GenContourPolygonXld(out line, row, col);
+                    HObject line = new HObject();
+                    HOperatorSet.GenContourPolygonXld(out line, row, col);
 
-                        HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
-                        HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
-                        HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
-                    HTuple lineAngle;
-                    HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
+                    HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
+                    HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
+                    HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
+
                     HObject lineEdge = new HObject();
                     if (fParam[Sid].roiP[i].useMidPt)
-                    {                        
+                    {
                         HOperatorSet.GenContourPolygonXld(out lineEdge, edgeRow, edgeCol);
                         HTuple Rowbg1, Colbg1, RowEd1, ColEd1, Nr1, Nc1, Dist1;
                         HOperatorSet.FitLineContourXld(lineEdge, "tukey", -1, Clipping, 5, 2, out Rowbg1, out Colbg1, out RowEd1, out ColEd1, out Nr1, out Nc1, out Dist1);
@@ -3932,79 +3945,79 @@ namespace SagensVision.VisionTool
                         Colbg = midCbg;
                         ColEd = midCed;
                     }
-                      
-
-                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
-
-                        if (Xresolution == 0)
-                        {
-                            return "XResolution=0";
-                        }
-                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
-                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
-
-                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
-                        if (fParam[Sid].roiP[i].offset < 0)
-                        {
-                            D = -D;
-                        }
-                        double distR = D * Math.Cos(lineAngle.D);
-                        double distC = D * Math.Sin(lineAngle.D);
-
-                        row = (Rowbg.D + RowEd.D) / 2 - distR;
-                        col = (Colbg.D + ColEd.D) / 2 - distC;
-
-                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
-                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
-                        row = row - yOffset;
-                        col = col - xOffset;
-
-                        if (hwind != null)
-                        {
-                            HObject cross1 = new HObject();
-                            HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                            hwind.viewWindow.displayHobject(cross1, "cadet blue", false);
-                        }
 
 
-                        //HTuple linephi = new HTuple();
-                        //HOperatorSet.LineOrientation(Rowbg, Colbg, RowEd, ColEd, out linephi);
-                        //HTuple deg = -(new HTuple(linephi.D)).TupleDeg();
-                        //double tan = Math.Tan(-linephi.D);
+                    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
 
-                        //int len1 = Math.Abs((int)(Rowbg.D - RowEd.D));
-                        //int len2 = Math.Abs((int)(Colbg.D - ColEd.D));
-                        //int len = len1 > len2 ? len1 : len2;
-                        //HTuple x0 = Colbg.D;
-                        //HTuple y0 = Rowbg.D;
-                        //double[] newr = new double[len]; double[] newc = new double[len];
-                        //for (int m = 0; m < len; m++)
-                        //{
-                        //    HTuple row1 = new HTuple(); HTuple col1 = new HTuple();
-                        //    if (len1 > len2)
-                        //    {
-                        //        row1 = Rowbg.D > RowEd.D ? y0 - m : y0 + m;
-                        //        col1 = Rowbg.D > RowEd.D ? x0 - m / tan : x0 + m / tan;
+                    if (Xresolution == 0)
+                    {
+                        return "XResolution=0";
+                    }
+                    double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                    double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
 
-                        //    }
-                        //    else
-                        //    {
-                        //        row1 = Colbg.D > ColEd.D ? y0 - m * tan : y0 + m * tan;
-                        //        col1 = Colbg.D > ColEd.D ? x0 - m : x0 + m;
-                        //    }
-                        //    newr[m] = row1;
-                        //    newc[m] = col1;
-                        //}
-                        //row = newr;col = newc;
+                    double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                    if (fParam[Sid].roiP[i].offset > 0)
+                    {
+                        D = -D;
+                    }
+                    double distR = D * Math.Cos(lineAngle.D);
+                    double distC = D * Math.Sin(lineAngle.D);
 
-                        //HOperatorSet.GenContourPolygonXld(out line, row, col);
+                    row = (Rowbg.D + RowEd.D) / 2 - distR;
+                    col = (Colbg.D + ColEd.D) / 2 - distC;
+
+                    double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                    double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+                    row = row - yOffset;
+                    col = col - xOffset;
+
+                    if (hwind != null)
+                    {
+                        HObject cross1 = new HObject();
+                        HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
+                        hwind.viewWindow.displayHobject(cross1, "cadet blue", false);
+                    }
 
 
-                        if (hwind != null && debug)
-                        {
-                            hwind.viewWindow.displayHobject(line, "red");
-                            hwind.viewWindow.displayHobject(lineEdge, "red");
+                    //HTuple linephi = new HTuple();
+                    //HOperatorSet.LineOrientation(Rowbg, Colbg, RowEd, ColEd, out linephi);
+                    //HTuple deg = -(new HTuple(linephi.D)).TupleDeg();
+                    //double tan = Math.Tan(-linephi.D);
+
+                    //int len1 = Math.Abs((int)(Rowbg.D - RowEd.D));
+                    //int len2 = Math.Abs((int)(Colbg.D - ColEd.D));
+                    //int len = len1 > len2 ? len1 : len2;
+                    //HTuple x0 = Colbg.D;
+                    //HTuple y0 = Rowbg.D;
+                    //double[] newr = new double[len]; double[] newc = new double[len];
+                    //for (int m = 0; m < len; m++)
+                    //{
+                    //    HTuple row1 = new HTuple(); HTuple col1 = new HTuple();
+                    //    if (len1 > len2)
+                    //    {
+                    //        row1 = Rowbg.D > RowEd.D ? y0 - m : y0 + m;
+                    //        col1 = Rowbg.D > RowEd.D ? x0 - m / tan : x0 + m / tan;
+
+                    //    }
+                    //    else
+                    //    {
+                    //        row1 = Colbg.D > ColEd.D ? y0 - m * tan : y0 + m * tan;
+                    //        col1 = Colbg.D > ColEd.D ? x0 - m : x0 + m;
+                    //    }
+                    //    newr[m] = row1;
+                    //    newc[m] = col1;
+                    //}
+                    //row = newr;col = newc;
+
+                    //HOperatorSet.GenContourPolygonXld(out line, row, col);
+
+
+                    if (hwind != null && debug)
+                    {
+                        hwind.viewWindow.displayHobject(line, "red");
+                        hwind.viewWindow.displayHobject(lineEdge, "red");
 
                     }
                     siglePart = line;
@@ -4392,7 +4405,11 @@ namespace SagensVision.VisionTool
                     if (radius != 0)
                     {
                         HOperatorSet.GenCircle(out Circle, origRow[i], origCol[i], radius);
-                        //hwind.viewWindow.displayHobject(Circle, "red");
+                        //if (debug && hwind !=null)
+                        //{
+                        //    hwind.viewWindow.displayHobject(Circle, "red");
+                        //}
+
                         HTuple rows, cols; HTuple Zpt = new HTuple();
                         HOperatorSet.GetRegionPoints(Circle, out rows, out cols);
                         try
@@ -4439,7 +4456,7 @@ namespace SagensVision.VisionTool
                     }
 
                     //判断 Z 值高度
-                    if (MyGlobal.ZCoord.Count !=0)
+                    if (MyGlobal.ZCoord.Count != 0)
                     {
                         if (ZCoord[i][0] - MyGlobal.ZCoord[Sid][i][0] > MyGlobal.globalConfig.HeightMax || ZCoord[i][0] - MyGlobal.ZCoord[Sid][i][0] < MyGlobal.globalConfig.HeightMin)
                         {
@@ -4447,10 +4464,10 @@ namespace SagensVision.VisionTool
                             {
                                 hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
                             }
-                            return msg + $"高度{0}超出范围" + Math.Round(ZCoord[i][0],3);
+                            return msg + $"高度{0}超出范围" + Math.Round(ZCoord[i][0], 3);
                         }
                     }
-                    
+
                 }
 
 
@@ -4551,177 +4568,178 @@ namespace SagensVision.VisionTool
                         continue;
                     }
                     HObject siglePart = new HObject();
-                    if (hwind != null && debug)
-                    {
-                        HObject Cross = new HObject();
-                        //HObject contour = new HObject();
-                        //HOperatorSet.GenContourPolygonXld(out contour, row, col);
-                        //HOperatorSet.SmoothContoursXld(contour, out contour, 9);
-                        //HTuple rowSmooth, colSmooth;
-                        //HOperatorSet.GetContourXld(contour, out rowSmooth, out colSmooth);
-                        HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "green", false);
-
-                    }
-
+       
                     int Clipping = 0;
                     int iNum = row.Length;
-                    double clipping = fParam[Sid].roiP[i].ClippingPer/100;
+                    double clipping = fParam[Sid].roiP[i].ClippingPer / 100;
                     Clipping = (int)(iNum * clipping);
                     if (Clipping == iNum / 2)
                     {
                         Clipping = iNum / 2 - 1;
                     }
-                    //直线段拟合
-                    if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
+                    ////直线段拟合
+                    //if (fParam[Sid].roiP[i].LineOrCircle != "圆弧段")
+                    //{
+                    //除去偏离较大点
+                    HTuple lineAngle;
+                    lineAngle = 1.571 - fParam[Sid].roiP[i].phi;
+                    double angle1 = 1.571 + fParam[Sid].roiP[i].phi;
+                    double Smoothcont = fParam[Sid].roiP[i].SmoothCont;
+                    string IgnoreStr = IgnorPoint(row, col, angle1,Smoothcont, out row, out col);
+                    if (IgnoreStr != "OK")
                     {
-                        HObject line = new HObject();
-                        HOperatorSet.GenContourPolygonXld(out line, row, col);
-
-
-                        HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
-                        HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
-                        HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
-
-                       
-                       
-
-                        HTuple lineAngle;
-                        HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
-                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
-
-                        if (Xresolution == 0)
-                        {
-                            return "XResolution=0";
-                        }
-                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
-                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
-
-                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
-                        if (fParam[Sid].roiP[i].offset < 0)
-                        {
-                            D = -D;
-                        }
-                        double distR = D * Math.Cos(lineAngle.D);
-                        double distC = D * Math.Sin(lineAngle.D);
-
-                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
-                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
-
-                        Rowbg = Rowbg.D - distR + yOffset;
-                        RowEd = RowEd.D - distR + yOffset;
-                        Colbg = Colbg.D - distC + xOffset;
-                        ColEd = ColEd.D - distC + xOffset;
-
-                        HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
-                        HLines.Add(lineCoord);
-                        row = (Rowbg.D + RowEd.D) / 2 ;
-                        col = (Colbg.D + ColEd.D) / 2 ;
-
-                        if (hwind != null)
-                        {
-                            HObject cross1 = new HObject();
-                            HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                            hwind.viewWindow.displayHobject(cross1, "yellow");
-                        }
-
-                        //HTuple linephi = new HTuple();
-                        //HOperatorSet.LineOrientation(Rowbg, Colbg, RowEd, ColEd, out linephi);
-                        //HTuple deg = -(new HTuple(linephi.D)).TupleDeg();
-                        //double tan = Math.Tan(-linephi.D);
-
-                        //int len1 = Math.Abs((int)(Rowbg.D - RowEd.D));
-                        //int len2 = Math.Abs((int)(Colbg.D - ColEd.D));
-                        //int len = len1 > len2 ? len1 : len2;
-                        //HTuple x0 = Colbg.D;
-                        //HTuple y0 = Rowbg.D;
-                        //double[] newr = new double[len]; double[] newc = new double[len];
-                        //for (int m = 0; m < len; m++)
-                        //{
-                        //    HTuple row1 = new HTuple(); HTuple col1 = new HTuple();
-                        //    if (len1 > len2)
-                        //    {
-                        //        row1 = Rowbg.D > RowEd.D ? y0 - m : y0 + m;
-                        //        col1 = Rowbg.D > RowEd.D ? x0 - m / tan : x0 + m / tan;
-
-                        //    }
-                        //    else
-                        //    {
-                        //        row1 = Colbg.D > ColEd.D ? y0 - m * tan : y0 + m * tan;
-                        //        col1 = Colbg.D > ColEd.D ? x0 - m : x0 + m;
-                        //    }
-                        //    newr[m] = row1;
-                        //    newc[m] = col1;
-                        //}
-                        //row = newr;col = newc;
-
-                        //HOperatorSet.GenContourPolygonXld(out line, row, col);
-
-
-                        if (hwind != null && debug)
-                        {
-                            hwind.viewWindow.displayHobject(line, "red");
-                        }
-                        siglePart = line;
+                        return "忽略点处理失败" + IgnoreStr;
                     }
-                    else
+                    if (hwind != null && debug)
                     {
-                        HObject ArcObj = new HObject();
-                        HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
-                        HTuple Rowbg, Colbg, RowEd, ColEd, Nr1, Nc1, Ptorder;
-                        HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr1, out Nc1, out Ptorder);
-                        HOperatorSet.GenContourPolygonXld(out ArcObj, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
+                        HObject Cross = new HObject();
+                        HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
+                        hwind.viewWindow.displayHobject(Cross, "green", false);
 
-
-                        HTuple lineAngle;
-                        HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
-                        double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                        double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
-
-                        if (Xresolution == 0)
-                        {
-                            return "XResolution=0";
-                        }
-                        double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
-                        double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
-
-                        double D = Math.Sqrt(DisX * DisX + DisY * DisY);
-                        if (fParam[Sid].roiP[i].offset < 0)
-                        {
-                            D = -D;
-                        }
-                        double distR = D * Math.Cos(lineAngle.D);
-                        double distC = D * Math.Sin(lineAngle.D);
-
-                        double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
-                        double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
-
-                        Rowbg = Rowbg.D - distR + yOffset;
-                        RowEd = RowEd.D - distR + yOffset;
-                        Colbg = Colbg.D - distC + xOffset;
-                        ColEd = ColEd.D - distC + xOffset;
-
-                       
-                        row = (Rowbg.D + RowEd.D) / 2 ;
-                        col = (Colbg.D + ColEd.D) / 2 ;
-                        HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
-                        HLines.Add(lineCoord);
-
-                        if (hwind != null)
-                        {
-                            HObject CrossArc = new HObject();
-                            HOperatorSet.GenCrossContourXld(out CrossArc, row, col, 30, 0.5);
-                            hwind.viewWindow.displayHobject(CrossArc, "blue");
-                        }
-                        if (hwind != null && debug)
-                        {
-                            hwind.viewWindow.displayHobject(ArcObj, "red");
-
-                        }
-
-                        siglePart = ArcObj;
                     }
+
+                    HObject line = new HObject();
+                    HOperatorSet.GenContourPolygonXld(out line, row, col);
+
+                    HTuple Rowbg, Colbg, RowEd, ColEd, Nr, Nc, Dist;
+                    HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
+                    HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
+
+
+                    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+
+                    if (Xresolution == 0)
+                    {
+                        return "XResolution=0";
+                    }
+                    double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                    double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
+
+                    double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                    if (fParam[Sid].roiP[i].offset > 0)
+                    {
+                        D = -D;
+                    }
+                    double distR = D * Math.Cos(lineAngle.D);
+                    double distC = D * Math.Sin(lineAngle.D);
+
+                    double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                    double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+
+                    Rowbg = Rowbg.D - distR + yOffset;
+                    RowEd = RowEd.D - distR + yOffset;
+                    Colbg = Colbg.D - distC + xOffset;
+                    ColEd = ColEd.D - distC + xOffset;
+
+                    HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
+                    HLines.Add(lineCoord);
+                    row = (Rowbg.D + RowEd.D) / 2;
+                    col = (Colbg.D + ColEd.D) / 2;
+
+                    if (hwind != null)
+                    {
+                        HObject cross1 = new HObject();
+                        HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
+                        hwind.viewWindow.displayHobject(cross1, "yellow");
+                    }
+
+                    //HTuple linephi = new HTuple();
+                    //HOperatorSet.LineOrientation(Rowbg, Colbg, RowEd, ColEd, out linephi);
+                    //HTuple deg = -(new HTuple(linephi.D)).TupleDeg();
+                    //double tan = Math.Tan(-linephi.D);
+
+                    //int len1 = Math.Abs((int)(Rowbg.D - RowEd.D));
+                    //int len2 = Math.Abs((int)(Colbg.D - ColEd.D));
+                    //int len = len1 > len2 ? len1 : len2;
+                    //HTuple x0 = Colbg.D;
+                    //HTuple y0 = Rowbg.D;
+                    //double[] newr = new double[len]; double[] newc = new double[len];
+                    //for (int m = 0; m < len; m++)
+                    //{
+                    //    HTuple row1 = new HTuple(); HTuple col1 = new HTuple();
+                    //    if (len1 > len2)
+                    //    {
+                    //        row1 = Rowbg.D > RowEd.D ? y0 - m : y0 + m;
+                    //        col1 = Rowbg.D > RowEd.D ? x0 - m / tan : x0 + m / tan;
+
+                    //    }
+                    //    else
+                    //    {
+                    //        row1 = Colbg.D > ColEd.D ? y0 - m * tan : y0 + m * tan;
+                    //        col1 = Colbg.D > ColEd.D ? x0 - m : x0 + m;
+                    //    }
+                    //    newr[m] = row1;
+                    //    newc[m] = col1;
+                    //}
+                    //row = newr;col = newc;
+
+                    //HOperatorSet.GenContourPolygonXld(out line, row, col);
+
+
+                    if (hwind != null && debug)
+                    {
+                        hwind.viewWindow.displayHobject(line, "red");
+                    }
+                    siglePart = line;
+                    //}
+                    //else
+                    //{
+                    //    HObject ArcObj = new HObject();
+                    //    HOperatorSet.GenContourPolygonXld(out ArcObj, row, col);
+                    //    HTuple Rowbg, Colbg, RowEd, ColEd, Nr1, Nc1, Ptorder;
+                    //    HOperatorSet.FitLineContourXld(ArcObj, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr1, out Nc1, out Ptorder);
+                    //    HOperatorSet.GenContourPolygonXld(out ArcObj, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
+
+
+                    //    HTuple lineAngle;
+                    //    HOperatorSet.AngleLx(Rowbg, Colbg, RowEd, ColEd, out lineAngle);
+                    //    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                    //    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+
+                    //    if (Xresolution == 0)
+                    //    {
+                    //        return "XResolution=0";
+                    //    }
+                    //    double DisX = fParam[Sid].roiP[i].offset * Math.Sin(lineAngle.D) / Xresolution;
+                    //    double DisY = fParam[Sid].roiP[i].offset * Math.Cos(lineAngle.D) / Yresolution;
+
+                    //    double D = Math.Sqrt(DisX * DisX + DisY * DisY);
+                    //    if (fParam[Sid].roiP[i].offset < 0)
+                    //    {
+                    //        D = -D;
+                    //    }
+                    //    double distR = D * Math.Cos(lineAngle.D);
+                    //    double distC = D * Math.Sin(lineAngle.D);
+
+                    //    double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
+                    //    double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
+
+                    //    Rowbg = Rowbg.D - distR + yOffset;
+                    //    RowEd = RowEd.D - distR + yOffset;
+                    //    Colbg = Colbg.D - distC + xOffset;
+                    //    ColEd = ColEd.D - distC + xOffset;
+
+
+                    //    row = (Rowbg.D + RowEd.D) / 2 ;
+                    //    col = (Colbg.D + ColEd.D) / 2 ;
+                    //    HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
+                    //    HLines.Add(lineCoord);
+
+                    //    if (hwind != null)
+                    //    {
+                    //        HObject CrossArc = new HObject();
+                    //        HOperatorSet.GenCrossContourXld(out CrossArc, row, col, 30, 0.5);
+                    //        hwind.viewWindow.displayHobject(CrossArc, "blue");
+                    //    }
+                    //    if (hwind != null && debug)
+                    //    {
+                    //        hwind.viewWindow.displayHobject(ArcObj, "red");
+
+                    //    }
+
+                    //    siglePart = ArcObj;
+                    //}
 
                     if (hwind != null)
                     {
@@ -4835,6 +4853,74 @@ namespace SagensVision.VisionTool
                 //RIntesity.Dispose();
                 //RHeight.Dispose();
                 return "FindPoint error:" + ex.Message;
+            }
+        }
+
+        string IgnorPoint(HTuple row,HTuple col, double Phi,double SmoothCont,out HTuple Row,out HTuple Col)
+        {
+            Row = new HTuple();Col = new HTuple();
+            try
+            {
+                HTuple RowMean, ColMean, RowMedian, ColMedian;
+                HOperatorSet.TupleMean(row, out RowMean);
+                HOperatorSet.TupleMean(col, out ColMean);
+                HOperatorSet.TupleMedian(row, out RowMedian);
+                HOperatorSet.TupleMedian(col, out ColMedian);
+                double SubR = Math.Abs(RowMean.D - RowMedian.D);
+                double SubC = Math.Abs(ColMean.D - ColMedian.D);
+                double Sin = Math.Sin(Phi);
+                double Cos = Math.Cos(Phi);
+                double Standard = SubR * Cos + SubC * Sin;
+               
+                if (SmoothCont ==0) //不过滤
+                {
+                    SmoothCont = 0.0001;
+                }
+                if (SmoothCont>=1)
+                {
+                    SmoothCont = 10000;
+                }
+                double cont = 1 / SmoothCont;
+                //if (cont < 1)
+                //{
+                //    cont = 1;
+                //}
+                if (Standard > -cont && Standard < cont)
+                {
+                    Row = row;
+                    Col = col;
+                    return "OK";
+                }
+                HTuple SUB = new HTuple();
+                for (int i = 0; i < row.Length; i++)
+                {
+                    double rowsub = Math.Abs(row[i].D - RowMedian.D);
+                    double colsub = Math.Abs(col[i].D - ColMedian.D);
+                    double sub1 = rowsub * Cos + colsub * Sin;
+                    SUB = SUB.TupleConcat(sub1);
+                }
+                HTuple NewId = new HTuple();
+                if (Standard>0)
+                {
+                    HTuple Less = new HTuple();
+                    HOperatorSet.TupleLessElem(SUB, Standard, out Less);
+                    HOperatorSet.TupleFind(Less, 1, out NewId);
+                }
+                else
+                {
+                    
+                    HTuple Greater = new HTuple();
+                    HOperatorSet.TupleGreaterElem(SUB, Standard, out Greater);
+                    HOperatorSet.TupleFind(Greater, 1, out NewId);
+                }                
+                Row = row[NewId];
+                Col = col[NewId];
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+
+                return "IgnorPoint error" +ex.Message;
             }
         }
 
@@ -5707,9 +5793,10 @@ namespace SagensVision.VisionTool
                         }
                         fParam[SideId].roiP[roiID].ClippingPer = num;
                         break;
-                    //case "textBox_OffsetY2":
-                    //    fParam[SideId].MaxZ = num;
-                    //    break;
+
+                    case "textBox_SmoothCont":
+                        fParam[SideId].roiP[roiID].SmoothCont = num;
+                        break;
                     case "textBox_OffsetZ":
                         fParam[SideId].roiP[roiID].Zoffset = num;
                         break;
@@ -5921,6 +6008,7 @@ namespace SagensVision.VisionTool
                 textBox_ZFtMin.Text = fParam[SideId].roiP[id].ZftMin.ToString();
                 textBox_ZFtRad.Text = fParam[SideId].roiP[id].ZftRad.ToString();
                 textBox_Clipping.Text = fParam[SideId].roiP[id].ClippingPer.ToString();
+                textBox_SmoothCont.Text = fParam[SideId].roiP[roiID].SmoothCont.ToString();
                 //textBox_IndEnd2.Text = fParam[SideId].roiP[id].EndOffSet2.ToString();
 
                 comboBox2.SelectedItem = fParam[SideId].roiP[id].LineOrCircle;
@@ -6098,14 +6186,14 @@ namespace SagensVision.VisionTool
             if (currentId != -1)
             {
                 fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
-                if (fParam[Id].roiP[currentId].SelectedType ==1)
-                {
-                    checkBox_Far.Visible = true;
-                }
-                else
-                {
-                    checkBox_Far.Visible = false;
-                }
+                //if (fParam[Id].roiP[currentId].SelectedType ==1)
+                //{
+                //    checkBox_Far.Visible = true;
+                //}
+                //else
+                //{
+                //    checkBox_Far.Visible = false;
+                //}
             }
         }
 
@@ -6296,6 +6384,7 @@ namespace SagensVision.VisionTool
         public double TopDownDist = 0;
         public double xDist = 0;
         public double ClippingPer = 0;//忽略点百分比
+        public double SmoothCont = 0;//滤波系数
         /// <summary>
         ///  0 极值 1 最高点下降
         /// </summary>
