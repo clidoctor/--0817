@@ -2171,13 +2171,12 @@ namespace SagensVision.VisionTool
                     return "roiList is Null";
                 }
 
-                //取最左 作为初步锚定点
-                HTuple maxZCol = true ? temp_2.TupleMin() : temp_2.TupleMax();
+                ////取最左 作为初步锚定点
+                //HTuple maxZCol =  temp_2.TupleMin();
 
-                //HTuple maxZCol = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
-                HTuple mZRowId = col.TupleFindFirst(maxZCol);
-                HTuple mZRow = row[mZRowId];
-
+                //HTuple mZRowId = col.TupleFindFirst(maxZCol);
+                //HTuple mZRow = row[mZRowId];
+                HTuple mZRow = 0;HTuple maxZCol = 0;
 
                 int roiID = -1;
                 for (int i = 0; i < fParam[Id].roiP.Count; i++)
@@ -4906,21 +4905,9 @@ namespace SagensVision.VisionTool
                 double Sin = Math.Sin(Phi);
                 double Cos = Math.Cos(Phi);
                 double Standard = SubR * Cos + SubC * Sin;
-               
-                if (SmoothCont ==0) //不过滤
-                {
-                    SmoothCont = 0.0001;
-                }
-                if (SmoothCont>=1)
-                {
-                    SmoothCont = 10000;
-                }
-                double cont = 1 / SmoothCont;
-                //if (cont < 1)
-                //{
-                //    cont = 1;
-                //}
-                if (Standard > -cont && Standard < cont)
+
+                int Num = (int)(row.Length * SmoothCont);
+                if (SmoothCont ==0 || SmoothCont ==1)
                 {
                     Row = row;
                     Col = col;
@@ -4931,25 +4918,20 @@ namespace SagensVision.VisionTool
                 {
                     double rowsub = Math.Abs(row[i].D - RowMedian.D);
                     double colsub = Math.Abs(col[i].D - ColMedian.D);
-                    double sub1 = rowsub * Cos + colsub * Sin;
-                    SUB = SUB.TupleConcat(sub1);
+                    //double sub1 = rowsub * Cos + colsub * Sin;
+                    //SUB = SUB.TupleConcat(sub1);
+                    double Add = rowsub * Cos * rowsub * Cos + colsub * Sin * colsub * Sin;
+                    double Sqrt = Math.Sqrt(Add);
+                    SUB = SUB.TupleConcat(Sqrt);
                 }
                 HTuple NewId = new HTuple();
-                if (Standard>0)
-                {
-                    HTuple Less = new HTuple();
-                    HOperatorSet.TupleLessElem(SUB, Standard, out Less);
-                    HOperatorSet.TupleFind(Less, 1, out NewId);
-                }
-                else
-                {
-                    
-                    HTuple Greater = new HTuple();
-                    HOperatorSet.TupleGreaterElem(SUB, Standard, out Greater);
-                    HOperatorSet.TupleFind(Greater, 1, out NewId);
-                }                
-                Row = row[NewId];
-                Col = col[NewId];
+                HTuple Less = new HTuple();
+                HTuple Indices = new HTuple();
+                HOperatorSet.TupleSortIndex(SUB, out Indices);               
+                HTuple selected = new HTuple();
+                HOperatorSet.TupleSelectRange(Indices, row.Length - Num, row.Length - 1, out selected);
+                HOperatorSet.TupleRemove(row, selected, out Row);
+                HOperatorSet.TupleRemove(col, selected, out Col);
                 return "OK";
             }
             catch (Exception ex)
@@ -5529,6 +5511,7 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Init();
             if (hwindow_final1.Image != null)
             {
                 hwindow_final1.Image.Dispose();
@@ -5830,6 +5813,16 @@ namespace SagensVision.VisionTool
                         break;
 
                     case "textBox_SmoothCont":
+                        if (num > 1)
+                        {
+                            textBox_SmoothCont.Text = "1";
+                            num = 50;
+                        }
+                        if (num < 0)
+                        {
+                            textBox_SmoothCont.Text = "0";
+                            num = 0;
+                        }
                         fParam[SideId].roiP[roiID].SmoothCont = num;
                         break;
                     case "textBox_OffsetZ":

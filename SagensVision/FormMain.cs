@@ -254,19 +254,7 @@ namespace SagensVision
                 0, intersect.Row, intersect.Col, 0, out homMaxFix);
 
                 string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
-                double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
-                HTuple deg = 0;
-                HOperatorSet.TupleDeg(intersect.Angle, out deg);
-                string AnchorX = Math.Round(intersect.Col * Xresolution, 3).ToString(); string AnchorY = Math.Round(intersect.Row * Yresolution, 3).ToString();
-                if (Side == 4)
-                {
-                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
-                }
-                else
-                {
-                    StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\t");
-                }
+                
                 return OK;
             }
             catch (Exception ex)
@@ -694,8 +682,8 @@ namespace SagensVision
                         if (SurfacePointZ != null)
                         {
                             long encoder = MyGlobal.GoSDK.Stamp.encoder;
-                            //ShowAndSaveMsg($"结束位编码器数值{encoder.ToString()}");
-                            ShowAndSaveMsg($"结束编码器数值2 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
+                            ShowAndSaveMsg($"Stamp 结束位编码器数值{encoder.ToString()}");
+                            //ShowAndSaveMsg($"结束编码器数值2 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
                             tempHeightImg.Dispose();
                             MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
                             MyGlobal.GoSDK.SurfaceDataZ = null;
@@ -1804,6 +1792,26 @@ namespace SagensVision
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), pix.ToString(), "pix");
 
+                    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        HTuple deg = 0;
+                        HOperatorSet.TupleDeg(AnchorList[i].Angle, out deg);
+
+                        string AnchorX = Math.Round(AnchorList[i].Col * Xresolution, 3).ToString(); string AnchorY = Math.Round(AnchorList[i].Row * Yresolution, 3).ToString();
+                        if (Side == 4)
+                        {
+                            StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
+                        }
+                        else
+                        {
+                            StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\t");
+                        }
+                    }
+                    
+
+
                     ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
                 }
 
@@ -1834,7 +1842,9 @@ namespace SagensVision
                 return;
             }
             HObject regpot;
-            HOperatorSet.GenRegionPoints(out regpot, new HTuple(recordXCoord) * 10, new HTuple(recordYCoord) * 10);
+            HTuple newRecordX = new HTuple(recordXCoord) * 20 - 4000;
+            HOperatorSet.GenRegionPoints(out regpot, new HTuple(newRecordX) , new HTuple(recordYCoord) * 20);
+          
             HObject ImageConst;
             HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
             ShowProfile.HobjectToHimage(ImageConst);
@@ -1843,9 +1853,16 @@ namespace SagensVision
             {
                 for (int i = 0; i < recordSigleTitle.Length; i++)
                 {
-                    ShowProfile.viewWindow.dispMessage($"{recordSigleTitle[i]} +({recordZCoord[i]})", "blue", recordXCoord[i] * 10, recordYCoord[i] * 10);
+                    ShowProfile.viewWindow.dispMessage($"{recordSigleTitle[i]} +({recordZCoord[i]})", "blue", newRecordX[i], recordYCoord[i] * 20);
                 }
             }
+            HObject contour;
+            newRecordX = newRecordX.TupleConcat(recordXCoord[0] * 20 - 4000);
+            HOperatorSet.GenContourPolygonXld(out contour, new HTuple(newRecordX), new HTuple(recordYCoord, recordYCoord[0]) * 20);
+            //HOperatorSet.GenContourPolygonXld(out contour1, new HTuple(recordXCoord[recordXCoord.Length - 1],new HTuple(recordYCoord[0));
+            ShowProfile.viewWindow.displayHobject(contour,"white");
+            contour.Dispose();
+
             regpot.Dispose();
             ImageConst.Dispose();
         }
@@ -1977,7 +1994,7 @@ namespace SagensVision
                                 if (MyGlobal.GoSDK.Start(ref Msg))
                                 {
                                     ShowAndSaveMsg($"打开激光成功！----");
-                                    Thread.Sleep(500);
+                                    Thread.Sleep(200);
                                 }
                                 ShowAndSaveMsg(Msg);
                                 sp.Stop();
