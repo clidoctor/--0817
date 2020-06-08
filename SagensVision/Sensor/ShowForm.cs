@@ -193,7 +193,7 @@ namespace SagensVision.Sensor
 
         }
 
-        void GoSDK_ProfileRecFinish()
+        void GoSDK_ProfileRecFinish() 
         {
             if (!ShowWitch.ShowProfile)
             {
