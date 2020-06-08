@@ -445,9 +445,7 @@
             // 
             // barCheckItem2
             // 
-            this.barCheckItem2.BindableChecked = true;
             this.barCheckItem2.Caption = "显示亮度图";
-            this.barCheckItem2.Checked = true;
             this.barCheckItem2.Id = 21;
             this.barCheckItem2.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItem2.ImageOptions.Image")));
             this.barCheckItem2.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barCheckItem2.ImageOptions.LargeImage")));
@@ -1035,8 +1033,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1379, 821);
-            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.panelContainer1);
+            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);

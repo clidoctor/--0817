@@ -30,6 +30,8 @@ namespace SagensVision
 
         public static List<double[]> Yorigin = new List<double[]>();
 
+        public static List<double[]> Zorigin = new List<double[]>();
+
         public static List<string[]> NameOrigin = new List<string[]>();
 
         public static List<IntersetionCoord> AnchorList = new List<IntersetionCoord>();
@@ -425,6 +427,7 @@ namespace SagensVision
             //MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
             //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
+            barCheckItem2.Checked = true;
         }
 
         void ConnectTcp()
@@ -523,6 +526,7 @@ namespace SagensVision
                     StrLorC.Clear();
                     Xorigin.Clear();
                     Yorigin.Clear();
+                    Zorigin.Clear();
                     NameOrigin.Clear();
                     AnchorList.Clear();
                     MyGlobal.globalConfig.Count++;
@@ -638,6 +642,7 @@ namespace SagensVision
                     StrLorC.Clear();
                     Xorigin.Clear();
                     Yorigin.Clear();
+                    Zorigin.Clear();
                     NameOrigin.Clear();
                     AnchorList.Clear();
 
@@ -822,6 +827,7 @@ namespace SagensVision
                 StrLorC.Clear();
                 Xorigin.Clear();
                 Yorigin.Clear();
+                Zorigin.Clear();
                 NameOrigin.Clear();
                 AnchorList.Clear();
 
@@ -1361,6 +1367,12 @@ namespace SagensVision
 
                 Yorigin.Add(original[0]);
                 Xorigin.Add(original[1]);
+                double[] zval = new double[z.Length];
+                for (int i = 0; i < zval.Length; i++)
+                {
+                    zval[i] = z[i][0];
+                }
+                Zorigin.Add(zval);
                 NameOrigin.Add(flset.fParam[Station - 1].DicPointName.ToArray());
                 if (OK != "OK")
                 {
@@ -1845,6 +1857,11 @@ namespace SagensVision
                     ShowProfile.viewWindow.dispMessage($"{recordSigleTitle[i]} +({recordZCoord[i]})", "blue", recordXCoord[i] * 10, recordYCoord[i] * 10);
                 }
             }
+            HObject contour;
+            HOperatorSet.GenContourPolygonXld(out contour, new HTuple(recordXCoord,recordXCoord[0]) * 10, new HTuple(recordYCoord,recordYCoord[0]) * 10);
+           
+            ShowProfile.viewWindow.displayHobject(contour, "white");
+            contour.Dispose();
             regpot.Dispose();
             ImageConst.Dispose();
         }

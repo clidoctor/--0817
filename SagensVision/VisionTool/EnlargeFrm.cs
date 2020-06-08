@@ -35,13 +35,13 @@ namespace SagensVision.VisionTool
                 cross.Dispose();
                 for (int j = 0; j < FormMain.NameOrigin[idx].Length; j++)
                 {
-                    hWindow_Final1.viewWindow.dispMessage(FormMain.NameOrigin[idx][j], "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);
+                    hWindow_Final1.viewWindow.dispMessage($"{FormMain.NameOrigin[idx][j]}({Math.Round( FormMain.Zorigin[idx][j],3)})", "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);
                 }
                 if (FormMain.AnchorList[idx].Row !=0 || FormMain.AnchorList[idx].Col != 0)
                 {
-                    hWindow_Final1.viewWindow.dispMessage("Y:"+ FormMain.AnchorList[idx].Row.ToString(), "red", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
-                    hWindow_Final1.viewWindow.dispMessage("X:" + FormMain.AnchorList[idx].Col.ToString(), "red", FormMain.AnchorList[idx].Row+60, FormMain.AnchorList[idx].Col);
-                    hWindow_Final1.viewWindow.dispMessage("Rad:" + FormMain.AnchorList[idx].Angle.ToString(), "red", FormMain.AnchorList[idx].Row+120, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage("Y:" + (FormMain.AnchorList[idx].Row * MyGlobal.globalConfig.dataContext.yResolution).ToString(), "red", FormMain.AnchorList[idx].Row, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage("X:" + (FormMain.AnchorList[idx].Col * MyGlobal.globalConfig.dataContext.xResolution).ToString(), "red", FormMain.AnchorList[idx].Row + 60, FormMain.AnchorList[idx].Col);
+                    hWindow_Final1.viewWindow.dispMessage("Rad:" + FormMain.AnchorList[idx].Angle.ToString(), "red", FormMain.AnchorList[idx].Row + 120, FormMain.AnchorList[idx].Col);
 
                 }
 
@@ -49,12 +49,13 @@ namespace SagensVision.VisionTool
 
             if (!MyGlobal.isShowHeightImg)
             {
-                if (MyGlobal.isShowHeightImg)
-                {
-                    hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
-                    hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
-                }
-                //OnHMouseUp(sender, null);
+                hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
+                hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
+            }
+            else
+            {
+                hWindow_Final1.hWindowControl.HMouseUp -= OnHMouseUp;
+                hWindow_Final1.hWindowControl.HMouseWheel -= OnHMouseUp;
             }
         }
 
