@@ -251,7 +251,7 @@ namespace SagensVision
                 AnchorList.Add(intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
-                MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
+                0, intersect.Row, intersect.Col, 0, out homMaxFix);
 
                 string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
                 double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
@@ -693,6 +693,8 @@ namespace SagensVision
                         isLastImgRecOK = true;
                         if (SurfacePointZ != null)
                         {
+                            long encoder = MyGlobal.GoSDK.Stamp.encoder;
+                            ShowAndSaveMsg($"结束位编码器数值{encoder.ToString()}");
                             tempHeightImg.Dispose();
                             MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
                             MyGlobal.GoSDK.SurfaceDataZ = null;
@@ -1564,11 +1566,13 @@ namespace SagensVision
                 string[] sigleTitle = new string[totalNum];
                 for (int i = 0; i < XCoord.Count; i++)
                 {
+
                     for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                    {
+                    {                       
                         if (XCoord[i][j] == null)
-                        {
-                            continue;
+                        {                           
+                            return $"第{i+1}边 Points  NG";
+                            
                         }
 
                         HTuple row = XCoord[i][j];
@@ -1968,7 +1972,7 @@ namespace SagensVision
                                 if (MyGlobal.GoSDK.Start(ref Msg))
                                 {
                                     ShowAndSaveMsg($"打开激光成功！----");
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(500);
                                 }
                                 ShowAndSaveMsg(Msg);
                                 sp.Stop();
@@ -2016,11 +2020,11 @@ namespace SagensVision
                                     if (ok1 != "OK")
                                     {
                                         ShowAndSaveMsg(ok1);
-                                        if (Side == 4)
-                                        {
+                                        //if (Side == 4)
+                                        //{
                                             ShowAndSaveMsg("输出点位失败！");
                                             MyGlobal.sktClient.Send(ng);
-                                        }
+                                        //}
 
                                     }
                                     else

@@ -45,7 +45,7 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.checkBox_Near = new System.Windows.Forms.CheckBox();
+            this.checkBox_Far = new System.Windows.Forms.CheckBox();
             this.checkBox_midPt = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -124,6 +124,8 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox_SmoothCont = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -311,7 +313,9 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.checkBox_Near);
+            this.groupBox7.Controls.Add(this.label12);
+            this.groupBox7.Controls.Add(this.textBox_SmoothCont);
+            this.groupBox7.Controls.Add(this.checkBox_Far);
             this.groupBox7.Controls.Add(this.checkBox_midPt);
             this.groupBox7.Controls.Add(this.label2);
             this.groupBox7.Controls.Add(this.label1);
@@ -332,16 +336,16 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
             // 
-            // checkBox_Near
+            // checkBox_Far
             // 
-            this.checkBox_Near.AutoSize = true;
-            this.checkBox_Near.Location = new System.Drawing.Point(21, 50);
-            this.checkBox_Near.Name = "checkBox_Near";
-            this.checkBox_Near.Size = new System.Drawing.Size(62, 18);
-            this.checkBox_Near.TabIndex = 97;
-            this.checkBox_Near.Text = "最近点";
-            this.checkBox_Near.UseVisualStyleBackColor = true;
-            this.checkBox_Near.CheckedChanged += new System.EventHandler(this.checkBox_Near_CheckedChanged);
+            this.checkBox_Far.AutoSize = true;
+            this.checkBox_Far.Location = new System.Drawing.Point(21, 50);
+            this.checkBox_Far.Name = "checkBox_Far";
+            this.checkBox_Far.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_Far.TabIndex = 97;
+            this.checkBox_Far.Text = "最远点";
+            this.checkBox_Far.UseVisualStyleBackColor = true;
+            this.checkBox_Far.CheckedChanged += new System.EventHandler(this.checkBox_Near_CheckedChanged);
             // 
             // checkBox_midPt
             // 
@@ -1087,6 +1091,23 @@
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
             // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(18, 193);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(65, 22);
+            this.label12.TabIndex = 99;
+            this.label12.Text = "滤波系数";
+            // 
+            // textBox_SmoothCont
+            // 
+            this.textBox_SmoothCont.Location = new System.Drawing.Point(88, 193);
+            this.textBox_SmoothCont.Name = "textBox_SmoothCont";
+            this.textBox_SmoothCont.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SmoothCont.TabIndex = 98;
+            this.textBox_SmoothCont.Text = "0";
+            this.textBox_SmoothCont.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            // 
             // FitLineSet
             // 
             this.Appearance.ForeColor = System.Drawing.Color.White;
@@ -1222,6 +1243,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_Clipping;
         private System.Windows.Forms.CheckBox checkBox_midPt;
-        private System.Windows.Forms.CheckBox checkBox_Near;
+        private System.Windows.Forms.CheckBox checkBox_Far;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox_SmoothCont;
     }
 }
