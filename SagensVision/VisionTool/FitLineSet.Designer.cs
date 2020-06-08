@@ -45,6 +45,8 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox_SmoothCont = new System.Windows.Forms.TextBox();
             this.checkBox_Far = new System.Windows.Forms.CheckBox();
             this.checkBox_midPt = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -124,8 +126,7 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBox_SmoothCont = new System.Windows.Forms.TextBox();
+            this.checkBox_center = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -313,6 +314,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.checkBox_center);
             this.groupBox7.Controls.Add(this.label12);
             this.groupBox7.Controls.Add(this.textBox_SmoothCont);
             this.groupBox7.Controls.Add(this.checkBox_Far);
@@ -335,6 +337,23 @@
             this.groupBox7.TabIndex = 67;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
+            // 
+            // label12
+            // 
+            this.label12.Location = new System.Drawing.Point(18, 212);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(65, 22);
+            this.label12.TabIndex = 99;
+            this.label12.Text = "滤波系数";
+            // 
+            // textBox_SmoothCont
+            // 
+            this.textBox_SmoothCont.Location = new System.Drawing.Point(88, 212);
+            this.textBox_SmoothCont.Name = "textBox_SmoothCont";
+            this.textBox_SmoothCont.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SmoothCont.TabIndex = 98;
+            this.textBox_SmoothCont.Text = "0";
+            this.textBox_SmoothCont.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // checkBox_Far
             // 
@@ -360,7 +379,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(194, 161);
+            this.label2.Location = new System.Drawing.Point(194, 180);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 22);
             this.label2.TabIndex = 95;
@@ -368,7 +387,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(18, 164);
+            this.label1.Location = new System.Drawing.Point(18, 183);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 22);
             this.label1.TabIndex = 94;
@@ -376,7 +395,7 @@
             // 
             // textBox_Clipping
             // 
-            this.textBox_Clipping.Location = new System.Drawing.Point(88, 161);
+            this.textBox_Clipping.Location = new System.Drawing.Point(88, 180);
             this.textBox_Clipping.Name = "textBox_Clipping";
             this.textBox_Clipping.Size = new System.Drawing.Size(100, 22);
             this.textBox_Clipping.TabIndex = 93;
@@ -417,7 +436,7 @@
             // 
             // label31
             // 
-            this.label31.Location = new System.Drawing.Point(194, 130);
+            this.label31.Location = new System.Drawing.Point(194, 149);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(28, 22);
             this.label31.TabIndex = 88;
@@ -425,7 +444,7 @@
             // 
             // textBox_xDist
             // 
-            this.textBox_xDist.Location = new System.Drawing.Point(88, 127);
+            this.textBox_xDist.Location = new System.Drawing.Point(88, 146);
             this.textBox_xDist.Name = "textBox_xDist";
             this.textBox_xDist.Size = new System.Drawing.Size(100, 22);
             this.textBox_xDist.TabIndex = 86;
@@ -434,7 +453,7 @@
             // 
             // label33
             // 
-            this.label33.Location = new System.Drawing.Point(18, 130);
+            this.label33.Location = new System.Drawing.Point(18, 149);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(65, 22);
             this.label33.TabIndex = 85;
@@ -442,7 +461,7 @@
             // 
             // label40
             // 
-            this.label40.Location = new System.Drawing.Point(18, 99);
+            this.label40.Location = new System.Drawing.Point(18, 118);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(65, 22);
             this.label40.TabIndex = 70;
@@ -450,7 +469,7 @@
             // 
             // label41
             // 
-            this.label41.Location = new System.Drawing.Point(194, 97);
+            this.label41.Location = new System.Drawing.Point(194, 116);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(28, 22);
             this.label41.TabIndex = 73;
@@ -458,7 +477,7 @@
             // 
             // textBox_downDist
             // 
-            this.textBox_downDist.Location = new System.Drawing.Point(88, 99);
+            this.textBox_downDist.Location = new System.Drawing.Point(88, 118);
             this.textBox_downDist.Name = "textBox_downDist";
             this.textBox_downDist.Size = new System.Drawing.Size(100, 22);
             this.textBox_downDist.TabIndex = 69;
@@ -1091,22 +1110,16 @@
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
             // 
-            // label12
+            // checkBox_center
             // 
-            this.label12.Location = new System.Drawing.Point(18, 193);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(65, 22);
-            this.label12.TabIndex = 99;
-            this.label12.Text = "滤波系数";
-            // 
-            // textBox_SmoothCont
-            // 
-            this.textBox_SmoothCont.Location = new System.Drawing.Point(88, 193);
-            this.textBox_SmoothCont.Name = "textBox_SmoothCont";
-            this.textBox_SmoothCont.Size = new System.Drawing.Size(100, 22);
-            this.textBox_SmoothCont.TabIndex = 98;
-            this.textBox_SmoothCont.Text = "0";
-            this.textBox_SmoothCont.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
+            this.checkBox_center.AutoSize = true;
+            this.checkBox_center.Location = new System.Drawing.Point(21, 86);
+            this.checkBox_center.Name = "checkBox_center";
+            this.checkBox_center.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_center.TabIndex = 100;
+            this.checkBox_center.Text = "取中心";
+            this.checkBox_center.UseVisualStyleBackColor = true;
+            this.checkBox_center.CheckedChanged += new System.EventHandler(this.checkBox_center_CheckedChanged);
             // 
             // FitLineSet
             // 
@@ -1246,5 +1259,6 @@
         private System.Windows.Forms.CheckBox checkBox_Far;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox_SmoothCont;
+        private System.Windows.Forms.CheckBox checkBox_center;
     }
 }

@@ -694,7 +694,8 @@ namespace SagensVision
                         if (SurfacePointZ != null)
                         {
                             long encoder = MyGlobal.GoSDK.Stamp.encoder;
-                            ShowAndSaveMsg($"结束位编码器数值{encoder.ToString()}");
+                            //ShowAndSaveMsg($"结束位编码器数值{encoder.ToString()}");
+                            ShowAndSaveMsg($"结束编码器数值2 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
                             tempHeightImg.Dispose();
                             MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
                             MyGlobal.GoSDK.SurfaceDataZ = null;
@@ -1963,6 +1964,8 @@ namespace SagensVision
                                 {
                                     ShowAndSaveMsg($"切换作业 {JobName[Side - 1]} 成功！");
                                 }
+
+                                ShowAndSaveMsg($"起始编码器数值 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
                                 string Msg = "开始扫描:" + Side.ToString();
 
                                 if (!Directory.Exists(MyGlobal.GoSDK.SaveDatFileDirectory))
@@ -1984,6 +1987,7 @@ namespace SagensVision
                             case "Stop":
                                 isLastImgRecOK = false;
                                 //关闭激光
+                                ShowAndSaveMsg($"结束编码器数值1 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
                                 if (Side < 4)//给运动机构信号，执行下一次扫描
                                 {
                                     MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop_OK"));
@@ -2008,6 +2012,7 @@ namespace SagensVision
                                 {
                                     ShowAndSaveMsg($"关闭激光成功！");
                                 }
+                                
 
 
 
