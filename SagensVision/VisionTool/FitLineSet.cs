@@ -645,6 +645,8 @@ namespace SagensVision.VisionTool
                     checkBox_useLeft.Checked = fParam[Index].roiP[0].useLeft;
                     checkBox_midPt.Checked = fParam[Index].roiP[0].useMidPt;
                     checkBox_Far.Checked = fParam[Index].roiP[0].useNear;
+                    checkBox_center.Checked = fParam[Index].roiP[0].useCenter;
+
                     textBox_downDist.Text = fParam[Index].roiP[0].TopDownDist.ToString();
                     textBox_xDist.Text = fParam[Index].roiP[0].xDist.ToString();
                     textBox_Clipping.Text = fParam[Index].roiP[0].ClippingPer.ToString();
@@ -1923,7 +1925,7 @@ namespace SagensVision.VisionTool
                     {
                         HObject cross2 = new HObject();
                         HOperatorSet.GenCrossContourXld(out cross2, maxZ, mZCol, 10, 0);
-                        hwnd.viewWindow.displayHobject(cross2, "green");
+                        hwnd.viewWindow.displayHobject(cross2, "blue");
 
                     }
 
@@ -1944,16 +1946,18 @@ namespace SagensVision.VisionTool
                 HTuple rowEnd = rowStart;
                 HTuple colStart = mZCol;
                 double dist = fParam[Id].roiP[roiID].xDist == 0 ? 300 : fParam[Id].roiP[roiID].xDist * 200;
-                HTuple colEnd = fParam[Id].roiP[roiID].useLeft ? mZCol - dist : mZCol + dist;
-
-                //取最左
-                //HTuple maxZ = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
-                //HTuple mZRowId = col.TupleFindFirst(maxZ);
-                //HTuple mZRow = row[mZRowId];
-                //HTuple rowStart = mZRow.D - 500;
-                //HTuple rowEnd = mZRow.D + 500;
-                //HTuple colStart = maxZ.D + fParam[Id].UpDownDist;
-                //HTuple colEnd = maxZ.D + fParam[Id].UpDownDist;
+                HTuple colEnd = new HTuple();
+                if (!fParam[Id].roiP[roiID].useCenter)
+                {
+                    colEnd = fParam[Id].roiP[roiID].useLeft ? mZCol - dist : mZCol + dist;
+                }
+                else
+                {
+                    //取轮廓中心
+                    colStart = mZCol - dist;
+                    colEnd = mZCol + dist;
+                }
+                 
 
                 //求交点
                 HObject Line = new HObject(); HObject Profile = new HObject(); HObject Intersect = new HObject();
@@ -1976,28 +1980,59 @@ namespace SagensVision.VisionTool
                     //取最上
                     //取距离 极值或最高点 最近的点/最远点
                     HTuple distMin = new HTuple();
-                    for (int i = 0; i < intersecC.Length; i++)
+                    
+                    HTuple minC = new HTuple();HTuple minCid = new HTuple();
+                    if (!fParam[Id].roiP[roiID].useCenter)
                     {
-                        double innerDis = Math.Abs(intersecC[i].D - mZCol.D);
-                        distMin = distMin.TupleConcat(innerDis);
+                        for (int i = 0; i < intersecC.Length; i++)
+                        {
+                            double innerDis = Math.Abs(intersecC[i].D - mZCol.D);
+                            distMin = distMin.TupleConcat(innerDis);
+                        }
+                        HTuple minDist = fParam[Id].roiP[roiID].useNear ? distMin.TupleMin() : distMin.TupleMax();
+                        HTuple minId = distMin.TupleFindFirst(minDist);
+                        minC = intersecC[minId];
+                        minCid = intersecC.TupleFindFirst(minC);
+                        LastR = LastR.TupleConcat(IntersecR[minCid]);
+                        LastC = LastC.TupleConcat(minC);
                     }
-                    HTuple minDist = fParam[Id].roiP[roiID].useNear ?  distMin.TupleMin(): distMin.TupleMax();
-                    HTuple minId = distMin.TupleFindFirst(minDist);
-                    HTuple minC = intersecC[minId];
-                    //HTuple minC = fParam[Id].roiP[roiID].useLeft ? intersecC.TupleMin() : intersecC.TupleMax();
-                    HTuple minCid = intersecC.TupleFindFirst(minC);
+                    else
+                    {
+                        ////取轮廓中心
+                        //取离最大值或极值最近的两个点
+                        HTuple distless = new HTuple();HTuple distgreater = new HTuple();
+                        for (int i = 0; i < intersecC.Length; i++)
+                        {
+                            double innerDis = intersecC[i].D - mZCol.D;
+                            if (innerDis<0)
+                            {
+                                distless = distless.TupleConcat(innerDis);
+                            }
+                            else
+                            {
+                                distgreater = distgreater.TupleConcat(innerDis);
+                            }
+                        }
+                        HTuple min1 = distless.TupleMax();
+                        HTuple min2 = distgreater.TupleMin();
+                        HTuple minC1 = mZCol.D + min1; HTuple minC2 = mZCol.D + min2;
+                        //取 区间 minCId1 -- minCId2
+                        HTuple MinMaxCol = col.TupleGreaterEqualElem(minC1);
+                        HTuple MinMaxColID = MinMaxCol.TupleFind(1);
+                        HTuple tempcol = col[MinMaxColID];
+                        HTuple temprow = row[MinMaxColID];
+                        HTuple MinMaxCol2 = tempcol.TupleLessEqualElem(minC2);
+                        HTuple MinMaxColID2 = MinMaxCol2.TupleFind(1);
+                        HTuple SegCol = tempcol[MinMaxColID2];
+                        HTuple SegRow = temprow[MinMaxColID2];
 
-
-                    LastR = LastR.TupleConcat(IntersecR[minCid]);
-                    LastC = LastC.TupleConcat(minC);
-
-                    ////取最左
-                    //HTuple minR = IntersecR.TupleMin();
-                    //HTuple minRid = IntersecR.TupleFindFirst(minR);
-
-
-                    //LastR = LastR.TupleConcat(IntersecR[minRid]);
-                    //LastC = LastC.TupleConcat(minR);
+                        HTuple centerR = SegRow.TupleMean();
+                        HTuple centerC = SegCol.TupleMean();
+                        LastR = LastR.TupleConcat(centerR);
+                        LastC = LastC.TupleConcat(centerC);
+                    }
+                               
+                   
                 }
                 else
                 {
@@ -2012,7 +2047,7 @@ namespace SagensVision.VisionTool
                 HOperatorSet.GenCrossContourXld(out cross, IntersecR, intersecC, 6, 0);
                 if (hwnd != null && ProfileId == 1)
                 {
-                    hwnd.viewWindow.displayHobject(cross, "green");
+                    hwnd.viewWindow.displayHobject(cross, "white");
                 }
 
 
@@ -2136,13 +2171,12 @@ namespace SagensVision.VisionTool
                     return "roiList is Null";
                 }
 
-                //取最左 作为初步锚定点
-                HTuple maxZCol = true ? temp_2.TupleMin() : temp_2.TupleMax();
+                ////取最左 作为初步锚定点
+                //HTuple maxZCol =  temp_2.TupleMin();
 
-                //HTuple maxZCol = fParam[Id].BeLeft ? temp_2.TupleMin() : temp_2.TupleMax();
-                HTuple mZRowId = col.TupleFindFirst(maxZCol);
-                HTuple mZRow = row[mZRowId];
-
+                //HTuple mZRowId = col.TupleFindFirst(maxZCol);
+                //HTuple mZRow = row[mZRowId];
+                HTuple mZRow = 0;HTuple maxZCol = 0;
 
                 int roiID = -1;
                 for (int i = 0; i < fParam[Id].roiP.Count; i++)
@@ -4871,21 +4905,9 @@ namespace SagensVision.VisionTool
                 double Sin = Math.Sin(Phi);
                 double Cos = Math.Cos(Phi);
                 double Standard = SubR * Cos + SubC * Sin;
-               
-                if (SmoothCont ==0) //不过滤
-                {
-                    SmoothCont = 0.0001;
-                }
-                if (SmoothCont>=1)
-                {
-                    SmoothCont = 10000;
-                }
-                double cont = 1 / SmoothCont;
-                //if (cont < 1)
-                //{
-                //    cont = 1;
-                //}
-                if (Standard > -cont && Standard < cont)
+
+                int Num = (int)(row.Length * SmoothCont);
+                if (SmoothCont ==0 || SmoothCont ==1)
                 {
                     Row = row;
                     Col = col;
@@ -4896,25 +4918,20 @@ namespace SagensVision.VisionTool
                 {
                     double rowsub = Math.Abs(row[i].D - RowMedian.D);
                     double colsub = Math.Abs(col[i].D - ColMedian.D);
-                    double sub1 = rowsub * Cos + colsub * Sin;
-                    SUB = SUB.TupleConcat(sub1);
+                    //double sub1 = rowsub * Cos + colsub * Sin;
+                    //SUB = SUB.TupleConcat(sub1);
+                    double Add = rowsub * Cos * rowsub * Cos + colsub * Sin * colsub * Sin;
+                    double Sqrt = Math.Sqrt(Add);
+                    SUB = SUB.TupleConcat(Sqrt);
                 }
                 HTuple NewId = new HTuple();
-                if (Standard>0)
-                {
-                    HTuple Less = new HTuple();
-                    HOperatorSet.TupleLessElem(SUB, Standard, out Less);
-                    HOperatorSet.TupleFind(Less, 1, out NewId);
-                }
-                else
-                {
-                    
-                    HTuple Greater = new HTuple();
-                    HOperatorSet.TupleGreaterElem(SUB, Standard, out Greater);
-                    HOperatorSet.TupleFind(Greater, 1, out NewId);
-                }                
-                Row = row[NewId];
-                Col = col[NewId];
+                HTuple Less = new HTuple();
+                HTuple Indices = new HTuple();
+                HOperatorSet.TupleSortIndex(SUB, out Indices);               
+                HTuple selected = new HTuple();
+                HOperatorSet.TupleSelectRange(Indices, row.Length - Num, row.Length - 1, out selected);
+                HOperatorSet.TupleRemove(row, selected, out Row);
+                HOperatorSet.TupleRemove(col, selected, out Col);
                 return "OK";
             }
             catch (Exception ex)
@@ -5494,6 +5511,7 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Init();
             if (hwindow_final1.Image != null)
             {
                 hwindow_final1.Image.Dispose();
@@ -5795,6 +5813,16 @@ namespace SagensVision.VisionTool
                         break;
 
                     case "textBox_SmoothCont":
+                        if (num > 1)
+                        {
+                            textBox_SmoothCont.Text = "1";
+                            num = 50;
+                        }
+                        if (num < 0)
+                        {
+                            textBox_SmoothCont.Text = "0";
+                            num = 0;
+                        }
                         fParam[SideId].roiP[roiID].SmoothCont = num;
                         break;
                     case "textBox_OffsetZ":
@@ -6015,6 +6043,8 @@ namespace SagensVision.VisionTool
                 //label_xoffset2.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
                 //label20.Text = fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
                 checkBox_useLeft.Checked = fParam[SideId].roiP[id].useLeft;
+                checkBox_center.Checked = fParam[SideId].roiP[id].useCenter;
+
                 checkBox_midPt.Checked = fParam[SideId].roiP[id].useMidPt;
                 checkBox_Far.Checked = fParam[SideId].roiP[0].useNear;
                 textBox_downDist.Text = fParam[SideId].roiP[id].TopDownDist.ToString();
@@ -6226,6 +6256,16 @@ namespace SagensVision.VisionTool
                 fParam[Id].roiP[currentId].useNear = !checkBox_Far.Checked;
             }
         }
+
+        private void checkBox_center_CheckedChanged(object sender, EventArgs e)
+        {
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            int currentId = CurrentRowIndex;
+            if (currentId != -1)
+            {
+                fParam[Id].roiP[currentId].useCenter = checkBox_center.Checked;
+            }
+        }
     }
 
     public class ParamPath
@@ -6401,6 +6441,10 @@ namespace SagensVision.VisionTool
         /// 取最近点还是最远点
         /// </summary>
         public bool useNear = false;
+        /// <summary>
+        /// 圆弧处取区域中心点
+        /// </summary>
+        public bool useCenter = false;
 
         public RoiParam Clone()
         {

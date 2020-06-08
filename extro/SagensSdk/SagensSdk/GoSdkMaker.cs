@@ -652,6 +652,13 @@ namespace SagensSdk
             }
         }
 
+        public long GetSensorEncode()
+        {
+            long encode = 0;
+            GoSdkWrapper.GoSensor_Encoder(go_sensor, ref encode);
+            return encode;
+        }
+
         /// <summary>
         /// 根据编码器数据补缺行数据
         /// </summary>

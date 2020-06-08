@@ -153,6 +153,8 @@ namespace SagensSdk
 
         [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoSensor_Role")]
         public static extern IntPtr GoSensor_Role(IntPtr sensor);
+        [DllImport(Constants.GOSDKDLLPATH, EntryPoint = "GoSensor_Encoder")]
+        public static extern kStatus GoSensor_Encoder(IntPtr sensor,ref long encoder);
     }
     public delegate int onDataType(DataContext ctx, IntPtr sys, IntPtr data);
     public class DataContext
