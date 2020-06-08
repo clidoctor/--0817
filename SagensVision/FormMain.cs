@@ -1943,9 +1943,7 @@ namespace SagensVision
                                 if (MyGlobal.GoSDK.ProfileList != null)
                                 {
                                     MyGlobal.GoSDK.ProfileList.Clear();
-
                                 }
-
 
                                 while (!isLastImgRecOK)
                                 {

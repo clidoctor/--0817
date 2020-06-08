@@ -49,8 +49,11 @@ namespace SagensVision.VisionTool
 
             if (!MyGlobal.isShowHeightImg)
             {
-                hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
-                hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
+                if (MyGlobal.isShowHeightImg)
+                {
+                    hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
+                    hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
+                }
                 //OnHMouseUp(sender, null);
             }
         }
