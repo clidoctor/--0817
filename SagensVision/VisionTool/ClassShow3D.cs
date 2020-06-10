@@ -3997,7 +3997,7 @@ namespace SagensVision.VisionTool
                     visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
     (((new HTuple("alpha")).TupleConcat("intensity_red")).TupleConcat("intensity_red")).TupleConcat(
 "intensity_red").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("inspection_mode"), (((new HTuple(0.5)).TupleConcat("coord_x")).TupleConcat(
-"coord_y")).TupleConcat("coord_z").TupleConcat("false").TupleConcat("true").TupleConcat(2.5).TupleConcat("standard"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
+"coord_y")).TupleConcat("coord_z").TupleConcat("false").TupleConcat("true").TupleConcat(3.5).TupleConcat("standard"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
 
 
                 });
