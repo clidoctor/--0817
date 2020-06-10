@@ -1674,7 +1674,6 @@ namespace SagensVision
                             ind++;
                         }
 
-
                     }
 
                 }
@@ -1850,6 +1849,7 @@ namespace SagensVision
                 HOperatorSet.GenContourPolygonXld(out Cnt, new HTuple(xcoord), new HTuple(ycoord));
                 HTuple centerR, centerC, phi, Len1, Len2, ptorder;
                 HOperatorSet.FitRectangle2ContourXld(Cnt, "tukey", -1, 0, 0, 3, 2, out centerR, out centerC, out phi, out Len1, out Len2, out ptorder);
+                
                 if (SaveBase)
                 {
                     //计算到中心点距离
@@ -1862,7 +1862,7 @@ namespace SagensVision
                         {
                             x1[j] = new double[1];
                             HTuple dist = new HTuple();
-                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], MyGlobal.xyzBaseCoord.centerR, MyGlobal.xyzBaseCoord.centerC, out dist);
+                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out dist);
                             x1[j][0] = Math.Round(dist.D,3);
                         }
                         tempDist.Add(x1);
@@ -1881,10 +1881,11 @@ namespace SagensVision
                         MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
                     }
                 }
+
+                //判断X Y 
+                //计算到中心点距离
                 if (MyGlobal.xyzBaseCoord.Dist != null)
                 {
-                    //判断X Y 
-                    //计算到中心点距离
                     for (int i = 0; i < XCoord.Count; i++)
                     {
                         for (int j = 0; j < XCoord[i].GetLength(0); j++)
@@ -1932,6 +1933,9 @@ namespace SagensVision
 
 
                     ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
+                    HObject cross = new HObject();
+                    HOperatorSet.GenCrossContourXld(out cross, centerR * 20 - 4000, centerC * 20, 30, 0);
+                    ShowProfile.viewWindow.displayHobject(cross, "red", true, 10);
                 }
 
 
