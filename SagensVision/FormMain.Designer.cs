@@ -59,6 +59,10 @@
             this.barCheckItem2 = new DevExpress.XtraBars.BarCheckItem();
             this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             this.btn_clearbuffer = new DevExpress.XtraBars.BarButtonItem();
+            this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
+            this.barEditItem1 = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
             this.bar3 = new DevExpress.XtraBars.Bar();
             this.barHeaderItem1 = new DevExpress.XtraBars.BarHeaderItem();
@@ -83,6 +87,7 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.panelContainer1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
@@ -103,6 +108,7 @@
             this.navBarItem4 = new DevExpress.XtraNavBar.NavBarItem();
             this.dockPanel7 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel7_Container = new DevExpress.XtraBars.Docking.ControlContainer();
+            this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dockPanel8 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel8_Container = new DevExpress.XtraBars.Docking.ControlContainer();
@@ -118,8 +124,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label_TotalNum = new System.Windows.Forms.Label();
-            this.panelContainer1 = new DevExpress.XtraBars.Docking.DockPanel();
-            this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -131,11 +135,13 @@
             this.dockPanel6.SuspendLayout();
             this.dockPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).BeginInit();
             this.dockPanel2.SuspendLayout();
             this.dockPanel2_Container.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
+            this.panelContainer1.SuspendLayout();
             this.dockPanel1.SuspendLayout();
             this.dockPanel1_Container.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).BeginInit();
@@ -148,7 +154,6 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).BeginInit();
-            this.panelContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // documentGroup1
@@ -343,9 +348,14 @@
             this.barCheckItem2,
             this.barButtonItem11,
             this.btn_clearbuffer,
-            this.barButtonItem12});
+            this.barButtonItem12,
+            this.barStaticItem1,
+            this.barEditItem1,
+            this.barSubItem4});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 25;
+            this.barManager1.MaxItemId = 30;
+            this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemComboBox1});
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar2
@@ -364,6 +374,9 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem2),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11),
             new DevExpress.XtraBars.LinkPersistInfo(this.btn_clearbuffer),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barEditItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem4),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem6, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
@@ -473,6 +486,36 @@
             this.btn_clearbuffer.Name = "btn_clearbuffer";
             this.btn_clearbuffer.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.btn_clearbuffer.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btn_clearbuffer_ItemClick);
+            // 
+            // barStaticItem1
+            // 
+            this.barStaticItem1.Caption = "当前型号：";
+            this.barStaticItem1.Id = 25;
+            this.barStaticItem1.Name = "barStaticItem1";
+            // 
+            // barEditItem1
+            // 
+            this.barEditItem1.Caption = "barEditItem1";
+            this.barEditItem1.Edit = this.repositoryItemComboBox1;
+            this.barEditItem1.Id = 26;
+            this.barEditItem1.Name = "barEditItem1";
+            // 
+            // repositoryItemComboBox1
+            // 
+            this.repositoryItemComboBox1.AutoHeight = false;
+            this.repositoryItemComboBox1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
+            // 
+            // barSubItem4
+            // 
+            this.barSubItem4.Caption = "型号设置";
+            this.barSubItem4.Id = 27;
+            this.barSubItem4.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barSubItem4.ImageOptions.Image")));
+            this.barSubItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barSubItem4.ImageOptions.LargeImage")));
+            this.barSubItem4.Name = "barSubItem4";
+            this.barSubItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barSubItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barSubItem4_ItemClick);
             // 
             // barButtonItem6
             // 
@@ -664,6 +707,19 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(189, 714);
             this.textBox1.TabIndex = 0;
+            // 
+            // panelContainer1
+            // 
+            this.panelContainer1.Controls.Add(this.dockPanel1);
+            this.panelContainer1.Controls.Add(this.dockPanel7);
+            this.panelContainer1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            this.panelContainer1.FloatSize = new System.Drawing.Size(133, 328);
+            this.panelContainer1.ID = new System.Guid("ae3dddae-f3ad-47a0-b7c3-7a8e64e41590");
+            this.panelContainer1.Location = new System.Drawing.Point(0, 24);
+            this.panelContainer1.Name = "panelContainer1";
+            this.panelContainer1.OriginalSize = new System.Drawing.Size(187, 275);
+            this.panelContainer1.Size = new System.Drawing.Size(187, 770);
+            this.panelContainer1.Text = "panelContainer1";
             // 
             // dockPanel1
             // 
@@ -860,6 +916,14 @@
             this.dockPanel7_Container.Size = new System.Drawing.Size(178, 176);
             this.dockPanel7_Container.TabIndex = 0;
             // 
+            // simpleButton2
+            // 
+            this.simpleButton2.Location = new System.Drawing.Point(0, 3);
+            this.simpleButton2.Name = "simpleButton2";
+            this.simpleButton2.Size = new System.Drawing.Size(178, 23);
+            this.simpleButton2.TabIndex = 1;
+            this.simpleButton2.Text = "显示生产数据";
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1011,27 +1075,6 @@
             this.label_TotalNum.TabIndex = 2;
             this.label_TotalNum.Text = "0";
             // 
-            // panelContainer1
-            // 
-            this.panelContainer1.Controls.Add(this.dockPanel1);
-            this.panelContainer1.Controls.Add(this.dockPanel7);
-            this.panelContainer1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
-            this.panelContainer1.FloatSize = new System.Drawing.Size(133, 328);
-            this.panelContainer1.ID = new System.Guid("ae3dddae-f3ad-47a0-b7c3-7a8e64e41590");
-            this.panelContainer1.Location = new System.Drawing.Point(0, 24);
-            this.panelContainer1.Name = "panelContainer1";
-            this.panelContainer1.OriginalSize = new System.Drawing.Size(187, 275);
-            this.panelContainer1.Size = new System.Drawing.Size(187, 770);
-            this.panelContainer1.Text = "panelContainer1";
-            // 
-            // simpleButton2
-            // 
-            this.simpleButton2.Location = new System.Drawing.Point(0, 3);
-            this.simpleButton2.Name = "simpleButton2";
-            this.simpleButton2.Size = new System.Drawing.Size(178, 23);
-            this.simpleButton2.TabIndex = 1;
-            this.simpleButton2.Text = "显示生产数据";
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1061,12 +1104,14 @@
             this.dockPanel6.ResumeLayout(false);
             this.dockPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).EndInit();
             this.dockPanel2.ResumeLayout(false);
             this.dockPanel2_Container.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage1.ResumeLayout(false);
             this.xtraTabPage1.PerformLayout();
+            this.panelContainer1.ResumeLayout(false);
             this.dockPanel1.ResumeLayout(false);
             this.dockPanel1_Container.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl1)).EndInit();
@@ -1079,7 +1124,6 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).EndInit();
-            this.panelContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1176,6 +1220,10 @@
         private System.Windows.Forms.Label label1;
         private DevExpress.XtraBars.Docking.DockPanel panelContainer1;
         private DevExpress.XtraEditors.SimpleButton simpleButton2;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem1;
+        private DevExpress.XtraBars.BarEditItem barEditItem1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
+        private DevExpress.XtraBars.BarSubItem barSubItem4;
     }
 }
 
