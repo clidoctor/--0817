@@ -48,7 +48,8 @@ namespace SagensVision
         public static FitLineSet flset2 = new FitLineSet("Fix");
         public static List<HObject[]> ImageMulti = new List<HObject[]>();
         public static int[] imgRotateArr = new int[4];
-        public static List<double[][]> ZCoord = new List<double[][]>();//z值基准高度
+        //public static List<double[][]> ZCoord = new List<double[][]>();//z值基准高度
+        public static XYZBaseCoord xyzBaseCoord = new XYZBaseCoord();
     }
 
     public  class GlobalConfig
@@ -69,6 +70,8 @@ namespace SagensVision
         public double Color_max = 0;//颜色区间
         public double HeightMin = 0;//最小高度
         public double HeightMax = 0;
+        public double XYMin = 0;
+        public double XYMax = 0;
         public GlobalParam[] gbParam = new GlobalParam[4];
         public GlobalConfig()
         {
@@ -83,6 +86,16 @@ namespace SagensVision
     {
        public double Xoffset = 0;
        public double Yoffset = 0;
+    }
+
+    public class XYZBaseCoord
+    {
+        public List<double[][]> XCoord;
+        public List<double[][]> YCoord;
+        public List<double[][]> ZCoord;
+        public List<double[][]> Dist;
+        public double centerR;
+        public double centerC;
     }
 
     public static class StaticOperate

@@ -76,7 +76,7 @@ namespace SagensVision
             //读取Z值基准高度】
             if (File.Exists(MyGlobal.BaseTxtPath))
             {
-                MyGlobal.ZCoord = (List<double[][]>) StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(List<double[][]>));
+                MyGlobal.xyzBaseCoord = (XYZBaseCoord) StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
             }
 
             string dbcreate = SQLiteHelper.NewDbFile();
@@ -253,7 +253,7 @@ namespace SagensVision
                 AnchorList.Add(intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
-                0, intersect.Row, intersect.Col, 0, out homMaxFix);
+                MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
 
                 string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
                 
@@ -1326,6 +1326,10 @@ namespace SagensVision
             try
             {
                 double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
+                if (SaveBase)
+                {
+                    MyGlobal.xyzBaseCoord.ZCoord = null;
+                }
                 string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[Station - 1]);
 
                 if (x == null)
@@ -1349,20 +1353,7 @@ namespace SagensVision
                     original[1] = new HTuple();
                 }
 
-                XCoord.Add(x);
-                YCoord.Add(y);
-                ZCoord.Add(z);
-                StrLorC.Add(Strlorc);
-
-                Yorigin.Add(original[0]);
-                Xorigin.Add(original[1]);
-                double[] zval = new double[z.Length];
-                for (int i = 0; i < zval.Length; i++)
-                {
-                    zval[i] = z[i][0];
-                }
-                Zorigin.Add(zval);
-                NameOrigin.Add(flset.fParam[Station - 1].DicPointName.ToArray());
+                
                 if (OK != "OK")
                 {
                     return "第" + Station + "边" + OK;
@@ -1371,11 +1362,31 @@ namespace SagensVision
                 {
                     return "第" + Station + "边未找到边";
                 }
+
+                XCoord.Add(x);
+                YCoord.Add(y);
+                ZCoord.Add(z);
+                StrLorC.Add(Strlorc);
+                NameOrigin.Add(flset.fParam[Station - 1].DicPointName.ToArray());
+                Yorigin.Add(original[0]);
+                Xorigin.Add(original[1]);
+
+                
+
+                double[] zval = new double[z.Length];
+                for (int i = 0; i < zval.Length; i++)
+                {
+                    zval[i] = z[i][0];
+                }
+                Zorigin.Add(zval);
                 if (Station != 4)
                 {
                     return "OK";
                 }
-
+                if (XCoord.Count != 4)
+                {
+                    return "运行失败";
+                }
                 #region 重复点
                 //#region 除去起始位重复部分 并均分 
                 //for (int i = 0; i < Station; i++)
@@ -1637,8 +1648,6 @@ namespace SagensVision
                 int Start = MyGlobal.globalConfig.Startpt;
                 double[] OrginalX1 = orginalC; double[] OrginalY1 = orginalR;
 
-
-
                 #region 锚定点转换机械坐标
                 HTuple[] AxisAnchorR = new HTuple[4]; HTuple[] AxisAnchorC = new HTuple[4];
                 HTuple[] AnchorR = new HTuple[4]; HTuple[] AnchorC = new HTuple[4];
@@ -1741,7 +1750,7 @@ namespace SagensVision
 
                     Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
 
-
+                    
                     if (i == 0)
                     {
                         StrOrginalHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
@@ -1789,15 +1798,68 @@ namespace SagensVision
                     Directory.CreateDirectory("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d");
                 }
                 StaticOperate.writeTxt("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d\\Laser3D_1.txt", Str.ToString());
+
+                //计算 中心
+                HObject Cnt = new HObject();
+                HOperatorSet.GenContourPolygonXld(out Cnt, new HTuple(xcoord), new HTuple(ycoord));
+                HTuple centerR, centerC, phi, Len1, Len2, ptorder;
+                HOperatorSet.FitRectangle2ContourXld(Cnt, "tukey", -1, 0, 0, 3, 2, out centerR, out centerC, out phi, out Len1, out Len2, out ptorder);
                 if (SaveBase)
                 {
-                    StaticOperate.WriteXML(ZCoord, MyGlobal.BaseTxtPath);
+                    //计算到中心点距离
+                    List<double[][]> tempDist = new List<double[][]>();
+                    List<double[][]> tempY = new List<double[][]>();
+                    for (int i = 0; i < XCoord.Count; i++)
+                    {
+                        double[][] x1 = new double[XCoord[i].GetLength(0)][];
+                        for (int j = 0; j < XCoord[i].GetLength(0); j++)
+                        {
+                            x1[j] = new double[1];
+                            HTuple dist = new HTuple();
+                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], MyGlobal.xyzBaseCoord.centerR, MyGlobal.xyzBaseCoord.centerC, out dist);
+                            x1[j][0] = Math.Round(dist.D,3);
+                        }
+                        tempDist.Add(x1);
+                    }
+                    MyGlobal.xyzBaseCoord.Dist = tempDist;
+                    MyGlobal.xyzBaseCoord.centerR = centerR.D;
+                    MyGlobal.xyzBaseCoord.centerC = centerC.D;
+                   
+                    MyGlobal.xyzBaseCoord.XCoord = XCoord;
+                    MyGlobal.xyzBaseCoord.YCoord = YCoord;
+                    MyGlobal.xyzBaseCoord.ZCoord = ZCoord;
+                    StaticOperate.WriteXML(MyGlobal.xyzBaseCoord, MyGlobal.BaseTxtPath);
                     //读取Z值基准高度】
                     if (File.Exists(MyGlobal.BaseTxtPath))
                     {
-                        MyGlobal.ZCoord = (List<double[][]>)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(List<double[][]>));
+                        MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
                     }
                 }
+
+                //判断X Y 
+                //计算到中心点距离
+                for (int i = 0; i < XCoord.Count; i++)
+                {
+                    for (int j = 0; j < XCoord[i].GetLength(0); j++)
+                    {
+                        HTuple Dist = 0;
+                        HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out Dist);
+                        double Sub = Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j][0];
+                        if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
+                        {
+                            if (MyGlobal.hWindow_Final[i] != null)
+                            {
+                                MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                            }
+                            return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                        }
+                    }                    
+                }
+                
+
+
+
+
                 if (Station == 4)
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
@@ -1812,7 +1874,7 @@ namespace SagensVision
                         HOperatorSet.TupleDeg(AnchorList[i].Angle, out deg);
 
                         string AnchorX = Math.Round(AnchorList[i].Col * Xresolution, 3).ToString(); string AnchorY = Math.Round(AnchorList[i].Row * Yresolution, 3).ToString();
-                        if (Side == 4)
+                        if (i == 3)
                         {
                             StaticOperate.SaveExcelData(1, AnchorX, AnchorY, deg.D.ToString() + "\r\n");
                         }
@@ -1860,8 +1922,9 @@ namespace SagensVision
             HObject ImageConst;
             HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
             ShowProfile.HobjectToHimage(ImageConst);
-            ShowProfile.viewWindow.displayHobject(regpot, "green", true);
-            if (showMsg)
+            ShowProfile.viewWindow.displayHobject(regpot, "green", true,10);
+
+            if (!showMsg)
             {
                 for (int i = 0; i < recordSigleTitle.Length; i++)
                 {
