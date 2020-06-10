@@ -23,6 +23,8 @@ namespace SagensVision.VisionTool
         private void Show3dPointFrm_Load(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Maximized;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             ClassShow3D cs3d = new ClassShow3D();
             float[] dx = new float[x.Length];
             float[] dy = new float[y.Length];

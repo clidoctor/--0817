@@ -3994,11 +3994,14 @@ namespace SagensVision.VisionTool
                     HTuple Pose1 = new HTuple();
                     //HOperatorSet.SetLineWidth(windowhandle, 50);
                     HOperatorSet.CreatePose(100, -100, 0, 0, 180, 0, "Rp+T", "gba", "point",out  Pose1);
-                    visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
-    (((new HTuple("alpha")).TupleConcat("intensity_red")).TupleConcat("intensity_red")).TupleConcat(
-"intensity_red").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("inspection_mode"), (((new HTuple(0.5)).TupleConcat("coord_x")).TupleConcat(
-"coord_y")).TupleConcat("coord_z").TupleConcat("false").TupleConcat("true").TupleConcat(2.5).TupleConcat("standard"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
+                    //                visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
+                    //new HTuple("alpha").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("color").TupleConcat("disp_background"),
+                    //(new HTuple(0.5)).TupleConcat("false").TupleConcat("true").TupleConcat(2.5).TupleConcat("red").TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
 
+                    visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
+   (((new HTuple("alpha")).TupleConcat("intensity_red")).TupleConcat("intensity_red")).TupleConcat(
+"intensity_red").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("disp_background"), (((new HTuple(0.5)).TupleConcat("coord_x")).TupleConcat(
+"coord_y")).TupleConcat("coord_z").TupleConcat("false").TupleConcat("true").TupleConcat(3.5).TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
 
                 });
 

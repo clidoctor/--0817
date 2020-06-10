@@ -219,6 +219,32 @@ namespace SagensVision
             sw.Close();
         }
 
+        public static void SaveErrorLog(string info)
+        {
+            string dir = MyGlobal.DataPath + "ErrorLog";
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            string[] files = Directory.GetFiles(dir);
+            for (int i = 0; i < files.Length; i++)
+            {
+                DateTime dt = File.GetCreationTime(files[i]);
+                TimeSpan ts = DateTime.Now - dt;
+                if (ts.Days > MyGlobal.globalConfig.SaveDays)
+                {
+                    File.Delete(files[i]);
+                }
+            }
+
+            string filename = dir + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+            StreamWriter sw = new StreamWriter(filename, true);
+            sw.WriteLine(info);
+            sw.Flush();
+            sw.Close();
+        }
+
         public static void SaveExcelData(int boardNum, string Height, string Width, string Area, string index ="")
         {
             try

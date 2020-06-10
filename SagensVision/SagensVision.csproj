@@ -43,14 +43,19 @@
       <HintPath>bin\Debug\Calibration.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.BonusSkins.v17.1" />
+    <Reference Include="DevExpress.Charts.v17.1.Core, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Data.v17.1" />
     <Reference Include="DevExpress.Utils.v17.1" />
     <Reference Include="DevExpress.Sparkline.v17.1.Core" />
     <Reference Include="DevExpress.XtraBars.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v17.1.UI, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v17.1.Wizard, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraEditors.v17.1" />
     <Reference Include="DevExpress.Printing.v17.1.Core" />
     <Reference Include="DevExpress.XtraLayout.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraNavBar.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v17.1, Version=17.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="GoSaveSurfaceGraphic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\GoSaveSurfaceGraphic.dll</HintPath>
@@ -88,6 +93,7 @@
       <HintPath>bin\Debug\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -241,6 +247,12 @@
     <Compile Include="VisionTool\Show3D.Designer.cs">
       <DependentUpon>Show3D.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\Show3dImgFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\Show3dImgFrm.Designer.cs">
+      <DependentUpon>Show3dImgFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="VisionTool\Show3dPointFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -262,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\Show3dImgFrm.resx">
+      <DependentUpon>Show3dImgFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\Show3dPointFrm.resx">
       <DependentUpon>Show3dPointFrm.cs</DependentUpon>

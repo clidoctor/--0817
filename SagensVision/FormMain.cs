@@ -96,6 +96,7 @@ namespace SagensVision
             for (int i = 0; i < 4; i++)
             {
                 MyGlobal.hWindow_Final[i] = new HWindow_Final();
+                MyGlobal.hWindow_Final[i].Name = $"hwindow_final{i+1}";
                 MyGlobal.hWindow_Final[i].viewWindow.setFitWindow(true);
                 //MyGlobal.parameterSet[i] = new MatchingModule.MatchingParam();
 
@@ -124,6 +125,11 @@ namespace SagensVision
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
             ShowProfile.Show3dTrackDel += Show3dPointFrm;
+            MyGlobal.hWindow_Final[0].Show3dTrackDel += Show3dImg;
+            MyGlobal.hWindow_Final[1].Show3dTrackDel += Show3dImg;
+            MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
+            MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
+
             if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
             {
                 MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
@@ -144,6 +150,13 @@ namespace SagensVision
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
             gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
+        }
+
+        private void Show3dImg(HWindow_Final obj)
+        {
+            string hwind_id = obj.Name.Substring(obj.Name.Length - 1, 1);
+            double hwind_idx = int.Parse(hwind_id) - 1;
+            //HObject img = 
         }
 
 
@@ -251,6 +264,10 @@ namespace SagensVision
             {
                 IntersetionCoord intersect = new IntersetionCoord();
                 string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
+                if (ok1!="OK")
+                {
+                    return ok1;
+                }
                 AnchorList.Add(intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
@@ -332,12 +349,42 @@ namespace SagensVision
                 string formatStr = "HH:mm:ss:ffff";
 
                 string longMsg = string.Format("[{0}]", DateTime.Now.ToString(formatStr)) + msg1;
+                
                 this.textBox1.AppendText(Environment.NewLine + longMsg);
                 this.textBox1.Select(this.textBox1.Text.Length, 0);
                 this.textBox1.ScrollToCaret();
                 this.textBox1.ScrollBars = ScrollBars.Both;
                 //Misc.SaveLog(longMsg);
                 StaticOperate.SaveLog(longMsg);
+            };
+            if (this.InvokeRequired)
+            {
+                this.Invoke(fp, msg);
+            }
+            else
+            {
+                fp(msg);
+            }
+        }
+
+        public void ShowAndSaveErrorMsg(string msg)
+        {
+            Action<string> fp = (string msg1) =>
+            {
+                if (this.textBox1.Lines.Length > 300)
+                {
+                    int index = this.textBox1.Text.IndexOf(Environment.NewLine);
+                    this.textBox1.Text = this.textBox1.Text.Remove(0, index + Environment.NewLine.Length);
+                }
+                string formatStr = "HH:mm:ss:ffff";
+
+                string longMsg = string.Format("[{0}]", DateTime.Now.ToString(formatStr)) + msg1;
+                this.textBox1.AppendText(Environment.NewLine + longMsg);
+                this.textBox1.Select(this.textBox1.Text.Length, 0);
+                this.textBox1.ScrollToCaret();
+                this.textBox1.ScrollBars = ScrollBars.Both;
+                //Misc.SaveLog(longMsg);
+                StaticOperate.SaveErrorLog(longMsg);
             };
             if (this.InvokeRequired)
             {
@@ -765,10 +812,8 @@ namespace SagensVision
                         HObject[] temp = { MyGlobal.hWindow_Final[Side - 1].Image, ZoomHeightImg };
                         MyGlobal.ImageMulti.Add(temp);
 
-                        while (!isSaveImgOK)//等待图片保存完成
-                        {
-
-                        }
+                        while (!isSaveImgOK);//等待图片保存完成
+                       
                         return OK;
                     }
                     catch (Exception ex)
@@ -1942,7 +1987,7 @@ namespace SagensVision
             ImageConst.Dispose();
         }
 
-        private void Show3dPointFrm()
+        private void Show3dPointFrm(HWindow_Final hwindowfinal)
         {
             if (recordXCoord == null || recordXCoord.Length == 0)
             {
