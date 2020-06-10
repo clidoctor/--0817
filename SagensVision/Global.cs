@@ -22,11 +22,8 @@ namespace SagensVision
     public static class  MyGlobal
     {
         public static string DataPath = AppDomain.CurrentDomain.BaseDirectory + "Data\\";
-        public static string ConfigPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\";
-        public static string ModelPath = AppDomain.CurrentDomain.BaseDirectory + "Model\\";
-        public static string fileName1 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "0.shm";
-        public static string fileName2 = AppDomain.CurrentDomain.BaseDirectory + "Model\\" + "1.shm";
-        public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "imgRotate.txt";
+        public static string ConfigPath = AppDomain.CurrentDomain.BaseDirectory +  "Config\\";
+        public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" + "imgRotate.txt";
         public static string BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" +"BaseHeight.xml";
 
         public static string SaveDatFileDirectory = "data\\datfile\\";
@@ -50,6 +47,7 @@ namespace SagensVision
         public static int[] imgRotateArr = new int[4];
         //public static List<double[][]> ZCoord = new List<double[][]>();//z值基准高度
         public static XYZBaseCoord xyzBaseCoord = new XYZBaseCoord();
+        public static SavePathName PathName = new SavePathName();
     }
 
     public  class GlobalConfig
@@ -87,7 +85,34 @@ namespace SagensVision
                 gbParam[i] = new GlobalParam();
             }
         }
+        
+       
     }
+
+    public class SavePathName
+    {       
+        /// <summary>
+        /// 产品型号
+        /// </summary>
+        public List<string> ProductType = new List<string>();
+        string currentType = "";
+        public string CurrentType
+        {
+            get
+            {
+                return currentType;
+            }
+            set
+            {
+                this.currentType = value;
+                MyGlobal.ConfigPath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\";
+                MyGlobal.imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "imgRotate.txt";
+                MyGlobal.BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "BaseHeight.xml";
+            }
+        }
+    }
+
+
 
     public class GlobalParam
     {

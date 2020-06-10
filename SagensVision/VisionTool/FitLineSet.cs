@@ -1080,8 +1080,8 @@ namespace SagensVision.VisionTool
                     MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out HeightImage);
 
                     hwindow_final2.HobjectToHimage(IntensityImage);
-                    HOperatorSet.WriteImage(HeightImage, "tiff", 0, MyGlobal.ModelPath + "\\" + SideName + "H.tiff");
-                    HOperatorSet.WriteImage(IntensityImage, "tiff", 0, MyGlobal.ModelPath + "\\" + SideName + "I.tiff");
+                    //HOperatorSet.WriteImage(HeightImage, "tiff", 0, MyGlobal.ModelPath + "\\" + SideName + "H.tiff");
+                    //HOperatorSet.WriteImage(IntensityImage, "tiff", 0, MyGlobal.ModelPath + "\\" + SideName + "I.tiff");
                     MyGlobal.hWindow_Final[0].HobjectToHimage(IntensityImage);
                 }
 
@@ -1137,7 +1137,7 @@ namespace SagensVision.VisionTool
                 FolderBrowserDialog opf = new FolderBrowserDialog();
 
 
-                opf.SelectedPath = MyGlobal.ModelPath + "\\";
+                opf.SelectedPath =  "\\";
                 if (opf.ShowDialog() == DialogResult.OK)
                 {
                     //string file = opf.FileName;
@@ -1172,7 +1172,7 @@ namespace SagensVision.VisionTool
 
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
 
-            string Path1 = SelectedPath == "" ? MyGlobal.ModelPath + "\\" : SelectedPath;
+            string Path1 = SelectedPath == "" ? MyGlobal.ConfigPath + "\\" : SelectedPath;
             if (MyGlobal.ImageMulti.Count >= Id + 1 && SelectedPath == "")
             {
                 HeightImage = MyGlobal.ImageMulti[Id][1];

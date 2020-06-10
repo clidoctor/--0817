@@ -64,23 +64,28 @@ namespace SagensVision
         private HWindow_Final ShowProfile = new HWindow_Final();
         void Init()
         {
-            if (!Directory.Exists(MyGlobal.ModelPath))
+            if (MyGlobal.PathName.CurrentType!="")
             {
-                Directory.CreateDirectory(MyGlobal.ModelPath);
+                if (!Directory.Exists(MyGlobal.ConfigPath))
+                {
+                    Directory.CreateDirectory(MyGlobal.ConfigPath);
+                }
+                if (!Directory.Exists(MyGlobal.DataPath))
+                {
+                    Directory.CreateDirectory(MyGlobal.DataPath);
+                }
+                //读取Z值基准高度】
+                if (File.Exists(MyGlobal.BaseTxtPath))
+                {
+                    MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
+                }
+
             }
-            if (!Directory.Exists(MyGlobal.ConfigPath))
+            else
             {
-                Directory.CreateDirectory(MyGlobal.ConfigPath);
+                ShowAndSaveMsg("配置文件加载失败!");
             }
-            if (!Directory.Exists(MyGlobal.DataPath))
-            {
-                Directory.CreateDirectory(MyGlobal.DataPath);
-            }
-            //读取Z值基准高度】
-            if (File.Exists(MyGlobal.BaseTxtPath))
-            {
-                MyGlobal.xyzBaseCoord = (XYZBaseCoord) StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
-            }
+            
 
             string dbcreate = SQLiteHelper.NewDbFile();
             if (dbcreate == "OK")
@@ -3100,6 +3105,12 @@ namespace SagensVision
         private void navBarItem5_LinkPressed_1(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
             gbParamSet.ShowDialog();
+        }
+
+        private void barSubItem4_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            NewProduct nProduct = new NewProduct();
+            nProduct.ShowDialog();
         }
     }
 }
