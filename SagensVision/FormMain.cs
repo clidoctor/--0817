@@ -1804,6 +1804,7 @@ namespace SagensVision
                 HOperatorSet.GenContourPolygonXld(out Cnt, new HTuple(xcoord), new HTuple(ycoord));
                 HTuple centerR, centerC, phi, Len1, Len2, ptorder;
                 HOperatorSet.FitRectangle2ContourXld(Cnt, "tukey", -1, 0, 0, 3, 2, out centerR, out centerC, out phi, out Len1, out Len2, out ptorder);
+                
                 if (SaveBase)
                 {
                     //计算到中心点距离
@@ -1838,28 +1839,28 @@ namespace SagensVision
 
                 //判断X Y 
                 //计算到中心点距离
-                for (int i = 0; i < XCoord.Count; i++)
+                if (MyGlobal.xyzBaseCoord.Dist!=null)
                 {
-                    for (int j = 0; j < XCoord[i].GetLength(0); j++)
+                    for (int i = 0; i < XCoord.Count; i++)
                     {
-                        HTuple Dist = 0;
-                        HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out Dist);
-                        double Sub = Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j][0];
-                        if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
+                        for (int j = 0; j < XCoord[i].GetLength(0); j++)
                         {
-                            if (MyGlobal.hWindow_Final[i] != null)
+                            HTuple Dist = 0;
+                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out Dist);
+                            double Sub = Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j][0];
+                            if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
                             {
-                                MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                if (MyGlobal.hWindow_Final[i] != null)
+                                {
+                                    MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                }
+                                return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
                             }
-                            return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
                         }
-                    }                    
+                    }
                 }
+               
                 
-
-
-
-
                 if (Station == 4)
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
@@ -1887,6 +1888,9 @@ namespace SagensVision
 
 
                     ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
+                    HObject cross = new HObject();
+                    HOperatorSet.GenCrossContourXld(out cross, centerR * 20 - 4000, centerC * 20, 30, 0);
+                    ShowProfile.viewWindow.displayHobject(cross, "red", true, 10);
                 }
 
 
