@@ -17,6 +17,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using SagensVision.VisionTool;
 using SagensSdk;
+using System.Runtime.InteropServices;
 
 namespace SagensVision
 {
@@ -122,7 +123,7 @@ namespace SagensVision
 
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
-
+            ShowProfile.Show3dTrackDel += Show3dPointFrm;
             if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
             {
                 MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
@@ -1879,6 +1880,27 @@ namespace SagensVision
             ImageConst.Dispose();
         }
 
+        private void Show3dPointFrm()
+        {
+            if (recordXCoord == null || recordXCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordYCoord == null || recordYCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordZCoord == null || recordZCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordXCoord.Length!=recordYCoord.Length || recordXCoord.Length!=recordZCoord.Length)
+            {
+                return;
+            }
+            Show3dPointFrm spf = new Show3dPointFrm(recordXCoord, recordYCoord, recordZCoord);
+            spf.Show();
+        }
 
 
         bool TcpIsConnect = false;

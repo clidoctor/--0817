@@ -71,6 +71,8 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SagensSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\extro\SagensSdk\SagensSdk\bin\Debug\SagensSdk.dll</HintPath>
@@ -98,6 +100,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\txtHelper.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Communication\Communication.cs">
@@ -238,6 +241,12 @@
     <Compile Include="VisionTool\Show3D.Designer.cs">
       <DependentUpon>Show3D.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\Show3dPointFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\Show3dPointFrm.Designer.cs">
+      <DependentUpon>Show3dPointFrm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Communication\Communication.resx">
       <DependentUpon>Communication.cs</DependentUpon>
     </EmbeddedResource>
@@ -253,6 +262,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\Show3dPointFrm.resx">
+      <DependentUpon>Show3dPointFrm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Resources.resx">
