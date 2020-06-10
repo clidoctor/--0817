@@ -18,8 +18,7 @@ namespace SagensVision.VisionTool
         public GlobalParam()
         {
             InitializeComponent();
-            Run = new RunOff(dmmy);
-            LoadToUi();
+            Run = new RunOff(dmmy);            
         }
         public void dmmy()
         {
@@ -33,6 +32,9 @@ namespace SagensVision.VisionTool
                 textBox_ColorMax.Text = MyGlobal.globalConfig.Color_max.ToString();
                 textBox_HeightMax.Text = MyGlobal.globalConfig.HeightMax.ToString();
                 textBox_HeightMin.Text = MyGlobal.globalConfig.HeightMin.ToString();
+                textBox_XYMax.Text = MyGlobal.globalConfig.XYMax.ToString();
+                textBox_XYMin.Text = MyGlobal.globalConfig.XYMin.ToString();
+
                 textBox_Start.Text = MyGlobal.globalConfig.Startpt.ToString();
                 textBox_totalZ.Text = MyGlobal.globalConfig.TotalZoffset.ToString();                
                 textBox_xOffset.Text = MyGlobal.globalConfig.gbParam[0].Xoffset.ToString();
@@ -91,6 +93,12 @@ namespace SagensVision.VisionTool
                 case "textBox_yOffset":
                     MyGlobal.globalConfig.gbParam[SideId].Yoffset = (int)num;
                     break;
+                case "textBox_XYMax":
+                    MyGlobal.globalConfig.XYMax = num;
+                    break;
+                case "textBox_XYMin":
+                    MyGlobal.globalConfig.XYMin = num;
+                    break;
             }
 
            
@@ -124,6 +132,11 @@ namespace SagensVision.VisionTool
         private void simpleButton3_Click(object sender, EventArgs e)
         {
             Run();
+        }
+
+        private void GlobalParam_Load(object sender, EventArgs e)
+        {
+            LoadToUi();
         }
     }
 

@@ -33,6 +33,10 @@ namespace SagensVision.VisionTool
                 HOperatorSet.GenCrossContourXld(out cross, new HTuple(FormMain.Yorigin[idx],FormMain.AnchorList[idx].Row), new HTuple(FormMain.Xorigin[idx], FormMain.AnchorList[idx].Col), 26, 1.5);
                 hWindow_Final1.viewWindow.displayHobject(cross,"green");
                 cross.Dispose();
+                if (FormMain.Yorigin.Count!= FormMain.NameOrigin.Count)
+                {
+                    return;
+                }
                 for (int j = 0; j < FormMain.NameOrigin[idx].Length; j++)
                 {
                     hWindow_Final1.viewWindow.dispMessage($"{FormMain.NameOrigin[idx][j]}({Math.Round( FormMain.Zorigin[idx][j],3)})", "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);

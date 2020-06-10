@@ -644,7 +644,7 @@ namespace SagensVision.VisionTool
                     textBox_Deg.Text = fParam[Index].roiP[0].AngleOfProfile.ToString();
                     checkBox_useLeft.Checked = fParam[Index].roiP[0].useLeft;
                     checkBox_midPt.Checked = fParam[Index].roiP[0].useMidPt;
-                    checkBox_Far.Checked = fParam[Index].roiP[0].useNear;
+                    checkBox_Far.Checked = !fParam[Index].roiP[0].useNear;
                     checkBox_center.Checked = fParam[Index].roiP[0].useCenter;
 
                     textBox_downDist.Text = fParam[Index].roiP[0].TopDownDist.ToString();
@@ -1215,7 +1215,7 @@ namespace SagensVision.VisionTool
                 }
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                0, intersection.Row, intersection.Col, 0, out homMaxFix);
+                MyGlobal.flset2.intersectCoordList[Id].Angle, intersection.Row, intersection.Col, intersection.Angle, out homMaxFix);
 
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
@@ -1269,7 +1269,7 @@ namespace SagensVision.VisionTool
                 string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
+                    MyGlobal.flset2.intersectCoordList[Id].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
                 MyGlobal.flset2.intersectCoordList[Id] = intersect;
             }
             catch (Exception)
@@ -2909,16 +2909,33 @@ namespace SagensVision.VisionTool
                 //hwindow_final2.viewWindow.saveROI(roiList3[Id], ParamPath.ParamDir + SideName + "_CorrectRegion.roi");
             }
 
-            MessageBox.Show("保存成功！");
+           
             isSave = true;
-            if (intersection.Row == 0 && intersection.Col == 0)
+           
+            if (Name == "Fix")
             {
-                return;
+                if (MessageBox.Show("是否重新写入模板位置？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    MyGlobal.flset2.intersectCoordList[Id] = intersection;
+                    StaticOperate.WriteXML(MyGlobal.flset2.intersectCoordList[Id], ParamPath.Path_Param);
+                }
             }
-            MyGlobal.flset2.intersectCoordList[Id] = intersection;
-            StaticOperate.WriteXML(MyGlobal.flset2.intersectCoordList[Id], ParamPath.Path_Param);
-            //MyGlobal.flset2.Init();
+            else
+            {
+                if (intersection.Row == 0 && intersection.Col == 0)
+                {
+                    MessageBox.Show("保存成功！");
+                    return;
+                }
+                else
+                {
+                    MyGlobal.flset2.intersectCoordList[Id] = intersection;
+                    StaticOperate.WriteXML(MyGlobal.flset2.intersectCoordList[Id], ParamPath.Path_Param);
+                }
+            }
 
+            //MyGlobal.flset2.Init();
+            MessageBox.Show("保存成功！");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -3372,81 +3389,99 @@ namespace SagensVision.VisionTool
 
                 int roiID = dataGridView1.CurrentCell.RowIndex;
                 roiID = CurrentRowIndex;
-                HTuple[] lineCoord = new HTuple[1];
-                switch (tb.Name)
+                int count = dataGridView1.SelectedCells.Count;
+                List<int> rowInd = new List<int>();
+                for (int i = 0; i < count; i++)
                 {
-                    case "textBox_Num":
-                        fParam[SideId].roiP[roiID].NumOfSection = num;
-
-                        DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
-                        break;
-                    case "textBox_Len":
-                        fParam[SideId].roiP[roiID].Len1 = num;
-                        HTuple temp = new HTuple();
-                        List<ROI> temproi = new List<ROI>();
-                        temp = roiList2[SideId][roiID].getModelData();
-                        hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi);
-                        //hwindow_final2.viewWindow.genRect2(temp[0].D, temp[1].D, temp[2].D, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi);
-                        roiList2[SideId][roiID] = temproi[0];
-                        hwindow_final2.viewWindow.notDisplayRoi();
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        hwindow_final2.viewWindow.selectROI(roiID);
-                        DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
-                        break;
-                    case "textBox_Width":
-                        fParam[SideId].roiP[roiID].Len2 = num;
-                        HTuple temp3 = new HTuple();
-                        temp3 = roiList2[SideId][roiID].getModelData();
-                        List<ROI> temproi3 = new List<ROI>();
-                        hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi3);
-                        roiList2[SideId][roiID] = temproi3[0];
-                        hwindow_final2.viewWindow.notDisplayRoi();
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        hwindow_final2.viewWindow.selectROI(roiID);
-                        DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
-                        break;
-                    case "textBox_Row":
-                        fParam[SideId].roiP[roiID].CenterRow = num;
-                        HTuple temp4 = new HTuple();
-                        temp4 = roiList2[SideId][roiID].getModelData();
-                        List<ROI> temproi4 = new List<ROI>();
-                        hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi4);
-                        roiList2[SideId][roiID] = temproi4[0];
-                        hwindow_final2.viewWindow.notDisplayRoi();
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        hwindow_final2.viewWindow.selectROI(roiID);
-                        DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
-                        break;
-                    case "textBox_Col":
-                        fParam[SideId].roiP[roiID].CenterCol = num;
-                        HTuple temp5 = new HTuple();
-                        temp3 = roiList2[SideId][roiID].getModelData();
-                        List<ROI> temproi5 = new List<ROI>();
-                        hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi5);
-                        roiList2[SideId][roiID] = temproi5[0];
-                        hwindow_final2.viewWindow.notDisplayRoi();
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        hwindow_final2.viewWindow.selectROI(roiID);
-                        DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
-                        break;
-                    case "textBox_phi":
-                        HTuple rad = new HTuple();
-                        HOperatorSet.TupleRad(num, out rad);
-                        fParam[SideId].roiP[roiID].phi = rad;
-                        HTuple temp6 = new HTuple();
-                        temp3 = roiList2[SideId][roiID].getModelData();
-                        List<ROI> temproi6 = new List<ROI>();
-                        hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi6);
-                        roiList2[SideId][roiID] = temproi6[0];
-                        hwindow_final2.viewWindow.notDisplayRoi();
-                        hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
-                        hwindow_final2.viewWindow.selectROI(roiID);
-                        DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
-                        break;
-                    case "textBox_Deg":
-                        fParam[SideId].roiP[roiID].AngleOfProfile = num;
-                        break;
+                    int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                    if (!rowInd.Contains(Ind))
+                    {
+                        rowInd.Add(Ind);
+                    }
                 }
+                for (int i = 0; i < rowInd.Count; i++)
+                {
+                    roiID = rowInd[i];
+                    HTuple[] lineCoord = new HTuple[1];
+                    switch (tb.Name)
+                    {
+                        case "textBox_Num":
+                            fParam[SideId].roiP[roiID].NumOfSection = num;
+
+                            DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            break;
+                        case "textBox_Len":
+                            fParam[SideId].roiP[roiID].Len1 = num;
+                            HTuple temp = new HTuple();
+                            List<ROI> temproi = new List<ROI>();
+                            temp = roiList2[SideId][roiID].getModelData();
+                            hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi);
+                            //hwindow_final2.viewWindow.genRect2(temp[0].D, temp[1].D, temp[2].D, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi);
+                            roiList2[SideId][roiID] = temproi[0];
+                            //hwindow_final2.viewWindow.notDisplayRoi();
+                            //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                            //hwindow_final2.viewWindow.selectROI(roiID);
+                            //DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            break;
+                        case "textBox_Width":
+                            fParam[SideId].roiP[roiID].Len2 = num;
+                            HTuple temp3 = new HTuple();
+                            temp3 = roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi3 = new List<ROI>();
+                            hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi3);
+                            roiList2[SideId][roiID] = temproi3[0];
+                            //hwindow_final2.viewWindow.notDisplayRoi();
+                            //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                            //hwindow_final2.viewWindow.selectROI(roiID);
+                            //DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            break;
+                        case "textBox_Row":
+                            fParam[SideId].roiP[roiID].CenterRow = num;
+                            HTuple temp4 = new HTuple();
+                            temp4 = roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi4 = new List<ROI>();
+                            hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi4);
+                            roiList2[SideId][roiID] = temproi4[0];
+                            //hwindow_final2.viewWindow.notDisplayRoi();
+                            //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                            //hwindow_final2.viewWindow.selectROI(roiID);
+                            //DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            break;
+                        case "textBox_Col":
+                            fParam[SideId].roiP[roiID].CenterCol = num;
+                            HTuple temp5 = new HTuple();
+                            temp3 = roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi5 = new List<ROI>();
+                            hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi5);
+                            roiList2[SideId][roiID] = temproi5[0];
+                            //hwindow_final2.viewWindow.notDisplayRoi();
+                            //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                            //hwindow_final2.viewWindow.selectROI(roiID);
+                            //DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            break;
+                        case "textBox_phi":
+                            HTuple rad = new HTuple();
+                            HOperatorSet.TupleRad(num, out rad);
+                            fParam[SideId].roiP[roiID].phi = rad;
+                            HTuple temp6 = new HTuple();
+                            temp3 = roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi6 = new List<ROI>();
+                            hwindow_final2.viewWindow.genRect2(fParam[SideId].roiP[roiID].CenterRow, fParam[SideId].roiP[roiID].CenterCol, fParam[SideId].roiP[roiID].phi, fParam[SideId].roiP[roiID].Len1, fParam[SideId].roiP[roiID].Len2, ref temproi6);
+                            roiList2[SideId][roiID] = temproi6[0];
+                            //hwindow_final2.viewWindow.notDisplayRoi();
+                            //hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                            //hwindow_final2.viewWindow.selectROI(roiID);
+                            //DispSection((ROIRectangle2)roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            break;
+                        case "textBox_Deg":
+                            fParam[SideId].roiP[roiID].AngleOfProfile = num;
+                            break;
+                    }
+                }
+                hwindow_final2.viewWindow.notDisplayRoi();
+                hwindow_final2.viewWindow.displayROI(ref roiList2[SideId]);
+                hwindow_final2.viewWindow.selectROI(roiID);
+
             }
             catch (Exception)
             {
@@ -3716,8 +3751,20 @@ namespace SagensVision.VisionTool
                 HTuple cb2 = (Hlines[1][1].D + Hlines[2][1].D) / 2;
                 HTuple re2 = (Hlines[1][2].D + Hlines[2][2].D) / 2;
                 HTuple ce2 = (Hlines[1][3].D + Hlines[2][3].D) / 2;
+                HTuple rowVer = new HTuple();HTuple colVer = new HTuple();
+                rowVer = rowVer.TupleConcat(Hlines[1][0].D).TupleConcat(Hlines[1][2].D).TupleConcat(Hlines[2][0].D).TupleConcat(Hlines[2][2].D);
+                colVer = colVer.TupleConcat(Hlines[1][1].D).TupleConcat(Hlines[1][3].D).TupleConcat(Hlines[2][1].D).TupleConcat(Hlines[2][3].D);
+
                 HObject contVer = new HObject();
+                HOperatorSet.GenContourPolygonXld(out contVer, rowVer, colVer);
+
+                //拟合线
+                //HObject line = new HObject();
+                HTuple  Nr, Nc, Dist;
+                HOperatorSet.FitLineContourXld(contVer, "tukey", -1, 0, 5, 2, out rb2, out cb2, out re2, out ce2, out Nr, out Nc, out Dist);
                 HOperatorSet.GenContourPolygonXld(out contVer, rb2.TupleConcat(re2), cb2.TupleConcat(ce2));
+
+                //HOperatorSet.GenContourPolygonXld(out contVer, rb2.TupleConcat(re2), cb2.TupleConcat(ce2));
                 HTuple Row, Col, Angle;
                 HOperatorSet.AngleLx(rb2, cb2, re2, ce2, out Angle);
                 HTuple isOver;
@@ -4490,9 +4537,9 @@ namespace SagensVision.VisionTool
                     }
 
                     //判断 Z 值高度
-                    if (MyGlobal.ZCoord.Count != 0)
+                    if (MyGlobal.xyzBaseCoord.ZCoord!=null && MyGlobal.xyzBaseCoord.ZCoord.Count != 0)
                     {
-                        if (ZCoord[i][0] - MyGlobal.ZCoord[Sid][i][0] > MyGlobal.globalConfig.HeightMax || ZCoord[i][0] - MyGlobal.ZCoord[Sid][i][0] < MyGlobal.globalConfig.HeightMin)
+                        if (ZCoord[i][0] - MyGlobal.xyzBaseCoord.ZCoord[Sid][i][0] > MyGlobal.globalConfig.HeightMax || ZCoord[i][0] - MyGlobal.xyzBaseCoord.ZCoord[Sid][i][0] < MyGlobal.globalConfig.HeightMin)
                         {
                             if (hwind != null)
                             {
@@ -4500,10 +4547,10 @@ namespace SagensVision.VisionTool
                             }
                             return msg + $"高度{0}超出范围" + Math.Round(ZCoord[i][0], 3);
                         }
+                        
                     }
 
                 }
-
 
                 if (HomMat3D == null)
                 {
@@ -5512,6 +5559,7 @@ namespace SagensVision.VisionTool
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
             Init();
+            MyGlobal.flset2.Init();
             if (hwindow_final1.Image != null)
             {
                 hwindow_final1.Image.Dispose();
@@ -5719,30 +5767,6 @@ namespace SagensVision.VisionTool
                     return;
                 }
                 double num = double.Parse(index);
-
-                switch (tb.Name)
-                {
-                    case "textBox_SingleOffset":
-                        fParam[SideId].SigleZoffset = num;
-                        break;
-                    //case "textBox_totalZ":
-                    //    MyGlobal.globalConfig.TotalZoffset = num;
-                    //    break;
-                    //case "textBox_Start":
-                    //    if ((int)num <= 0)
-                    //    {
-                    //        num = 1;
-                    //    }
-                    //    MyGlobal.globalConfig.Startpt = (int)num;
-                        break;
-                    case "textBox_OffsetX2":
-                        fParam[SideId].MinZ = num;
-                        break;
-                    case "textBox_OffsetY2":
-                        fParam[SideId].MaxZ = num;
-                        break;
-                }
-
                 int roiID = dataGridView1.CurrentCell.RowIndex;
                 roiID = CurrentRowIndex;
                 if (roiID == -1)
@@ -5759,88 +5783,81 @@ namespace SagensVision.VisionTool
                         rowInd.Add(Ind);
                     }
                 }
-                
-                switch (tb.Name)
+                for (int i = 0; i < rowInd.Count; i++)
                 {
-                    case "textBox_OffsetX":
-                        for (int i = 0; i < rowInd.Count; i++)
-                        {
-                            fParam[SideId].roiP[rowInd[i]].Xoffset = num;
-                        }
-                        
-                        break;
-                    case "textBox_OffsetY":
-                        for (int i = 0; i < rowInd.Count; i++)
-                        {
-                            fParam[SideId].roiP[rowInd[i]].Yoffset = num;
-                        }
-                       
-                        break;
-                    case "textBox_Offset":
-                        for (int i = 0; i < rowInd.Count; i++)
-                        {
+                    switch (tb.Name)
+                    {
+                        case "textBox_OffsetX":
+                            fParam[SideId].roiP[rowInd[i]].Xoffset = num;                          
+                            break;
+                        case "textBox_OffsetY":
+                            
+                            fParam[SideId].roiP[rowInd[i]].Yoffset = num;          
+                            break;
+                        case "textBox_Offset":
+                           
                             fParam[SideId].roiP[rowInd[i]].offset = num;
-                        }
-                        
-                        break;
-                    case "textBox_ZFtMax":
-                        fParam[SideId].roiP[roiID].ZftMax = (int)num;
-                        break;
-                    case "textBox_ZFtMin":
-                        fParam[SideId].roiP[roiID].ZftMin = (int)num;
-                        break;
-                    case "textBox_ZFtRad":
-                        fParam[SideId].roiP[roiID].ZftRad = num;
-                        break;
-                    case "textBox_downDist":
-                        fParam[SideId].roiP[roiID].TopDownDist = num;
-                        break;
-                    case "textBox_xDist":
-                        fParam[SideId].roiP[roiID].xDist = num;
-                        break;
-                    case "textBox_Clipping":
-                        if (num>50)
-                        {
-                            textBox_Clipping.Text = "50";
-                            num = 50;
-                        }
-                        if (num<0)
-                        {
-                            textBox_Clipping.Text = "0";
-                            num = 0;
-                        }
-                        fParam[SideId].roiP[roiID].ClippingPer = num;
-                        break;
+                            break;
+                        case "textBox_ZFtMax":
+                            fParam[SideId].roiP[rowInd[i]].ZftMax = (int)num;
+                            break;
+                        case "textBox_ZFtMin":
+                            fParam[SideId].roiP[rowInd[i]].ZftMin = (int)num;
+                            break;
+                        case "textBox_ZFtRad":
+                            fParam[SideId].roiP[rowInd[i]].ZftRad = num;
+                            break;
+                        case "textBox_downDist":
+                            fParam[SideId].roiP[rowInd[i]].TopDownDist = num;
+                            break;
+                        case "textBox_xDist":
+                            fParam[SideId].roiP[rowInd[i]].xDist = num;
+                            break;
+                        case "textBox_Clipping":
+                            if (num > 50)
+                            {
+                                textBox_Clipping.Text = "50";
+                                num = 50;
+                            }
+                            if (num < 0)
+                            {
+                                textBox_Clipping.Text = "0";
+                                num = 0;
+                            }
+                            fParam[SideId].roiP[rowInd[i]].ClippingPer = num;
+                            break;
 
-                    case "textBox_SmoothCont":
-                        if (num > 1)
-                        {
-                            textBox_SmoothCont.Text = "1";
-                            num = 50;
-                        }
-                        if (num < 0)
-                        {
-                            textBox_SmoothCont.Text = "0";
-                            num = 0;
-                        }
-                        fParam[SideId].roiP[roiID].SmoothCont = num;
-                        break;
-                    case "textBox_OffsetZ":
-                        fParam[SideId].roiP[roiID].Zoffset = num;
-                        break;
-                    case "textBox_IndStart1":
-                        //fParam[SideId].roiP[roiID].StartOffSet1 = (int)num;
-                        break;
-                    case "textBox_IndEnd1":
-                        //fParam[SideId].roiP[roiID].EndOffSet1 = (int)num;
-                        break;
-                    case "textBox_IndStart2":
-                        //fParam[SideId].roiP[roiID].StartOffSet2 = (int)num;
-                        break;
-                    case "textBox_IndEnd2":
-                        //fParam[SideId].roiP[roiID].EndOffSet2 = (int)num;
-                        break;
+                        case "textBox_SmoothCont":
+                            if (num > 1)
+                            {
+                                textBox_SmoothCont.Text = "1";
+                                num = 50;
+                            }
+                            if (num < 0)
+                            {
+                                textBox_SmoothCont.Text = "0";
+                                num = 0;
+                            }
+                            fParam[SideId].roiP[rowInd[i]].SmoothCont = num;
+                            break;
+                        case "textBox_OffsetZ":
+                            fParam[SideId].roiP[rowInd[i]].Zoffset = num;
+                            break;
+                        case "textBox_IndStart1":
+                            //fParam[SideId].roiP[roiID].StartOffSet1 = (int)num;
+                            break;
+                        case "textBox_IndEnd1":
+                            //fParam[SideId].roiP[roiID].EndOffSet1 = (int)num;
+                            break;
+                        case "textBox_IndStart2":
+                            //fParam[SideId].roiP[roiID].StartOffSet2 = (int)num;
+                            break;
+                        case "textBox_IndEnd2":
+                            //fParam[SideId].roiP[roiID].EndOffSet2 = (int)num;
+                            break;
+                    }
                 }
+                
             }
 
             catch (Exception)
@@ -6046,7 +6063,7 @@ namespace SagensVision.VisionTool
                 checkBox_center.Checked = fParam[SideId].roiP[id].useCenter;
 
                 checkBox_midPt.Checked = fParam[SideId].roiP[id].useMidPt;
-                checkBox_Far.Checked = fParam[SideId].roiP[0].useNear;
+                checkBox_Far.Checked = !fParam[SideId].roiP[id].useNear;
                 textBox_downDist.Text = fParam[SideId].roiP[id].TopDownDist.ToString();
                 textBox_xDist.Text = fParam[SideId].roiP[id].xDist.ToString();
                 comboBox_GetPtType.SelectedIndex = fParam[SideId].roiP[id].SelectedType;
@@ -6183,6 +6200,10 @@ namespace SagensVision.VisionTool
         {
             try
             {
+                if (isLoading)
+                {
+                    return;
+                }
                 bool newID = dataGridView1.IsCurrentCellInEditMode;
                 if (!newID)
                 {
@@ -6211,59 +6232,162 @@ namespace SagensVision.VisionTool
 
         private void comboBox_GetPtType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (isLoading)
+            {
+                return;
+            }
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             int currentId = CurrentRowIndex;
-            if (currentId != -1)
+
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            roiID = CurrentRowIndex;
+
+            int count = dataGridView1.SelectedCells.Count;
+            List<int> rowInd = new List<int>();
+            for (int i = 0; i < count; i++)
             {
-                fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
-                //if (fParam[Id].roiP[currentId].SelectedType ==1)
-                //{
-                //    checkBox_Far.Visible = true;
-                //}
-                //else
-                //{
-                //    checkBox_Far.Visible = false;
-                //}
+                int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                if (!rowInd.Contains(Ind))
+                {
+                    rowInd.Add(Ind);
+                }
             }
+            for (int i = 0; i < rowInd.Count; i++)
+            {
+                currentId = rowInd[i];
+                if (currentId != -1)
+                {
+                    fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
+
+                }
+            }
+
+           
         }
 
         private void checkBox_useLeft_CheckedChanged(object sender, EventArgs e)
         {
+            if (isLoading)
+            {
+                return;
+            }
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             int currentId = CurrentRowIndex;
-            if (currentId != -1)
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            roiID = CurrentRowIndex;
+
+            int count = dataGridView1.SelectedCells.Count;
+            List<int> rowInd = new List<int>();
+            for (int i = 0; i < count; i++)
             {
-                fParam[Id].roiP[currentId].useLeft = checkBox_useLeft.Checked;
+                int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                if (!rowInd.Contains(Ind))
+                {
+                    rowInd.Add(Ind);
+                }
+            }
+            for (int i = 0; i < rowInd.Count; i++)
+            {
+                currentId = rowInd[i];
+                if (currentId != -1)
+                {
+                    fParam[Id].roiP[currentId].useLeft = checkBox_useLeft.Checked;
+                }
             }
         }
 
         private void checkBox_midPt_CheckedChanged(object sender, EventArgs e)
         {
+            if (isLoading)
+            {
+                return;
+            }
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             int currentId = CurrentRowIndex;
-            if (currentId != -1)
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            roiID = CurrentRowIndex;
+
+            int count = dataGridView1.SelectedCells.Count;
+            List<int> rowInd = new List<int>();
+            for (int i = 0; i < count; i++)
             {
-                fParam[Id].roiP[currentId].useMidPt = checkBox_midPt.Checked;
+                int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                if (!rowInd.Contains(Ind))
+                {
+                    rowInd.Add(Ind);
+                }
+            }
+            for (int i = 0; i < rowInd.Count; i++)
+            {
+                currentId = rowInd[i];
+                if (currentId != -1)
+                {
+                    fParam[Id].roiP[currentId].useMidPt = checkBox_midPt.Checked;
+                }
             }
         }
 
         private void checkBox_Near_CheckedChanged(object sender, EventArgs e)
         {
+            if (isLoading)
+            {
+                return;
+            }
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             int currentId = CurrentRowIndex;
-            if (currentId != -1)
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            roiID = CurrentRowIndex;
+
+            int count = dataGridView1.SelectedCells.Count;
+            List<int> rowInd = new List<int>();
+            for (int i = 0; i < count; i++)
             {
-                fParam[Id].roiP[currentId].useNear = !checkBox_Far.Checked;
+                int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                if (!rowInd.Contains(Ind))
+                {
+                    rowInd.Add(Ind);
+                }
+            }
+            for (int i = 0; i < rowInd.Count; i++)
+            {
+                currentId = rowInd[i];
+                if (currentId != -1)
+                {
+                    fParam[Id].roiP[currentId].useNear = !checkBox_Far.Checked;
+                }
             }
         }
 
         private void checkBox_center_CheckedChanged(object sender, EventArgs e)
         {
+            if (isLoading)
+            {
+                return;
+            }
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             int currentId = CurrentRowIndex;
-            if (currentId != -1)
+
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            roiID = CurrentRowIndex;
+
+            int count = dataGridView1.SelectedCells.Count;
+            List<int> rowInd = new List<int>();
+            for (int i = 0; i < count; i++)
             {
-                fParam[Id].roiP[currentId].useCenter = checkBox_center.Checked;
+                int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                if (!rowInd.Contains(Ind))
+                {
+                    rowInd.Add(Ind);
+                }
+            }
+            for (int i = 0; i < rowInd.Count; i++)
+            {
+                currentId = rowInd[i];
+
+                if (currentId != -1)
+                {
+                    fParam[Id].roiP[currentId].useCenter = checkBox_center.Checked;
+                }
             }
         }
     }

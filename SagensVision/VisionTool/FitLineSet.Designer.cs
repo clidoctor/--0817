@@ -45,6 +45,7 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.checkBox_center = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox_SmoothCont = new System.Windows.Forms.TextBox();
             this.checkBox_Far = new System.Windows.Forms.CheckBox();
@@ -126,7 +127,6 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.checkBox_center = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -338,6 +338,17 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
             // 
+            // checkBox_center
+            // 
+            this.checkBox_center.AutoSize = true;
+            this.checkBox_center.Location = new System.Drawing.Point(21, 86);
+            this.checkBox_center.Name = "checkBox_center";
+            this.checkBox_center.Size = new System.Drawing.Size(62, 18);
+            this.checkBox_center.TabIndex = 100;
+            this.checkBox_center.Text = "取中心";
+            this.checkBox_center.UseVisualStyleBackColor = true;
+            this.checkBox_center.CheckedChanged += new System.EventHandler(this.checkBox_center_CheckedChanged);
+            // 
             // label12
             // 
             this.label12.Location = new System.Drawing.Point(18, 212);
@@ -488,6 +499,8 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -1109,17 +1122,6 @@
             this.splitContainerControl6.SplitterPosition = 288;
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
-            // 
-            // checkBox_center
-            // 
-            this.checkBox_center.AutoSize = true;
-            this.checkBox_center.Location = new System.Drawing.Point(21, 86);
-            this.checkBox_center.Name = "checkBox_center";
-            this.checkBox_center.Size = new System.Drawing.Size(62, 18);
-            this.checkBox_center.TabIndex = 100;
-            this.checkBox_center.Text = "取中心";
-            this.checkBox_center.UseVisualStyleBackColor = true;
-            this.checkBox_center.CheckedChanged += new System.EventHandler(this.checkBox_center_CheckedChanged);
             // 
             // FitLineSet
             // 
