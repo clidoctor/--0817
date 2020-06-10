@@ -73,6 +73,13 @@ namespace SagensVision
         public double XYMin = 0;
         public double XYMax = 0;
         public GlobalParam[] gbParam = new GlobalParam[4];
+
+        //产能
+        public int OkCnt = 0;
+        public int AnchorErrorCnt = 0;
+        public int FindEgdeErrorCnt = 0;
+        public int ExploreHeightErrorCnt = 0;
+
         public GlobalConfig()
         {
             for (int i = 0; i < 4; i++)
@@ -162,6 +169,52 @@ namespace SagensVision
             }
             string filePath = path + FormMain.saveImageTime + "\\" + Product ;
            HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
+
+
+        }
+
+        public static void SaveErrorImage(HObject Image, string Count, string Product)
+        {
+
+            string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            string[] dirs = Directory.GetDirectories(MyGlobal.DataPath + "Image\\");
+
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                DateTime dt = File.GetCreationTime(dirs[i]);
+                TimeSpan ts = DateTime.Now - dt;
+                if (ts.Days > 2)
+                {
+                    Directory.Delete(dirs[i], true);
+
+                }
+            }
+            //数量大于500时
+
+            DirectoryInfo dirinf = new DirectoryInfo(path);
+            FileInfo[] files = dirinf.GetFiles();
+            Array.Sort<FileInfo>(files, new FileCompare());
+
+            if (files.Length > 17)
+            {
+                for (int i = 0; i < files.Length - 17; i++)
+                {
+                    File.Delete(files[i].FullName);
+                }
+
+            }
+
+            if (!Directory.Exists(path + FormMain.saveImageTime))
+            {
+                Directory.CreateDirectory(path + FormMain.saveImageTime);
+            }
+            string filePath = path + FormMain.saveImageTime + "\\" + Product;
+            HOperatorSet.WriteImage(Image, "tiff", 0, filePath);
 
 
         }
