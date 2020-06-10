@@ -17,6 +17,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using SagensVision.VisionTool;
 using SagensSdk;
+using System.Runtime.InteropServices;
 
 namespace SagensVision
 {
@@ -122,7 +123,7 @@ namespace SagensVision
 
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
-
+            ShowProfile.Show3dTrackDel += Show3dPointFrm;
             if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
             {
                 MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
@@ -1836,31 +1837,32 @@ namespace SagensVision
                         MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
                     }
                 }
-
+                if (MyGlobal.xyzBaseCoord.Dist != null)
+                {
                 //判断X Y 
                 //计算到中心点距离
                 if (MyGlobal.xyzBaseCoord.Dist!=null)
                 {
-                    for (int i = 0; i < XCoord.Count; i++)
+                for (int i = 0; i < XCoord.Count; i++)
+                {
+                    for (int j = 0; j < XCoord[i].GetLength(0); j++)
                     {
-                        for (int j = 0; j < XCoord[i].GetLength(0); j++)
+                        HTuple Dist = 0;
+                        HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out Dist);
+                        double Sub = Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j][0];
+                        if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
                         {
-                            HTuple Dist = 0;
-                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out Dist);
-                            double Sub = Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j][0];
-                            if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
+                            if (MyGlobal.hWindow_Final[i] != null)
                             {
-                                if (MyGlobal.hWindow_Final[i] != null)
-                                {
-                                    MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
-                                }
-                                return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                                MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
                             }
+                            return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
                         }
-                    }
+                    }                    
                 }
-               
+                }
                 
+
                 if (Station == 4)
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
@@ -1926,7 +1928,7 @@ namespace SagensVision
             HObject ImageConst;
             HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
             ShowProfile.HobjectToHimage(ImageConst);
-            ShowProfile.viewWindow.displayHobject(regpot, "green", true,10);
+            ShowProfile.viewWindow.displayHobject(regpot, "green", true,20);
 
             if (!showMsg)
             {
@@ -1946,6 +1948,27 @@ namespace SagensVision
             ImageConst.Dispose();
         }
 
+        private void Show3dPointFrm()
+        {
+            if (recordXCoord == null || recordXCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordYCoord == null || recordYCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordZCoord == null || recordZCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordXCoord.Length!=recordYCoord.Length || recordXCoord.Length!=recordZCoord.Length)
+            {
+                return;
+            }
+            Show3dPointFrm spf = new Show3dPointFrm(recordXCoord, recordYCoord, recordZCoord);
+            spf.Show();
+        }
 
 
         bool TcpIsConnect = false;

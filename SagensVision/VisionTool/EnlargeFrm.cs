@@ -93,5 +93,7 @@ namespace SagensVision.VisionTool
             hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp;
             hWindow_Final1.hWindowControl.HMouseWheel += OnHMouseUp;
         }
+
+     
     }
 }

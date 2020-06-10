@@ -688,7 +688,7 @@
             this.dockPanel1.ID = new System.Guid("19d979f9-0ad1-47f3-b52e-156227f70c6c");
             this.dockPanel1.Location = new System.Drawing.Point(0, 0);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(163, 615);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(186, 614);
             this.dockPanel1.Size = new System.Drawing.Size(186, 614);
             this.dockPanel1.Text = "功能设置";
             // 
@@ -865,7 +865,7 @@
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
             this.dockPanel7.Location = new System.Drawing.Point(0, 614);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(163, 156);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 156);
             this.dockPanel7.Size = new System.Drawing.Size(186, 156);
             // 
             // dockPanel7_Container
