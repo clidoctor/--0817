@@ -18,6 +18,7 @@ using System.Diagnostics;
 using SagensVision.VisionTool;
 using SagensSdk;
 using System.Runtime.InteropServices;
+using DevExpress.XtraEditors.Repository;
 
 namespace SagensVision
 {
@@ -62,16 +63,33 @@ namespace SagensVision
         private HWindow_Final ShowProfile = new HWindow_Final();
         void Init()
         {
-            if (MyGlobal.PathName.CurrentType!="")
+            MyGlobal.GoSDK.SaveKdatDirectoy = "SaveKdatDirectoy//";
+            if (!Directory.Exists(MyGlobal.GoSDK.SaveKdatDirectoy))
             {
-                if (!Directory.Exists(MyGlobal.ConfigPath))
-                {
-                    Directory.CreateDirectory(MyGlobal.ConfigPath);
-                }
-                if (!Directory.Exists(MyGlobal.DataPath))
-                {
-                    Directory.CreateDirectory(MyGlobal.DataPath);
-                }
+                Directory.CreateDirectory(MyGlobal.GoSDK.SaveKdatDirectoy);
+            }
+            if (!Directory.Exists(MyGlobal.SaveDatFileDirectory))
+            {
+                Directory.CreateDirectory(MyGlobal.SaveDatFileDirectory);
+            }
+            if (!Directory.Exists(MyGlobal.DataPath))
+            {
+                Directory.CreateDirectory(MyGlobal.DataPath);
+            }
+            if (!Directory.Exists(MyGlobal.AllTypePath))
+            {
+                Directory.CreateDirectory(MyGlobal.AllTypePath);
+            }
+            if (File.Exists(MyGlobal.AllTypePath + "AllType.xml"))
+            {
+                MyGlobal.PathName = (SavePathName)StaticOperate.ReadXML(MyGlobal.AllTypePath + "AllType.xml",typeof(SavePathName));
+            }
+            if (File.Exists(MyGlobal.imgRotatePath))
+            {
+                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
+            }
+            if (MyGlobal.PathName.CurrentType!="")
+            {                              
                 //读取Z值基准高度】
                 if (File.Exists(MyGlobal.BaseTxtPath))
                 {
@@ -83,7 +101,26 @@ namespace SagensVision
             {
                 ShowAndSaveMsg("配置文件加载失败!");
             }
-            
+
+            string ok1 = flset.Init();
+            if (ok1 != "OK")
+            {
+                ShowAndSaveMsg(ok1);
+            }
+            else
+            {
+                ShowAndSaveMsg("抓边参数" + ok1);
+            }
+            string ok2 = MyGlobal.flset2.Init();
+            if (ok2 != "OK")
+            {
+                ShowAndSaveMsg(ok2);
+            }
+            else
+            {
+                ShowAndSaveMsg("定位参数" + ok2);
+            }
+
 
             string dbcreate = SQLiteHelper.NewDbFile();
             if (dbcreate == "OK")
@@ -97,11 +134,35 @@ namespace SagensVision
             }
             LoadDataDB();
 
+            if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
+            {
+                MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
+            }
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                Calibration.ParamPath.ParaName = SideName[i];
+                if (File.Exists(Calibration.ParamPath.Path_tup))
+                {
+                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D[i]);
+                }
+
+            }
+
+            //match.load = new Matching.Form1.LoadParam(loadMathParam);
+            //match2.load = new Matching.Form1.LoadParam(loadMathParam);
+            //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+            gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
+        }
+
+        void InitControl()
+        {
             //loadMathParam();
             for (int i = 0; i < 4; i++)
             {
                 MyGlobal.hWindow_Final[i] = new HWindow_Final();
-                MyGlobal.hWindow_Final[i].Name = $"hwindow_final{i+1}";
+                MyGlobal.hWindow_Final[i].Name = $"hwindow_final{i + 1}";
                 MyGlobal.hWindow_Final[i].viewWindow.setFitWindow(true);
                 //MyGlobal.parameterSet[i] = new MatchingModule.MatchingParam();
 
@@ -134,27 +195,6 @@ namespace SagensVision
             MyGlobal.hWindow_Final[1].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
-
-            if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
-            {
-                MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
-            }
-
-
-            for (int i = 0; i < 4; i++)
-            {
-                Calibration.ParamPath.ParaName = SideName[i];
-                if (File.Exists(Calibration.ParamPath.Path_tup))
-                {
-                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D[i]);
-                }
-
-            }
-
-            //match.load = new Matching.Form1.LoadParam(loadMathParam);
-            //match2.load = new Matching.Form1.LoadParam(loadMathParam);
-            //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
-            gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
         }
 
         private void Show3dImg(HWindow_Final obj)
@@ -404,22 +444,8 @@ namespace SagensVision
         VisionTool.Display3D show3D = new VisionTool.Display3D();
         private void FormMain_Load(object sender, EventArgs e)
         {
-            if (File.Exists(MyGlobal.imgRotatePath))
-            {
-                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
-            }
-
-            if (!Directory.Exists(MyGlobal.SaveDatFileDirectory))
-            {
-                Directory.CreateDirectory(MyGlobal.SaveDatFileDirectory);
-            }
-
-            MyGlobal.GoSDK.SaveKdatDirectoy = "SaveKdatDirectoy//";
-            if (!Directory.Exists(MyGlobal.GoSDK.SaveKdatDirectoy))
-            {
-                Directory.CreateDirectory(MyGlobal.GoSDK.SaveKdatDirectoy);
-            }
-
+            
+            InitControl();           
             //MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen);
             MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen_Surface);
             MyGlobal.thdWaitForClientAndMessage.IsBackground = true;
@@ -457,7 +483,7 @@ namespace SagensVision
                 }
                 MyGlobal.globalConfig.zStart = MyGlobal.GoSDK.zStart;
                 MyGlobal.globalConfig.zRange = MyGlobal.GoSDK.zRange;
-                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                //StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
             }
             else
             {
@@ -469,7 +495,20 @@ namespace SagensVision
             //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
             barCheckItem2.Checked = true;
+            NewProduct.AddToFormain += ChangeBarEditValue;
+
+            //加载config
+            DirectoryInfo dirinf = new DirectoryInfo(MyGlobal.AllTypePath);
+            DirectoryInfo[] dirinfo = dirinf.GetDirectories();
+            RepositoryItemComboBox q = (RepositoryItemComboBox)barEditItem_CurrentType.Edit;
+            for (int i = 0; i < dirinfo.Length; i++)
+            {
+                q.Items.Add(dirinfo[i].Name);
+            }
+            barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
+           
         }
+
 
         void ConnectTcp()
         {
@@ -3049,6 +3088,33 @@ namespace SagensVision
         {
             NewProduct nProduct = new NewProduct();
             nProduct.ShowDialog();
+        }
+
+        private void barEditItem_CurrentType_EditValueChanged(object sender, EventArgs e)
+        {
+            string Currenttype = barEditItem_CurrentType.EditValue.ToString();
+            MyGlobal.PathName.CurrentType = Currenttype;
+            StaticOperate.WriteXML(MyGlobal.PathName, MyGlobal.AllTypePath + "AllType.xml");
+            Init();          
+          
+        }
+
+        public  void ChangeBarEditValue(string Name)
+        {
+            //barEditItem_CurrentType.
+            //RepositoryItemComboBox q =(RepositoryItemComboBox)barEditItem_CurrentType.Edit;
+            //q.Items.Add(Name);
+            //加载config
+
+            DirectoryInfo dirinf = new DirectoryInfo(MyGlobal.AllTypePath);
+            DirectoryInfo[] dirinfo = dirinf.GetDirectories();
+            RepositoryItemComboBox q = (RepositoryItemComboBox)barEditItem_CurrentType.Edit;
+            q.Items.Clear();
+            for (int i = 0; i < dirinfo.Length; i++)
+            {
+                q.Items.Add(dirinfo[i].Name);
+            }
+            barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
         }
     }
 }

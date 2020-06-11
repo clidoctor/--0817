@@ -22,6 +22,7 @@ namespace SagensVision
     public static class  MyGlobal
     {
         public static string DataPath = AppDomain.CurrentDomain.BaseDirectory + "Data\\";
+        public static string AllTypePath = AppDomain.CurrentDomain.BaseDirectory + "AllType\\";
         public static string ConfigPath = AppDomain.CurrentDomain.BaseDirectory +  "Config\\";
         public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" + "imgRotate.txt";
         public static string BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" +"BaseHeight.xml";
@@ -78,16 +79,11 @@ namespace SagensVision
                 gbParam[i] = new GlobalParam();
             }
         }
-        
        
     }
 
     public class SavePathName
     {       
-        /// <summary>
-        /// 产品型号
-        /// </summary>
-        public List<string> ProductType = new List<string>();
         string currentType = "";
         public string CurrentType
         {
@@ -98,9 +94,25 @@ namespace SagensVision
             set
             {
                 this.currentType = value;
-                MyGlobal.ConfigPath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\";
-                MyGlobal.imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "imgRotate.txt";
-                MyGlobal.BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "BaseHeight.xml";
+                if (currentType!="")
+                {
+                    MyGlobal.ConfigPath = MyGlobal.AllTypePath + currentType  + "\\Config\\";
+                    MyGlobal.imgRotatePath = MyGlobal.AllTypePath + currentType + "\\Config\\" + "imgRotate.txt";
+                    MyGlobal.BaseTxtPath = MyGlobal.AllTypePath + currentType + "\\Config\\" + "BaseHeight.xml";
+                    if (!Directory.Exists(MyGlobal.ConfigPath))
+                    {
+                        Directory.CreateDirectory(MyGlobal.ConfigPath);
+                    }
+                    string[] SideName = { "Side1", "Side2", "Side3", "Side4" };
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (!Directory.Exists(MyGlobal.ConfigPath + SideName[i]+"\\"))
+                        {
+                            Directory.CreateDirectory(MyGlobal.ConfigPath + SideName[i] + "\\");
+                        }
+                    }
+                }
+                
             }
         }
     }
