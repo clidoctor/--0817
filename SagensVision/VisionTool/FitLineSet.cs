@@ -4572,8 +4572,8 @@ namespace SagensVision.VisionTool
                         hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
                     }
 
-                    //判断 Z 值高度
-                    if (MyGlobal.xyzBaseCoord.ZCoord!=null && MyGlobal.xyzBaseCoord.ZCoord.Count != 0)
+                    ////判断 Z 值高度
+                    if (MyGlobal.xyzBaseCoord.ZCoord != null && MyGlobal.xyzBaseCoord.ZCoord.Count != 0)
                     {
                         if (ZCoord[i][0] - MyGlobal.xyzBaseCoord.ZCoord[Sid][i][0] > MyGlobal.globalConfig.HeightMax || ZCoord[i][0] - MyGlobal.xyzBaseCoord.ZCoord[Sid][i][0] < MyGlobal.globalConfig.HeightMin)
                         {
@@ -4581,9 +4581,9 @@ namespace SagensVision.VisionTool
                             {
                                 hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
                             }
-                            return msg + $"高度{0}超出范围" + Math.Round(ZCoord[i][0], 3);
+                            return  $"{msg}高度超出范围" + Math.Round(ZCoord[i][0], 3);
                         }
-                        
+
                     }
 
                 }

@@ -262,6 +262,12 @@
     <Compile Include="VisionTool\Show3dPointFrm.Designer.cs">
       <DependentUpon>Show3dPointFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\ShowCapacityFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisionTool\ShowCapacityFrm.Designer.cs">
+      <DependentUpon>ShowCapacityFrm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Communication\Communication.resx">
       <DependentUpon>Communication.cs</DependentUpon>
     </EmbeddedResource>
@@ -286,6 +292,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\Show3dPointFrm.resx">
       <DependentUpon>Show3dPointFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\ShowCapacityFrm.resx">
+      <DependentUpon>ShowCapacityFrm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Resources.resx">

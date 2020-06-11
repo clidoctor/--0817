@@ -1,0 +1,131 @@
+﻿namespace SagensVision.VisionTool
+{
+    partial class ShowCapacityFrm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            DevExpress.XtraCharts.SimpleDiagram3D simpleDiagram3D1 = new DevExpress.XtraCharts.SimpleDiagram3D();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem1 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem2 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem3 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem4 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SeriesPoint seriesPoint1 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
+            ((object)(1D))}, 0);
+            DevExpress.XtraCharts.SeriesPoint seriesPoint2 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
+            ((object)(1D))}, 1);
+            DevExpress.XtraCharts.SeriesPoint seriesPoint3 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
+            ((object)(1D))}, 2);
+            DevExpress.XtraCharts.SeriesPoint seriesPoint4 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
+            ((object)(1D))}, 3);
+            DevExpress.XtraCharts.Pie3DSeriesView pie3DSeriesView1 = new DevExpress.XtraCharts.Pie3DSeriesView();
+            DevExpress.XtraCharts.SeriesTitle seriesTitle1 = new DevExpress.XtraCharts.SeriesTitle();
+            this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
+            this.timer1 = new System.Windows.Forms.Timer();
+            ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(simpleDiagram3D1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pie3DSeriesView1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // chartControl1
+            // 
+            this.chartControl1.DataBindings = null;
+            simpleDiagram3D1.RotationMatrixSerializable = "0.477215672887733;0.665010649161712;-0.574478927421923;0;-0.874557448090084;0.423" +
+    "44354559115;-0.236315115232545;0;0.086107325707421;0.615188101476881;0.783663912" +
+    "822841;0;0;0;0;1";
+            this.chartControl1.Diagram = simpleDiagram3D1;
+            this.chartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            customLegendItem1.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(229)))), ((int)(((byte)(99)))));
+            customLegendItem1.Name = "Custom Legend Item 1";
+            customLegendItem1.Text = "OK";
+            customLegendItem2.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(95)))), ((int)(((byte)(98)))));
+            customLegendItem2.Name = "Custom Legend Item 2";
+            customLegendItem2.Text = "定位异常";
+            customLegendItem3.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
+            customLegendItem3.Name = "Custom Legend Item 3";
+            customLegendItem3.Text = "抓边异常";
+            customLegendItem4.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
+            customLegendItem4.Name = "Custom Legend Item 4";
+            customLegendItem4.Text = "探高异常";
+            this.chartControl1.Legend.CustomItems.AddRange(new DevExpress.XtraCharts.CustomLegendItem[] {
+            customLegendItem1,
+            customLegendItem2,
+            customLegendItem3,
+            customLegendItem4});
+            this.chartControl1.Legend.Name = "Default Legend";
+            this.chartControl1.Location = new System.Drawing.Point(0, 0);
+            this.chartControl1.Name = "chartControl1";
+            series1.Name = "Series 1";
+            seriesPoint1.ColorSerializable = "#00DC63";
+            seriesPoint2.ColorSerializable = "#FF5F62";
+            seriesPoint3.ColorSerializable = "#FF2F31";
+            seriesPoint4.ColorSerializable = "#C40002";
+            series1.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
+            seriesPoint1,
+            seriesPoint2,
+            seriesPoint3,
+            seriesPoint4});
+            seriesTitle1.Text = "总产能：0";
+            pie3DSeriesView1.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
+            seriesTitle1});
+            series1.View = pie3DSeriesView1;
+            this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
+        series1};
+            this.chartControl1.Size = new System.Drawing.Size(477, 416);
+            this.chartControl1.TabIndex = 0;
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // ShowCapacityFrm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(477, 416);
+            this.Controls.Add(this.chartControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "ShowCapacityFrm";
+            this.Text = "ShowCapacityFrm";
+            this.Load += new System.EventHandler(this.ShowCapacityFrm_Load);
+            ((System.ComponentModel.ISupportInitialize)(simpleDiagram3D1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pie3DSeriesView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private DevExpress.XtraCharts.ChartControl chartControl1;
+        private System.Windows.Forms.Timer timer1;
+    }
+}

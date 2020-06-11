@@ -38,6 +38,8 @@ namespace SagensVision
 
         public static List<IntersetionCoord> AnchorList = new List<IntersetionCoord>();
 
+        private static StringBuilder errstr = new StringBuilder();
+
         public FormMain()
         {
             InitializeComponent();
@@ -311,6 +313,7 @@ namespace SagensVision
                 string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
                 if (ok1!="OK")
                 {
+                    errstr.Append($"<side{Side}:-定位-{ok1}>");
                     return ok1;
                 }
                 AnchorList.Add(intersect);
@@ -319,12 +322,21 @@ namespace SagensVision
                 MyGlobal.flset2.intersectCoordList[Side - 1].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
 
                 string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
+                if (OK != "OK")
+                {
+                    if (OK.Contains("高度超出范围"))
+                        errstr.Append($"<side{Side}:-探高-{OK}>");
+                    else 
+                        errstr.Append($"<side{Side}:-抓边-{OK}>");
+                    return ok1;
+                }
+
                 
                 return OK;
             }
             catch (Exception ex)
             {
-
+                errstr.Append($"<side{Side}:-RunFindPoint-{ex.Message}>");
                 return "RunFindPoint Error :" + ex.Message;
             }
         }
@@ -412,22 +424,12 @@ namespace SagensVision
             }
         }
 
-        public void ShowAndSaveErrorMsg(string msg)
+        public void ShowAndSaveErrorMsg(string msg,string date)
         {
             Action<string> fp = (string msg1) =>
             {
-                if (this.textBox1.Lines.Length > 300)
-                {
-                    int index = this.textBox1.Text.IndexOf(Environment.NewLine);
-                    this.textBox1.Text = this.textBox1.Text.Remove(0, index + Environment.NewLine.Length);
-                }
-                string formatStr = "HH:mm:ss:ffff";
-
-                string longMsg = string.Format("[{0}]", DateTime.Now.ToString(formatStr)) + msg1;
-                this.textBox1.AppendText(Environment.NewLine + longMsg);
-                this.textBox1.Select(this.textBox1.Text.Length, 0);
-                this.textBox1.ScrollToCaret();
-                this.textBox1.ScrollBars = ScrollBars.Both;
+                string longMsg = string.Format("运行时间：[{0}]  图像路径： [{1}]   错误消息： [{2}]\r\n", DateTime.Now.ToString("hh:mm:ss:ff"), date, msg1);
+             
                 //Misc.SaveLog(longMsg);
                 StaticOperate.SaveErrorLog(longMsg);
             };
@@ -460,7 +462,6 @@ namespace SagensVision
             //}
             MyGlobal.GoSDK.isStartCheck = false;
             MyGlobal.GoSDK.expirationTime = "2020-03-30 18:00:00";
-            label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
             string Msg = "";
             if (MyGlobal.GoSDK.connect(MyGlobal.globalConfig.SensorIP, ref Msg))
             {
@@ -610,7 +611,6 @@ namespace SagensVision
                     NameOrigin.Clear();
                     AnchorList.Clear();
                     MyGlobal.globalConfig.Count++;
-                    label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
 
                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                     {
@@ -726,9 +726,10 @@ namespace SagensVision
                     NameOrigin.Clear();
                     AnchorList.Clear();
 
+                    errstr.Clear();
+
                     MyGlobal.globalConfig.Count++;
 
-                    label_TotalNum.Text = MyGlobal.globalConfig.Count.ToString();
 
                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                     {
@@ -838,25 +839,70 @@ namespace SagensVision
                         if (Station == 1)
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-                        bool isSaveImgOK = false;
-                        ThreadPool.QueueUserWorkItem(delegate
-                        {
-                            StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
-                            StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
-                            if (!MyGlobal.isShowHeightImg)
-                            {
-                                StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
+                        //bool isSaveImgOK = false;
+                        //ThreadPool.QueueUserWorkItem(delegate
+                        //{
+                        //    StaticOperate.SaveImage(ZoomIntensityImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
+                        //    StaticOperate.SaveImage(ZoomHeightImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                        //    if (!MyGlobal.isShowHeightImg)
+                        //    {
+                        //        StaticOperate.SaveImage(zoomRgbImg, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "B.tiff");
 
-                            }
-                            isSaveImgOK = true;
-                        });
+                        //    }
+                        //    isSaveImgOK = true;
+                        //});
 
 
                         string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
                         HObject[] temp = { MyGlobal.hWindow_Final[Side - 1].Image, ZoomHeightImg };
                         MyGlobal.ImageMulti.Add(temp);
 
-                        while (!isSaveImgOK);//等待图片保存完成
+                        //while (!isSaveImgOK);//等待图片保存完成
+
+                        if (Side == 4)
+                        {
+                            if (errstr.Length > 0)
+                            {
+                                if (errstr.ToString().Contains("定位"))
+                                {
+                                    MyGlobal.globalConfig.AnchorErrorCnt++;
+                                }
+                                else if (errstr.ToString().Contains("抓边") || errstr.ToString().Contains("RunFindPoint"))
+                                {
+                                    MyGlobal.globalConfig.FindEgdeErrorCnt++;
+                                }
+                                else if (errstr.ToString().Contains("探高"))
+                                {
+                                    MyGlobal.globalConfig.ExploreHeightErrorCnt++;
+                                }
+                                else
+                                {
+                                    MyGlobal.globalConfig.FindEgdeErrorCnt++;
+                                }
+                                string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+                                ShowAndSaveErrorMsg(errstr.ToString(), path + saveImageTime);
+                                ThreadPool.QueueUserWorkItem(delegate
+                                {
+                                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                                    {
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                MyGlobal.globalConfig.OkCnt++;
+                                ThreadPool.QueueUserWorkItem(delegate
+                                {
+                                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                                    {
+                                        StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
+                                        StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                    }
+                                });
+                            }
+                        }
                        
                         return OK;
                     }
@@ -909,7 +955,7 @@ namespace SagensVision
                 Zorigin.Clear();
                 NameOrigin.Clear();
                 AnchorList.Clear();
-
+                errstr.Clear();
             }
             if (MyGlobal.ImageMulti.Count == 0)
             {
@@ -925,6 +971,8 @@ namespace SagensVision
             return Ok;
         }
 
+        #region RunSide111
+        [Obsolete]
         private string RunSide111(int Station, HObject IntensityImage, HObject HeightImage)
         {
             try
@@ -1410,6 +1458,7 @@ namespace SagensVision
                 return "RunSide error :" + ex.Message;
             }
         }
+        #endregion
 
         private string RunSide(int Station, HObject IntensityImage, HObject HeightImage,bool SaveBase = false)
         {
@@ -1925,13 +1974,14 @@ namespace SagensVision
                         MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
                     }
                 }
-
+               
                 //判断X Y 
                 //计算到中心点距离
                 if (MyGlobal.xyzBaseCoord.Dist != null)
                 {
                     for (int i = 0; i < XCoord.Count; i++)
                     {
+
                         for (int j = 0; j < XCoord[i].GetLength(0); j++)
                         {
                             HTuple Dist = 0;
@@ -2690,7 +2740,19 @@ namespace SagensVision
                         //}
                         //MyGlobal.ImageMulti.Clear();
                         //sidelist.Clear();
+                        if (errstr.Length > 0)
+                        {
+                            ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
+                        }
                         break;
+                    }
+
+                    if (i == 3)
+                    {
+                        if (errstr.Length > 0)
+                        {
+                            ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
+                        }
                     }
                 }
             }
