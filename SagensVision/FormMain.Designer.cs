@@ -60,7 +60,7 @@
             this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             this.btn_clearbuffer = new DevExpress.XtraBars.BarButtonItem();
             this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
-            this.barEditItem1 = new DevExpress.XtraBars.BarEditItem();
+            this.barEditItem_CurrentType = new DevExpress.XtraBars.BarEditItem();
             this.repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
@@ -348,7 +348,7 @@
             this.btn_clearbuffer,
             this.barButtonItem12,
             this.barStaticItem1,
-            this.barEditItem1,
+            this.barEditItem_CurrentType,
             this.barSubItem4});
             this.barManager1.MainMenu = this.bar2;
             this.barManager1.MaxItemId = 30;
@@ -373,7 +373,7 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11),
             new DevExpress.XtraBars.LinkPersistInfo(this.btn_clearbuffer),
             new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem1),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barEditItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem_CurrentType, "", false, true, true, 112),
             new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem4),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem6, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph)});
             this.bar2.OptionsBar.MultiLine = true;
@@ -491,18 +491,20 @@
             this.barStaticItem1.Id = 25;
             this.barStaticItem1.Name = "barStaticItem1";
             // 
-            // barEditItem1
+            // barEditItem_CurrentType
             // 
-            this.barEditItem1.Caption = "barEditItem1";
-            this.barEditItem1.Edit = this.repositoryItemComboBox1;
-            this.barEditItem1.Id = 26;
-            this.barEditItem1.Name = "barEditItem1";
+            this.barEditItem_CurrentType.Caption = "barEditItem1";
+            this.barEditItem_CurrentType.Edit = this.repositoryItemComboBox1;
+            this.barEditItem_CurrentType.Id = 26;
+            this.barEditItem_CurrentType.Name = "barEditItem_CurrentType";
+            this.barEditItem_CurrentType.EditValueChanged += new System.EventHandler(this.barEditItem_CurrentType_EditValueChanged);
             // 
             // repositoryItemComboBox1
             // 
             this.repositoryItemComboBox1.AutoHeight = false;
             this.repositoryItemComboBox1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemComboBox1.ButtonsStyle = DevExpress.XtraEditors.Controls.BorderStyles.Office2003;
             this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
             // 
             // barSubItem4
@@ -1195,7 +1197,7 @@
         private DevExpress.XtraNavBar.NavBarItem navBarItem5;
         private DevExpress.XtraEditors.SimpleButton btn_show_capacity;
         private DevExpress.XtraBars.BarStaticItem barStaticItem1;
-        private DevExpress.XtraBars.BarEditItem barEditItem1;
+        private DevExpress.XtraBars.BarEditItem barEditItem_CurrentType;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
         private DevExpress.XtraBars.BarSubItem barSubItem4;
         private DevExpress.XtraBars.Docking.DockPanel panelContainer1;

@@ -45,16 +45,17 @@ namespace SagensVision.VisionTool
             {
                 this.Text = text;
             }
-            string ok = Init();
-            if (ok != "OK")
-            {
-                MessageBox.Show(ok);
-            }
+            
         }
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
 
+            string ok = Init();
+            if (ok != "OK")
+            {
+                MessageBox.Show(ok);
+            }
             this.MaximizeBox = true;
             CurrentSide = "";
             isSave = true;
@@ -515,7 +516,7 @@ namespace SagensVision.VisionTool
                         }
                         else
                         {
-                            initError = "设置参数加载失败";
+                            initError = "抓边参数加载失败";
                             continue;
                         }
                         if (File.Exists(MyGlobal.ConfigPath + SideName[i] + "_Section.roi"))
@@ -1242,6 +1243,9 @@ namespace SagensVision.VisionTool
                 }
             }
 
+            //刷新Roi参数
+            UpdateRoiParam();
+
             RoiIsMoving = true;
             LoadToUI(Id);
             RoiIsMoving = false;
@@ -1260,6 +1264,21 @@ namespace SagensVision.VisionTool
 
         }
 
+        void UpdateRoiParam()
+        {
+            for (int i = 0; i < roiList2.Length; i++)
+            {
+                for (int j = 0; j < roiList2[i].Count; j++)
+                {
+                    HTuple roiData = roiList2[i][j].getModelData();
+                    fParam[i].roiP[j].CenterRow = roiData[0];
+                    fParam[i].roiP[j].CenterCol = roiData[1];
+                    fParam[i].roiP[j].phi = roiData[2];
+                    fParam[i].roiP[j].Len1 = roiData[3];
+                    fParam[i].roiP[j].Len2 = roiData[4];                    
+                }
+            }
+        }
         public void GetCurrentFix()
         {
             try
@@ -4027,6 +4046,21 @@ namespace SagensVision.VisionTool
                         ColEd = midCed;
                     }
 
+                    //取拟合线与ROI中心交点
+                    //HObject RoiCenter = new HObject();
+
+                    HTuple roiData = roiList2[Sid][i].getModelData();
+                    double EndR = roiData[0] + 100 * Math.Sin(fParam[Sid].roiP[i].phi);
+                    double EndC = roiData[1] + 100 * Math.Cos(fParam[Sid].roiP[i].phi);
+                    //HOperatorSet.GenRegionLine(out RoiCenter, fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC);
+                    //HOperatorSet.GenRegionLine(out line, Rowbg, Colbg, RowEd, ColEd);
+                    //if (hwind != null && debug)
+                    //{
+                    //    hwind.viewWindow.displayHobject(RoiCenter);
+                    //    hwind.viewWindow.displayHobject(line);
+                    //}
+                    HTuple isOverlapping = new HTuple();
+                    HOperatorSet.IntersectionLines(fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC, Rowbg, Colbg, RowEd, ColEd, out row, out col, out isOverlapping);
 
                     double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                     double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
@@ -4046,8 +4080,10 @@ namespace SagensVision.VisionTool
                     double distR = D * Math.Cos(lineAngle.D);
                     double distC = D * Math.Sin(lineAngle.D);
 
-                    row = (Rowbg.D + RowEd.D) / 2 - distR;
-                    col = (Colbg.D + ColEd.D) / 2 - distC;
+                    //row = (Rowbg.D + RowEd.D) / 2 - distR;
+                    //col = (Colbg.D + ColEd.D) / 2 - distC;
+                    row = row.D - distR;
+                    col = col.D - distC;
 
                     double xOffset = fParam[Sid].roiP[i].Xoffset / Xresolution;
                     double yOffset = fParam[Sid].roiP[i].Yoffset / Yresolution;
@@ -4686,6 +4722,20 @@ namespace SagensVision.VisionTool
                     HOperatorSet.FitLineContourXld(line, "tukey", -1, Clipping, 5, 2, out Rowbg, out Colbg, out RowEd, out ColEd, out Nr, out Nc, out Dist);
                     HOperatorSet.GenContourPolygonXld(out line, Rowbg.TupleConcat(RowEd), Colbg.TupleConcat(ColEd));
 
+                    //取拟合线与ROI中心交点
+                    //HObject RoiCenter = new HObject();
+                    HTuple roiData = roiList2[Sid][i].getModelData();
+                    double EndR = roiData[0] + 100 * Math.Sin(fParam[Sid].roiP[i].phi);
+                    double EndC = roiData[1] + 100 * Math.Cos(fParam[Sid].roiP[i].phi);
+                    //HOperatorSet.GenRegionLine(out RoiCenter, fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC);
+                    //HOperatorSet.GenRegionLine(out line, Rowbg, Colbg, RowEd, ColEd);
+                    //if (hwind!=null && debug)
+                    //{
+                    //    hwind.viewWindow.displayHobject(RoiCenter);
+                    //    hwind.viewWindow.displayHobject(line);
+                    //}
+                    HTuple isOverlapping = new HTuple();
+                    HOperatorSet.IntersectionLines(fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC, Rowbg, Colbg, RowEd, ColEd,out row,out col,out isOverlapping);
 
                     double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                     double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
@@ -4715,8 +4765,11 @@ namespace SagensVision.VisionTool
 
                     HTuple lineCoord = Rowbg.TupleConcat(Colbg).TupleConcat(RowEd).TupleConcat(ColEd);
                     HLines.Add(lineCoord);
-                    row = (Rowbg.D + RowEd.D) / 2;
-                    col = (Colbg.D + ColEd.D) / 2;
+
+                    //row = (Rowbg.D + RowEd.D) / 2;
+                    //col = (Colbg.D + ColEd.D) / 2;
+                    row = row - distR + yOffset;
+                    col = col - distC + xOffset;
 
                     if (hwind != null)
                     {
@@ -6396,13 +6449,11 @@ namespace SagensVision.VisionTool
     {
         public static string ParaName = "";
         public static string ParamDir
-        {
-            //get { return AppDomain.CurrentDomain.BaseDirectory + "Calib" + "\\" + ParaName + "\\"; }
-
+        {           
             get
             {
-
-                return Application.StartupPath + "\\Config" + "\\" + ParaName + "\\";
+                return MyGlobal.ConfigPath + ParaName + "\\";
+                //return Application.StartupPath + "\\Config" + "\\" + ParaName + "\\";
             }
         }
         public static string Path_Param
