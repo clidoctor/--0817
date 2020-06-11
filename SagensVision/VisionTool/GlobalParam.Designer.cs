@@ -63,12 +63,15 @@
             this.label11 = new System.Windows.Forms.Label();
             this.textBox_XYMin = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.checkedListBox_save_data = new System.Windows.Forms.CheckedListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -266,7 +269,7 @@
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.textBox_HeightMin);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(12, 111);
+            this.groupBox2.Location = new System.Drawing.Point(12, 246);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(266, 93);
             this.groupBox2.TabIndex = 76;
@@ -309,7 +312,7 @@
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(187, 390);
+            this.simpleButton1.Location = new System.Drawing.Point(176, 507);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(90, 23);
             this.simpleButton1.TabIndex = 77;
@@ -318,7 +321,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(371, 390);
+            this.simpleButton2.Location = new System.Drawing.Point(360, 507);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(90, 23);
             this.simpleButton2.TabIndex = 78;
@@ -339,7 +342,7 @@
             // 
             // simpleButton3
             // 
-            this.simpleButton3.Location = new System.Drawing.Point(25, 337);
+            this.simpleButton3.Location = new System.Drawing.Point(25, 472);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(90, 23);
             this.simpleButton3.TabIndex = 80;
@@ -352,7 +355,7 @@
             this.groupBox5.Controls.Add(this.label11);
             this.groupBox5.Controls.Add(this.textBox_XYMin);
             this.groupBox5.Controls.Add(this.label12);
-            this.groupBox5.Location = new System.Drawing.Point(12, 221);
+            this.groupBox5.Location = new System.Drawing.Point(12, 356);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(266, 93);
             this.groupBox5.TabIndex = 81;
@@ -393,11 +396,34 @@
             this.label12.TabIndex = 1;
             this.label12.Text = "Min";
             // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.checkedListBox_save_data);
+            this.groupBox7.Location = new System.Drawing.Point(12, 111);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(266, 129);
+            this.groupBox7.TabIndex = 82;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "数据保存选项";
+            // 
+            // checkedListBox_save_data
+            // 
+            this.checkedListBox_save_data.FormattingEnabled = true;
+            this.checkedListBox_save_data.Items.AddRange(new object[] {
+            "保存kdat",
+            "保存filedat",
+            "保存正常图像"});
+            this.checkedListBox_save_data.Location = new System.Drawing.Point(13, 38);
+            this.checkedListBox_save_data.Name = "checkedListBox_save_data";
+            this.checkedListBox_save_data.Size = new System.Drawing.Size(237, 72);
+            this.checkedListBox_save_data.TabIndex = 0;
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 425);
+            this.ClientSize = new System.Drawing.Size(679, 556);
+            this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.simpleButton3);
             this.Controls.Add(this.groupBox4);
@@ -423,6 +449,7 @@
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -463,5 +490,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox_XYMin;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.CheckedListBox checkedListBox_save_data;
     }
 }

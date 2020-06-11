@@ -23,7 +23,7 @@ namespace SagensVision
     {
         public static string DataPath = AppDomain.CurrentDomain.BaseDirectory + "Data\\";
         public static string ConfigPath = AppDomain.CurrentDomain.BaseDirectory +  "Config\\";
-        public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" + "imgRotate.txt";
+        //public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" + "imgRotate.txt";
         public static string BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" +"BaseHeight.xml";
 
         public static string SaveDatFileDirectory = "data\\datfile\\";
@@ -44,7 +44,7 @@ namespace SagensVision
         //public static Fixcs fix = new Fixcs();
         public static FitLineSet flset2 = new FitLineSet("Fix");
         public static List<HObject[]> ImageMulti = new List<HObject[]>();
-        public static int[] imgRotateArr = new int[4];
+        //public static int[] imgRotateArr = new int[4];
         //public static List<double[][]> ZCoord = new List<double[][]>();//z值基准高度
         public static XYZBaseCoord xyzBaseCoord = new XYZBaseCoord();
         public static SavePathName PathName = new SavePathName();
@@ -78,6 +78,14 @@ namespace SagensVision
         public int FindEgdeErrorCnt = 0;
         public int ExploreHeightErrorCnt = 0;
 
+        //保存数据选项
+        public bool isSaveKdat;
+        public bool isSaveFileDat;
+        public bool isSaveImg;
+
+        //图像旋转角度
+        public int[] imgRotateArr = new int[4];
+
         public GlobalConfig()
         {
             for (int i = 0; i < 4; i++)
@@ -106,7 +114,7 @@ namespace SagensVision
             {
                 this.currentType = value;
                 MyGlobal.ConfigPath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\";
-                MyGlobal.imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "imgRotate.txt";
+                //MyGlobal.imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "imgRotate.txt";
                 MyGlobal.BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + currentType + "\\Config\\" + "BaseHeight.xml";
             }
         }

@@ -40,6 +40,12 @@ namespace SagensVision.VisionTool
                 textBox_xOffset.Text = MyGlobal.globalConfig.gbParam[0].Xoffset.ToString();
                 textBox_yOffset.Text = MyGlobal.globalConfig.gbParam[0].Yoffset.ToString();
 
+                checkedListBox_save_data.SetItemChecked(0, MyGlobal.globalConfig.isSaveKdat);
+                checkedListBox_save_data.SetItemChecked(1, MyGlobal.globalConfig.isSaveFileDat);
+                checkedListBox_save_data.SetItemChecked(2, MyGlobal.globalConfig.isSaveImg);
+
+                ///task
+
             }
             catch (Exception)
             {
@@ -112,7 +118,10 @@ namespace SagensVision.VisionTool
         private void simpleButton1_Click(object sender, EventArgs e)
         {
             try
-            {               
+            {
+                MyGlobal.globalConfig.isSaveKdat = checkedListBox_save_data.GetItemChecked(0);
+                MyGlobal.globalConfig.isSaveFileDat = checkedListBox_save_data.GetItemChecked(1);
+                MyGlobal.globalConfig.isSaveImg = checkedListBox_save_data.GetItemChecked(2);
                 StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
                 MessageBox.Show("保存成功！");
             }
@@ -138,6 +147,8 @@ namespace SagensVision.VisionTool
         {
             LoadToUi();
         }
+
+       
     }
 
     

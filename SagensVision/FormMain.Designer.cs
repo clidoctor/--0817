@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
-            this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup();
-            this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.document2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.document1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document();
-            this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager();
+            this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup(this.components);
+            this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.dockPanel5 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel5_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.dockPanel4 = new DevExpress.XtraBars.Docking.DockPanel();
@@ -44,7 +45,7 @@
             this.dockPanel6_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.dockPanel3 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel3_Container = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar2 = new DevExpress.XtraBars.Bar();
             this.barSubItem3 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
@@ -107,8 +108,8 @@
             this.navBarItem4 = new DevExpress.XtraNavBar.NavBarItem();
             this.dockPanel7 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel7_Container = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btn_show_capacity = new DevExpress.XtraEditors.SimpleButton();
             this.dockPanel8 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel8_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -118,9 +119,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager();
-            this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView();
-            this.timer1 = new System.Windows.Forms.Timer();
+            this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
+            this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -508,8 +509,6 @@
             // 
             this.barSubItem4.Caption = "型号设置";
             this.barSubItem4.Id = 27;
-            this.barSubItem4.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barSubItem4.ImageOptions.Image")));
-            this.barSubItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barSubItem4.ImageOptions.LargeImage")));
             this.barSubItem4.Name = "barSubItem4";
             this.barSubItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barSubItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barSubItem4_ItemClick);
@@ -711,7 +710,7 @@
             this.panelContainer1.Controls.Add(this.dockPanel7);
             this.panelContainer1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             this.panelContainer1.FloatSize = new System.Drawing.Size(133, 328);
-            this.panelContainer1.ID = new System.Guid("ae3dddae-f3ad-47a0-b7c3-7a8e64e41590");
+            this.panelContainer1.ID = new System.Guid("94534b59-373a-48f6-af67-a51d59bd6e0a");
             this.panelContainer1.Location = new System.Drawing.Point(0, 24);
             this.panelContainer1.Name = "panelContainer1";
             this.panelContainer1.OriginalSize = new System.Drawing.Size(187, 275);
@@ -727,7 +726,7 @@
             this.dockPanel1.Location = new System.Drawing.Point(0, 0);
             this.dockPanel1.Name = "dockPanel1";
             this.dockPanel1.OriginalSize = new System.Drawing.Size(200, 200);
-            this.dockPanel1.Size = new System.Drawing.Size(187, 567);
+            this.dockPanel1.Size = new System.Drawing.Size(187, 556);
             this.dockPanel1.Text = "功能设置";
             // 
             // dockPanel1_Container
@@ -735,7 +734,7 @@
             this.dockPanel1_Container.Controls.Add(this.navBarControl1);
             this.dockPanel1_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel1_Container.Name = "dockPanel1_Container";
-            this.dockPanel1_Container.Size = new System.Drawing.Size(178, 539);
+            this.dockPanel1_Container.Size = new System.Drawing.Size(178, 528);
             this.dockPanel1_Container.TabIndex = 0;
             // 
             // navBarControl1
@@ -765,7 +764,7 @@
             this.navBarControl1.Name = "navBarControl1";
             this.navBarControl1.OptionsNavPane.ExpandedWidth = 178;
             this.navBarControl1.PaintStyleKind = DevExpress.XtraNavBar.NavBarViewKind.ExplorerBar;
-            this.navBarControl1.Size = new System.Drawing.Size(178, 539);
+            this.navBarControl1.Size = new System.Drawing.Size(178, 528);
             this.navBarControl1.TabIndex = 0;
             this.navBarControl1.Text = "功能菜单";
             // 
@@ -899,38 +898,39 @@
             this.dockPanel7.FloatVertical = true;
             this.dockPanel7.ForeColor = System.Drawing.Color.Black;
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
-            this.dockPanel7.Location = new System.Drawing.Point(0, 567);
+            this.dockPanel7.Location = new System.Drawing.Point(0, 556);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(186, 205);
-            this.dockPanel7.Size = new System.Drawing.Size(187, 203);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(187, 203);
+            this.dockPanel7.Size = new System.Drawing.Size(187, 214);
             // 
             // dockPanel7_Container
             // 
-            this.dockPanel7_Container.Controls.Add(this.simpleButton2);
             this.dockPanel7_Container.Controls.Add(this.pictureBox1);
+            this.dockPanel7_Container.Controls.Add(this.btn_show_capacity);
             this.dockPanel7_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel7_Container.Name = "dockPanel7_Container";
-            this.dockPanel7_Container.Size = new System.Drawing.Size(178, 176);
+            this.dockPanel7_Container.Size = new System.Drawing.Size(178, 187);
             this.dockPanel7_Container.TabIndex = 0;
-            // 
-            // simpleButton2
-            // 
-            this.simpleButton2.Location = new System.Drawing.Point(0, 3);
-            this.simpleButton2.Name = "simpleButton2";
-            this.simpleButton2.Size = new System.Drawing.Size(178, 23);
-            this.simpleButton2.TabIndex = 1;
-            this.simpleButton2.Text = "显示生产数据";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(3, 140);
+            this.pictureBox1.Location = new System.Drawing.Point(3, 152);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(171, 33);
+            this.pictureBox1.Size = new System.Drawing.Size(157, 33);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            // 
+            // btn_show_capacity
+            // 
+            this.btn_show_capacity.Location = new System.Drawing.Point(0, 3);
+            this.btn_show_capacity.Name = "btn_show_capacity";
+            this.btn_show_capacity.Size = new System.Drawing.Size(178, 23);
+            this.btn_show_capacity.TabIndex = 1;
+            this.btn_show_capacity.Text = "显示生产数据";
+            this.btn_show_capacity.Click += new System.EventHandler(this.btn_show_capacity_Click);
             // 
             // dockPanel8
             // 
@@ -1193,12 +1193,12 @@
         private System.Windows.Forms.Label label2;
         private DevExpress.XtraBars.BarButtonItem barButtonItem12;
         private DevExpress.XtraNavBar.NavBarItem navBarItem5;
-        private DevExpress.XtraBars.Docking.DockPanel panelContainer1;
-        private DevExpress.XtraEditors.SimpleButton simpleButton2;
+        private DevExpress.XtraEditors.SimpleButton btn_show_capacity;
         private DevExpress.XtraBars.BarStaticItem barStaticItem1;
         private DevExpress.XtraBars.BarEditItem barEditItem1;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
         private DevExpress.XtraBars.BarSubItem barSubItem4;
+        private DevExpress.XtraBars.Docking.DockPanel panelContainer1;
     }
 }
 

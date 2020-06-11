@@ -45,7 +45,7 @@
             DevExpress.XtraCharts.Pie3DSeriesView pie3DSeriesView1 = new DevExpress.XtraCharts.Pie3DSeriesView();
             DevExpress.XtraCharts.SeriesTitle seriesTitle1 = new DevExpress.XtraCharts.SeriesTitle();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
-            this.timer1 = new System.Windows.Forms.Timer();
+            this.btn_show_clear_data = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(simpleDiagram3D1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
@@ -80,8 +80,8 @@
             this.chartControl1.Legend.Name = "Default Legend";
             this.chartControl1.Location = new System.Drawing.Point(0, 0);
             this.chartControl1.Name = "chartControl1";
-            series1.Name = "Series 1";
-            seriesPoint1.ColorSerializable = "#00DC63";
+            series1.Name = "Series1";
+            seriesPoint1.ColorSerializable = "#00E563";
             seriesPoint2.ColorSerializable = "#FF5F62";
             seriesPoint3.ColorSerializable = "#FF2F31";
             seriesPoint4.ColorSerializable = "#C40002";
@@ -99,17 +99,22 @@
             this.chartControl1.Size = new System.Drawing.Size(477, 416);
             this.chartControl1.TabIndex = 0;
             // 
-            // timer1
+            // btn_show_clear_data
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.btn_show_clear_data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_show_clear_data.Location = new System.Drawing.Point(364, 381);
+            this.btn_show_clear_data.Name = "btn_show_clear_data";
+            this.btn_show_clear_data.Size = new System.Drawing.Size(101, 23);
+            this.btn_show_clear_data.TabIndex = 1;
+            this.btn_show_clear_data.Text = "清空产能数据";
+            this.btn_show_clear_data.Click += new System.EventHandler(this.btn_show_clear_data_Click);
             // 
             // ShowCapacityFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 416);
+            this.Controls.Add(this.btn_show_clear_data);
             this.Controls.Add(this.chartControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ShowCapacityFrm";
@@ -126,6 +131,6 @@
         #endregion
 
         private DevExpress.XtraCharts.ChartControl chartControl1;
-        private System.Windows.Forms.Timer timer1;
+        private DevExpress.XtraEditors.SimpleButton btn_show_clear_data;
     }
 }

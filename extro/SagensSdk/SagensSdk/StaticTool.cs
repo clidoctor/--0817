@@ -42,11 +42,11 @@ namespace SagensSdk
 
             PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
             byteImg.Dispose();
-            HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 0.7, 3.5, "constant");
+            HOperatorSet.ZoomImageFactor(rgbImg, out zoomRgbImg, 1, 4, "constant");
             rgbImg.Dispose();
-            HOperatorSet.ZoomImageFactor(heightImg, out zoomHeightImg, 0.7, 3.5, "constant");
+            HOperatorSet.ZoomImageFactor(heightImg, out zoomHeightImg, 1, 4, "constant");
             heightImg.Dispose();
-            HOperatorSet.ZoomImageFactor(intensityImg, out zoomIntensityImg, 0.7, 3.5, "constant");
+            HOperatorSet.ZoomImageFactor(intensityImg, out zoomIntensityImg, 1, 4, "constant");
             intensityImg.Dispose();
             GC.Collect();
         }

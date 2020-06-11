@@ -51,6 +51,7 @@
             this.Controls.Add(this.hWindowControl1);
             this.Name = "Show3dImgFrm";
             this.Text = "Show3dImgFrm";
+            this.Load += new System.EventHandler(this.Show3dImgFrm_Load);
             this.ResumeLayout(false);
 
         }

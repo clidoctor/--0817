@@ -161,9 +161,15 @@ namespace SagensVision
 
         private void Show3dImg(HWindow_Final obj)
         {
-            string hwind_id = obj.Name.Substring(obj.Name.Length - 1, 1);
-            double hwind_idx = int.Parse(hwind_id) - 1;
-            //HObject img = 
+            //string hwind_id = obj.Name.Substring(obj.Name.Length - 1, 1);
+            //int hwind_idx = int.Parse(hwind_id) - 1;
+            //HObject img = MyGlobal.ImageMulti[hwind_idx][1];
+            //HTuple pointer, type, w, h;
+            //HOperatorSet.GetImagePointer1(img, out pointer, out type, out w, out h);
+            //float[] z = new float[w * h];
+            //Marshal.Copy(pointer, z, 0, w * h);
+            //Show3dImgFrm sif = new Show3dImgFrm(z, w, h);
+            //sif.Show();
         }
 
 
@@ -406,21 +412,21 @@ namespace SagensVision
         VisionTool.Display3D show3D = new VisionTool.Display3D();
         private void FormMain_Load(object sender, EventArgs e)
         {
-            if (File.Exists(MyGlobal.imgRotatePath))
-            {
-                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
-            }
+       
 
             if (!Directory.Exists(MyGlobal.SaveDatFileDirectory))
             {
                 Directory.CreateDirectory(MyGlobal.SaveDatFileDirectory);
             }
-
-            MyGlobal.GoSDK.SaveKdatDirectoy = "SaveKdatDirectoy//";
-            if (!Directory.Exists(MyGlobal.GoSDK.SaveKdatDirectoy))
+            if (MyGlobal.globalConfig.isSaveKdat)
             {
-                Directory.CreateDirectory(MyGlobal.GoSDK.SaveKdatDirectoy);
+                MyGlobal.GoSDK.SaveKdatDirectoy = "SaveKdatDirectoy//";
+                if (!Directory.Exists(MyGlobal.GoSDK.SaveKdatDirectoy))
+                {
+                    Directory.CreateDirectory(MyGlobal.GoSDK.SaveKdatDirectoy);
+                }
             }
+            
 
             //MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen);
             MyGlobal.thdWaitForClientAndMessage = new Thread(TcpClientListen_Surface);
@@ -768,7 +774,7 @@ namespace SagensVision
                             MyGlobal.GoSDK.SurfaceDataZByte = null;
 
                             byteImg.Dispose();
-                            HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.imgRotateArr[Station - 1], "constant");
+                            HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.globalConfig.imgRotateArr[Station - 1], "constant");
                             rgbImg.Dispose();
                             PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                             zoomRgbImg.Dispose();
@@ -778,12 +784,12 @@ namespace SagensVision
 
 
                         HeightImage.Dispose();
-                        HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.globalConfig.imgRotateArr[Station - 1], "constant");
                         ZoomHeightImg.Dispose();
                         HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 4, "constant");
 
                         IntensityImage.Dispose();
-                        HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.imgRotateArr[Station - 1], "constant");
+                        HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.globalConfig.imgRotateArr[Station - 1], "constant");
                         ZoomIntensityImg.Dispose();
                         HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 4, "constant");
 
@@ -854,15 +860,20 @@ namespace SagensVision
                             else
                             {
                                 MyGlobal.globalConfig.OkCnt++;
-                                ThreadPool.QueueUserWorkItem(delegate
+                                if (MyGlobal.globalConfig.isSaveImg)
                                 {
-                                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                                    ThreadPool.QueueUserWorkItem(delegate
                                     {
-                                        StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
-                                        StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
-                                    }
-                                });
+                                        for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                                        {
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                        }
+                                    });
+                                }
                             }
+                            scf?.setValue();
+                            StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
                         }
                        
                         return OK;
@@ -2147,7 +2158,7 @@ namespace SagensVision
                                 MyGlobal.hWindow_Final[i].ClearWindow();
                             }
                             ShowProfile.ClearWindow();
-                            if (MyGlobal.ReceiveMsg.Contains("Start"))
+                            if (MyGlobal.ReceiveMsg.Contains("Start") && MyGlobal.globalConfig.isSaveFileDat)
                             {
                                 MyGlobal.GoSDK.SaveDatFileDirectory = MyGlobal.SaveDatFileDirectory + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
 
@@ -2183,7 +2194,7 @@ namespace SagensVision
                                 ShowAndSaveMsg($"起始编码器数值 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
                                 string Msg = "开始扫描:" + Side.ToString();
 
-                                if (!Directory.Exists(MyGlobal.GoSDK.SaveDatFileDirectory))
+                                if ((!Directory.Exists(MyGlobal.GoSDK.SaveDatFileDirectory)) && MyGlobal.globalConfig.isSaveFileDat)
                                 {
                                     Directory.CreateDirectory(MyGlobal.GoSDK.SaveDatFileDirectory);
                                 }
@@ -3071,10 +3082,6 @@ namespace SagensVision
         {
             ImgRotateFrm imgrotatefrm = new ImgRotateFrm();
             imgrotatefrm.Show();
-            if (File.Exists(MyGlobal.imgRotatePath))
-            {
-                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
-            }
         }
 
         private void btn_clearbuffer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -3111,6 +3118,25 @@ namespace SagensVision
         {
             NewProduct nProduct = new NewProduct();
             nProduct.ShowDialog();
+        }
+
+        ShowCapacityFrm scf;
+        private void btn_show_capacity_Click(object sender, EventArgs e)
+        {
+            if (btn_show_capacity.Text == "显示生产数据")
+            {
+                scf = new ShowCapacityFrm();
+                btn_show_capacity.Text = "关闭生产数据";
+                scf.SetDesktopLocation(0, 0);
+                scf.setValue();
+                scf.Show();
+            }
+            else
+            {
+                btn_show_capacity.Text = "显示生产数据";
+                scf.Close();
+                scf.Dispose();
+            }
         }
     }
 }
