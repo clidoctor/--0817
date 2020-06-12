@@ -712,7 +712,7 @@
             this.panelContainer1.Controls.Add(this.dockPanel7);
             this.panelContainer1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             this.panelContainer1.FloatSize = new System.Drawing.Size(133, 328);
-            this.panelContainer1.ID = new System.Guid("94534b59-373a-48f6-af67-a51d59bd6e0a");
+            this.panelContainer1.ID = new System.Guid("1ee341ad-82ed-4e17-837e-78688f36ae8b");
             this.panelContainer1.Location = new System.Drawing.Point(0, 24);
             this.panelContainer1.Name = "panelContainer1";
             this.panelContainer1.OriginalSize = new System.Drawing.Size(187, 275);
@@ -902,7 +902,7 @@
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
             this.dockPanel7.Location = new System.Drawing.Point(0, 556);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(187, 203);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(187, 214);
             this.dockPanel7.Size = new System.Drawing.Size(187, 214);
             // 
             // dockPanel7_Container
@@ -1008,7 +1008,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(321, 37);
             this.label4.TabIndex = 2;
-            this.label4.Text = "轨迹";
+            this.label4.Text = "3D轨迹";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3

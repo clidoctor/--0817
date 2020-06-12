@@ -366,6 +366,8 @@ namespace SagensVision
         {
             dockPanel1.Show();
             dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            dockPanel7.Show();
+            dockPanel7.DockTo(dockPanel1, DevExpress.XtraBars.Docking.DockingStyle.Bottom);
         }
 
         private void barButtonItem7_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -378,15 +380,13 @@ namespace SagensVision
         {
             dockPanel1.Show();
             dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            dockPanel8.Show();
+            dockPanel8.DockedAsTabbedDocument = true;
+            dockPanel7.Show();
+            dockPanel7.DockTo(dockPanel1, DevExpress.XtraBars.Docking.DockingStyle.Bottom);
             dockPanel2.Show();
             dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
 
-            //dockPanel4.Show();
-            //dockPanel3.Show();
-            //dockPanel5.Show();
-            //dockPanel4.DockedAsTabbedDocument = true;
-            //dockPanel3.DockedAsTabbedDocument = true;
-            //dockPanel5.DockedAsTabbedDocument = true;
             bar2.Reset();
             bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
 
