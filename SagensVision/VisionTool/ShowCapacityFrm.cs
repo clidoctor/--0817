@@ -23,6 +23,7 @@ namespace SagensVision.VisionTool
 
         public void setValue()
         {
+            
             chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalConfig.OkCnt };
             chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalConfig.AnchorErrorCnt };
             chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalConfig.FindEgdeErrorCnt };

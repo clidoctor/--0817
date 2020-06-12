@@ -83,6 +83,7 @@ namespace SagensVision
         public bool isSaveKdat;
         public bool isSaveFileDat;
         public bool isSaveImg;
+        public bool isUseAnchorDeg = true;
 
         //图像旋转角度
         public int[] imgRotateArr = new int[4];

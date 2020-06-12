@@ -1085,7 +1085,7 @@ namespace SagensVision.VisionTool
                     //HOperatorSet.WriteImage(IntensityImage, "tiff", 0, MyGlobal.ModelPath + "\\" + SideName + "I.tiff");
                     MyGlobal.hWindow_Final[0].HobjectToHimage(IntensityImage);
                 }
-
+               
                 if (MyGlobal.GoSDK.SurfaceDataZ == null)
                 {
                     MessageBox.Show("未收到数据");
@@ -1215,8 +1215,10 @@ namespace SagensVision.VisionTool
                     MessageBox.Show(ok);
                 }
                 HTuple homMaxFix = new HTuple();
+                double orignalDeg = MyGlobal.globalConfig.isUseAnchorDeg ? MyGlobal.flset2.intersectCoordList[Id].Angle : 0;
+                double currentDeg = MyGlobal.globalConfig.isUseAnchorDeg ? intersection.Angle : 0;
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                MyGlobal.flset2.intersectCoordList[Id].Angle, intersection.Row, intersection.Col, intersection.Angle, out homMaxFix);
+                orignalDeg, intersection.Row, intersection.Col, currentDeg, out homMaxFix);
 
                 //转换Roi
                 if (roiList2[Id].Count > 0 && homMaxFix.Length > 0)
@@ -1288,7 +1290,7 @@ namespace SagensVision.VisionTool
                 string ok = MyGlobal.flset2.FindIntersectPoint(Id + 1, HeightImage, out intersect);
                 HTuple homMaxFix = new HTuple();
                 HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Id].Row, MyGlobal.flset2.intersectCoordList[Id].Col,
-                    MyGlobal.flset2.intersectCoordList[Id].Angle, intersect.Row, intersect.Col, intersect.Angle, out homMaxFix);
+                    0, intersect.Row, intersect.Col, 0, out homMaxFix);
                 MyGlobal.flset2.intersectCoordList[Id] = intersect;
             }
             catch (Exception)
@@ -4007,13 +4009,23 @@ namespace SagensVision.VisionTool
                     {
                         HObject Cross = new HObject();
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "green", false);
+                       
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(Cross, "green", false);
+                        };
+                        hwind.Invoke(sw);
 
                         if (fParam[Sid].roiP[i].useMidPt)
                         {
                             HObject Cross1 = new HObject();
                             HOperatorSet.GenCrossContourXld(out Cross1, edgeRow, edgeCol, 5, 0.5);
-                            hwind.viewWindow.displayHobject(Cross1, "green", false);
+                           
+                            Action sw2 = () =>
+                            {
+                                hwind.viewWindow.displayHobject(Cross1, "green", false);
+                            };
+                            hwind.Invoke(sw2);
                         }
                     }
 
@@ -4048,10 +4060,20 @@ namespace SagensVision.VisionTool
 
                     //取拟合线与ROI中心交点
                     //HObject RoiCenter = new HObject();
+                    HTuple recCoord = roiList2[Sid][i].getModelData();
+                    HTuple CenterR = new HTuple(); HTuple CenterC = new HTuple();
+                    if (homMatFix!=null)
+                    {
+                        HOperatorSet.AffineTransPoint2d(homMatFix, recCoord[0], recCoord[1], out CenterR, out CenterC);
+                    }
+                    else
+                    {
+                        CenterR = recCoord[0];
+                        CenterC = recCoord[1];
+                    }          
 
-                    HTuple roiData = roiList2[Sid][i].getModelData();
-                    double EndR = roiData[0] + 100 * Math.Sin(fParam[Sid].roiP[i].phi);
-                    double EndC = roiData[1] + 100 * Math.Cos(fParam[Sid].roiP[i].phi);
+                    double EndR = CenterR + 100 * Math.Sin(fParam[Sid].roiP[i].phi);
+                    double EndC = CenterC + 100 * Math.Cos(fParam[Sid].roiP[i].phi);
                     //HOperatorSet.GenRegionLine(out RoiCenter, fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC);
                     //HOperatorSet.GenRegionLine(out line, Rowbg, Colbg, RowEd, ColEd);
                     //if (hwind != null && debug)
@@ -4060,7 +4082,7 @@ namespace SagensVision.VisionTool
                     //    hwind.viewWindow.displayHobject(line);
                     //}
                     HTuple isOverlapping = new HTuple();
-                    HOperatorSet.IntersectionLines(fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC, Rowbg, Colbg, RowEd, ColEd, out row, out col, out isOverlapping);
+                    HOperatorSet.IntersectionLines(CenterR, CenterC, EndR, EndC, Rowbg, Colbg, RowEd, ColEd, out row, out col, out isOverlapping);
 
                     double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                     double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
@@ -4094,7 +4116,12 @@ namespace SagensVision.VisionTool
                     {
                         HObject cross1 = new HObject();
                         HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                        hwind.viewWindow.displayHobject(cross1, "cadet blue", false);
+                        
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(cross1, "cadet blue", false);
+                        };
+                        hwind.Invoke(sw);
                     }
 
 
@@ -4133,8 +4160,13 @@ namespace SagensVision.VisionTool
 
                     if (hwind != null && debug)
                     {
-                        hwind.viewWindow.displayHobject(line, "red");
-                        hwind.viewWindow.displayHobject(lineEdge, "red");
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(line, "red");
+                            hwind.viewWindow.displayHobject(lineEdge, "red");
+                        };
+                        hwind.Invoke(sw);
+                       
 
                     }
                     siglePart = line;
@@ -4430,7 +4462,12 @@ namespace SagensVision.VisionTool
                     {
                         HObject NewSide = new HObject();
                         HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
-                        hwind.viewWindow.displayHobject(NewSide, "red");
+                        
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(NewSide, "red");
+                        };
+                        hwind.Invoke(sw);
                     }
                     origRow = origRow.TupleConcat(row);
                     origCol = origCol.TupleConcat(col);
@@ -4569,7 +4606,12 @@ namespace SagensVision.VisionTool
                     string msg = fParam[Sid].DicPointName[i] + "(" + Math.Round(ZCoord[i][0], 3).ToString() + ")";
                     if (hwind != null)
                     {
-                        hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
+                        
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
+                        };
+                        hwind.Invoke(sw);
                     }
 
                     ////判断 Z 值高度
@@ -4579,7 +4621,12 @@ namespace SagensVision.VisionTool
                         {
                             if (hwind != null)
                             {
-                                hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
+                                
+                                Action sw = () =>
+                                {
+                                    hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
+                                };
+                                hwind.Invoke(sw);
                             }
                             return  $"{msg}高度超出范围" + Math.Round(ZCoord[i][0], 3);
                         }
@@ -4711,8 +4758,11 @@ namespace SagensVision.VisionTool
                     {
                         HObject Cross = new HObject();
                         HOperatorSet.GenCrossContourXld(out Cross, row, col, 5, 0.5);
-                        hwind.viewWindow.displayHobject(Cross, "green", false);
-
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(Cross, "green", false);
+                        };
+                        hwind.Invoke(sw);                       
                     }
 
                     HObject line = new HObject();
@@ -4724,9 +4774,14 @@ namespace SagensVision.VisionTool
 
                     //取拟合线与ROI中心交点
                     //HObject RoiCenter = new HObject();
-                    HTuple roiData = roiList2[Sid][i].getModelData();
-                    double EndR = roiData[0] + 100 * Math.Sin(fParam[Sid].roiP[i].phi);
-                    double EndC = roiData[1] + 100 * Math.Cos(fParam[Sid].roiP[i].phi);
+                    HTuple recCoord = roiList2[Sid][i].getModelData();
+                    HTuple CenterR = new HTuple(); HTuple CenterC = new HTuple();
+                   
+                    CenterR = recCoord[0];
+                    CenterC = recCoord[1];
+                    
+                    double EndR = CenterR + 100 * Math.Sin(fParam[Sid].roiP[i].phi);
+                    double EndC = CenterC + 100 * Math.Cos(fParam[Sid].roiP[i].phi);
                     //HOperatorSet.GenRegionLine(out RoiCenter, fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC);
                     //HOperatorSet.GenRegionLine(out line, Rowbg, Colbg, RowEd, ColEd);
                     //if (hwind!=null && debug)
@@ -4735,7 +4790,7 @@ namespace SagensVision.VisionTool
                     //    hwind.viewWindow.displayHobject(line);
                     //}
                     HTuple isOverlapping = new HTuple();
-                    HOperatorSet.IntersectionLines(fParam[Sid].roiP[i].CenterRow, fParam[Sid].roiP[i].CenterCol, EndR, EndC, Rowbg, Colbg, RowEd, ColEd,out row,out col,out isOverlapping);
+                    HOperatorSet.IntersectionLines(CenterR, CenterC, EndR, EndC, Rowbg, Colbg, RowEd, ColEd,out row,out col,out isOverlapping);
 
                     double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                     double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
@@ -4775,7 +4830,13 @@ namespace SagensVision.VisionTool
                     {
                         HObject cross1 = new HObject();
                         HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                        hwind.viewWindow.displayHobject(cross1, "yellow");
+                       
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(cross1, "yellow");
+                        };
+
+                        hwind.Invoke(sw);
                     }
 
                     //HTuple linephi = new HTuple();
@@ -4813,7 +4874,12 @@ namespace SagensVision.VisionTool
 
                     if (hwind != null && debug)
                     {
-                        hwind.viewWindow.displayHobject(line, "red");
+                        
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(line, "red");
+                        };
+                        hwind.Invoke(sw);
                     }
                     siglePart = line;
                     //}
@@ -4891,15 +4957,24 @@ namespace SagensVision.VisionTool
                             //    }
                             //}
                             msg = fParam[Sid].DicPointName[i];
-                            hwind.viewWindow.dispMessage("Fix" + msg, "red", row.D, col.D);
+                            
+                            Action sw = () =>
+                            {
+                                hwind.viewWindow.dispMessage("Fix" + msg, "red", row.D, col.D);
+                            };
+                            hwind.Invoke(sw);
 
                         }
                     }
                     if (hwind != null)
                     {
                         HObject cross1 = new HObject();
-                        HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);
-                        hwind.viewWindow.displayHobject(cross1, "red");
+                        HOperatorSet.GenCrossContourXld(out cross1, row, col, 30, 0.5);                        
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(cross1, "red");
+                        };
+                        hwind.Invoke(sw);
                     }
 
                     //加上 x y z 偏移
@@ -4932,7 +5007,12 @@ namespace SagensVision.VisionTool
                     {
                         HObject NewSide = new HObject();
                         HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
-                        hwind.viewWindow.displayHobject(NewSide, "red");
+                        
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.displayHobject(NewSide, "red");
+                        };
+                        hwind.Invoke(sw);
                     }
 
                     RowCoord[i] = row;

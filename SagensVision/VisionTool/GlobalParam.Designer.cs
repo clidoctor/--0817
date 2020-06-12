@@ -65,6 +65,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.checkedListBox_save_data = new System.Windows.Forms.CheckedListBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.checkBox_useAnchorDeg = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -72,6 +74,7 @@
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -87,7 +90,7 @@
             // 
             // textBox_Start
             // 
-            this.textBox_Start.Location = new System.Drawing.Point(110, 36);
+            this.textBox_Start.Location = new System.Drawing.Point(102, 36);
             this.textBox_Start.Name = "textBox_Start";
             this.textBox_Start.Size = new System.Drawing.Size(100, 22);
             this.textBox_Start.TabIndex = 3;
@@ -418,11 +421,33 @@
             this.checkedListBox_save_data.Size = new System.Drawing.Size(237, 72);
             this.checkedListBox_save_data.TabIndex = 0;
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.checkBox_useAnchorDeg);
+            this.groupBox8.Location = new System.Drawing.Point(356, 366);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(265, 83);
+            this.groupBox8.TabIndex = 83;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "锚定选项";
+            // 
+            // checkBox_useAnchorDeg
+            // 
+            this.checkBox_useAnchorDeg.AutoSize = true;
+            this.checkBox_useAnchorDeg.Location = new System.Drawing.Point(103, 35);
+            this.checkBox_useAnchorDeg.Name = "checkBox_useAnchorDeg";
+            this.checkBox_useAnchorDeg.Size = new System.Drawing.Size(98, 18);
+            this.checkBox_useAnchorDeg.TabIndex = 0;
+            this.checkBox_useAnchorDeg.Text = "启用锚定角度";
+            this.checkBox_useAnchorDeg.UseVisualStyleBackColor = true;
+            this.checkBox_useAnchorDeg.CheckedChanged += new System.EventHandler(this.checkBox_useAnchorDeg_CheckedChanged);
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 556);
+            this.ClientSize = new System.Drawing.Size(679, 572);
+            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.simpleButton3);
@@ -450,6 +475,8 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox7.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -492,5 +519,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckedListBox checkedListBox_save_data;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.CheckBox checkBox_useAnchorDeg;
     }
 }

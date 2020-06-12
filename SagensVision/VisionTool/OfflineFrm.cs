@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Threading;
 namespace SagensVision
 {
     public partial class OfflineFrm : DevExpress.XtraEditors.XtraForm
@@ -90,15 +90,15 @@ namespace SagensVision
                 path = listBox1.SelectedItem.ToString();
             tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
         }
-
-        private void btn_run_Click(object sender, EventArgs e)
+        void RunOnce(bool AutoRun =false)
         {
             try
             {
+                //Thread.Sleep(100);
                 //run之前先判断该路径下面的文件是否齐全
                 path = (listBox1.Items[listBox1.SelectedIndex]).ToString();
-                string[] fileNames = Directory.GetFiles(path,"*.tiff");
-                if (fileNames.Length != 8 && fileNames.Length!=12)
+                string[] fileNames = Directory.GetFiles(path, "*.tiff");
+                if (fileNames.Length != 8 && fileNames.Length != 12)
                     MessageBox.Show("当前物料文件不齐全，请确认目录缺失文件");
                 else
                 {
@@ -113,17 +113,37 @@ namespace SagensVision
                             if ((listBox1.SelectedIndex + 1) == listBox1.Items.Count)
                             {
                                 MessageBox.Show("已到最后一个文件！");
+                                return;
                             }
                             else
                             {
                                 path = (listBox1.Items[listBox1.SelectedIndex + 1]).ToString();
-                                listBox1.SetSelected(listBox1.SelectedIndex + 1, true);
-
+                                //listBox1.SetSelected(listBox1.SelectedIndex + 1, true);
+                                Action show = () =>
+                                 {
+                                     listBox1.SetSelected(listBox1.SelectedIndex + 1, true);
+                                 };
+                                this.Invoke(show);
                             }
                             //MessageBox.Show("当前选中物料ID:" + (listBox1.SelectedIndex + 1).ToString());
-
+                            if (AutoRun)
+                            {
+                                Action show2 = () =>
+                                {
+                                    tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
+                                };
+                                this.Invoke(show2);
+                                RunOnce(true);
+                                 
+                            }
                         }
-                        tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
+
+                        //tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
+                        Action show3 = () =>
+                        {
+                            tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
+                        };
+                        this.Invoke(show3);
 
                     }
                     else
@@ -136,6 +156,25 @@ namespace SagensVision
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void btn_run_Click(object sender, EventArgs e)
+        {
+            if (!cb_RunAll.Checked)
+            {
+                RunOnce();
+            }
+            else
+            {
+                cb_runMode.Checked = true;
+                ThreadPool.QueueUserWorkItem(delegate
+                {                    
+                    RunOnce(true);
+                   
+                });               
+               
+            }
+                
         }
 
         private void cb_runMode_CheckedChanged(object sender, EventArgs e)
