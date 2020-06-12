@@ -30,6 +30,10 @@ namespace SagensVision.VisionTool
             Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl1.Series[0].View;
             int totalCnt = MyGlobal.globalConfig.OkCnt + MyGlobal.globalConfig.AnchorErrorCnt +
                 MyGlobal.globalConfig.FindEgdeErrorCnt + MyGlobal.globalConfig.ExploreHeightErrorCnt;
+            if (totalCnt == 0)
+            {
+                chartControl1.Series[0].Points[0].Values = new double[] { 1 };
+            }
             pie3DSeriesView.Titles[0].Text = $"总产能：{totalCnt}";
         }
 

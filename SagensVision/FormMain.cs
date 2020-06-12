@@ -86,10 +86,6 @@ namespace SagensVision
             {
                 MyGlobal.PathName = (SavePathName)StaticOperate.ReadXML(MyGlobal.AllTypePath + "AllType.xml",typeof(SavePathName));
             }
-            if (File.Exists(MyGlobal.imgRotatePath))
-            {
-                MyGlobal.imgRotateArr = (int[])StaticOperate.ReadXML(MyGlobal.imgRotatePath, typeof(int[]));
-            }
             if (MyGlobal.PathName.CurrentType!="")
             {                              
                 //读取Z值基准高度】

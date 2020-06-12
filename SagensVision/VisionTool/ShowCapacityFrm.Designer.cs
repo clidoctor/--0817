@@ -44,6 +44,7 @@
             ((object)(1D))}, 3);
             DevExpress.XtraCharts.Pie3DSeriesView pie3DSeriesView1 = new DevExpress.XtraCharts.Pie3DSeriesView();
             DevExpress.XtraCharts.SeriesTitle seriesTitle1 = new DevExpress.XtraCharts.SeriesTitle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShowCapacityFrm));
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
             this.btn_show_clear_data = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
@@ -63,10 +64,10 @@
             customLegendItem1.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(229)))), ((int)(((byte)(99)))));
             customLegendItem1.Name = "Custom Legend Item 1";
             customLegendItem1.Text = "OK";
-            customLegendItem2.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(95)))), ((int)(((byte)(98)))));
+            customLegendItem2.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(105)))), ((int)(((byte)(244)))));
             customLegendItem2.Name = "Custom Legend Item 2";
             customLegendItem2.Text = "定位异常";
-            customLegendItem3.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
+            customLegendItem3.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(67)))), ((int)(((byte)(167)))));
             customLegendItem3.Name = "Custom Legend Item 3";
             customLegendItem3.Text = "抓边异常";
             customLegendItem4.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
@@ -82,8 +83,8 @@
             this.chartControl1.Name = "chartControl1";
             series1.Name = "Series1";
             seriesPoint1.ColorSerializable = "#00E563";
-            seriesPoint2.ColorSerializable = "#FF5F62";
-            seriesPoint3.ColorSerializable = "#FF2F31";
+            seriesPoint2.ColorSerializable = "#EC69F4";
+            seriesPoint3.ColorSerializable = "#EA43A7";
             seriesPoint4.ColorSerializable = "#C40002";
             series1.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
             seriesPoint1,
@@ -117,7 +118,9 @@
             this.Controls.Add(this.btn_show_clear_data);
             this.Controls.Add(this.chartControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ShowCapacityFrm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ShowCapacityFrm";
             this.Load += new System.EventHandler(this.ShowCapacityFrm_Load);
             ((System.ComponentModel.ISupportInitialize)(simpleDiagram3D1)).EndInit();
