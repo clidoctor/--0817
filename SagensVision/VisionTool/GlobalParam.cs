@@ -43,7 +43,7 @@ namespace SagensVision.VisionTool
                 checkedListBox_save_data.SetItemChecked(0, MyGlobal.globalConfig.isSaveKdat);
                 checkedListBox_save_data.SetItemChecked(1, MyGlobal.globalConfig.isSaveFileDat);
                 checkedListBox_save_data.SetItemChecked(2, MyGlobal.globalConfig.isSaveImg);
-
+                checkBox_useAnchorDeg.Checked = MyGlobal.globalConfig.isUseAnchorDeg;
                 ///task
 
             }
@@ -148,7 +148,10 @@ namespace SagensVision.VisionTool
             LoadToUi();
         }
 
-       
+        private void checkBox_useAnchorDeg_CheckedChanged(object sender, EventArgs e)
+        {
+            MyGlobal.globalConfig.isUseAnchorDeg = checkBox_useAnchorDeg.Checked;
+        }
     }
 
     

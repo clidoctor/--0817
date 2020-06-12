@@ -118,6 +118,7 @@
             this.Controls.Add(this.chartControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ShowCapacityFrm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ShowCapacityFrm";
             this.Load += new System.EventHandler(this.ShowCapacityFrm_Load);
             ((System.ComponentModel.ISupportInitialize)(simpleDiagram3D1)).EndInit();

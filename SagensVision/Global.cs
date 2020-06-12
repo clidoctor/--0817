@@ -83,6 +83,7 @@ namespace SagensVision
         public bool isSaveKdat;
         public bool isSaveFileDat;
         public bool isSaveImg;
+        public bool isUseAnchorDeg = true;
 
         //图像旋转角度
         public int[] imgRotateArr = new int[4];
@@ -111,8 +112,7 @@ namespace SagensVision
                 this.currentType = value;
                 if (currentType!="")
                 {
-                    MyGlobal.ConfigPath = MyGlobal.AllTypePath + currentType  + "\\Config\\";
-                    MyGlobal.imgRotatePath = MyGlobal.AllTypePath + currentType + "\\Config\\" + "imgRotate.txt";
+                    MyGlobal.ConfigPath = MyGlobal.AllTypePath + currentType  + "\\Config\\";                   
                     MyGlobal.BaseTxtPath = MyGlobal.AllTypePath + currentType + "\\Config\\" + "BaseHeight.xml";
                     if (!Directory.Exists(MyGlobal.ConfigPath))
                     {
@@ -227,7 +227,7 @@ namespace SagensVision
                 Directory.CreateDirectory(path);
             }
 
-            string[] dirs = Directory.GetDirectories(MyGlobal.DataPath + "Image\\");
+            string[] dirs = Directory.GetDirectories(MyGlobal.DataPath + "ErrorImage\\");
 
             for (int i = 0; i < dirs.Length; i++)
             {
