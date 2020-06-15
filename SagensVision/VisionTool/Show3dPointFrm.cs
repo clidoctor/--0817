@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HalconDotNet;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,13 +12,15 @@ namespace SagensVision.VisionTool
 {
     public partial class Show3dPointFrm : Form
     {
-        double[] x, y, z;
-        public Show3dPointFrm(double[] x,double[] y,double[] z)
+        private double[] recordXCoord; double[] recordYCoord; double[] recordZCoord; string[] recordSigleTitle;
+        public Show3dPointFrm(double[] recordXCoord, double[] recordYCoord, double[] recordZCoord, string[] recordSigleTitle)
         {
             InitializeComponent();
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.recordXCoord = recordXCoord;
+            this.recordYCoord = recordYCoord;
+            this.recordZCoord = recordZCoord;
+            this.recordSigleTitle = recordSigleTitle;
+            hWindow_Final1.hWindowControl.HMouseUp += OnHMouseUp4;
         }
 
         private void Show3dPointFrm_Load(object sender, EventArgs e)
@@ -25,17 +28,79 @@ namespace SagensVision.VisionTool
             WindowState = FormWindowState.Maximized;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            ClassShow3D cs3d = new ClassShow3D();
-            float[] dx = new float[x.Length];
-            float[] dy = new float[y.Length];
-            float[] dz = new float[z.Length];
-            for (int i = 0; i < dx.Length; i++)
+            ShowProfileToWindow(recordXCoord, recordYCoord, recordZCoord, recordSigleTitle, false);
+        }
+
+
+        public void ShowProfileToWindow(double[] xcoord, double[] ycoord, double[] zcoord, string[] sigleTitle, bool showMsg)
+        {
+           
+            if (recordXCoord == null || recordYCoord == null || recordSigleTitle == null || recordXCoord.Length == 0 || recordYCoord.Length == 0 || recordSigleTitle.Length == 0)
             {
-                dx[i] = Convert.ToSingle((x[i]-200).ToString());
-                dy[i] = Convert.ToSingle(y[i].ToString());
-                dz[i] = Convert.ToSingle(z[i].ToString());
+                return;
             }
-            cs3d.Show3D(dx, dy, dz, hWindowControl1.HalconWindow);
+            HObject regpot;
+            HTuple newRecordX = new HTuple(recordXCoord) * 20 - 4000;
+            HOperatorSet.GenRegionPoints(out regpot, new HTuple(newRecordX) , new HTuple(recordYCoord) * 20);
+          
+            HObject ImageConst;
+            HOperatorSet.GenImageConst(out ImageConst, "byte", 5000, 5000);
+            Action sw = () =>
+            {
+                hWindow_Final1.HobjectToHimage(ImageConst);
+                hWindow_Final1.viewWindow.displayHobject(regpot, "green", true, 20);
+            };
+            this.Invoke(sw);
+            
+
+
+            if (!showMsg)
+            {
+                for (int i = 0; i < recordSigleTitle.Length; i++)
+                {
+                    
+                    Action sw1 = () =>
+                    {
+                        hWindow_Final1.viewWindow.dispMessage($"{recordSigleTitle[i]} +({recordZCoord[i]})", "blue", newRecordX[i], recordYCoord[i] * 20);
+                    };
+                    this.Invoke(sw1);
+                }
+            }
+            HObject contour;
+            newRecordX = newRecordX.TupleConcat(recordXCoord[0] * 20 - 4000);
+            HOperatorSet.GenContourPolygonXld(out contour, new HTuple(newRecordX), new HTuple(recordYCoord, recordYCoord[0]) * 20);
+            Action sw2 = () =>
+            {
+                hWindow_Final1.viewWindow.displayHobject(contour, "white");
+
+
+
+            };
+            this.Invoke(sw2);
+            
+
+            contour.Dispose();
+
+            regpot.Dispose();
+            ImageConst.Dispose();
+        }
+        private int MouseClickCnt4 = 0;
+        private bool ShowMsg = false;
+
+        private void OnHMouseUp4(object sender, HMouseEventArgs e)
+        {
+            MouseClickCnt4++;
+            if (MouseClickCnt4 == 2)
+            {
+                ShowProfileToWindow(null, null, null, null, ShowMsg);
+                ShowMsg = !ShowMsg;
+                MouseClickCnt4 = 0;
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            MouseClickCnt4 = 0;
         }
     }
 }

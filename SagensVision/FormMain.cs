@@ -62,7 +62,7 @@ namespace SagensVision
                 throw;
             }
         }
-        private HWindow_Final ShowProfile = new HWindow_Final();
+        private HWindowControl ShowProfile = new HWindowControl();
         void Init()
         {
             MyGlobal.GoSDK.SaveKdatDirectoy = "SaveKdatDirectoy//";
@@ -184,11 +184,11 @@ namespace SagensVision
             MyGlobal.hWindow_Final[1].hWindowControl.HMouseUp += OnHMouseUp1;
             MyGlobal.hWindow_Final[2].hWindowControl.HMouseUp += OnHMouseUp2;
             MyGlobal.hWindow_Final[3].hWindowControl.HMouseUp += OnHMouseUp3;
-            ShowProfile.hWindowControl.HMouseUp += OnHMouseUp4;
 
             ShowProfile.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Controls.Add(ShowProfile, 2, 1);
-            ShowProfile.Show3dTrackDel += Show3dPointFrm;
+            //ShowProfile.Show3dTrackDel += Show3dPointFrm;
+            ShowProfile.ContextMenuStrip = contextMenuStrip1;
             MyGlobal.hWindow_Final[0].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[1].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
@@ -214,20 +214,9 @@ namespace SagensVision
         private int MouseClickCnt1 = 0;
         private int MouseClickCnt2 = 0;
         private int MouseClickCnt3 = 0;
-        private int MouseClickCnt4 = 0;
 
-        private bool ShowMsg = false;
 
-        private void OnHMouseUp4(object sender, HMouseEventArgs e)
-        {
-            MouseClickCnt4++;
-            if (MouseClickCnt4 == 2)
-            {
-                ShowProfileToWindow(null, null, null, null, false, ShowMsg);
-                ShowMsg = !ShowMsg;
-                MouseClickCnt4 = 0;
-            }
-        }
+        
         private void OnHMouseUp(object sender, EventArgs e)
         {
             MouseClickCnt++;
@@ -268,6 +257,49 @@ namespace SagensVision
         {
             EnlargeFrm enlargefrm = new EnlargeFrm(MyGlobal.hWindow_Final[idx].Image, idx);
             enlargefrm.Show();
+        }
+
+        private void 点位详情ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (recordXCoord == null || recordXCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordYCoord == null || recordYCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordZCoord == null || recordZCoord.Length == 0)
+            {
+                return;
+            }
+            if (recordXCoord.Length != recordYCoord.Length || recordXCoord.Length != recordZCoord.Length)
+            {
+                return;
+            }
+            Show3dPointFrm spf = new Show3dPointFrm(recordXCoord, recordYCoord, recordZCoord, recordSigleTitle);
+            spf.Show();
+        }
+        private void Show3dPointFrm(HWindow_Final hwindowfinal)
+        {
+            //if (recordXCoord == null || recordXCoord.Length == 0)
+            //{
+            //    return;
+            //}
+            //if (recordYCoord == null || recordYCoord.Length == 0)
+            //{
+            //    return;
+            //}
+            //if (recordZCoord == null || recordZCoord.Length == 0)
+            //{
+            //    return;
+            //}
+            //if (recordXCoord.Length != recordYCoord.Length || recordXCoord.Length != recordZCoord.Length)
+            //{
+            //    return;
+            //}
+            //Show3dPointFrm spf = new Show3dPointFrm(recordXCoord, recordYCoord, recordZCoord);
+            //spf.Show();
         }
         #endregion
 
@@ -2114,13 +2146,13 @@ namespace SagensVision
 
 
                     ShowProfileToWindow(xcoord, ycoord, zcoord, sigleTitle, true, true);
-                    HObject cross = new HObject();
-                    HOperatorSet.GenCrossContourXld(out cross, centerR * 20 - 4000, centerC * 20, 30, 0);                   
-                    Action sw = () =>
-                    {
-                        ShowProfile.viewWindow.displayHobject(cross, "red", true, 10);
-                    };
-                    this.Invoke(sw);
+                    //HObject cross = new HObject();
+                    //HOperatorSet.GenCrossContourXld(out cross, centerR * 20 - 4000, centerC * 20, 30, 0);                   
+                    //Action sw = () =>
+                    //{
+                    //    ShowProfile.viewWindow.displayHobject(cross, "red", true, 10);
+                    //};
+                    //this.Invoke(sw);
                 }
 
 
@@ -2149,6 +2181,20 @@ namespace SagensVision
             {
                 return;
             }
+            ClassShow3D cs3d = new ClassShow3D();
+            float[] dx = new float[recordXCoord.Length];
+            float[] dy = new float[recordYCoord.Length];
+            float[] dz = new float[recordZCoord.Length];
+            for (int i = 0; i < dx.Length; i++)
+            {
+                dx[i] = Convert.ToSingle((recordXCoord[i] - 200).ToString());
+                dy[i] = Convert.ToSingle(recordYCoord[i].ToString());
+                dz[i] = Convert.ToSingle(recordZCoord[i].ToString());
+            }
+            cs3d.Show3D(dx, dy, dz, ShowProfile.HalconWindow);
+
+
+            /*
             HObject regpot;
             HTuple newRecordX = new HTuple(recordXCoord) * 20 - 4000;
             HOperatorSet.GenRegionPoints(out regpot, new HTuple(newRecordX) , new HTuple(recordYCoord) * 20);
@@ -2182,7 +2228,10 @@ namespace SagensVision
             //HOperatorSet.GenContourPolygonXld(out contour1, new HTuple(recordXCoord[recordXCoord.Length - 1],new HTuple(recordYCoord[0));
             Action sw2 = () =>
             {
-                ShowProfile.viewWindow.displayHobject(contour, "white");
+                //ShowProfile.viewWindow.displayHobject(contour, "white");
+
+
+                
             };
             this.Invoke(sw2);
             
@@ -2191,29 +2240,10 @@ namespace SagensVision
 
             regpot.Dispose();
             ImageConst.Dispose();
+            */
         }
 
-        private void Show3dPointFrm(HWindow_Final hwindowfinal)
-        {
-            if (recordXCoord == null || recordXCoord.Length == 0)
-            {
-                return;
-            }
-            if (recordYCoord == null || recordYCoord.Length == 0)
-            {
-                return;
-            }
-            if (recordZCoord == null || recordZCoord.Length == 0)
-            {
-                return;
-            }
-            if (recordXCoord.Length!=recordYCoord.Length || recordXCoord.Length!=recordZCoord.Length)
-            {
-                return;
-            }
-            Show3dPointFrm spf = new Show3dPointFrm(recordXCoord, recordYCoord, recordZCoord);
-            spf.Show();
-        }
+       
 
 
         bool TcpIsConnect = false;
@@ -2302,7 +2332,7 @@ namespace SagensVision
                             {
                                 MyGlobal.hWindow_Final[i].ClearWindow();
                             }
-                            ShowProfile.ClearWindow();
+                            ShowProfile.HalconWindow.ClearWindow();
                             if (MyGlobal.ReceiveMsg.Contains("Start") && MyGlobal.globalConfig.isSaveFileDat)
                             {
                                 MyGlobal.GoSDK.SaveDatFileDirectory = MyGlobal.SaveDatFileDirectory + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
@@ -2974,7 +3004,7 @@ namespace SagensVision
             openfile.Multiselect = true;
             if (openfile.ShowDialog() == DialogResult.OK)
             {
-                ShowProfile.ClearWindow();
+                ShowProfile.HalconWindow.ClearWindow();
                 for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                 {
                     for (int j = 0; j < 2; j++)
@@ -3211,7 +3241,6 @@ namespace SagensVision
             MouseClickCnt1 = 0;
             MouseClickCnt2 = 0;
             MouseClickCnt3 = 0;
-            MouseClickCnt4 = 0;
         }
 
 
@@ -3319,5 +3348,7 @@ namespace SagensVision
             }
             barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
         }
+
+        
     }
 }

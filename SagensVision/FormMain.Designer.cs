@@ -122,6 +122,8 @@
             this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.点位详情ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -152,6 +154,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // documentGroup1
@@ -653,10 +656,10 @@
             this.dockPanel2.Controls.Add(this.dockPanel2_Container);
             this.dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
             this.dockPanel2.ID = new System.Guid("2a08fcca-ef38-4a4b-aefa-fdffbb3950c6");
-            this.dockPanel2.Location = new System.Drawing.Point(1175, 24);
+            this.dockPanel2.Location = new System.Drawing.Point(1175, 48);
             this.dockPanel2.Name = "dockPanel2";
             this.dockPanel2.OriginalSize = new System.Drawing.Size(204, 469);
-            this.dockPanel2.Size = new System.Drawing.Size(204, 770);
+            this.dockPanel2.Size = new System.Drawing.Size(204, 746);
             this.dockPanel2.Text = "消息栏";
             // 
             // dockPanel2_Container
@@ -664,7 +667,7 @@
             this.dockPanel2_Container.Controls.Add(this.xtraTabControl1);
             this.dockPanel2_Container.Location = new System.Drawing.Point(5, 23);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(195, 743);
+            this.dockPanel2_Container.Size = new System.Drawing.Size(195, 719);
             this.dockPanel2_Container.TabIndex = 0;
             // 
             // xtraTabControl1
@@ -673,7 +676,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(195, 743);
+            this.xtraTabControl1.Size = new System.Drawing.Size(195, 719);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
@@ -683,13 +686,13 @@
             this.xtraTabPage1.Controls.Add(this.simpleButton1);
             this.xtraTabPage1.Controls.Add(this.textBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(189, 714);
+            this.xtraTabPage1.Size = new System.Drawing.Size(189, 690);
             this.xtraTabPage1.Text = "工位信息";
             // 
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.simpleButton1.Location = new System.Drawing.Point(0, 690);
+            this.simpleButton1.Location = new System.Drawing.Point(0, 666);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(189, 24);
@@ -703,7 +706,7 @@
             this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(189, 714);
+            this.textBox1.Size = new System.Drawing.Size(189, 690);
             this.textBox1.TabIndex = 0;
             // 
             // panelContainer1
@@ -727,7 +730,7 @@
             this.dockPanel1.ID = new System.Guid("19d979f9-0ad1-47f3-b52e-156227f70c6c");
             this.dockPanel1.Location = new System.Drawing.Point(0, 0);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.OriginalSize = new System.Drawing.Size(200, 200);
+            this.dockPanel1.OriginalSize = new System.Drawing.Size(187, 539);
             this.dockPanel1.Size = new System.Drawing.Size(187, 556);
             this.dockPanel1.Text = "功能设置";
             // 
@@ -902,7 +905,7 @@
             this.dockPanel7.ID = new System.Guid("337f6810-d207-453f-9b8a-799f93b270c4");
             this.dockPanel7.Location = new System.Drawing.Point(0, 556);
             this.dockPanel7.Name = "dockPanel7";
-            this.dockPanel7.OriginalSize = new System.Drawing.Size(187, 214);
+            this.dockPanel7.OriginalSize = new System.Drawing.Size(187, 207);
             this.dockPanel7.Size = new System.Drawing.Size(187, 214);
             // 
             // dockPanel7_Container
@@ -1056,13 +1059,27 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.点位详情ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 26);
+            // 
+            // 点位详情ToolStripMenuItem
+            // 
+            this.点位详情ToolStripMenuItem.Name = "点位详情ToolStripMenuItem";
+            this.点位详情ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.点位详情ToolStripMenuItem.Text = "点位详情";
+            this.点位详情ToolStripMenuItem.Click += new System.EventHandler(this.点位详情ToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1379, 821);
-            this.Controls.Add(this.panelContainer1);
             this.Controls.Add(this.dockPanel2);
+            this.Controls.Add(this.panelContainer1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);
@@ -1103,6 +1120,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1201,6 +1219,8 @@
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
         private DevExpress.XtraBars.BarSubItem barSubItem4;
         private DevExpress.XtraBars.Docking.DockPanel panelContainer1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 点位详情ToolStripMenuItem;
     }
 }
 

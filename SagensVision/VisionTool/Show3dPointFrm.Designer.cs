@@ -30,27 +30,36 @@ namespace SagensVision.VisionTool
         /// </summary>
         private void InitializeComponent()
         {
-            this.hWindowControl1 = new HalconDotNet.HWindowControl();
+            this.components = new System.ComponentModel.Container();
+            this.hWindow_Final1 = new ChoiceTech.Halcon.Control.HWindow_Final();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // hWindowControl1
+            // hWindow_Final1
             // 
-            this.hWindowControl1.BackColor = System.Drawing.Color.Black;
-            this.hWindowControl1.BorderColor = System.Drawing.Color.Black;
-            this.hWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hWindowControl1.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
-            this.hWindowControl1.Location = new System.Drawing.Point(0, 0);
-            this.hWindowControl1.Name = "hWindowControl1";
-            this.hWindowControl1.Size = new System.Drawing.Size(1046, 620);
-            this.hWindowControl1.TabIndex = 0;
-            this.hWindowControl1.WindowSize = new System.Drawing.Size(1046, 620);
+            this.hWindow_Final1.BackColor = System.Drawing.Color.Transparent;
+            this.hWindow_Final1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.hWindow_Final1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hWindow_Final1.DrawModel = false;
+            this.hWindow_Final1.EditModel = true;
+            this.hWindow_Final1.Image = null;
+            this.hWindow_Final1.Location = new System.Drawing.Point(0, 0);
+            this.hWindow_Final1.Name = "hWindow_Final1";
+            this.hWindow_Final1.Size = new System.Drawing.Size(825, 802);
+            this.hWindow_Final1.TabIndex = 0;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Interval = 500;
+            this.timer1.Start();
             // 
             // Show3dPointFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1046, 620);
-            this.Controls.Add(this.hWindowControl1);
+            this.ClientSize = new System.Drawing.Size(825, 802);
+            this.Controls.Add(this.hWindow_Final1);
             this.Name = "Show3dPointFrm";
             this.Text = "Show3dPointFrm";
             this.Load += new System.EventHandler(this.Show3dPointFrm_Load);
@@ -60,6 +69,7 @@ namespace SagensVision.VisionTool
 
         #endregion
 
-        private HWindowControl hWindowControl1;
+        private ChoiceTech.Halcon.Control.HWindow_Final hWindow_Final1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
