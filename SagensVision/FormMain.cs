@@ -1048,8 +1048,6 @@ namespace SagensVision
             }
         }
 
-        delegate void ShowToUI();
-
         private string RunOutLine(int Station, int id,bool SaveBase = false)
         {
 
@@ -1800,7 +1798,8 @@ namespace SagensVision
                 //#endregion
                 #endregion
 
-
+                double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
+                double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
 
                 Dictionary<int, string> everySeg = new Dictionary<int, string>();
                 double[] xcoord, ycoord, zcoord; string[] keypt;
@@ -1820,6 +1819,113 @@ namespace SagensVision
 
                     }
                 }
+                double[] RecX = new double[totalNum];double[] RecY = new double[totalNum];
+                int nID = 0;
+                for (int i = 0; i < Yorigin.Count; i++)
+                {
+                    for (int j = 0; j < Yorigin[i].Length; j++)
+                    {
+                        RecX[nID] = Xorigin[i][j];
+                        RecY[nID] = Yorigin[i][j];
+                        nID++;
+                    }
+                   
+                }
+
+                #region 判断离中心点距离是否超出范围
+                //计算 中心
+                HObject Cnt = new HObject();
+                HOperatorSet.GenContourPolygonXld(out Cnt, new HTuple(RecX), new HTuple(RecY));
+                HTuple centerR, centerC, phi, Len1, Len2, ptorder;
+                HOperatorSet.FitRectangle2ContourXld(Cnt, "tukey", -1, 0, 0, 3, 2, out centerR, out centerC, out phi, out Len1, out Len2, out ptorder);
+
+                if (SaveBase)
+                {
+                    //计算到中心点距离
+                    List<double[]> tempDist = new List<double[]>();
+                    List<double[]> tempY = new List<double[]>();
+                    for (int i = 0; i < Xorigin.Count; i++)
+                    {
+                        double[] x1 = new double[Xorigin[i].Length];
+                        for (int j = 0; j < Xorigin[i].Length; j++)
+                        {                           
+                            HTuple dist = new HTuple();
+                            HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], centerR, centerC, out dist);
+                            x1[j] = Math.Round(dist.D, 3);
+                        }
+                        tempDist.Add(x1);
+                    }
+                    MyGlobal.xyzBaseCoord.Dist = tempDist;
+                    MyGlobal.xyzBaseCoord.intersectCoordList = AnchorList;
+
+                    MyGlobal.xyzBaseCoord.XCoord = Xorigin;
+                    MyGlobal.xyzBaseCoord.YCoord = Yorigin;
+                    MyGlobal.xyzBaseCoord.ZCoord = ZCoord;
+                    StaticOperate.WriteXML(MyGlobal.xyzBaseCoord, MyGlobal.BaseTxtPath);
+                    //读取Z值基准高度】
+                    if (File.Exists(MyGlobal.BaseTxtPath))
+                    {
+                        MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
+                    }
+                }
+                //判断X Y 
+                //计算到中心点距离
+                if (MyGlobal.xyzBaseCoord.Dist != null)
+                {
+                    for (int i = 0; i < Xorigin.Count; i++)
+                    {
+
+                        for (int j = 0; j < Xorigin[i].Length; j++)
+                        {
+                            HTuple Dist = 0;
+                            HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], centerR, centerC, out Dist);
+                            double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
+                            double Sub = (Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j])* xyResolution;
+                            if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
+                            {
+                                if (MyGlobal.hWindow_Final[i] != null)
+                                {
+                                    Action sw = () =>
+                                    {
+                                        MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                    };
+                                    this.Invoke(sw);
+                                }
+                                return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                            }
+                        }
+                    }
+                }
+                #endregion
+
+                HTuple SubX = new HTuple(); HTuple SubY = new HTuple();
+                if (MyGlobal.xyzBaseCoord.Dist != null)
+                {
+                    #region 重复性数据
+                    //将当前数据转换到模板数据取差值                 
+                    for (int i = 0; i < 4; i++)
+                    {
+                        HTuple HomMat = new HTuple();
+                        HTuple ModelX = new HTuple(); HTuple ModelY = new HTuple();
+                        HOperatorSet.VectorAngleToRigid(AnchorList[i].Row, AnchorList[i].Col, AnchorList[i].Angle, MyGlobal.xyzBaseCoord.intersectCoordList[i].Row,
+                            MyGlobal.xyzBaseCoord.intersectCoordList[i].Col, MyGlobal.xyzBaseCoord.intersectCoordList[i].Angle, out HomMat);
+                        HOperatorSet.AffineTransPoint2d(HomMat, new HTuple(Yorigin[i]), new HTuple(Xorigin[i]), out ModelY, out ModelX);
+
+                        //HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.XCoord[i])*Xresolution;
+                        //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
+                        HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.intersectCoordList[i].Col) * Xresolution;
+                        HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.intersectCoordList[i].Row) * Yresolution;
+                        SubX = SubX.TupleConcat(subX);
+                        SubY = SubY.TupleConcat(subY);
+
+                    }
+
+                    #endregion
+                }
+
+
+
+
                 xcoord = new double[totalNum]; ycoord = new double[totalNum]; zcoord = new double[totalNum];
                 keypt = new string[totalNum]; double[] orginalR = new double[totalNum]; double[] orginalC = new double[totalNum];
                 int ind = 0; int ind2 = 0;
@@ -1839,17 +1945,7 @@ namespace SagensVision
                         HTuple row = XCoord[i][j];
                         HTuple col = YCoord[i][j];
 
-                        if (Station == 4)
-                        {
-                            HObject NewSide = new HObject();
-                            HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
-                            Action sw = () =>
-                            {
-                                MyGlobal.hWindow_Final[0].viewWindow.displayHobject(NewSide, "red");
-                            };
-                            this.Invoke(sw);
-                            
-                        }
+                      
                         //if (i == 89)
                         //{
                         //    Debug.WriteLine("xcoord" + i+"j"+j);
@@ -1892,6 +1988,8 @@ namespace SagensVision
                 StringBuilder StrOrginalHeader = new StringBuilder();
                 StringBuilder StrOrginalData = new StringBuilder();
                 StringBuilder StrAxisData = new StringBuilder();
+                StringBuilder StrRelative = new StringBuilder();
+
                 //test
                 StringBuilder pix = new StringBuilder();
 
@@ -1968,19 +2066,21 @@ namespace SagensVision
 
 
 
-                    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
-                    double xorigin = (OrginalX1[start] - PixC) * Xresolution;
-                    double yorigin = (OrginalY1[start] - PixR) * Yresolution;
+                    
+                    double xorigin = (OrginalX1[start] * Xresolution - PixC * Xresolution) ;
+                    double yorigin = (OrginalY1[start] * Yresolution - PixR * Yresolution) ;
 
                     //test
                     double Pix_x = OrginalX1[start] * Xresolution;
                     double Pix_y = OrginalY1[start] * Yresolution;
 
-
-
                     double Xrelative = X1 - AxisC;
                     double Yrelative = Y1 - AxisR;
+                    
+                    double Xrelative1 = MyGlobal.xyzBaseCoord.Dist == null ? 0 : SubX[i].D;
+                    double Yrelative1 = MyGlobal.xyzBaseCoord.Dist == null ? 0 : SubY[i].D;
+
+
 
                     if (i == 0)
                     {
@@ -2009,6 +2109,7 @@ namespace SagensVision
                         StrOrginalHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
                         StrOrginalData.Append(saveTime + "\t" + xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(saveTime + "\t" + Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        StrRelative.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         //test
                         pix.Append(saveTime + "\t" + Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
@@ -2018,6 +2119,8 @@ namespace SagensVision
                         StrOrginalHeader.Append(sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t" + sigleTitle[i] + "_Z" + "\t");
                         StrOrginalData.Append(xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        StrRelative.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+
                         //test
                         pix.Append(Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
@@ -2027,6 +2130,8 @@ namespace SagensVision
                         StrOrginalHeader.Append("\r\n");
                         StrOrginalData.Append("\r\n");
                         StrAxisData.Append("\r\n");
+                        StrRelative.Append("\r\n");
+
                         //test
                         pix.Append("\r\n");
                     }
@@ -2052,81 +2157,13 @@ namespace SagensVision
                 }
                 StaticOperate.writeTxt("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d\\Laser3D_1.txt", Str.ToString());
 
-                //计算 中心
-                HObject Cnt = new HObject();
-                HOperatorSet.GenContourPolygonXld(out Cnt, new HTuple(xcoord), new HTuple(ycoord));
-                HTuple centerR, centerC, phi, Len1, Len2, ptorder;
-                HOperatorSet.FitRectangle2ContourXld(Cnt, "tukey", -1, 0, 0, 3, 2, out centerR, out centerC, out phi, out Len1, out Len2, out ptorder);
-                
-                if (SaveBase)
-                {
-                    //计算到中心点距离
-                    List<double[][]> tempDist = new List<double[][]>();
-                    List<double[][]> tempY = new List<double[][]>();
-                    for (int i = 0; i < XCoord.Count; i++)
-                    {
-                        double[][] x1 = new double[XCoord[i].GetLength(0)][];
-                        for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                        {
-                            x1[j] = new double[1];
-                            HTuple dist = new HTuple();
-                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out dist);
-                            x1[j][0] = Math.Round(dist.D,3);
-                        }
-                        tempDist.Add(x1);
-                    }
-                    MyGlobal.xyzBaseCoord.Dist = tempDist;
-                    MyGlobal.xyzBaseCoord.centerR = centerR.D;
-                    MyGlobal.xyzBaseCoord.centerC = centerC.D;
-                   
-                    MyGlobal.xyzBaseCoord.XCoord = XCoord;
-                    MyGlobal.xyzBaseCoord.YCoord = YCoord;
-                    MyGlobal.xyzBaseCoord.ZCoord = ZCoord;
-                    StaticOperate.WriteXML(MyGlobal.xyzBaseCoord, MyGlobal.BaseTxtPath);
-                    //读取Z值基准高度】
-                    if (File.Exists(MyGlobal.BaseTxtPath))
-                    {
-                        MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
-                    }
-                }
-               
-                //判断X Y 
-                //计算到中心点距离
-                if (MyGlobal.xyzBaseCoord.Dist != null)
-                {
-                    for (int i = 0; i < XCoord.Count; i++)
-                    {
-
-                        for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                        {
-                            HTuple Dist = 0;
-                            HOperatorSet.DistancePp(XCoord[i][j][0], YCoord[i][j][0], centerR, centerC, out Dist);
-                            double Sub = Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j][0];
-                            if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
-                            {
-                                if (MyGlobal.hWindow_Final[i] != null)
-                                {                                   
-                                    Action sw = () =>
-                                    {
-                                        MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
-                                    };
-                                    this.Invoke(sw);
-                                }
-                                return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
-                            }
-                        }
-                    }
-                }
-
-
                 if (Station == 4)
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
+                    StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrRelative.ToString(), "Relative");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), pix.ToString(), "pix");
-
-                    double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
-                    double Yresolution = MyGlobal.globalConfig.dataContext.yResolution;
+                   
                     for (int i = 0; i < 4; i++)
                     {
                         HTuple deg = 0;
@@ -2837,8 +2874,7 @@ namespace SagensVision
         public void RunOffline(string ImagePath)
         {
 
-            ThreadPool.QueueUserWorkItem(delegate
-            {
+            
                 try
                 {
                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
@@ -2874,9 +2910,10 @@ namespace SagensVision
                     for (int i = 0; i < 4; i++)
                     {
                         string OK = RunOutLine(i + 1, i);
-                        if (OK != "OK")
+                   
+                    if (OK != "OK")
                         {
-                            ShowAndSaveMsg(OK);
+                           
                                 //for (int j = 0; j < MyGlobal.ImageMulti.Count; j++)
                                 //{
                                 //    for (int k = 0; j < k; j++)
@@ -2899,6 +2936,7 @@ namespace SagensVision
 
                         if (i == 3)
                         {
+                            ShowAndSaveMsg(OK);
                             if (errstr.Length > 0)
                             {
                                 ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
@@ -2911,8 +2949,7 @@ namespace SagensVision
 
                     ShowAndSaveMsg("RunOffline :" + ex.Message);
                 }
-
-            });
+          
         }
 
         public void RunBaseHeight()
@@ -2957,6 +2994,10 @@ namespace SagensVision
                 {
                     string OK = RunOutLine(i + 1, i);
                     if (OK != "OK")
+                    {
+                        ShowAndSaveMsg(OK);
+                    }
+                    if (i==3)
                     {
                         ShowAndSaveMsg(OK);
                     }

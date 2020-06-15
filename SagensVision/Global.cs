@@ -142,12 +142,11 @@ namespace SagensVision
 
     public class XYZBaseCoord
     {
-        public List<double[][]> XCoord;
-        public List<double[][]> YCoord;
+        public List<double[]> XCoord;
+        public List<double[]> YCoord;
         public List<double[][]> ZCoord;
-        public List<double[][]> Dist;
-        public double centerR;
-        public double centerC;
+        public List<double[]> Dist;
+        public List<IntersetionCoord> intersectCoordList = new List<IntersetionCoord>();
     }
 
     public static class StaticOperate

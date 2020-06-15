@@ -1628,8 +1628,6 @@ namespace SagensVision.VisionTool
             hwindow_final2.viewWindow.displayHobject(Contourline, "green");
             MessageBox.Show("拟合成功！");
         }
-
-
         public void FindFirstAnchor(int SideId, out HTuple Row, out HTuple Col)
         {
             Row = new HTuple(); Col = new HTuple();
