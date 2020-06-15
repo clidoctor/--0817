@@ -112,7 +112,7 @@ namespace SagensVision
                 this.currentType = value;
                 if (currentType!="")
                 {
-                    MyGlobal.ConfigPath = MyGlobal.AllTypePath + currentType  + "\\Config\\";                   
+                    MyGlobal.ConfigPath = MyGlobal.AllTypePath + currentType  + "\\Config\\";
                     MyGlobal.BaseTxtPath = MyGlobal.AllTypePath + currentType + "\\Config\\" + "BaseHeight.xml";
                     if (!Directory.Exists(MyGlobal.ConfigPath))
                     {
