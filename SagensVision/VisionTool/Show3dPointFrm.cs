@@ -85,7 +85,7 @@ namespace SagensVision.VisionTool
             ImageConst.Dispose();
         }
         private int MouseClickCnt4 = 0;
-        private bool ShowMsg = false;
+        private bool ShowMsg = false; 
 
         private void OnHMouseUp4(object sender, HMouseEventArgs e)
         {
