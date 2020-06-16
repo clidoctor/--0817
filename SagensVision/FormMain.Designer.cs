@@ -656,10 +656,10 @@
             this.dockPanel2.Controls.Add(this.dockPanel2_Container);
             this.dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
             this.dockPanel2.ID = new System.Guid("2a08fcca-ef38-4a4b-aefa-fdffbb3950c6");
-            this.dockPanel2.Location = new System.Drawing.Point(1175, 48);
+            this.dockPanel2.Location = new System.Drawing.Point(1175, 24);
             this.dockPanel2.Name = "dockPanel2";
             this.dockPanel2.OriginalSize = new System.Drawing.Size(204, 469);
-            this.dockPanel2.Size = new System.Drawing.Size(204, 746);
+            this.dockPanel2.Size = new System.Drawing.Size(204, 770);
             this.dockPanel2.Text = "消息栏";
             // 
             // dockPanel2_Container
@@ -667,7 +667,7 @@
             this.dockPanel2_Container.Controls.Add(this.xtraTabControl1);
             this.dockPanel2_Container.Location = new System.Drawing.Point(5, 23);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(195, 719);
+            this.dockPanel2_Container.Size = new System.Drawing.Size(195, 743);
             this.dockPanel2_Container.TabIndex = 0;
             // 
             // xtraTabControl1
@@ -676,7 +676,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(195, 719);
+            this.xtraTabControl1.Size = new System.Drawing.Size(195, 743);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
@@ -686,16 +686,16 @@
             this.xtraTabPage1.Controls.Add(this.simpleButton1);
             this.xtraTabPage1.Controls.Add(this.textBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(189, 690);
+            this.xtraTabPage1.Size = new System.Drawing.Size(189, 714);
             this.xtraTabPage1.Text = "工位信息";
             // 
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.simpleButton1.Location = new System.Drawing.Point(0, 666);
+            this.simpleButton1.Location = new System.Drawing.Point(0, 684);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(189, 24);
+            this.simpleButton1.Size = new System.Drawing.Size(189, 30);
             this.simpleButton1.TabIndex = 1;
             this.simpleButton1.Text = "消息栏信息清除";
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
@@ -708,7 +708,7 @@
             this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(189, 685);
+            this.textBox1.Size = new System.Drawing.Size(189, 679);
             this.textBox1.TabIndex = 0;
             // 
             // panelContainer1
