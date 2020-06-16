@@ -2228,6 +2228,7 @@ namespace SagensVision
                 dy[i] = Convert.ToSingle(recordYCoord[i].ToString());
                 dz[i] = Convert.ToSingle(recordZCoord[i].ToString());
             }
+            cs3d.breakOut = true;
             cs3d.Show3D(dx, dy, dz, ShowProfile.HalconWindow);
 
 

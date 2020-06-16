@@ -13,8 +13,8 @@ namespace SagensVision.VisionTool
         public ClassShow3D()
         {
             // Default settings used in HDevelop 
-            HOperatorSet.SetSystem("width", 512);
-            HOperatorSet.SetSystem("height", 512);
+            HOperatorSet.SetSystem("width", 25000);
+            HOperatorSet.SetSystem("height", 25000);
             if (HalconAPI.isWindows)
                 HOperatorSet.SetSystem("use_window_thread", "true");
             //action();
@@ -1630,6 +1630,7 @@ namespace SagensVision.VisionTool
                         // catch (Exception) 
                         catch (HalconException HDevExpDefaultException1)
                         {
+                            Thread.Sleep(500);
                             HDevExpDefaultException1.ToHTuple(out hv_Exception);
 
                             //hv_GraphEvent = 0;
@@ -3970,7 +3971,8 @@ namespace SagensVision.VisionTool
         }
 
         public void Show3D(float[] x, float[] y, float[] z, HTuple windowhandle)
-        {
+        {           
+            //Dispose3D();
             HTuple hv_x = new HTuple();
             HTuple hv_y = new HTuple();
             HTuple hv_z = new HTuple();
@@ -3990,6 +3992,7 @@ namespace SagensVision.VisionTool
                 delegate
                 {
                     //Thread.Sleep(200);
+
                     breakOut = false;
                     HTuple Pose1 = new HTuple();
                     //HOperatorSet.SetLineWidth(windowhandle, 50);
@@ -4004,6 +4007,7 @@ namespace SagensVision.VisionTool
 "coord_y")).TupleConcat("coord_z").TupleConcat("false").TupleConcat("true").TupleConcat(3.5).TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
 
                 });
+            //Dispose3D();
 
 
         }
