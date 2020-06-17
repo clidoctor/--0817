@@ -745,7 +745,7 @@ namespace SagensVision.VisionTool
 
             return;
         }
-        public bool breakOut = false;
+        public static bool breakOut = false;
         // Chapter: Graphics / Output
         // Short Description: Interactively display 3D object models 
 
@@ -754,7 +754,7 @@ namespace SagensVision.VisionTool
                 HTuple hv_CamParam, HTuple hv_PoseIn, HTuple hv_GenParamName, HTuple hv_GenParamValue,
                 HTuple hv_Title, HTuple hv_Label, HTuple hv_Information, out HTuple hv_PoseOut)
         {
-
+            isRunOver = false;
             // Local iconic variables 
 
             HObject ho_Image, ho_ImageDump = null;
@@ -1485,6 +1485,13 @@ namespace SagensVision.VisionTool
 
                 while (true)
                 {
+                    if (breakOut)
+                    {
+                        isRunOver = true;
+                        hv_GraphEvent = 0;
+                        hv_Exit = 1;
+                        break;
+                    }
                     showEnd = false;
 
                     hv_VisualizeTB = new HTuple(((hv_SelectedObject.TupleMax())).TupleNotEqual(
@@ -1553,6 +1560,13 @@ namespace SagensVision.VisionTool
 
                     while (true)
                     {
+                        if (breakOut)
+                        {
+                            isRunOver = true;
+                            hv_GraphEvent = 0;
+                            hv_Exit = 1;
+                            break;
+                        }
                         showEnd = false;
                         try
                         {
@@ -1575,6 +1589,13 @@ namespace SagensVision.VisionTool
                                     {
                                         while (true)
                                         {
+                                            if (breakOut)
+                                            {
+                                                isRunOver = true;
+                                                hv_GraphEvent = 0;
+                                                hv_Exit = 1;
+                                                break;
+                                            }
                                             showEnd = false;
                                             HOperatorSet.GetMpositionSubPix(hv_WindowHandle, out hv_GraphButtonRow,
                                                     out hv_GraphButtonColumn, out hv_GraphButton);
@@ -1601,10 +1622,7 @@ namespace SagensVision.VisionTool
                                                 break;
                                             }
                                             //Keep waiting until mouse button is released or moved out of the window
-                                            if (breakOut)
-                                            {
-                                                break;
-                                            }
+                                            
                                         }
 
                                     }
@@ -1639,17 +1657,9 @@ namespace SagensVision.VisionTool
 
                             //Keep waiting
                         }
-                        if (breakOut)
-                        {
-                            hv_GraphEvent = 0;
-                            hv_Exit = 1;
-                            break;
-                        }
+                        
                     }
-                    if (breakOut)
-                    {
-                        break;
-                    }
+                    
                     if ((int)(hv_GraphEvent) != 0)
                     {
                         analyze_graph_event(ho_Image, hv_MouseMapping, hv_GraphButton, hv_GraphButtonRow,
@@ -1666,7 +1676,7 @@ namespace SagensVision.VisionTool
                     }
 
                 }
-
+                
                 //});
                 //
                 //Display final state with persistence, if requested
@@ -3969,7 +3979,7 @@ namespace SagensVision.VisionTool
             }
 
         }
-
+        static bool isRunOver = true; 
         public void Show3D(float[] x, float[] y, float[] z, HTuple windowhandle)
         {           
             //Dispose3D();
@@ -3985,27 +3995,33 @@ namespace SagensVision.VisionTool
             }
 
             HOperatorSet.GenObjectModel3dFromPoints(hv_x, hv_y, hv_z, out hv_ObjectModel3D);
-            HOperatorSet.WriteTuple(hv_x,"x.tup");
-            HOperatorSet.WriteTuple(hv_y, "y.tup");
-            HOperatorSet.WriteTuple(hv_z, "z.tup");
+            HObject contour;
+            HOperatorSet.GenContourPolygonXld(out contour, hv_x, hv_y);
+            HTuple Row, Column, Phi, Length1, Length2, PointOrder;
+            HOperatorSet.FitRectangle2ContourXld(contour, "regression", -1, 0, 0, 3, 2, out Row, out Column, out Phi, out Length1, out Length2, out PointOrder);
+            contour.Dispose();
+            //HOperatorSet.WriteTuple(hv_x,"x.tup");
+            //HOperatorSet.WriteTuple(hv_y, "y.tup");
+            //HOperatorSet.WriteTuple(hv_z, "z.tup");
             ThreadPool.QueueUserWorkItem(
                 delegate
                 {
-                    //Thread.Sleep(200);
+                    while (!isRunOver) ;//等待上一次结束
+                    isRunOver = false;
 
                     breakOut = false;
                     HTuple Pose1 = new HTuple();
                     //HOperatorSet.SetLineWidth(windowhandle, 50);
-                    HOperatorSet.CreatePose(100, -100, 0, 0, 0, 0, "Rp+T", "gba", "point",out  Pose1);
+                    HOperatorSet.CreatePose(-Row.TupleRound().ToIArr()[0], -Column.TupleRound().ToIArr()[0], 0, 0, 180, 0, "Rp+T", "gba", "point",out  Pose1);
                     //                visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
                     //new HTuple("alpha").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("color").TupleConcat("disp_background"),
                     //(new HTuple(0.5)).TupleConcat("false").TupleConcat("true").TupleConcat(2.5).TupleConcat("red").TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
 
                     visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
    (((new HTuple("alpha")).TupleConcat("intensity_red")).TupleConcat("intensity_red")).TupleConcat(
-"intensity_red").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("disp_background"), (((new HTuple(0.5)).TupleConcat("coord_x")).TupleConcat(
-"coord_y")).TupleConcat("coord_z").TupleConcat("false").TupleConcat("true").TupleConcat(3.5).TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
-
+"intensity_red").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("color"), (((new HTuple(0.5)).TupleConcat("coord_x")).TupleConcat(
+"coord_y")).TupleConcat("coord_z").TupleConcat("true").TupleConcat("true").TupleConcat(3.5).TupleConcat("yellow"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);
+                    
                 });
             //Dispose3D();
 
@@ -4013,7 +4029,7 @@ namespace SagensVision.VisionTool
         }
 
 #endif
-
+        
 
     }
 

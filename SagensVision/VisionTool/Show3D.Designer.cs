@@ -67,7 +67,7 @@
             customLegendItem2});
             this.chartControl1.Legend.Name = "Default Legend";
             this.chartControl1.Legend.TextOffset = 20;
-            this.chartControl1.Location = new System.Drawing.Point(244, 216);
+            this.chartControl1.Location = new System.Drawing.Point(12, 51);
             this.chartControl1.Name = "chartControl1";
             series1.Name = "Series 1";
             seriesPoint1.ColorSerializable = "#F00000";
@@ -82,7 +82,7 @@
             series1.View = pie3DSeriesView1;
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1};
-            this.chartControl1.Size = new System.Drawing.Size(310, 250);
+            this.chartControl1.Size = new System.Drawing.Size(798, 490);
             this.chartControl1.TabIndex = 0;
             this.chartControl1.Click += new System.EventHandler(this.chartControl1_Click);
             // 

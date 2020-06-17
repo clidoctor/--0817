@@ -120,17 +120,17 @@ namespace SagensVision
             }
 
 
-            string dbcreate = SQLiteHelper.NewDbFile();
-            if (dbcreate == "OK")
-            {
+            //string dbcreate = SQLiteHelper.NewDbFile();
+            //if (dbcreate == "OK")
+            //{
 
-                ShowAndSaveMsg("数据库创建成功!");
-            }
-            else
-            {
-                ShowAndSaveMsg("数据库创建失败!" + dbcreate);
-            }
-            LoadDataDB();
+            //    ShowAndSaveMsg("数据库创建成功!");
+            //}
+            //else
+            //{
+            //    ShowAndSaveMsg("数据库创建失败!" + dbcreate);
+            //}
+            //LoadDataDB();
 
             if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
             {
@@ -2228,7 +2228,8 @@ namespace SagensVision
                 dy[i] = Convert.ToSingle(recordYCoord[i].ToString());
                 dz[i] = Convert.ToSingle(recordZCoord[i].ToString());
             }
-            cs3d.breakOut = true;
+            ClassShow3D.breakOut = true;
+            ShowProfile.HalconWindow.ClearWindow();
             cs3d.Show3D(dx, dy, dz, ShowProfile.HalconWindow);
 
 
@@ -3391,6 +3392,9 @@ namespace SagensVision
             barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
         }
 
-        
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

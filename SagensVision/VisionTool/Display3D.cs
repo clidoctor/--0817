@@ -84,7 +84,7 @@ namespace SagensVision.VisionTool
             surfaceX = MyGlobal.GoSDK.SurfaceDataX;
             surfaceY = MyGlobal.GoSDK.SurfaceDataY;
             surfaceZ = MyGlobal.GoSDK.SurfaceDataZ;
-            Show3d.breakOut = true;
+            //Show3d.breakOut = true;
             Show3d.Show3D(surfaceX, surfaceY, surfaceZ, Window.HalconWindow);
         }
 
