@@ -150,19 +150,17 @@ namespace SagensVision
                 ShowAndSaveMsg("左工位定位参数" + ok4);
             }
 
+            //string dbcreate = SQLiteHelper.NewDbFile();
+            //if (dbcreate == "OK")
+            //{
 
-
-            string dbcreate = SQLiteHelper.NewDbFile();
-            if (dbcreate == "OK")
-            {
-
-                ShowAndSaveMsg("数据库创建成功!");
-            }
-            else
-            {
-                ShowAndSaveMsg("数据库创建失败!" + dbcreate);
-            }
-            LoadDataDB();
+            //    ShowAndSaveMsg("数据库创建成功!");
+            //}
+            //else
+            //{
+            //    ShowAndSaveMsg("数据库创建失败!" + dbcreate);
+            //}
+            //LoadDataDB();
 
             if (File.Exists(MyGlobal.AllTypePath + "Global.xml"))
             {
@@ -430,7 +428,7 @@ namespace SagensVision
                 {
                     orignalDeg = MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Col,
-                    orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
                     OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
 
                 }
@@ -1014,7 +1012,7 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.AnchorErrorCnt++ ;
-                                    }
+                                }
                                     else
                                     {
                                         MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
@@ -1027,7 +1025,7 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
-                                    }
+                                }
                                     else
                                     {
                                         MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
@@ -1040,11 +1038,11 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
-                                    }
-                                    else
-                                    {
+                                }
+                                else
+                                {
                                         MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
-                                    }
+                                }
                                 }
                                 else
                                 {
@@ -1096,11 +1094,11 @@ namespace SagensVision
                             if (isRight)
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
-                            }
+                        }
                             else
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
-
+                       
                             }
 
                         }
@@ -1142,7 +1140,7 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.AnchorErrorCnt++;
-                                    }
+                                }
                                     else
                                     {
                                         MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
@@ -1155,7 +1153,7 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
-                                    }
+                                }
                                     else
                                     {
                                         MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
@@ -1168,11 +1166,11 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
-                                    }
-                                    else
-                                    {
+                                }
+                                else
+                                {
                                         MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
-                                    }
+                                }
                                 }
                                 else
                                 {
@@ -1224,7 +1222,7 @@ namespace SagensVision
                             if (isRight)
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
-                            }
+                        }
                             else
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
@@ -1666,32 +1664,32 @@ namespace SagensVision
         //        StringBuilder Str = new StringBuilder();
         //        int Start = MyGlobal.globalConfig.Startpt;
         //        for (int i = 0; i < xcoord.Length; i++)
-        //        {
+                //        {
 
         //            int start = Start;
         //            if (Start - 1 + i >= xcoord.Length)
-        //            {
+                //            {
         //                start = Start - 1 + i - xcoord.Length;
-        //            }
+                //            }
         //            else
-        //            {
+                //            {
         //                start = Start - 1 + i;
-        //            }
+                //            }
         //            double X1 = xcoord[start];
         //            double Y1 = ycoord[start];
         //            double Z1 = zcoord[start];
         //            string lorc = keypt[start];
         //            if (i == 0)
-        //            {
+                //            {
         //                int[] keys = everySeg.Keys.ToArray();
         //                for (int m = 0; m < keys.Length; m++)
-        //                {
+                //                {
         //                    if (Start >= keys[m])
         //                    {
         //                        lorc = everySeg[keys[m]];
         //                        break;
         //                    }
-        //                }
+                //                }
         //            }
         //            if (i == 0)
         //            {
@@ -1756,19 +1754,19 @@ namespace SagensVision
         //        {
         //            strlast = StrLorC[Station - 1][len1 - 2][0];
 
-        //        }
+                //        }
         //        Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
 
         //        StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
         //        //}
         //        return "OK";
-        //    }
+                //    }
         //    catch (Exception ex)
         //    {
 
         //        return "RunSide error :" + ex.Message;
         //    }
-        //}
+                //}
         #endregion
 
         private string RunSide(int Side,bool isRight, HObject IntensityImage, HObject HeightImage,bool SaveBase = false)
@@ -2101,12 +2099,12 @@ namespace SagensVision
                         MyGlobal.xyzBaseCoord_Left.ZCoord = ZCoord;
 
                         StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Left, MyGlobal.BaseTxtPath_Left);
-                        //读取Z值基准高度】
+                    //读取Z值基准高度】
                         if (File.Exists(MyGlobal.BaseTxtPath_Left))
-                        {
+                    {
                             MyGlobal.xyzBaseCoord_Left = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Left, typeof(XYZBaseCoord));
                         }
-                    }                                      
+                    }
                 }
                 //判断X Y 
                 //计算到中心点距离
@@ -2142,31 +2140,31 @@ namespace SagensVision
                 else
                 {
                     if (MyGlobal.xyzBaseCoord_Left.Dist != null && !SaveBase)
+                {
+                    for (int i = 0; i < Xorigin.Count; i++)
                     {
-                        for (int i = 0; i < Xorigin.Count; i++)
-                        {
 
-                            for (int j = 0; j < Xorigin[i].Length; j++)
-                            {
-                                HTuple Dist = 0;
-                                HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], centerR, centerC, out Dist);
-                                double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
+                        for (int j = 0; j < Xorigin[i].Length; j++)
+                        {
+                            HTuple Dist = 0;
+                            HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], centerR, centerC, out Dist);
+                            double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
                                 double Sub = (Dist.D - MyGlobal.xyzBaseCoord_Left.Dist[i][j]) * xyResolution;
                                 if (Sub > MyGlobal.globalPointSet_Left.XYMax || Sub < MyGlobal.globalPointSet_Left.XYMin)
+                            {
+                                if (MyGlobal.hWindow_Final[i] != null)
                                 {
-                                    if (MyGlobal.hWindow_Final[i] != null)
+                                    Action sw = () =>
                                     {
-                                        Action sw = () =>
-                                        {
-                                            MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
-                                        };
-                                        this.Invoke(sw);
-                                    }
-                                    return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                                        MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                    };
+                                    this.Invoke(sw);
                                 }
+                                return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
                             }
                         }
                     }
+                }
                 }
                 #endregion
 
@@ -2174,25 +2172,25 @@ namespace SagensVision
                 if (isRight)
                 {
                     if (MyGlobal.xyzBaseCoord_Right.Dist != null)
+                {
+                    #region 重复性数据
+                    //将当前数据转换到模板数据取差值                 
+                    for (int i = 0; i < 4; i++)
                     {
-                        #region 重复性数据
-                        //将当前数据转换到模板数据取差值                 
-                        for (int i = 0; i < 4; i++)
-                        {
-                            HTuple HomMat = new HTuple();
-                            HTuple ModelX = new HTuple(); HTuple ModelY = new HTuple();
+                        HTuple HomMat = new HTuple();
+                        HTuple ModelX = new HTuple(); HTuple ModelY = new HTuple();
                             HOperatorSet.VectorAngleToRigid(AnchorList[i].Row, AnchorList[i].Col, AnchorList[i].Angle, MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row,
                                 MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Col, MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Angle, out HomMat);
-                            HOperatorSet.AffineTransPoint2d(HomMat, new HTuple(Yorigin[i]), new HTuple(Xorigin[i]), out ModelY, out ModelX);
+                        HOperatorSet.AffineTransPoint2d(HomMat, new HTuple(Yorigin[i]), new HTuple(Xorigin[i]), out ModelY, out ModelX);
 
-                            //HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.XCoord[i])*Xresolution;
-                            //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
+                        //HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.XCoord[i])*Xresolution;
+                        //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
                             HTuple subX = (ModelX - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Col) * Xresolution;
                             HTuple subY = (ModelY - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row) * Yresolution;
-                            SubX = SubX.TupleConcat(subX);
-                            SubY = SubY.TupleConcat(subY);
+                        SubX = SubX.TupleConcat(subX);
+                        SubY = SubY.TupleConcat(subY);
 
-                        }
+                    }
                         #endregion
                     }
                 }
@@ -2218,11 +2216,11 @@ namespace SagensVision
                             SubY = SubY.TupleConcat(subY);
 
                         }
-                        #endregion
-                    }
+                    #endregion
+                }
                 }
 
-               
+
 
 
 
@@ -2399,7 +2397,7 @@ namespace SagensVision
                             Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
                             Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
                         }
-                   
+
                     if (i == 0)
                     {
                         int[] keys = everySeg.Keys.ToArray();
@@ -2546,7 +2544,8 @@ namespace SagensVision
                 dy[i] = Convert.ToSingle(recordYCoord[i].ToString());
                 dz[i] = Convert.ToSingle(recordZCoord[i].ToString());
             }
-            cs3d.breakOut = true;
+            ClassShow3D.breakOut = true;
+            ShowProfile.HalconWindow.ClearWindow();
             cs3d.Show3D(dx, dy, dz, ShowProfile.HalconWindow);
 
 
@@ -3727,7 +3726,10 @@ namespace SagensVision
             barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
         }
 
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
         
     }
 
+}
 }

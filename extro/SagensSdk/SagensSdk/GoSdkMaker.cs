@@ -220,13 +220,13 @@ namespace SagensSdk
                         //保存Kdat
                         Stopwatch sp = new Stopwatch();
                         sp.Start();
-                        if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy))
-                        {
-                            Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
-                            Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
-                            GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
-                            GoSdkWrapper.SaveSufaceToFile($"{SaveKdatDirectoy}/{DateTime.Now.ToFileTimeUtc().ToString()}.kdat", ref insurface, false);
-                        }
+                        //if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy))
+                        //{
+                        //    Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                        //    Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                        //    GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
+                        //    GoSdkWrapper.SaveSufaceToFile($"{SaveKdatDirectoy}/{DateTime.Now.ToFileTimeUtc().ToString()}.kdat", ref insurface, false);
+                        //}
 
                         Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
 

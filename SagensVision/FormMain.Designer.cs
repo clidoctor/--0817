@@ -124,6 +124,9 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.点位详情ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.barHeaderItem3 = new DevExpress.XtraBars.BarHeaderItem();
+            this.barListItem1 = new DevExpress.XtraBars.BarListItem();
+            this.barStaticItem2 = new DevExpress.XtraBars.BarStaticItem();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -352,9 +355,12 @@
             this.barButtonItem12,
             this.barStaticItem1,
             this.barEditItem_CurrentType,
-            this.barSubItem4});
+            this.barSubItem4,
+            this.barHeaderItem3,
+            this.barListItem1,
+            this.barStaticItem2});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 30;
+            this.barManager1.MaxItemId = 33;
             this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemComboBox1});
             this.barManager1.StatusBar = this.bar3;
@@ -533,7 +539,7 @@
             this.bar3.DockRow = 0;
             this.bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
             this.bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(this.barHeaderItem1)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem2)});
             this.bar3.OptionsBar.AllowQuickCustomization = false;
             this.bar3.OptionsBar.DrawDragBorder = false;
             this.bar3.OptionsBar.UseWholeRow = true;
@@ -541,7 +547,9 @@
             // 
             // barHeaderItem1
             // 
-            this.barHeaderItem1.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.1";
+            this.barHeaderItem1.Appearance.BackColor = System.Drawing.Color.DarkRed;
+            this.barHeaderItem1.Appearance.Options.UseBackColor = true;
+            this.barHeaderItem1.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
             this.barHeaderItem1.Id = 2;
             this.barHeaderItem1.Name = "barHeaderItem1";
             // 
@@ -691,10 +699,10 @@
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.simpleButton1.Location = new System.Drawing.Point(0, 690);
+            this.simpleButton1.Location = new System.Drawing.Point(0, 684);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(189, 24);
+            this.simpleButton1.Size = new System.Drawing.Size(189, 30);
             this.simpleButton1.TabIndex = 1;
             this.simpleButton1.Text = "消息栏信息清除";
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
@@ -984,6 +992,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(982, 750);
             this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // label6
             // 
@@ -1073,6 +1082,24 @@
             this.点位详情ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.点位详情ToolStripMenuItem.Text = "点位详情";
             this.点位详情ToolStripMenuItem.Click += new System.EventHandler(this.点位详情ToolStripMenuItem_Click);
+            // 
+            // barHeaderItem3
+            // 
+            this.barHeaderItem3.Caption = "barHeaderItem3";
+            this.barHeaderItem3.Id = 30;
+            this.barHeaderItem3.Name = "barHeaderItem3";
+            // 
+            // barListItem1
+            // 
+            this.barListItem1.Caption = "barListItem1";
+            this.barListItem1.Id = 31;
+            this.barListItem1.Name = "barListItem1";
+            // 
+            // barStaticItem2
+            // 
+            this.barStaticItem2.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
+            this.barStaticItem2.Id = 32;
+            this.barStaticItem2.Name = "barStaticItem2";
             // 
             // FormMain
             // 
@@ -1222,6 +1249,9 @@
         private DevExpress.XtraBars.Docking.DockPanel panelContainer1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 点位详情ToolStripMenuItem;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem2;
+        private DevExpress.XtraBars.BarHeaderItem barHeaderItem3;
+        private DevExpress.XtraBars.BarListItem barListItem1;
     }
 }
 

@@ -188,6 +188,8 @@ namespace SagensVision
 
         [DllImport("kernel32.dll")]
         private static extern void CopyMemory(int Destination, int add, int Length);
+        [DllImport("kernel32.dll")]
+        private static extern void CopyMemory(long Destination, long add, int Length);
 
         private static void HObject2Bpp8(HObject image, out Bitmap res)
         {
@@ -196,7 +198,7 @@ namespace SagensVision
                 HTuple hpoint, type, width, height;
 
                 const int Alpha = 255;
-                int[] ptr = new int[2];
+                long[] ptr = new long[2];
                 HOperatorSet.GetImagePointer1(image, out hpoint, out type, out width, out height);
 
                 res = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
@@ -209,8 +211,8 @@ namespace SagensVision
                 Rectangle rect = new Rectangle(0, 0, width, height);
                 BitmapData bitmapData = res.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
                 int PixelSize = Bitmap.GetPixelFormatSize(bitmapData.PixelFormat) / 8;
-                ptr[0] = bitmapData.Scan0.ToInt32();
-                ptr[1] = hpoint.I;
+                ptr[0] = bitmapData.Scan0.ToInt64();
+                ptr[1] = hpoint.L;
                 if (width % 4 == 0)
                     CopyMemory(ptr[0], ptr[1], width * height * PixelSize);
                 else
