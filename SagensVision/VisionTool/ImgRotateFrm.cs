@@ -12,20 +12,41 @@ namespace SagensVision.VisionTool
 {
     public partial class ImgRotateFrm : Form
     {
-        public ImgRotateFrm()
+        public ImgRotateFrm(bool _isRight)
         {
             InitializeComponent();
+            isRight = _isRight;
         }
 
+        bool isRight = false;
         private void btn_save_Click(object sender, EventArgs e)
         {
-            MyGlobal.globalConfig.imgRotateArr[0] = (int)l1.Value;
-            MyGlobal.globalConfig.imgRotateArr[1] = (int)t2.Value;
-            MyGlobal.globalConfig.imgRotateArr[2] = (int)r3.Value;
-            MyGlobal.globalConfig.imgRotateArr[3] = (int)d4.Value;
+            if (isRight)
+            {
+                MyGlobal.globalPointSet_Right.imgRotateArr[0] = (int)l1.Value;
+                MyGlobal.globalPointSet_Right.imgRotateArr[1] = (int)t2.Value;
+                MyGlobal.globalPointSet_Right.imgRotateArr[2] = (int)r3.Value;
+                MyGlobal.globalPointSet_Right.imgRotateArr[3] = (int)d4.Value;
+
+            }
+            else
+            {
+                MyGlobal.globalPointSet_Left.imgRotateArr[0] = (int)l1.Value;
+                MyGlobal.globalPointSet_Left.imgRotateArr[1] = (int)t2.Value;
+                MyGlobal.globalPointSet_Left.imgRotateArr[2] = (int)r3.Value;
+                MyGlobal.globalPointSet_Left.imgRotateArr[3] = (int)d4.Value;
+            }
             try
             {
-                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                if (isRight)
+                {
+                    StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+                }
+                else
+                {
+                    StaticOperate.WriteXML(MyGlobal.globalPointSet_Left, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
+                }
+               
                 MessageBox.Show("保存成功！");
             }
             catch (Exception ex)
@@ -37,11 +58,20 @@ namespace SagensVision.VisionTool
 
         private void ImgRotateFrm_Load(object sender, EventArgs e)
         {
-            
-            l1.Value = MyGlobal.globalConfig.imgRotateArr[0];
-            t2.Value = MyGlobal.globalConfig.imgRotateArr[1];
-            r3.Value = MyGlobal.globalConfig.imgRotateArr[2];
-            d4.Value = MyGlobal.globalConfig.imgRotateArr[3];
+            if (isRight)
+            {
+                l1.Value = MyGlobal.globalPointSet_Right.imgRotateArr[0];
+                t2.Value = MyGlobal.globalPointSet_Right.imgRotateArr[1];
+                r3.Value = MyGlobal.globalPointSet_Right.imgRotateArr[2];
+                d4.Value = MyGlobal.globalPointSet_Right.imgRotateArr[3];
+            }
+            else
+            {
+                l1.Value = MyGlobal.globalPointSet_Left.imgRotateArr[0];
+                t2.Value = MyGlobal.globalPointSet_Left.imgRotateArr[1];
+                r3.Value = MyGlobal.globalPointSet_Left.imgRotateArr[2];
+                d4.Value = MyGlobal.globalPointSet_Left.imgRotateArr[3];
+            }
 
         }
     }

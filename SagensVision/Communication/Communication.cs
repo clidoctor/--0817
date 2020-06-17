@@ -37,7 +37,7 @@ namespace SagensVision.Communication
 
         private void button1_Click(object sender, EventArgs e)
         {
-            StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+            StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.AllTypePath + "Global.xml");
             string ok = "";
             if (!MyGlobal.sktOK)
             {

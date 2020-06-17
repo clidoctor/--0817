@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FitLineSet));
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
@@ -127,6 +126,7 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -155,7 +155,7 @@
             "Side2",
             "Side3",
             "Side4"});
-            this.comboBox1.Location = new System.Drawing.Point(661, 27);
+            this.comboBox1.Location = new System.Drawing.Point(821, 27);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(100, 22);
             this.comboBox1.TabIndex = 9;
@@ -164,7 +164,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.simpleButton1);
+            this.panel1.Controls.Add(this.comboBox3);
             this.panel1.Controls.Add(this.simpleButton3);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.simpleButton4);
@@ -180,21 +180,11 @@
             this.panel1.Size = new System.Drawing.Size(968, 74);
             this.panel1.TabIndex = 2;
             // 
-            // simpleButton1
-            // 
-            this.simpleButton1.Location = new System.Drawing.Point(826, 26);
-            this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(75, 23);
-            this.simpleButton1.TabIndex = 2;
-            this.simpleButton1.Text = "加载数据";
-            this.simpleButton1.Visible = false;
-            this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
-            // 
             // simpleButton3
             // 
             this.simpleButton3.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.simpleButton3.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton3.ImageOptions.Image")));
-            this.simpleButton3.Location = new System.Drawing.Point(403, 18);
+            this.simpleButton3.Location = new System.Drawing.Point(563, 18);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(41, 39);
             this.simpleButton3.TabIndex = 13;
@@ -205,7 +195,7 @@
             // 
             this.simpleButton4.ButtonStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.simpleButton4.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton4.ImageOptions.Image")));
-            this.simpleButton4.Location = new System.Drawing.Point(357, 18);
+            this.simpleButton4.Location = new System.Drawing.Point(517, 18);
             this.simpleButton4.Name = "simpleButton4";
             this.simpleButton4.Size = new System.Drawing.Size(41, 39);
             this.simpleButton4.TabIndex = 12;
@@ -214,7 +204,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(564, 26);
+            this.simpleButton2.Location = new System.Drawing.Point(724, 26);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(75, 23);
             this.simpleButton2.TabIndex = 11;
@@ -223,7 +213,7 @@
             // 
             // btn_open
             // 
-            this.btn_open.Location = new System.Drawing.Point(471, 26);
+            this.btn_open.Location = new System.Drawing.Point(631, 26);
             this.btn_open.Name = "btn_open";
             this.btn_open.Size = new System.Drawing.Size(75, 23);
             this.btn_open.TabIndex = 10;
@@ -233,7 +223,7 @@
             // trackBarControl1
             // 
             this.trackBarControl1.EditValue = null;
-            this.trackBarControl1.Location = new System.Drawing.Point(59, 26);
+            this.trackBarControl1.Location = new System.Drawing.Point(219, 26);
             this.trackBarControl1.Name = "trackBarControl1";
             this.trackBarControl1.Properties.LabelAppearance.Options.UseTextOptions = true;
             this.trackBarControl1.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
@@ -244,7 +234,7 @@
             // 
             // textBox_Total
             // 
-            this.textBox_Total.Location = new System.Drawing.Point(280, 27);
+            this.textBox_Total.Location = new System.Drawing.Point(440, 27);
             this.textBox_Total.Name = "textBox_Total";
             this.textBox_Total.ReadOnly = true;
             this.textBox_Total.Size = new System.Drawing.Size(64, 22);
@@ -253,7 +243,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(261, 30);
+            this.label3.Location = new System.Drawing.Point(421, 30);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(12, 14);
             this.label3.TabIndex = 7;
@@ -261,7 +251,7 @@
             // 
             // textBox_Current
             // 
-            this.textBox_Current.Location = new System.Drawing.Point(190, 27);
+            this.textBox_Current.Location = new System.Drawing.Point(350, 27);
             this.textBox_Current.Name = "textBox_Current";
             this.textBox_Current.Size = new System.Drawing.Size(64, 22);
             this.textBox_Current.TabIndex = 6;
@@ -1123,6 +1113,19 @@
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
             // 
+            // comboBox3
+            // 
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Items.AddRange(new object[] {
+            "Right",
+            "Left"});
+            this.comboBox3.Location = new System.Drawing.Point(89, 27);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(100, 22);
+            this.comboBox3.TabIndex = 14;
+            this.comboBox3.Text = "Right";
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            // 
             // FitLineSet
             // 
             this.Appearance.ForeColor = System.Drawing.Color.White;
@@ -1166,7 +1169,6 @@
 
         #endregion
         private System.Windows.Forms.Panel panel1;
-        private DevExpress.XtraEditors.SimpleButton simpleButton1;
         private DevExpress.XtraEditors.TrackBarControl trackBarControl1;
         private System.Windows.Forms.TextBox textBox_Total;
         private System.Windows.Forms.Label label3;
@@ -1262,5 +1264,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox_SmoothCont;
         private System.Windows.Forms.CheckBox checkBox_center;
+        private System.Windows.Forms.ComboBox comboBox3;
     }
 }

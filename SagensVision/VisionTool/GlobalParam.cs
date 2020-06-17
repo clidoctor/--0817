@@ -15,6 +15,7 @@ namespace SagensVision.VisionTool
     {
         public delegate void RunOff();
         public RunOff Run;
+        bool isRight;
         public GlobalParam()
         {
             InitializeComponent();
@@ -30,20 +31,35 @@ namespace SagensVision.VisionTool
             {
                 textBox_ColorMin.Text = MyGlobal.globalConfig.Color_min.ToString();
                 textBox_ColorMax.Text = MyGlobal.globalConfig.Color_max.ToString();
-                textBox_HeightMax.Text = MyGlobal.globalConfig.HeightMax.ToString();
-                textBox_HeightMin.Text = MyGlobal.globalConfig.HeightMin.ToString();
-                textBox_XYMax.Text = MyGlobal.globalConfig.XYMax.ToString();
-                textBox_XYMin.Text = MyGlobal.globalConfig.XYMin.ToString();
+                if (isRight)
+                {
+                    textBox_HeightMax.Text = MyGlobal.globalPointSet_Right.HeightMax.ToString();
+                    textBox_HeightMin.Text = MyGlobal.globalPointSet_Right.HeightMin.ToString();
+                    textBox_XYMax.Text = MyGlobal.globalPointSet_Right.XYMax.ToString();
+                    textBox_XYMin.Text = MyGlobal.globalPointSet_Right.XYMin.ToString();
 
-                textBox_Start.Text = MyGlobal.globalConfig.Startpt.ToString();
-                textBox_totalZ.Text = MyGlobal.globalConfig.TotalZoffset.ToString();                
-                textBox_xOffset.Text = MyGlobal.globalConfig.gbParam[0].Xoffset.ToString();
-                textBox_yOffset.Text = MyGlobal.globalConfig.gbParam[0].Yoffset.ToString();
+                    textBox_Start.Text = MyGlobal.globalPointSet_Right.Startpt.ToString();
+                    textBox_totalZ.Text = MyGlobal.globalPointSet_Right.TotalZoffset.ToString();
+                    textBox_xOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Xoffset.ToString();
+                    textBox_yOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Yoffset.ToString();
+                }
+                else
+                {
+                    textBox_HeightMax.Text = MyGlobal.globalPointSet_Left.HeightMax.ToString();
+                    textBox_HeightMin.Text = MyGlobal.globalPointSet_Left.HeightMin.ToString();
+                    textBox_XYMax.Text = MyGlobal.globalPointSet_Left.XYMax.ToString();
+                    textBox_XYMin.Text = MyGlobal.globalPointSet_Left.XYMin.ToString();
+
+                    textBox_Start.Text = MyGlobal.globalPointSet_Left.Startpt.ToString();
+                    textBox_totalZ.Text = MyGlobal.globalPointSet_Left.TotalZoffset.ToString();
+                    textBox_xOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Xoffset.ToString();
+                    textBox_yOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Yoffset.ToString();
+                }
 
                 checkedListBox_save_data.SetItemChecked(0, MyGlobal.globalConfig.isSaveKdat);
                 checkedListBox_save_data.SetItemChecked(1, MyGlobal.globalConfig.isSaveFileDat);
                 checkedListBox_save_data.SetItemChecked(2, MyGlobal.globalConfig.isSaveImg);
-                checkBox_useAnchorDeg.Checked = MyGlobal.globalConfig.isUseAnchorDeg;
+                
                 ///task
 
             }
@@ -78,32 +94,91 @@ namespace SagensVision.VisionTool
                     MyGlobal.globalConfig.Color_max = num;
                     break;
                 case "textBox_HeightMin":
-                    MyGlobal.globalConfig.HeightMin = num;
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.HeightMin = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.HeightMin = num;
+                    }
                     break;
                 case "textBox_HeightMax":
-                    MyGlobal.globalConfig.HeightMax = num;
+                   
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.HeightMax = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.HeightMax = num;
+                    }
                     break;
                 case "textBox_totalZ":
-                    MyGlobal.globalConfig.TotalZoffset = num;
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.TotalZoffset = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.TotalZoffset = num;
+                    }
                     break;
                 case "textBox_Start":
                     if ((int)num <= 0)
                     {
                         num = 1;
                     }
-                    MyGlobal.globalConfig.Startpt = (int)num;
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.Startpt = (int)num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.Startpt = (int)num;
+                    }
                     break;
                 case "textBox_xOffset":
-                    MyGlobal.globalConfig.gbParam[SideId].Xoffset = (int)num;
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.gbParam[SideId].Xoffset = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.gbParam[SideId].Xoffset = num;
+                    }
                     break;
                 case "textBox_yOffset":
-                    MyGlobal.globalConfig.gbParam[SideId].Yoffset = (int)num;
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.gbParam[SideId].Yoffset = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.gbParam[SideId].Yoffset = num;
+                    }
                     break;
                 case "textBox_XYMax":
-                    MyGlobal.globalConfig.XYMax = num;
+                   
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.XYMax = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.XYMax = num;
+                    }
                     break;
                 case "textBox_XYMin":
-                    MyGlobal.globalConfig.XYMin = num;
+                   
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.XYMin = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.XYMin = num;
+                    }
                     break;
             }
 
@@ -119,10 +194,34 @@ namespace SagensVision.VisionTool
         {
             try
             {
+                if (isRight)
+                {
+                    if (MessageBox.Show("提示", "是否保存右工位参数", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("提示", "是否保存左工位参数", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                
+
                 MyGlobal.globalConfig.isSaveKdat = checkedListBox_save_data.GetItemChecked(0);
                 MyGlobal.globalConfig.isSaveFileDat = checkedListBox_save_data.GetItemChecked(1);
                 MyGlobal.globalConfig.isSaveImg = checkedListBox_save_data.GetItemChecked(2);
-                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.AllTypePath + "Global.xml");
+                if (isRight)
+                {
+                    StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+                }
+                else
+                {
+                    StaticOperate.WriteXML(MyGlobal.globalPointSet_Left, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
+                }
                 MessageBox.Show("保存成功！");
             }
             catch (Exception ex)
@@ -145,12 +244,50 @@ namespace SagensVision.VisionTool
 
         private void GlobalParam_Load(object sender, EventArgs e)
         {
+            isRight = MyGlobal.IsRight;
             LoadToUi();
+            
+            if (isRight)
+            {
+                comboBox2.SelectedIndex = 0;
+                comboBox2.BackColor = Color.LimeGreen;
+            }
+            else
+            {
+                comboBox2.SelectedIndex = 1;
+                comboBox2.BackColor = Color.Yellow;
+            }
+          
         }
 
-        private void checkBox_useAnchorDeg_CheckedChanged(object sender, EventArgs e)
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MyGlobal.globalConfig.isUseAnchorDeg = checkBox_useAnchorDeg.Checked;
+            if (comboBox2.SelectedItem.ToString() == "Right")
+            {
+                isRight = true;
+                comboBox2.BackColor = Color.LimeGreen;
+            }
+            else
+            {
+                isRight = false;
+                comboBox2.BackColor = Color.Yellow;
+            }
+            LoadToUi();
+            MessageBox.Show("切换成功!");
+        }
+
+        private void simpleButton4_Click(object sender, EventArgs e)
+        {
+
+            NewProduct nProduct = new NewProduct(isRight);
+            nProduct.ShowDialog();
+        }
+
+        private void simpleButton5_Click(object sender, EventArgs e)
+        {
+            ImgRotateFrm imgrotatefrm = new ImgRotateFrm(isRight);
+            imgrotatefrm.Show();
         }
     }
 

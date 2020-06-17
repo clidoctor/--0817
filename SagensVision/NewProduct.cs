@@ -15,11 +15,12 @@ namespace SagensVision
     public partial class NewProduct : DevExpress.XtraEditors.XtraForm
     {
         public static event Action<string>  AddToFormain;
-        public NewProduct()
+        public NewProduct(bool isRight)
         {
             InitializeComponent();
+            this.isRight = isRight;
         }
-
+        bool isRight = false;
         private void simpleButton1_Click(object sender, EventArgs e)
         {
             SimpleButton simpleBtn = new SimpleButton();
@@ -73,9 +74,15 @@ namespace SagensVision
                                 return;
                             }
                             MyGlobal.PathName.CurrentType = listBox_AllType.SelectedItem.ToString();
-                            string pathCurrent = MyGlobal.ConfigPath;
+                            string pathCurrent = isRight ?  MyGlobal.ConfigPath_Right : MyGlobal.ConfigPath_Left;
                             MyGlobal.PathName.CurrentType = text;
-                            CopyFiles(pathCurrent, MyGlobal.ConfigPath);
+                            
+                                CopyFiles(pathCurrent, MyGlobal.ConfigPath_Right);
+                            
+                                CopyFiles(pathCurrent, MyGlobal.ConfigPath_Left);
+
+                           
+
                             listBox_AllType.Items.Add(text);
                             MessageBox.Show("复制成功");
                             break;

@@ -23,9 +23,13 @@ namespace SagensVision
     {
         public static string DataPath = AppDomain.CurrentDomain.BaseDirectory + "Data\\";
         public static string AllTypePath = AppDomain.CurrentDomain.BaseDirectory + "AllType\\";
-        public static string ConfigPath = AppDomain.CurrentDomain.BaseDirectory +  "Config\\";
+
+        public static string ConfigPath_Right = AppDomain.CurrentDomain.BaseDirectory +  "Config_Right\\";
+        public static string ConfigPath_Left = AppDomain.CurrentDomain.BaseDirectory + "Config_Left\\";
+
         //public static string imgRotatePath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" + "imgRotate.txt";
-        public static string BaseTxtPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\" +"BaseHeight.xml";
+        public static string BaseTxtPath_Right = AppDomain.CurrentDomain.BaseDirectory + "Config_Right\\" + "BaseHeight.xml";
+        public static string BaseTxtPath_Left = AppDomain.CurrentDomain.BaseDirectory + "Config_Left\\" + "BaseHeight.xml";
 
         public static string SaveDatFileDirectory = "data\\datfile\\";
 
@@ -35,8 +39,9 @@ namespace SagensVision
         public static Socket sktClient;        
         public static string ReceiveMsg = "";
         public static GlobalConfig globalConfig = new GlobalConfig();
+        public static GlobalPointSet globalPointSet_Right = new GlobalPointSet();
+        public static GlobalPointSet globalPointSet_Left = new GlobalPointSet();
 
-     
         public static bool isShowHeightImg;
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
@@ -47,8 +52,14 @@ namespace SagensVision
         public static List<HObject[]> ImageMulti = new List<HObject[]>();
         //public static int[] imgRotateArr = new int[4];
         //public static List<double[][]> ZCoord = new List<double[][]>();//z值基准高度
-        public static XYZBaseCoord xyzBaseCoord = new XYZBaseCoord();
+        public static XYZBaseCoord xyzBaseCoord_Right = new XYZBaseCoord();
+        public static XYZBaseCoord xyzBaseCoord_Left = new XYZBaseCoord();
         public static SavePathName PathName = new SavePathName();
+        public static FindPointTool Left_findPointTool_Find = new FindPointTool();
+        public static FindPointTool Left_findPointTool_Fix = new FindPointTool();
+        public static FindPointTool Right_findPointTool_Find = new FindPointTool();
+        public static FindPointTool Right_findPointTool_Fix = new FindPointTool();
+        public static bool IsRight = true;
     }
 
     public  class GlobalConfig
@@ -60,18 +71,31 @@ namespace SagensVision
         public  string MotorIpAddress = "127.0.0.1";
         public  int MotorPort = 8080;
         public DataContext dataContext = new DataContext();
-        public double TotalZoffset = 0;//整体Z
-        public int Startpt = 1;//起始点
         public int Count = 0;
         public double zRange;//扫描z范围
         public double zStart;
         public double Color_min = 0;
         public double Color_max = 0;//颜色区间
+              
+        //保存数据选项
+        public bool isSaveKdat;
+        public bool isSaveFileDat;
+        public bool isSaveImg;
+        //public bool isUseAnchorDeg = true;
+       
+    }
+
+    public class GlobalPointSet
+    {
+        public double TotalZoffset = 0;//整体Z
+        public int Startpt = 1;//起始点
         public double HeightMin = 0;//最小高度
         public double HeightMax = 0;
         public double XYMin = 0;
         public double XYMax = 0;
         public GlobalParam[] gbParam = new GlobalParam[4];
+        //图像旋转角度
+        public int[] imgRotateArr = new int[4];
 
         //产能
         public int OkCnt = 0;
@@ -79,23 +103,14 @@ namespace SagensVision
         public int FindEgdeErrorCnt = 0;
         public int ExploreHeightErrorCnt = 0;
 
-        //保存数据选项
-        public bool isSaveKdat;
-        public bool isSaveFileDat;
-        public bool isSaveImg;
-        public bool isUseAnchorDeg = true;
-
-        //图像旋转角度
-        public int[] imgRotateArr = new int[4];
-
-        public GlobalConfig()
+        public GlobalPointSet()
         {
             for (int i = 0; i < 4; i++)
             {
                 gbParam[i] = new GlobalParam();
             }
         }
-       
+
     }
 
     public class SavePathName
@@ -112,18 +127,31 @@ namespace SagensVision
                 this.currentType = value;
                 if (currentType!="")
                 {
-                    MyGlobal.ConfigPath = MyGlobal.AllTypePath + currentType  + "\\Config\\";
-                    MyGlobal.BaseTxtPath = MyGlobal.AllTypePath + currentType + "\\Config\\" + "BaseHeight.xml";
-                    if (!Directory.Exists(MyGlobal.ConfigPath))
+                    MyGlobal.ConfigPath_Right = MyGlobal.AllTypePath + currentType + "\\Config_Right\\" ;
+                    MyGlobal.ConfigPath_Left = MyGlobal.AllTypePath + currentType + "\\Config_Left\\"  ;
+
+                    MyGlobal.BaseTxtPath_Right = MyGlobal.AllTypePath + currentType + "\\Config_Right\\"  + "BaseHeight.xml";
+                    MyGlobal.BaseTxtPath_Left = MyGlobal.AllTypePath + currentType + "\\Config_Left\\"  + "BaseHeight.xml";
+
+                    if (!Directory.Exists(MyGlobal.ConfigPath_Right))
                     {
-                        Directory.CreateDirectory(MyGlobal.ConfigPath);
+                        Directory.CreateDirectory(MyGlobal.ConfigPath_Right);
                     }
+                    if (!Directory.Exists(MyGlobal.ConfigPath_Left))
+                    {
+                        Directory.CreateDirectory(MyGlobal.ConfigPath_Left);
+                    }
+
                     string[] SideName = { "Side1", "Side2", "Side3", "Side4" };
                     for (int i = 0; i < 4; i++)
                     {
-                        if (!Directory.Exists(MyGlobal.ConfigPath + SideName[i]+"\\"))
+                        if (!Directory.Exists(MyGlobal.ConfigPath_Right + SideName[i]+"\\"))
                         {
-                            Directory.CreateDirectory(MyGlobal.ConfigPath + SideName[i] + "\\");
+                            Directory.CreateDirectory(MyGlobal.ConfigPath_Right + SideName[i] + "\\");
+                        }
+                        if (!Directory.Exists(MyGlobal.ConfigPath_Left + SideName[i] + "\\"))
+                        {
+                            Directory.CreateDirectory(MyGlobal.ConfigPath_Left + SideName[i] + "\\");
                         }
                     }
                 }
@@ -171,10 +199,10 @@ namespace SagensVision
             }
         }
 
-        public static void SaveImage(HObject Image,string Count, string Product )
+        public static void SaveImage(HObject Image,string Count, string Product ,bool isRight)
         {
-
-            string path = MyGlobal.DataPath + "Image\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+            string RorL = isRight ? "Right" : "Left";
+            string path = MyGlobal.DataPath + "Image\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\"+ RorL + "\\";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -217,10 +245,10 @@ namespace SagensVision
 
         }
 
-        public static void SaveErrorImage(HObject Image, string Count, string Product)
+        public static void SaveErrorImage(HObject Image, string Count, string Product,bool isRight)
         {
-
-            string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+            string RorL = isRight ? "Right" : "Left";
+            string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\" + RorL + "\\";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
