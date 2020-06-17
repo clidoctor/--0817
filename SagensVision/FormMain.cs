@@ -245,6 +245,7 @@ namespace SagensVision
             MyGlobal.hWindow_Final[1].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
+           
         }
 
         private void Show3dImg(HWindow_Final obj)
@@ -577,17 +578,17 @@ namespace SagensVision
             if (MyGlobal.GoSDK.connect(MyGlobal.globalConfig.SensorIP, ref Msg))
             {
                 ShowAndSaveMsg("Sensor连接成功！");
-                MyGlobal.globalConfig.dataContext.serialNumber = MyGlobal.GoSDK.context.serialNumber;
-                MyGlobal.globalConfig.dataContext.xOffset = MyGlobal.GoSDK.context.xOffset;
-                MyGlobal.globalConfig.dataContext.yOffset = MyGlobal.GoSDK.context.yOffset;
-                MyGlobal.globalConfig.dataContext.zOffset = MyGlobal.GoSDK.context.zOffset;
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution;
-                MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
+                //MyGlobal.globalConfig.dataContext.serialNumber = MyGlobal.GoSDK.context.serialNumber;
+                //MyGlobal.globalConfig.dataContext.xOffset = MyGlobal.GoSDK.context.xOffset;
+                //MyGlobal.globalConfig.dataContext.yOffset = MyGlobal.GoSDK.context.yOffset;
+                //MyGlobal.globalConfig.dataContext.zOffset = MyGlobal.GoSDK.context.zOffset;
+                ////MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution;
+                ////MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution;
+                ////MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
+                //MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                //MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
 
                 if (!SecretKey.License.SnOk)
                 {
@@ -3240,26 +3241,27 @@ namespace SagensVision
                    
                     if (OK != "OK")
                         {
-                           
-                                //for (int j = 0; j < MyGlobal.ImageMulti.Count; j++)
-                                //{
-                                //    for (int k = 0; j < k; j++)
-                                //    {
-                                //        if (MyGlobal.ImageMulti[j][j]!=null)
-                                //        {
-                                //            MyGlobal.ImageMulti[j][j].Dispose();
-                                //        }                               
-                                //    }
 
-                                //}
-                                //MyGlobal.ImageMulti.Clear();
-                                //sidelist.Clear();
-                                if (errstr.Length > 0)
+                        //for (int j = 0; j < MyGlobal.ImageMulti.Count; j++)
+                        //{
+                        //    for (int k = 0; j < k; j++)
+                        //    {
+                        //        if (MyGlobal.ImageMulti[j][j]!=null)
+                        //        {
+                        //            MyGlobal.ImageMulti[j][j].Dispose();
+                        //        }                               
+                        //    }
+
+                        //}
+                        //MyGlobal.ImageMulti.Clear();
+                        //sidelist.Clear();
+                             ShowAndSaveMsg(OK);
+                             if (errstr.Length > 0)
                             {
                                 ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
                             }
-                            break;
-                        }
+                        break;
+                    }
 
                         if (i == 3)
                         {

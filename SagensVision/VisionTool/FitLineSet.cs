@@ -1596,11 +1596,11 @@ namespace SagensVision.VisionTool
                     string ok1 = "";
                     if (isRight)
                     {
-                        ok1 = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
                     }
                     else
                     {
-                        ok1 = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
                     }
 
                     if (ok1 != "OK")
@@ -5604,7 +5604,10 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
-            fpTool.Init(this.Text,isRight);
+            
+            MyGlobal.Right_findPointTool_Find.Init(this.Text,isRight);
+            MyGlobal.Left_findPointTool_Find.Init(this.Text, isRight);
+
             //MyGlobal.flset2.Init();
             if (hwindow_final1.Image != null)
             {
@@ -6034,18 +6037,18 @@ namespace SagensVision.VisionTool
                 {
                     if (fpTool.fParam[SideId].roiP[CurrentRowIndex].TopDownDist != 0 && fpTool.fParam[SideId].roiP[CurrentRowIndex].xDist != 0)
                     {
-                        fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                        fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
 
                     }
                     else
                     {
-                        fpTool.FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                        fpTool.FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection,false,hwindow_final1);
 
                     }
                 }
                 else
                 {
-                    fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection);
+                    fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
                 }
 
                 //string[] color = {"red","blue","green", "lime green", "black" };

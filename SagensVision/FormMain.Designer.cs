@@ -62,16 +62,16 @@
             this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
             this.barEditItem_CurrentType = new DevExpress.XtraBars.BarEditItem();
             this.repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
             this.bar3 = new DevExpress.XtraBars.Bar();
-            this.barHeaderItem1 = new DevExpress.XtraBars.BarHeaderItem();
+            this.barStaticItem2 = new DevExpress.XtraBars.BarStaticItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.barLargeButtonItem1 = new DevExpress.XtraBars.BarLargeButtonItem();
             this.skinBarSubItem1 = new DevExpress.XtraBars.SkinBarSubItem();
+            this.barHeaderItem1 = new DevExpress.XtraBars.BarHeaderItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem1 = new DevExpress.XtraBars.BarSubItem();
             this.barSubItem2 = new DevExpress.XtraBars.BarSubItem();
@@ -81,6 +81,9 @@
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             this.barHeaderItem2 = new DevExpress.XtraBars.BarHeaderItem();
             this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
+            this.barHeaderItem3 = new DevExpress.XtraBars.BarHeaderItem();
+            this.barListItem1 = new DevExpress.XtraBars.BarListItem();
             this.dockPanel2 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel2_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
@@ -124,9 +127,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.点位详情ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.barHeaderItem3 = new DevExpress.XtraBars.BarHeaderItem();
-            this.barListItem1 = new DevExpress.XtraBars.BarListItem();
-            this.barStaticItem2 = new DevExpress.XtraBars.BarStaticItem();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -379,7 +379,6 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem1),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem10),
             new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem2),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11),
             new DevExpress.XtraBars.LinkPersistInfo(this.btn_clearbuffer),
             new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem1),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem_CurrentType, "", false, true, true, 112),
@@ -515,14 +514,6 @@
             this.repositoryItemComboBox1.ButtonsStyle = DevExpress.XtraEditors.Controls.BorderStyles.Office2003;
             this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
             // 
-            // barSubItem4
-            // 
-            this.barSubItem4.Caption = "型号设置";
-            this.barSubItem4.Id = 27;
-            this.barSubItem4.Name = "barSubItem4";
-            this.barSubItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barSubItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barSubItem4_ItemClick);
-            // 
             // barButtonItem6
             // 
             this.barButtonItem6.Caption = "关于";
@@ -545,13 +536,11 @@
             this.bar3.OptionsBar.UseWholeRow = true;
             this.bar3.Text = "Status bar";
             // 
-            // barHeaderItem1
+            // barStaticItem2
             // 
-            this.barHeaderItem1.Appearance.BackColor = System.Drawing.Color.DarkRed;
-            this.barHeaderItem1.Appearance.Options.UseBackColor = true;
-            this.barHeaderItem1.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
-            this.barHeaderItem1.Id = 2;
-            this.barHeaderItem1.Name = "barHeaderItem1";
+            this.barStaticItem2.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
+            this.barStaticItem2.Id = 32;
+            this.barStaticItem2.Name = "barStaticItem2";
             // 
             // barDockControlTop
             // 
@@ -599,6 +588,14 @@
             this.skinBarSubItem1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("skinBarSubItem1.ImageOptions.Image")));
             this.skinBarSubItem1.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("skinBarSubItem1.ImageOptions.LargeImage")));
             this.skinBarSubItem1.Name = "skinBarSubItem1";
+            // 
+            // barHeaderItem1
+            // 
+            this.barHeaderItem1.Appearance.BackColor = System.Drawing.Color.DarkRed;
+            this.barHeaderItem1.Appearance.Options.UseBackColor = true;
+            this.barHeaderItem1.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
+            this.barHeaderItem1.Id = 2;
+            this.barHeaderItem1.Name = "barHeaderItem1";
             // 
             // barButtonItem1
             // 
@@ -657,6 +654,26 @@
             this.barButtonItem12.Caption = "数据导入";
             this.barButtonItem12.Id = 24;
             this.barButtonItem12.Name = "barButtonItem12";
+            // 
+            // barSubItem4
+            // 
+            this.barSubItem4.Caption = "型号设置";
+            this.barSubItem4.Id = 27;
+            this.barSubItem4.Name = "barSubItem4";
+            this.barSubItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barSubItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barSubItem4_ItemClick);
+            // 
+            // barHeaderItem3
+            // 
+            this.barHeaderItem3.Caption = "barHeaderItem3";
+            this.barHeaderItem3.Id = 30;
+            this.barHeaderItem3.Name = "barHeaderItem3";
+            // 
+            // barListItem1
+            // 
+            this.barListItem1.Caption = "barListItem1";
+            this.barListItem1.Id = 31;
+            this.barListItem1.Name = "barListItem1";
             // 
             // dockPanel2
             // 
@@ -1083,31 +1100,13 @@
             this.点位详情ToolStripMenuItem.Text = "点位详情";
             this.点位详情ToolStripMenuItem.Click += new System.EventHandler(this.点位详情ToolStripMenuItem_Click);
             // 
-            // barHeaderItem3
-            // 
-            this.barHeaderItem3.Caption = "barHeaderItem3";
-            this.barHeaderItem3.Id = 30;
-            this.barHeaderItem3.Name = "barHeaderItem3";
-            // 
-            // barListItem1
-            // 
-            this.barListItem1.Caption = "barListItem1";
-            this.barListItem1.Id = 31;
-            this.barListItem1.Name = "barListItem1";
-            // 
-            // barStaticItem2
-            // 
-            this.barStaticItem2.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
-            this.barStaticItem2.Id = 32;
-            this.barStaticItem2.Name = "barStaticItem2";
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1379, 821);
-            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.panelContainer1);
+            this.Controls.Add(this.dockPanel2);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
             this.Controls.Add(this.barDockControlBottom);

@@ -996,7 +996,7 @@ namespace SagensVision.VisionTool
                 HTuple ColNew = temp_2[IntersetID];
 
                 int deg = fParam[Id].roiP[roiID].AngleOfProfile;
-                GetInflection(RowNew, ColNew, deg, out LastR, out LastC, hwnd, true, true, true, ShowFeatures);
+                GetInflection(RowNew, ColNew, deg, out LastR, out LastC, hwnd_profile, true, true, true, ShowFeatures);
 
                 if (LastR.Length == 0)
                 {
@@ -2400,7 +2400,12 @@ namespace SagensVision.VisionTool
                         ////判断 Z 值高度
                         if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
                         {
-                            if (ZCoord[i][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[Sid][i][0] > MyGlobal.globalPointSet_Right.HeightMax || ZCoord[i][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[Sid][i][0] < MyGlobal.globalPointSet_Right.HeightMin)
+                            if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[Sid].GetLength(0))
+                            {
+                                return "请重新设置基准值";
+                            }
+                            double sub = ZCoord[i][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[Sid][i][0];
+                            if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
                             {
                                 if (hwind != null)
                                 {
@@ -2411,7 +2416,7 @@ namespace SagensVision.VisionTool
                                     };
                                     hwind.Invoke(sw);
                                 }
-                                return $"{msg}高度超出范围" + Math.Round(ZCoord[i][0], 3);
+                                return $"{msg}高度超出范围" + Math.Round(sub, 3);
                             }
 
                         }
@@ -2421,6 +2426,10 @@ namespace SagensVision.VisionTool
                         ////判断 Z 值高度
                         if (MyGlobal.xyzBaseCoord_Left.ZCoord != null && MyGlobal.xyzBaseCoord_Left.ZCoord.Count != 0)
                         {
+                            if (i >= MyGlobal.xyzBaseCoord_Left.ZCoord[Sid].GetLength(0))
+                            {
+                                return "请重新设置基准值";
+                            }
                             if (ZCoord[i][0] - MyGlobal.xyzBaseCoord_Left.ZCoord[Sid][i][0] > MyGlobal.globalPointSet_Left.HeightMax || ZCoord[i][0] - MyGlobal.xyzBaseCoord_Left.ZCoord[Sid][i][0] < MyGlobal.globalPointSet_Left.HeightMin)
                             {
                                 if (hwind != null)
