@@ -57,7 +57,6 @@
             this.barCheckItem1 = new DevExpress.XtraBars.BarCheckItem();
             this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
             this.barCheckItem2 = new DevExpress.XtraBars.BarCheckItem();
-            this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             this.btn_clearbuffer = new DevExpress.XtraBars.BarButtonItem();
             this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
             this.barEditItem_CurrentType = new DevExpress.XtraBars.BarEditItem();
@@ -80,6 +79,7 @@
             this.barToolbarsListItem2 = new DevExpress.XtraBars.BarToolbarsListItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             this.barHeaderItem2 = new DevExpress.XtraBars.BarHeaderItem();
+            this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barHeaderItem3 = new DevExpress.XtraBars.BarHeaderItem();
@@ -472,16 +472,6 @@
             this.barCheckItem2.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.barCheckItem2.CheckedChanged += new DevExpress.XtraBars.ItemClickEventHandler(this.barCheckItem2_CheckedChanged);
             // 
-            // barButtonItem11
-            // 
-            this.barButtonItem11.Caption = "设置图像旋转角度";
-            this.barButtonItem11.Id = 22;
-            this.barButtonItem11.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.ImageOptions.Image")));
-            this.barButtonItem11.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.ImageOptions.LargeImage")));
-            this.barButtonItem11.Name = "barButtonItem11";
-            this.barButtonItem11.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barButtonItem11.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem11_ItemClick);
-            // 
             // btn_clearbuffer
             // 
             this.btn_clearbuffer.Caption = "清理缓存图像";
@@ -538,7 +528,7 @@
             // 
             // barStaticItem2
             // 
-            this.barStaticItem2.Caption = "深圳鼎晟自动化有限公司  版本1.0.1.2";
+            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.1.2";
             this.barStaticItem2.Id = 32;
             this.barStaticItem2.Name = "barStaticItem2";
             // 
@@ -648,6 +638,16 @@
             this.barHeaderItem2.Caption = "barHeaderItem2";
             this.barHeaderItem2.Id = 19;
             this.barHeaderItem2.Name = "barHeaderItem2";
+            // 
+            // barButtonItem11
+            // 
+            this.barButtonItem11.Caption = "设置图像旋转角度";
+            this.barButtonItem11.Id = 22;
+            this.barButtonItem11.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.ImageOptions.Image")));
+            this.barButtonItem11.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.ImageOptions.LargeImage")));
+            this.barButtonItem11.Name = "barButtonItem11";
+            this.barButtonItem11.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem11.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem11_ItemClick);
             // 
             // barButtonItem12
             // 

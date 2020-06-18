@@ -246,13 +246,26 @@ namespace SagensVision
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
 
-            ShowProfile.HMouseMove += ShowProfile_HMouseMove; ;
+            ShowProfile.MouseLeave += ShowProfile_MouseLeave;
+            ShowProfile.MouseClick += ShowProfile_MouseClick;
         }
 
-        private void ShowProfile_HMouseMove(object sender, HMouseEventArgs e)
+        private void ShowProfile_MouseClick(object sender, MouseEventArgs e)
         {
-           
+            //if (ClassShow3D.breakOut == false)
+            //{
+            //    return;
+            //}
+            //ShowProfileToWindow(this.recordXCoord, this.recordYCoord, this.recordZCoord, this.recordSigleTitle, false, true);
         }
+
+        private void ShowProfile_MouseLeave(object sender, EventArgs e)
+        {
+            //ClassShow3D.breakOut = true;
+            
+        }
+
+     
 
      
         private void Show3dImg(HWindow_Final obj)
@@ -2230,14 +2243,10 @@ namespace SagensVision
 
 
 
-
-
-
-
                 xcoord = new double[totalNum]; ycoord = new double[totalNum]; zcoord = new double[totalNum];
                 keypt = new string[totalNum]; double[] orginalR = new double[totalNum]; double[] orginalC = new double[totalNum];
                 int ind = 0; int ind2 = 0;
-                double x0 = 0, y0 = 0, z0 = 0;
+                double x0 = 0, y0 = 0, z0 = 0;string str0 = "";
                 string[] sigleTitle = new string[totalNum];
                 for (int i = 0; i < XCoord.Count; i++)
                 {
@@ -2409,24 +2418,29 @@ namespace SagensVision
                             Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
                         }
 
-                    if (i == 0)
-                    {
-                        int[] keys = everySeg.Keys.ToArray();
-                        for (int m = 0; m < keys.Length; m++)
-                        {
-                            if (Start >= keys[m])
-                            {
-                                lorc = everySeg[keys[m]];
-                                break;
-                            }
-                        }
-                    }
+                    //if (i == 0)
+                    //{
+                    //    int[] keys = everySeg.Keys.ToArray();
+                    //    for (int m = 0; m < keys.Length; m++)
+                    //    {
+                    //        if (Start >= keys[m])
+                    //        {
+                    //            lorc = everySeg[keys[m]];
+                    //            break;
+                    //        }
+                    //    }
+                    //}
                     if (i == 0)
                     {
                         x0 = X1;
                         y0 = Y1;
-                        z0 = Z1;
+                        z0 = Z1;                        
                     }
+                    if (i == xcoord.Length -2)
+                    {
+                        str0 = lorc;
+                    }
+
 
                     Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
 
@@ -2493,18 +2507,19 @@ namespace SagensVision
                         pix.Append("\r\n");
                     }
                 }
-                string strlast = "0;";
-                int len1 = XCoord[Side - 1].GetLength(0);
+                string strlast = str0;
+                //int len1 = XCoord[Side - 1].GetLength(0);
 
-                if (XCoord[Side - 1][len1 - 1] != null)
-                {
-                    strlast = StrLorC[Side - 1][len1 - 1][0];
-                }
-                else
-                {
-                    strlast = StrLorC[Side - 1][len1 - 2][0];
+                //if (XCoord[Side - 1][len1 - 1] != null)
+                //{
+                //    strlast = StrLorC[Side - 1][len1 - 1][0];
+                //}
+                //else
+                //{
+                //    strlast = StrLorC[Side - 1][len1 - 2][0];
 
-                }
+                //}
+                
                 Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
                 //StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
                 //C:\IT7000\data\11\C#@Users@AR9XX@Desktop@PK@guiji@3d
@@ -2694,7 +2709,7 @@ namespace SagensVision
                     {
                         for (int i = 0; i < 4; i++)
                         {
-                           string test = RunSuface(i + 1, true);
+                           string test = RunSuface(i + 1, true,true);
                             ShowAndSaveMsg(test);
                         }
                     }

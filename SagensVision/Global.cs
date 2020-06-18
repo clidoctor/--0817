@@ -31,7 +31,7 @@ namespace SagensVision
         public static string BaseTxtPath_Right = AppDomain.CurrentDomain.BaseDirectory + "Config_Right\\" + "BaseHeight.xml";
         public static string BaseTxtPath_Left = AppDomain.CurrentDomain.BaseDirectory + "Config_Left\\" + "BaseHeight.xml";
 
-        public static string SaveDatFileDirectory = "data\\datfile\\";
+        public static string SaveDatFileDirectory = "Data\\datfile\\";
 
         public static SagensSdk.GoSdkMaker GoSDK = new GoSdkMaker();
         
