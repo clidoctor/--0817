@@ -3335,7 +3335,7 @@ namespace SagensVision
 
         }
         VisionTool.GlobalParam gbParamSet = new VisionTool.GlobalParam(); 
-        private void navBarItem5_LinkPressed_1(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
+        private void navBarItem5_LinkPressed_1(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e) 
         {
             gbParamSet.ShowDialog();
         }
