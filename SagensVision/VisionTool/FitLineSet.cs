@@ -1220,14 +1220,14 @@ namespace SagensVision.VisionTool
         {
             if (isRight)
             {
-                if (MessageBox.Show("提示","是否保存右工位参数",MessageBoxButtons.YesNo)== DialogResult.Yes)
+                if (MessageBox.Show("是否保存右工位参数", "提示", MessageBoxButtons.YesNo)== DialogResult.Yes)
                 {
                     FitLineParamSave();
                 }
             }
             else
             {
-                if (MessageBox.Show("提示", "是否保存左工位参数", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show( "是否保存左工位参数", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     FitLineParamSave();
                 }

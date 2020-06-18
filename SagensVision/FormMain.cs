@@ -245,9 +245,16 @@ namespace SagensVision
             MyGlobal.hWindow_Final[1].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
+
+            ShowProfile.HMouseMove += ShowProfile_HMouseMove; ;
+        }
+
+        private void ShowProfile_HMouseMove(object sender, HMouseEventArgs e)
+        {
            
         }
 
+     
         private void Show3dImg(HWindow_Final obj)
         {
             //string hwind_id = obj.Name.Substring(obj.Name.Length - 1, 1);
@@ -2299,7 +2306,9 @@ namespace SagensVision
                 StringBuilder StrOrginalData = new StringBuilder();
                 StringBuilder StrAxisData = new StringBuilder();
                 StringBuilder StrRelative = new StringBuilder();
-
+                //重复性
+                StringBuilder Repeat = new StringBuilder();
+                StringBuilder RepeatHeader = new StringBuilder();
                 //test
                 StringBuilder pix = new StringBuilder();
 
@@ -2386,12 +2395,13 @@ namespace SagensVision
 
                     double Xrelative = X1 - AxisC;
                     double Yrelative = Y1 - AxisR;
-                        double Xrelative1 = 0;
-                        double Yrelative1 = 0;
-                        if (isRight)
-                        {
+                    double Xrelative1 = 0;
+                    double Yrelative1 = 0;
+                    if (isRight)
+                       {
                             Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
                             Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
+                            
                         }
                         else
                         {
@@ -2427,6 +2437,20 @@ namespace SagensVision
                         StrOrginalData.Append(saveTime + "\t" + xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(saveTime + "\t" + Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrRelative.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+
+                        //重复性
+                        if (sigleTitle[i].Contains("C"))
+                        {
+                            RepeatHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y"  + "\t");
+                            Repeat.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t");
+                        }
+                        else
+                        {
+                            RepeatHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t");
+                            Repeat.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t");
+                        }
+
+
                         //test
                         pix.Append(saveTime + "\t" + Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
@@ -2438,6 +2462,19 @@ namespace SagensVision
                         StrAxisData.Append(Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrRelative.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
 
+
+                        //重复性
+                        if (sigleTitle[i].Contains("C"))
+                        {
+                            RepeatHeader.Append(sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t");
+                            Repeat.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t");
+                        }
+                        else
+                        {
+                            RepeatHeader.Append( sigleTitle[i] + "_X" + "\t");
+                            Repeat.Append( Xrelative1.ToString("0.000") + "\t");
+                        }
+
                         //test
                         pix.Append(Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
@@ -2448,6 +2485,9 @@ namespace SagensVision
                         StrOrginalData.Append("\r\n");
                         StrAxisData.Append("\r\n");
                         StrRelative.Append("\r\n");
+                        //重复性
+                        RepeatHeader.Append("\r\n");
+                        Repeat.Append("\r\n");
 
                         //test
                         pix.Append("\r\n");
@@ -2480,7 +2520,8 @@ namespace SagensVision
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrRelative.ToString(), "Relative");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), pix.ToString(), "pix");
-                   
+                    StaticOperate.SaveExcelData(RepeatHeader.ToString(), Repeat.ToString(), "Repeatability");
+
                     for (int i = 0; i < 4; i++)
                     {
                         HTuple deg = 0;
