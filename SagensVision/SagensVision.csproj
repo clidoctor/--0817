@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -269,6 +270,12 @@
     <Compile Include="VisionTool\ShowCapacityFrm.Designer.cs">
       <DependentUpon>ShowCapacityFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="VisionTool\ShowCapacityUtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VisionTool\ShowCapacityUtl.Designer.cs">
+      <DependentUpon>ShowCapacityUtl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Communication\Communication.resx">
       <DependentUpon>Communication.cs</DependentUpon>
     </EmbeddedResource>
@@ -296,6 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VisionTool\ShowCapacityFrm.resx">
       <DependentUpon>ShowCapacityFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisionTool\ShowCapacityUtl.resx">
+      <DependentUpon>ShowCapacityUtl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Resources.resx">
