@@ -78,7 +78,6 @@
             this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
             this.barEditItem_CurrentType = new DevExpress.XtraBars.BarEditItem();
             this.repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
             this.bar3 = new DevExpress.XtraBars.Bar();
             this.barStaticItem2 = new DevExpress.XtraBars.BarStaticItem();
@@ -99,6 +98,7 @@
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             this.barHeaderItem2 = new DevExpress.XtraBars.BarHeaderItem();
             this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
+            this.barSubItem4 = new DevExpress.XtraBars.BarSubItem();
             this.barHeaderItem3 = new DevExpress.XtraBars.BarHeaderItem();
             this.barListItem1 = new DevExpress.XtraBars.BarListItem();
             this.dockPanel2 = new DevExpress.XtraBars.Docking.DockPanel();
@@ -410,11 +410,9 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem1),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem10),
             new DevExpress.XtraBars.LinkPersistInfo(this.barCheckItem2),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem11),
             new DevExpress.XtraBars.LinkPersistInfo(this.btn_clearbuffer),
             new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem1),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem_CurrentType, "", false, true, true, 112),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barSubItem4),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem6, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
@@ -546,14 +544,6 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.repositoryItemComboBox1.ButtonsStyle = DevExpress.XtraEditors.Controls.BorderStyles.Office2003;
             this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
-            // 
-            // barSubItem4
-            // 
-            this.barSubItem4.Caption = "型号设置";
-            this.barSubItem4.Id = 27;
-            this.barSubItem4.Name = "barSubItem4";
-            this.barSubItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            this.barSubItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barSubItem4_ItemClick);
             // 
             // barButtonItem6
             // 
@@ -701,6 +691,14 @@
             this.barButtonItem12.Caption = "数据导入";
             this.barButtonItem12.Id = 24;
             this.barButtonItem12.Name = "barButtonItem12";
+            // 
+            // barSubItem4
+            // 
+            this.barSubItem4.Caption = "型号设置";
+            this.barSubItem4.Id = 27;
+            this.barSubItem4.Name = "barSubItem4";
+            this.barSubItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barSubItem4.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barSubItem4_ItemClick);
             // 
             // barHeaderItem3
             // 

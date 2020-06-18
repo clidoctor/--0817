@@ -90,10 +90,12 @@ namespace SagensVision
                 path = listBox1.SelectedItem.ToString();
             tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
         }
+        bool isRunning = false;
         void RunOnce(bool AutoRun =false)
         {
             try
             {
+                isRunning = true;
                 //Thread.Sleep(100);
                 //run之前先判断该路径下面的文件是否齐全
                 path = (listBox1.Items[listBox1.SelectedIndex]).ToString();
@@ -111,8 +113,10 @@ namespace SagensVision
                         if (cb_runMode.Checked)
                         {
                             if ((listBox1.SelectedIndex + 1) == listBox1.Items.Count)
-                            {
+                            {     
+                                                           
                                 MessageBox.Show("已到最后一个文件！");
+                                isRunning = false;
                                 return;
                             }
                             else
@@ -151,10 +155,12 @@ namespace SagensVision
                         MessageBox.Show("请确认已在ListBox选择需要测试的物料");
                     }
                 }
+                isRunning = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                isRunning = false;
             }
         }
 
@@ -221,7 +227,16 @@ namespace SagensVision
 
         private void OfflineFrm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            
             FormMain.runOffLineFrmTag = false;
+        }
+
+        private void OfflineFrm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isRunning)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

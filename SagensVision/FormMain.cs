@@ -52,9 +52,9 @@ namespace SagensVision
         {
             try
             {
-                if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
+                if (File.Exists(MyGlobal.AllTypePath + "Global.xml"))
                 {
-                    MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
+                    MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.AllTypePath + "Global.xml", MyGlobal.globalConfig.GetType());
                 }
 
             }
@@ -91,36 +91,66 @@ namespace SagensVision
             if (MyGlobal.PathName.CurrentType!="")
             {                              
                 //读取Z值基准高度】
-                if (File.Exists(MyGlobal.BaseTxtPath))
+                if (File.Exists(MyGlobal.BaseTxtPath_Right))
                 {
-                    MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
+                    MyGlobal.xyzBaseCoord_Right = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Right, typeof(XYZBaseCoord));
+                }
+                else
+                {
+                    ShowAndSaveMsg("右工位基准值配置文件加载失败!");
+                }
+                if (File.Exists(MyGlobal.BaseTxtPath_Left))
+                {
+                    MyGlobal.xyzBaseCoord_Left = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Left, typeof(XYZBaseCoord));
+                }
+                else
+                {
+                    ShowAndSaveMsg("左工位基准值配置文件加载失败!");
                 }
 
             }
             else
             {
-                ShowAndSaveMsg("配置文件加载失败!");
+                ShowAndSaveMsg("基准值配置文件加载失败!");
             }
 
-            string ok1 = flset.Init();
+            string ok1 = MyGlobal.Right_findPointTool_Find.Init("FitLineSet",true);
             if (ok1 != "OK")
             {
                 ShowAndSaveMsg(ok1);
             }
             else
             {
-                ShowAndSaveMsg("抓边参数" + ok1);
+                ShowAndSaveMsg("右工位抓边参数" + ok1);
             }
-            string ok2 = MyGlobal.flset2.Init();
+            string ok2 = MyGlobal.Right_findPointTool_Fix.Init("Fix", true);
             if (ok2 != "OK")
             {
                 ShowAndSaveMsg(ok2);
             }
             else
             {
-                ShowAndSaveMsg("定位参数" + ok2);
+                ShowAndSaveMsg("右工位定位参数" + ok2);
             }
 
+            string ok3 = MyGlobal.Left_findPointTool_Find.Init("FitLineSet",false);
+            if (ok3 != "OK")
+            {
+                ShowAndSaveMsg("左工位" + ok3);
+            }
+            else
+            {
+                ShowAndSaveMsg("左工位抓边参数" + ok3);
+            }
+            string ok4 = MyGlobal.Left_findPointTool_Fix.Init("Fix",false);
+            if (ok4 != "OK")
+            {
+                ShowAndSaveMsg("左工位" + ok4);
+            }
+            else
+            {
+                ShowAndSaveMsg("左工位定位参数" + ok4);
+            }
 
             //string dbcreate = SQLiteHelper.NewDbFile();
             //if (dbcreate == "OK")
@@ -134,11 +164,33 @@ namespace SagensVision
             //}
             //LoadDataDB();
 
-            if (File.Exists(MyGlobal.ConfigPath + "Global.xml"))
+            if (File.Exists(MyGlobal.AllTypePath + "Global.xml"))
             {
-                MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.ConfigPath + "Global.xml", MyGlobal.globalConfig.GetType());
+                MyGlobal.globalConfig = (GlobalConfig)StaticOperate.ReadXML(MyGlobal.AllTypePath + "Global.xml", MyGlobal.globalConfig.GetType());
+            }
+            else
+            {
+                ShowAndSaveMsg("通信参数加载失败!");
+            }
+            if (File.Exists(MyGlobal.AllTypePath + "GlobalPoint_Right.xml"))
+            {
+                MyGlobal.globalPointSet_Right = (GlobalPointSet) StaticOperate.ReadXML(MyGlobal.AllTypePath + "GlobalPoint_Right.xml", typeof(GlobalPointSet));
+            }
+            else
+            {
+                ShowAndSaveMsg("右工位全局参数加载失败!");
+
             }
 
+            if (File.Exists(MyGlobal.AllTypePath + "GlobalPoint_Left.xml"))
+            {
+                MyGlobal.globalPointSet_Left = (GlobalPointSet)StaticOperate.ReadXML(MyGlobal.AllTypePath + "GlobalPoint_Left.xml", typeof(GlobalPointSet));
+
+            }
+            else
+            {
+                ShowAndSaveMsg("左工位全局参数加载失败!");
+            }
 
             for (int i = 0; i < 4; i++)
             {
@@ -195,8 +247,16 @@ namespace SagensVision
             MyGlobal.hWindow_Final[1].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
+
+            ShowProfile.HMouseMove += ShowProfile_HMouseMove; ;
         }
 
+        private void ShowProfile_HMouseMove(object sender, HMouseEventArgs e)
+        {
+           
+        }
+
+     
         private void Show3dImg(HWindow_Final obj)
         {
             //string hwind_id = obj.Name.Substring(obj.Name.Length - 1, 1);
@@ -340,13 +400,22 @@ namespace SagensVision
             }
         }
 
-        string RunFindPoint(int Side, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HTuple Homat3D, HWindow_Final Hwnd)
+        string RunFindPoint(int Side,bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HTuple Homat3D, HWindow_Final Hwnd)
         {
             X = null; Y = null; Z = null; Str = null; original = new HTuple[2];
             try
             {
                 IntersetionCoord intersect = new IntersetionCoord();
-                string ok1 = MyGlobal.flset2.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
+                string ok1 = "";
+                if (isRight)
+                {
+                    ok1 = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
+                }
+                else
+                {
+                    ok1 = MyGlobal.Left_findPointTool_Fix.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false);
+                }
+               
                 if (ok1!="OK")
                 {
                     errstr.Append($"<side{Side}:-定位-{ok1}>");
@@ -354,13 +423,27 @@ namespace SagensVision
                 }
                 AnchorList.Add(intersect);
                 HTuple homMaxFix = new HTuple();
-                double orignalDeg = MyGlobal.globalConfig.isUseAnchorDeg ? MyGlobal.flset2.intersectCoordList[Side - 1].Angle:0;
-                double currentDeg = MyGlobal.globalConfig.isUseAnchorDeg ? intersect.Angle : 0;
+                string OK = "";
+                double orignalDeg = 0;
+                double currentDeg = intersect.Angle ;
+                if (isRight)
+                {
+                    orignalDeg = MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Angle ;
+                    HOperatorSet.VectorAngleToRigid(MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Col,
+                    orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side,isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
 
-                HOperatorSet.VectorAngleToRigid(MyGlobal.flset2.intersectCoordList[Side - 1].Row, MyGlobal.flset2.intersectCoordList[Side - 1].Col,
+                }
+                else
+                {
+                    orignalDeg = MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
+                    HOperatorSet.VectorAngleToRigid(MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Col,
                 orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                    OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
 
-                string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
+                }
+
+
                 if (OK != "OK")
                 {
                     if (OK.Contains("高度超出范围"))
@@ -504,17 +587,17 @@ namespace SagensVision
             if (MyGlobal.GoSDK.connect(MyGlobal.globalConfig.SensorIP, ref Msg))
             {
                 ShowAndSaveMsg("Sensor连接成功！");
-                MyGlobal.globalConfig.dataContext.serialNumber = MyGlobal.GoSDK.context.serialNumber;
-                MyGlobal.globalConfig.dataContext.xOffset = MyGlobal.GoSDK.context.xOffset;
-                MyGlobal.globalConfig.dataContext.yOffset = MyGlobal.GoSDK.context.yOffset;
-                MyGlobal.globalConfig.dataContext.zOffset = MyGlobal.GoSDK.context.zOffset;
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution;
-                MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
+                //MyGlobal.globalConfig.dataContext.serialNumber = MyGlobal.GoSDK.context.serialNumber;
+                //MyGlobal.globalConfig.dataContext.xOffset = MyGlobal.GoSDK.context.xOffset;
+                //MyGlobal.globalConfig.dataContext.yOffset = MyGlobal.GoSDK.context.yOffset;
+                //MyGlobal.globalConfig.dataContext.zOffset = MyGlobal.GoSDK.context.zOffset;
+                ////MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution;
+                ////MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution;
+                ////MyGlobal.globalConfig.dataContext.zResolution = MyGlobal.GoSDK.context.zResolution;
 
 
-                MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
-                MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
+                //MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
+                //MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
 
                 if (!SecretKey.License.SnOk)
                 {
@@ -581,7 +664,7 @@ namespace SagensVision
                 //{
                 Action run = () =>
                 {
-                    string ok = RunSuface(1);
+                    string ok = RunSuface(1,true);
                     if (ok != "OK")
                     {
                         ShowAndSaveMsg(ok);
@@ -701,10 +784,11 @@ namespace SagensVision
                     if (Station == 1)
                         saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-                    StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff");
-                    StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff");
+                    StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff", true);
+                    StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff", true);
 
-                    string OK = RunSide(Station, IntensityImage, HeightImage);
+                    string OK = RunSide(Station,true, IntensityImage, HeightImage);
+
                     HObject[] temp = { IntensityImage, HeightImage };
                     MyGlobal.ImageMulti.Add(temp);
 
@@ -751,7 +835,7 @@ namespace SagensVision
         }
 
         //点云
-        private string RunSuface(int Station,bool outline = false)
+        private string RunSuface(int Station,bool isRight ,bool outline = false)
         {
             try
             {
@@ -851,7 +935,16 @@ namespace SagensVision
                             MyGlobal.GoSDK.SurfaceDataZByte = null;
 
                             byteImg.Dispose();
-                            HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.globalConfig.imgRotateArr[Station - 1], "constant");
+                            if (isRight)
+                            {
+                                HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.globalPointSet_Right.imgRotateArr[Station - 1], "constant");
+
+                            }
+                            else
+                            {
+                                HOperatorSet.RotateImage(tempByteImg, out byteImg, MyGlobal.globalPointSet_Left.imgRotateArr[Station - 1], "constant");
+
+                            }
                             rgbImg.Dispose();
                             PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
                             zoomRgbImg.Dispose();
@@ -861,12 +954,28 @@ namespace SagensVision
 
 
                         HeightImage.Dispose();
-                        HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.globalConfig.imgRotateArr[Station - 1], "constant");
+                        if (isRight)
+                        {
+                            HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.globalPointSet_Right.imgRotateArr[Station - 1], "constant");
+                        }
+                        else
+                        {
+                            HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.globalPointSet_Left.imgRotateArr[Station - 1], "constant");
+
+                        }
+
                         ZoomHeightImg.Dispose();
                         HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 4, "constant");
 
                         IntensityImage.Dispose();
-                        HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.globalConfig.imgRotateArr[Station - 1], "constant");
+                        if (isRight)
+                        {
+                            HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.globalPointSet_Right.imgRotateArr[Station - 1], "constant");
+                        }
+                        else
+                        {
+                            HOperatorSet.RotateImage(tempInteImg, out IntensityImage, MyGlobal.globalPointSet_Left.imgRotateArr[Station - 1], "constant");
+                        }
                         ZoomIntensityImg.Dispose();
                         HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 4, "constant");
 
@@ -881,6 +990,7 @@ namespace SagensVision
                         }
 
                         if (Station == 1)
+
                             saveImageTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
                         //bool isSaveImgOK = false;
@@ -897,7 +1007,7 @@ namespace SagensVision
                         //});
 
 
-                        string OK = RunSide(Station, ZoomIntensityImg, ZoomHeightImg);
+                        string OK = RunSide(Station,isRight, ZoomIntensityImg, ZoomHeightImg);
                         HObject[] temp = { MyGlobal.hWindow_Final[Side - 1].Image, ZoomHeightImg };
                         MyGlobal.ImageMulti.Add(temp);
 
@@ -909,19 +1019,52 @@ namespace SagensVision
                             {
                                 if (errstr.ToString().Contains("定位"))
                                 {
-                                    MyGlobal.globalConfig.AnchorErrorCnt++;
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.AnchorErrorCnt++ ;
+                                }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
+
+                                    }
                                 }
                                 else if (errstr.ToString().Contains("抓边") || errstr.ToString().Contains("RunFindPoint"))
                                 {
-                                    MyGlobal.globalConfig.FindEgdeErrorCnt++;
+                                   
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
+                                }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
+
+                                    }
                                 }
                                 else if (errstr.ToString().Contains("探高"))
                                 {
-                                    MyGlobal.globalConfig.ExploreHeightErrorCnt++;
+                                   
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
                                 }
                                 else
                                 {
-                                    MyGlobal.globalConfig.FindEgdeErrorCnt++;
+                                        MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
+                                }
+                                }
+                                else
+                                {
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
+                                    }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
+                                    }
+                                    
                                 }
                                 string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
                                 ShowAndSaveErrorMsg(errstr.ToString(), path + saveImageTime);
@@ -929,29 +1072,45 @@ namespace SagensVision
                                 {
                                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                     {
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff",isRight);
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
                                     }
                                 });
                             }
                             else
                             {
-                                MyGlobal.globalConfig.OkCnt++;
+                                if (isRight)
+                                {
+                                    MyGlobal.globalPointSet_Right.OkCnt++;
+                                }
+                                else
+                                {
+                                    MyGlobal.globalPointSet_Left.OkCnt++;
+
+                                }
                                 if (MyGlobal.globalConfig.isSaveImg)
                                 {
                                     ThreadPool.QueueUserWorkItem(delegate
                                     {
                                         for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                         {
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
                                         }
                                     });
                                 }
                             }
-                            //scf?.setValue();
-                            setValue();
-                            StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                            scf?.setValue(isRight);
+                            if (isRight)
+                            {
+                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+                        }
+                            else
+                            {
+                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
+                       
+                            }
+
                         }
                        
                         return OK;
@@ -980,7 +1139,7 @@ namespace SagensVision
                     //判断是否离线测试
                     if (outline)
                     {
-                        string OK = RunSide(Station, MyGlobal.ImageMulti[Station - 1][0], MyGlobal.ImageMulti[Station - 1][1]);
+                        string OK = RunSide(Station,isRight, MyGlobal.ImageMulti[Station - 1][0], MyGlobal.ImageMulti[Station - 1][1]);
                         if (Station == 4)
                         {
                             outline = false;
@@ -988,19 +1147,52 @@ namespace SagensVision
                             {
                                 if (errstr.ToString().Contains("定位"))
                                 {
-                                    MyGlobal.globalConfig.AnchorErrorCnt++;
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.AnchorErrorCnt++;
+                                }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
+
+                                    }
                                 }
                                 else if (errstr.ToString().Contains("抓边") || errstr.ToString().Contains("RunFindPoint"))
                                 {
-                                    MyGlobal.globalConfig.FindEgdeErrorCnt++;
+
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
+                                }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
+
+                                    }
                                 }
                                 else if (errstr.ToString().Contains("探高"))
                                 {
-                                    MyGlobal.globalConfig.ExploreHeightErrorCnt++;
+
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
                                 }
                                 else
                                 {
-                                    MyGlobal.globalConfig.FindEgdeErrorCnt++;
+                                        MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
+                                }
+                                }
+                                else
+                                {
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
+                                    }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
+                                    }
+
                                 }
                                 string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
                                 ShowAndSaveErrorMsg(errstr.ToString(), path + saveImageTime);
@@ -1008,28 +1200,44 @@ namespace SagensVision
                                 {
                                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                     {
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
                                     }
                                 });
                             }
                             else
                             {
-                                MyGlobal.globalConfig.OkCnt++;
+                                if (isRight)
+                                {
+                                    MyGlobal.globalPointSet_Right.OkCnt++;
+                                }
+                                else
+                                {
+                                    MyGlobal.globalPointSet_Left.OkCnt++;
+
+                                }
                                 if (MyGlobal.globalConfig.isSaveImg)
                                 {
                                     ThreadPool.QueueUserWorkItem(delegate
                                     {
                                         for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                         {
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff");
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff");
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
                                         }
                                     });
                                 }
                             }
-                            scf?.setValue();
-                            StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                            scf?.setValue(isRight);
+                            if (isRight)
+                            {
+                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+                        }
+                            else
+                            {
+                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
+
+                            }
                         }
                         return OK;
                     }
@@ -1072,7 +1280,7 @@ namespace SagensVision
                 return "加载高度图和亮度图 Ng";
             }
 
-            string Ok = RunSide(Station, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], SaveBase);
+            string Ok = RunSide(Station,true, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], SaveBase);
 
             if (Ok != "OK")
             {
@@ -1083,504 +1291,512 @@ namespace SagensVision
         }
 
         #region RunSide111
-        [Obsolete]
-        private string RunSide111(int Station, HObject IntensityImage, HObject HeightImage)
-        {
-            try
-            {
-                double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
-                string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
-                XCoord.Add(x);
-                YCoord.Add(y);
-                ZCoord.Add(z);
-                StrLorC.Add(Strlorc);
-                #region 除去起始位重复部分 并均分 
-                for (int i = 0; i < Station; i++)
-                {
-                    HTuple firstPt, order = 0, lastPt, fpt, Grater, Less, GraterId = new HTuple(), LessId = new HTuple(); string first = "";
-                    HTuple ResultX = new HTuple(), ResultY = new HTuple(), ResultZ = new HTuple(), ResultLorC = new HTuple();
-                    HTuple ResultX2 = new HTuple(), ResultY2 = new HTuple(), ResultZ2 = new HTuple(), ResultLorC2 = new HTuple();
-                    HTuple Lx1 = new HTuple(), Ly1 = new HTuple(), Lz1 = new HTuple(), Gx1 = new HTuple(), Gy1 = new HTuple(), Gz1 = new HTuple(); int Len1 = 0; int Len2 = 0; int Len = 0;
-                    HTuple tempx, tempy, tempz; HTuple x1, y1, x2, y2;
-                    switch (i)
-                    {
-                        case 0:
-                            if (Station == 4) //Y1<Y4  // 去掉第一条重叠 保留第4条
-                            {
+        //[Obsolete]
+        //private string RunSide111(int Station, HObject IntensityImage, HObject HeightImage)
+        //{
+        //    try
+        //    {
+        //        double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
+        //        string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[0]);
+        //        XCoord.Add(x);
+        //        YCoord.Add(y);
+        //        ZCoord.Add(z);
+        //        StrLorC.Add(Strlorc);
+        //        #region 除去起始位重复部分 并均分 
+        //        for (int i = 0; i < Station; i++)
+        //        {
+        //            HTuple firstPt, order = 0, lastPt, fpt, Grater, Less, GraterId = new HTuple(), LessId = new HTuple(); string first = "";
+        //            HTuple ResultX = new HTuple(), ResultY = new HTuple(), ResultZ = new HTuple(), ResultLorC = new HTuple();
+        //            HTuple ResultX2 = new HTuple(), ResultY2 = new HTuple(), ResultZ2 = new HTuple(), ResultLorC2 = new HTuple();
+        //            HTuple Lx1 = new HTuple(), Ly1 = new HTuple(), Lz1 = new HTuple(), Gx1 = new HTuple(), Gy1 = new HTuple(), Gz1 = new HTuple(); int Len1 = 0; int Len2 = 0; int Len = 0;
+        //            HTuple tempx, tempy, tempz; HTuple x1, y1, x2, y2;
+        //            switch (i)
+        //            {
+        //                case 0:
+        //                    if (Station == 4) //Y1<Y4  // 去掉第一条重叠 保留第4条
+        //                    {
 
-                                ResultY = YCoord[i][0];//第1条第一段
-                                ResultX = XCoord[i][0];//第1条第一段
-                                ResultZ = ZCoord[i][0];//第1条第一段
-                                ResultLorC = StrLorC[i][0];//第一段
+        //                        ResultY = YCoord[i][0];//第1条第一段
+        //                        ResultX = XCoord[i][0];//第1条第一段
+        //                        ResultZ = ZCoord[i][0];//第1条第一段
+        //                        ResultLorC = StrLorC[i][0];//第一段
 
-                                if (ResultY.Length == 0)
-                                {
-                                    break;
-                                }
-                                firstPt = ResultY[0];//第1条第一点
-                                order = YCoord[3].GetLength(0) - 1;
-                                ResultY2 = YCoord[3][order];//第四边最后段
-                                ResultX2 = XCoord[3][order];//第四边最后段
-                                //ResultLorC2 = StrLorC[3][order];
-
-
-                                lastPt = ResultY2[ResultY2.Length - 1];//第4条最后一点
-                                Less = ResultY.TupleLessEqualElem(lastPt);//第1条小于第4条重叠部分
-                                Grater = ResultY2.TupleGreaterEqualElem(firstPt);//第4条大于于第1边不重叠部分
-
-                                GraterId = Grater.TupleFind(1);
-                                LessId = Less.TupleFind(1);
-                                if (GraterId == -1)
-                                {
-                                    break;
-                                }
-
-                                //重叠部分取均值
-                                Len2 = GraterId.Length;
-                                Len1 = LessId.Length;
-                                Len = Len1 < Len2 ? Len1 : Len2;
-                                //Len2 添加到第4条
-                                if (Len >= ResultY.Length || Len >= ResultY2.Length)
-                                {
-                                    break;
-                                }
-                                y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
-                                x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
-                                y2 = ResultY.TupleSelectRange(0, Len - 1);
-                                x2 = ResultX.TupleSelectRange(0, Len - 1);
-                                Lx1 = (x1 + x2) / 2;
-                                Ly1 = (y1 + y2) / 2;
-                                HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Less);
-                                HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Grater);
+        //                        if (ResultY.Length == 0)
+        //                        {
+        //                            break;
+        //                        }
+        //                        firstPt = ResultY[0];//第1条第一点
+        //                        order = YCoord[3].GetLength(0) - 1;
+        //                        ResultY2 = YCoord[3][order];//第四边最后段
+        //                        ResultX2 = XCoord[3][order];//第四边最后段
+        //                        //ResultLorC2 = StrLorC[3][order];
 
 
-                                ResultY2 = ResultY2.TupleReplace(Grater, Ly1);
-                                ResultX2 = ResultX2.TupleReplace(Grater, Lx1);
+        //                        lastPt = ResultY2[ResultY2.Length - 1];//第4条最后一点
+        //                        Less = ResultY.TupleLessEqualElem(lastPt);//第1条小于第4条重叠部分
+        //                        Grater = ResultY2.TupleGreaterEqualElem(firstPt);//第4条大于于第1边不重叠部分
 
-                                ResultY = ResultY.TupleRemove(Less);
-                                ResultX = ResultX.TupleRemove(Less);
-                                ResultZ = ResultZ.TupleRemove(Less);
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC.TupleRemove(Less);
-                                ResultLorC[0] = first;
+        //                        GraterId = Grater.TupleFind(1);
+        //                        LessId = Less.TupleFind(1);
+        //                        if (GraterId == -1)
+        //                        {
+        //                            break;
+        //                        }
 
-                                XCoord[3][order] = ResultX2;
-                                YCoord[3][order] = ResultY2;
-                            }
-
-                            break;
-                        case 1:
-                            if (Station >= 2) //X2>X1  去掉第二条重叠 保留第1条
-                            {
-
-                                ResultX = XCoord[i][0];//第2条第第一段
-                                ResultY = YCoord[i][0];//第2条第第一段
-                                ResultZ = ZCoord[i][0];//第2条第第一段
-                                ResultLorC = StrLorC[i][0];//第一段
-
-                                if (ResultX.Length == 0)
-                                {
-                                    break;
-                                }
-                                firstPt = ResultX[0];//第2条第一点
-                                order = XCoord[0].GetLength(0) - 1;
-                                ResultX2 = XCoord[0][order];//第1边最后段
-                                ResultY2 = YCoord[0][order];//第1边最后段
-
-                                lastPt = ResultX2[ResultX2.Length - 1];//第1条最后一点
-                                Grater = ResultX.TupleGreaterEqualElem(lastPt);//第2条大于第1条重叠部分
-                                Less = ResultX2.TupleLessEqualElem(firstPt);//第1条小于第2边重叠部分
-
-                                GraterId = Grater.TupleFind(1);
-                                LessId = Less.TupleFind(1);
-
-                                if (GraterId == -1 || LessId == -1)
-                                {
-                                    break;
-                                }
-
-                                //重叠部分取均值    
-                                //Gx1 = ResultX[LessId];
-                                //Gy1 = ResultY[LessId];
-                                //Gz1 = ResultZ[LessId];
-
-                                Len2 = LessId.Length; Len1 = GraterId.Length;
-                                Len = Len1 < Len2 ? Len1 : Len2;
-                                //Len2 添加到第4条
-                                if (Len >= ResultY.Length || Len >= ResultY2.Length)
-                                {
-                                    break;
-                                }
-                                y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
-                                x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
-                                y2 = ResultY.TupleSelectRange(0, Len - 1);
-                                x2 = ResultX.TupleSelectRange(0, Len - 1);
-                                Lx1 = (x1 + x2) / 2;
-                                Ly1 = (y1 + y2) / 2;
-
-                                HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Grater);
-                                HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Less);
+        //                        //重叠部分取均值
+        //                        Len2 = GraterId.Length;
+        //                        Len1 = LessId.Length;
+        //                        Len = Len1 < Len2 ? Len1 : Len2;
+        //                        //Len2 添加到第4条
+        //                        if (Len >= ResultY.Length || Len >= ResultY2.Length)
+        //                        {
+        //                            break;
+        //                        }
+        //                        y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
+        //                        x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
+        //                        y2 = ResultY.TupleSelectRange(0, Len - 1);
+        //                        x2 = ResultX.TupleSelectRange(0, Len - 1);
+        //                        Lx1 = (x1 + x2) / 2;
+        //                        Ly1 = (y1 + y2) / 2;
+        //                        HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Less);
+        //                        HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Grater);
 
 
-                                ResultY2 = ResultY2.TupleReplace(Less, Ly1);
-                                ResultX2 = ResultX2.TupleReplace(Less, Lx1);
+        //                        ResultY2 = ResultY2.TupleReplace(Grater, Ly1);
+        //                        ResultX2 = ResultX2.TupleReplace(Grater, Lx1);
 
-                                ResultY = ResultY.TupleRemove(Grater);
-                                ResultX = ResultX.TupleRemove(Grater);
-                                ResultZ = ResultZ.TupleRemove(Grater);
+        //                        ResultY = ResultY.TupleRemove(Less);
+        //                        ResultX = ResultX.TupleRemove(Less);
+        //                        ResultZ = ResultZ.TupleRemove(Less);
+        //                        //首位 
+        //                        first = ResultLorC[0];
+        //                        ResultLorC = ResultLorC.TupleRemove(Less);
+        //                        ResultLorC[0] = first;
 
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC.TupleRemove(Grater);
-                                ResultLorC[0] = first;
+        //                        XCoord[3][order] = ResultX2;
+        //                        YCoord[3][order] = ResultY2;
+        //                    }
 
-                                XCoord[0][order] = ResultX2;
-                                YCoord[0][order] = ResultY2;
-                            }
-                            break;
-                        case 2:
-                            if (Station >= 3) //Y3>Y2 去掉第三条重叠 保留第2条
-                            {
+        //                    break;
+        //                case 1:
+        //                    if (Station >= 2) //X2>X1  去掉第二条重叠 保留第1条
+        //                    {
 
-                                ResultY = YCoord[i][0];//第3条第一段
-                                ResultX = XCoord[i][0];//第3条第一段
-                                ResultZ = ZCoord[i][0];//第3条第一段
-                                ResultLorC = StrLorC[i][0];//第一段
+        //                        ResultX = XCoord[i][0];//第2条第第一段
+        //                        ResultY = YCoord[i][0];//第2条第第一段
+        //                        ResultZ = ZCoord[i][0];//第2条第第一段
+        //                        ResultLorC = StrLorC[i][0];//第一段
 
-                                if (ResultY.Length == 0)
-                                {
-                                    break;
-                                }
+        //                        if (ResultX.Length == 0)
+        //                        {
+        //                            break;
+        //                        }
+        //                        firstPt = ResultX[0];//第2条第一点
+        //                        order = XCoord[0].GetLength(0) - 1;
+        //                        ResultX2 = XCoord[0][order];//第1边最后段
+        //                        ResultY2 = YCoord[0][order];//第1边最后段
 
-                                firstPt = ResultY[0];//第3条第一点
-                                order = YCoord[1].GetLength(0) - 1;
-                                ResultY2 = YCoord[1][order];//第2边最后段
-                                ResultX2 = XCoord[1][order];//第2边最后段
-                                //ResultLorC2 = StrLorC[3][order];
+        //                        lastPt = ResultX2[ResultX2.Length - 1];//第1条最后一点
+        //                        Grater = ResultX.TupleGreaterEqualElem(lastPt);//第2条大于第1条重叠部分
+        //                        Less = ResultX2.TupleLessEqualElem(firstPt);//第1条小于第2边重叠部分
 
+        //                        GraterId = Grater.TupleFind(1);
+        //                        LessId = Less.TupleFind(1);
 
-                                lastPt = ResultY2[ResultY2.Length - 1];//第2条最后一点
-                                Less = ResultY.TupleGreaterEqualElem(lastPt);//第3条大于第2条重叠部分
-                                Grater = ResultY2.TupleLessEqualElem(firstPt);//第2条小于第3边重叠部分
+        //                        if (GraterId == -1 || LessId == -1)
+        //                        {
+        //                            break;
+        //                        }
 
-                                GraterId = Grater.TupleFind(1);
-                                LessId = Less.TupleFind(1);
-                                if (GraterId == -1 || LessId == -1)
-                                {
-                                    break;
-                                }
+        //                        //重叠部分取均值    
+        //                        //Gx1 = ResultX[LessId];
+        //                        //Gy1 = ResultY[LessId];
+        //                        //Gz1 = ResultZ[LessId];
 
-                                //重叠部分取均值
-                                Len2 = LessId.Length; Len1 = GraterId.Length;
-                                Len = Len1 < Len2 ? Len1 : Len2;
-                                //Len2 添加到第4条
-                                if (Len >= ResultY.Length || Len >= ResultY2.Length)
-                                {
-                                    break;
-                                }
-                                y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
-                                x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
-                                y2 = ResultY.TupleSelectRange(0, Len - 1);
-                                x2 = ResultX.TupleSelectRange(0, Len - 1);
-                                Lx1 = (x1 + x2) / 2;
-                                Ly1 = (y1 + y2) / 2;
+        //                        Len2 = LessId.Length; Len1 = GraterId.Length;
+        //                        Len = Len1 < Len2 ? Len1 : Len2;
+        //                        //Len2 添加到第4条
+        //                        if (Len >= ResultY.Length || Len >= ResultY2.Length)
+        //                        {
+        //                            break;
+        //                        }
+        //                        y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
+        //                        x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
+        //                        y2 = ResultY.TupleSelectRange(0, Len - 1);
+        //                        x2 = ResultX.TupleSelectRange(0, Len - 1);
+        //                        Lx1 = (x1 + x2) / 2;
+        //                        Ly1 = (y1 + y2) / 2;
 
-                                HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Less);
-                                HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Grater);
-
-
-                                ResultY2 = ResultY2.TupleReplace(Grater, Ly1);
-                                ResultX2 = ResultX2.TupleReplace(Grater, Lx1);
-
-                                ResultY = ResultY.TupleRemove(Less);
-                                ResultX = ResultX.TupleRemove(Less);
-                                ResultZ = ResultZ.TupleRemove(Less);
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC.TupleRemove(Less);
-                                ResultLorC[0] = first;
-
-                                XCoord[1][order] = ResultX2;
-                                YCoord[1][order] = ResultY2;
-                            }
-                            break;
-                        case 3:
-                            if (Station >= 4) //X4<X3  //Y3>Y2 去掉第四条重叠 保留第3条
-                            {
-
-                                ResultX = XCoord[i][0];//第4条第一段
-                                ResultY = YCoord[i][0];//第4条第一段
-                                ResultZ = ZCoord[i][0];//第4条第一段
-                                ResultLorC = StrLorC[i][0]; //第4条//第一段
-
-                                if (ResultX.Length == 0)
-                                {
-                                    break;
-                                }
-                                firstPt = ResultX[0];//第4条第一点
-                                order = XCoord[2].GetLength(0) - 1;
-                                ResultX2 = XCoord[2][order];//第3边最后段
-                                ResultY2 = YCoord[2][order];//第3边最后段
-
-                                lastPt = ResultX2[ResultX2.Length - 1];//第3条最后一点
-                                Grater = ResultX.TupleLessEqualElem(lastPt);//第4条小于第1条重叠部分
-                                Less = ResultX2.TupleGreaterEqualElem(firstPt);//第3条大于第2边重叠部分
-
-                                GraterId = Grater.TupleFind(1);
-                                LessId = Less.TupleFind(1);
-
-                                if (GraterId == -1 || LessId == -1)
-                                {
-                                    break;
-                                }
-
-                                //重叠部分取均值    
-                                Len2 = LessId.Length; Len1 = GraterId.Length;
-                                Len = Len1 < Len2 ? Len1 : Len2;
-                                //Len2 添加到第4条
-                                if (Len >= ResultY.Length || Len >= ResultY2.Length)
-                                {
-                                    break;
-                                }
-                                y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
-                                x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
-                                y2 = ResultY.TupleSelectRange(0, Len - 1);
-                                x2 = ResultX.TupleSelectRange(0, Len - 1);
-                                Lx1 = (x1 + x2) / 2;
-                                Ly1 = (y1 + y2) / 2;
-
-                                HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Grater);
-                                HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Less);
+        //                        HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Grater);
+        //                        HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Less);
 
 
-                                ResultY2 = ResultY2.TupleReplace(Less, Ly1);
-                                ResultX2 = ResultX2.TupleReplace(Less, Lx1);
+        //                        ResultY2 = ResultY2.TupleReplace(Less, Ly1);
+        //                        ResultX2 = ResultX2.TupleReplace(Less, Lx1);
 
-                                ResultY = ResultY.TupleRemove(Grater);
-                                ResultX = ResultX.TupleRemove(Grater);
-                                ResultZ = ResultZ.TupleRemove(Grater);
+        //                        ResultY = ResultY.TupleRemove(Grater);
+        //                        ResultX = ResultX.TupleRemove(Grater);
+        //                        ResultZ = ResultZ.TupleRemove(Grater);
 
-                                //首位 
-                                first = ResultLorC[0];
-                                ResultLorC = ResultLorC.TupleRemove(Grater);
-                                ResultLorC[0] = first;
+        //                        //首位 
+        //                        first = ResultLorC[0];
+        //                        ResultLorC = ResultLorC.TupleRemove(Grater);
+        //                        ResultLorC[0] = first;
 
-                                XCoord[2][order] = ResultX2;
-                                YCoord[2][order] = ResultY2;
-                            }
-                            break;
-                    }
-                    if (GraterId.Length != 0 && GraterId.D == -1)
-                    {
-                        //XCoord[i][0] = null;
-                        //YCoord[i][0] = null;
-                        //ZCoord[i][0] = null;
-                        //StrLorC[i][0] = null;
+        //                        XCoord[0][order] = ResultX2;
+        //                        YCoord[0][order] = ResultY2;
+        //                    }
+        //                    break;
+        //                case 2:
+        //                    if (Station >= 3) //Y3>Y2 去掉第三条重叠 保留第2条
+        //                    {
 
-                        //return string.Format("第{0}边,第一段重合点数过多", i + 1);
-                    }
-                    else if (GraterId.Length != 0)
-                    {
+        //                        ResultY = YCoord[i][0];//第3条第一段
+        //                        ResultX = XCoord[i][0];//第3条第一段
+        //                        ResultZ = ZCoord[i][0];//第3条第一段
+        //                        ResultLorC = StrLorC[i][0];//第一段
 
-                        //XCoord[i][0] = ResultX;
-                        //YCoord[i][0] = ResultY;
-                        //ZCoord[i][0] = ResultZ;
-                        //StrLorC[i][0] = ResultLorC;                        
-                    }
+        //                        if (ResultY.Length == 0)
+        //                        {
+        //                            break;
+        //                        }
 
-                }
-                #endregion
-
-                Dictionary<int, string> everySeg = new Dictionary<int, string>();
-                double[] xcoord, ycoord, zcoord; string[] keypt;
-                int totalNum = 0;
-                for (int i = 0; i < XCoord.Count; i++)
-                {
-                    for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                    {
-                        if (XCoord[i][j] == null)
-                        {
-                            continue;
-                        }
-                        for (int k = 0; k < XCoord[i][j].Length; k++)
-                        {
-                            totalNum++;
-                        }
-
-                    }
-                }
-                xcoord = new double[totalNum]; ycoord = new double[totalNum]; zcoord = new double[totalNum];
-                keypt = new string[totalNum];
-                int ind = 0;
-                double x0 = 0, y0 = 0, z0 = 0;
-                for (int i = 0; i < XCoord.Count; i++)
-                {
-                    for (int j = 0; j < XCoord[i].GetLength(0); j++)
-                    {
-                        if (XCoord[i][j] == null)
-                        {
-                            continue;
-                        }
-
-                        HTuple row = XCoord[i][j];
-                        HTuple col = YCoord[i][j];
-
-                        if (Station == 4)
-                        {
-                            HObject NewSide = new HObject();
-                            HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
-                            MyGlobal.hWindow_Final[0].viewWindow.displayHobject(NewSide, "red");
-                        }
-
-                        for (int k = 0; k < XCoord[i][j].Length; k++)
-                        {
-                            if (k > 0)
-                            {
-                                if (xcoord[ind] == xcoord[ind - 1] && ycoord[ind] == ycoord[ind - 1])
-                                {
-                                    //存在重复点；
-                                    MessageBox.Show("重复点");
-                                }
-                            }
-                            xcoord[ind] = Math.Round(XCoord[i][j][k], 3);
-                            ycoord[ind] = Math.Round(YCoord[i][j][k], 3);
-                            zcoord[ind] = Math.Round(ZCoord[i][j][k], 3);
-                            keypt[ind] = StrLorC[i][j][k];
-                            if (k == 0)
-                            {
-                                everySeg.Add(ind, keypt[ind]);
-                            }
-                            ind++;
-                            if (ind == 2044)
-                            {
-                                Debug.WriteLine("tt+" + ind);
-                            }
-                            Debug.WriteLine("tt+" + ind);
-                        }
-                    }
-                }
-
-                //排列起点
-                //写入到文本
-                StringBuilder Str = new StringBuilder();
-                int Start = MyGlobal.globalConfig.Startpt;
-                for (int i = 0; i < xcoord.Length; i++)
-                {
-
-                    int start = Start;
-                    if (Start - 1 + i >= xcoord.Length)
-                    {
-                        start = Start - 1 + i - xcoord.Length;
-                    }
-                    else
-                    {
-                        start = Start - 1 + i;
-                    }
-                    double X1 = xcoord[start];
-                    double Y1 = ycoord[start];
-                    double Z1 = zcoord[start];
-                    string lorc = keypt[start];
-                    if (i == 0)
-                    {
-                        int[] keys = everySeg.Keys.ToArray();
-                        for (int m = 0; m < keys.Length; m++)
-                        {
-                            if (Start >= keys[m])
-                            {
-                                lorc = everySeg[keys[m]];
-                                break;
-                            }
-                        }
-                    }
-                    if (i == 0)
-                    {
-                        x0 = X1;
-                        y0 = Y1;
-                        z0 = Z1;
-                    }
-                    Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
-
-                }
-                string strlast = "0;";
-                int len1 = XCoord[Station - 1].GetLength(0);
+        //                        firstPt = ResultY[0];//第3条第一点
+        //                        order = YCoord[1].GetLength(0) - 1;
+        //                        ResultY2 = YCoord[1][order];//第2边最后段
+        //                        ResultX2 = XCoord[1][order];//第2边最后段
+        //                        //ResultLorC2 = StrLorC[3][order];
 
 
-                //if (Station > 0)
-                //{
-                //    double x0 =0, y0 =0, z0 =0;                   
+        //                        lastPt = ResultY2[ResultY2.Length - 1];//第2条最后一点
+        //                        Less = ResultY.TupleGreaterEqualElem(lastPt);//第3条大于第2条重叠部分
+        //                        Grater = ResultY2.TupleLessEqualElem(firstPt);//第2条小于第3边重叠部分
 
-                //    //写入到文本
-                //    StringBuilder Str = new StringBuilder();
-                //    for (int i = 0; i < Station; i++)
-                //    {
-                //        for (int j = 0; j < XCoord[i].GetLength(0); j++)
+        //                        GraterId = Grater.TupleFind(1);
+        //                        LessId = Less.TupleFind(1);
+        //                        if (GraterId == -1 || LessId == -1)
+        //                        {
+        //                            break;
+        //                        }
+
+        //                        //重叠部分取均值
+        //                        Len2 = LessId.Length; Len1 = GraterId.Length;
+        //                        Len = Len1 < Len2 ? Len1 : Len2;
+        //                        //Len2 添加到第4条
+        //                        if (Len >= ResultY.Length || Len >= ResultY2.Length)
+        //                        {
+        //                            break;
+        //                        }
+        //                        y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
+        //                        x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
+        //                        y2 = ResultY.TupleSelectRange(0, Len - 1);
+        //                        x2 = ResultX.TupleSelectRange(0, Len - 1);
+        //                        Lx1 = (x1 + x2) / 2;
+        //                        Ly1 = (y1 + y2) / 2;
+
+        //                        HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Less);
+        //                        HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Grater);
+
+
+        //                        ResultY2 = ResultY2.TupleReplace(Grater, Ly1);
+        //                        ResultX2 = ResultX2.TupleReplace(Grater, Lx1);
+
+        //                        ResultY = ResultY.TupleRemove(Less);
+        //                        ResultX = ResultX.TupleRemove(Less);
+        //                        ResultZ = ResultZ.TupleRemove(Less);
+        //                        //首位 
+        //                        first = ResultLorC[0];
+        //                        ResultLorC = ResultLorC.TupleRemove(Less);
+        //                        ResultLorC[0] = first;
+
+        //                        XCoord[1][order] = ResultX2;
+        //                        YCoord[1][order] = ResultY2;
+        //                    }
+        //                    break;
+        //                case 3:
+        //                    if (Station >= 4) //X4<X3  //Y3>Y2 去掉第四条重叠 保留第3条
+        //                    {
+
+        //                        ResultX = XCoord[i][0];//第4条第一段
+        //                        ResultY = YCoord[i][0];//第4条第一段
+        //                        ResultZ = ZCoord[i][0];//第4条第一段
+        //                        ResultLorC = StrLorC[i][0]; //第4条//第一段
+
+        //                        if (ResultX.Length == 0)
+        //                        {
+        //                            break;
+        //                        }
+        //                        firstPt = ResultX[0];//第4条第一点
+        //                        order = XCoord[2].GetLength(0) - 1;
+        //                        ResultX2 = XCoord[2][order];//第3边最后段
+        //                        ResultY2 = YCoord[2][order];//第3边最后段
+
+        //                        lastPt = ResultX2[ResultX2.Length - 1];//第3条最后一点
+        //                        Grater = ResultX.TupleLessEqualElem(lastPt);//第4条小于第1条重叠部分
+        //                        Less = ResultX2.TupleGreaterEqualElem(firstPt);//第3条大于第2边重叠部分
+
+        //                        GraterId = Grater.TupleFind(1);
+        //                        LessId = Less.TupleFind(1);
+
+        //                        if (GraterId == -1 || LessId == -1)
+        //                        {
+        //                            break;
+        //                        }
+
+        //                        //重叠部分取均值    
+        //                        Len2 = LessId.Length; Len1 = GraterId.Length;
+        //                        Len = Len1 < Len2 ? Len1 : Len2;
+        //                        //Len2 添加到第4条
+        //                        if (Len >= ResultY.Length || Len >= ResultY2.Length)
+        //                        {
+        //                            break;
+        //                        }
+        //                        y1 = ResultY2.TupleSelectRange(ResultY2.Length - Len, ResultY2.Length - 1);
+        //                        x1 = ResultX2.TupleSelectRange(ResultX2.Length - Len, ResultX2.Length - 1);
+        //                        y2 = ResultY.TupleSelectRange(0, Len - 1);
+        //                        x2 = ResultX.TupleSelectRange(0, Len - 1);
+        //                        Lx1 = (x1 + x2) / 2;
+        //                        Ly1 = (y1 + y2) / 2;
+
+        //                        HOperatorSet.TupleGenSequence(0, Len - 1, 1, out Grater);
+        //                        HOperatorSet.TupleGenSequence(ResultY2.Length - 1, ResultY2.Length - Len, -1, out Less);
+
+
+        //                        ResultY2 = ResultY2.TupleReplace(Less, Ly1);
+        //                        ResultX2 = ResultX2.TupleReplace(Less, Lx1);
+
+        //                        ResultY = ResultY.TupleRemove(Grater);
+        //                        ResultX = ResultX.TupleRemove(Grater);
+        //                        ResultZ = ResultZ.TupleRemove(Grater);
+
+        //                        //首位 
+        //                        first = ResultLorC[0];
+        //                        ResultLorC = ResultLorC.TupleRemove(Grater);
+        //                        ResultLorC[0] = first;
+
+        //                        XCoord[2][order] = ResultX2;
+        //                        YCoord[2][order] = ResultY2;
+        //                    }
+        //                    break;
+        //            }
+        //            if (GraterId.Length != 0 && GraterId.D == -1)
+        //            {
+        //                //XCoord[i][0] = null;
+        //                //YCoord[i][0] = null;
+        //                //ZCoord[i][0] = null;
+        //                //StrLorC[i][0] = null;
+
+        //                //return string.Format("第{0}边,第一段重合点数过多", i + 1);
+        //            }
+        //            else if (GraterId.Length != 0)
+        //            {
+
+        //                //XCoord[i][0] = ResultX;
+        //                //YCoord[i][0] = ResultY;
+        //                //ZCoord[i][0] = ResultZ;
+        //                //StrLorC[i][0] = ResultLorC;                        
+        //            }
+
+        //        }
+        //        #endregion
+
+        //        Dictionary<int, string> everySeg = new Dictionary<int, string>();
+        //        double[] xcoord, ycoord, zcoord; string[] keypt;
+        //        int totalNum = 0;
+        //        for (int i = 0; i < XCoord.Count; i++)
+        //        {
+        //            for (int j = 0; j < XCoord[i].GetLength(0); j++)
+        //            {
+        //                if (XCoord[i][j] == null)
+        //                {
+        //                    continue;
+        //                }
+        //                for (int k = 0; k < XCoord[i][j].Length; k++)
+        //                {
+        //                    totalNum++;
+        //                }
+
+        //            }
+        //        }
+        //        xcoord = new double[totalNum]; ycoord = new double[totalNum]; zcoord = new double[totalNum];
+        //        keypt = new string[totalNum];
+        //        int ind = 0;
+        //        double x0 = 0, y0 = 0, z0 = 0;
+        //        for (int i = 0; i < XCoord.Count; i++)
+        //        {
+        //            for (int j = 0; j < XCoord[i].GetLength(0); j++)
+        //            {
+        //                if (XCoord[i][j] == null)
+        //                {
+        //                    continue;
+        //                }
+
+        //                HTuple row = XCoord[i][j];
+        //                HTuple col = YCoord[i][j];
+
+        //                if (Station == 4)
+        //                {
+        //                    HObject NewSide = new HObject();
+        //                    HOperatorSet.GenContourPolygonXld(out NewSide, row, col);
+        //                    MyGlobal.hWindow_Final[0].viewWindow.displayHobject(NewSide, "red");
+        //                }
+
+        //                for (int k = 0; k < XCoord[i][j].Length; k++)
+        //                {
+        //                    if (k > 0)
+        //                    {
+        //                        if (xcoord[ind] == xcoord[ind - 1] && ycoord[ind] == ycoord[ind - 1])
+        //                        {
+        //                            //存在重复点；
+        //                            MessageBox.Show("重复点");
+        //                        }
+        //                    }
+        //                    xcoord[ind] = Math.Round(XCoord[i][j][k], 3);
+        //                    ycoord[ind] = Math.Round(YCoord[i][j][k], 3);
+        //                    zcoord[ind] = Math.Round(ZCoord[i][j][k], 3);
+        //                    keypt[ind] = StrLorC[i][j][k];
+        //                    if (k == 0)
+        //                    {
+        //                        everySeg.Add(ind, keypt[ind]);
+        //                    }
+        //                    ind++;
+        //                    if (ind == 2044)
+        //                    {
+        //                        Debug.WriteLine("tt+" + ind);
+        //                    }
+        //                    Debug.WriteLine("tt+" + ind);
+        //                }
+        //            }
+        //        }
+
+        //        //排列起点
+        //        //写入到文本
+        //        StringBuilder Str = new StringBuilder();
+        //        int Start = MyGlobal.globalConfig.Startpt;
+        //        for (int i = 0; i < xcoord.Length; i++)
                 //        {
-                //            if (XCoord[i][j] == null)
-                //            {
-                //                continue;
-                //            }
-                //            HTuple row = XCoord[i][j];
-                //            HTuple col = YCoord[i][j];
 
-                //            if (Station ==4)
+        //            int start = Start;
+        //            if (Start - 1 + i >= xcoord.Length)
                 //            {
-                //                HObject NewSide = new HObject();
-                //                HOperatorSet.GenContourPolygonXld(out NewSide,row, col);
-                //                MyGlobal.hWindow_Final[0].viewWindow.displayHobject(NewSide, "red");
+        //                start = Start - 1 + i - xcoord.Length;
                 //            }
-                //            for (int k = 0; k < XCoord[i][j].Length; k++)
+        //            else
                 //            {
-
-                //                double X1 = Math.Round(XCoord[i][j][k], 3);
-                //                double Y1 = Math.Round(YCoord[i][j][k], 3);
-                //                double Z1 = Math.Round(ZCoord[i][j][k], 3);
-                //                if (i == j  && j==k && k == 0)
+        //                start = Start - 1 + i;
+                //            }
+        //            double X1 = xcoord[start];
+        //            double Y1 = ycoord[start];
+        //            double Z1 = zcoord[start];
+        //            string lorc = keypt[start];
+        //            if (i == 0)
+                //            {
+        //                int[] keys = everySeg.Keys.ToArray();
+        //                for (int m = 0; m < keys.Length; m++)
                 //                {
-                //                     x0 = X1;
-                //                     y0 = Y1;
-                //                     z0 = Z1;
+        //                    if (Start >= keys[m])
+        //                    {
+        //                        lorc = everySeg[keys[m]];
+        //                        break;
+        //                    }
                 //                }
-                //                string lorc = StrLorC[i][j][k];
-                //                count++;
-                //                Str.Append(count.ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
+        //            }
+        //            if (i == 0)
+        //            {
+        //                x0 = X1;
+        //                y0 = Y1;
+        //                z0 = Z1;
+        //            }
+        //            Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
 
-                //            }
+        //        }
+        //        string strlast = "0;";
+        //        int len1 = XCoord[Station - 1].GetLength(0);
+
+
+        //        //if (Station > 0)
+        //        //{
+        //        //    double x0 =0, y0 =0, z0 =0;                   
+
+        //        //    //写入到文本
+        //        //    StringBuilder Str = new StringBuilder();
+        //        //    for (int i = 0; i < Station; i++)
+        //        //    {
+        //        //        for (int j = 0; j < XCoord[i].GetLength(0); j++)
+        //        //        {
+        //        //            if (XCoord[i][j] == null)
+        //        //            {
+        //        //                continue;
+        //        //            }
+        //        //            HTuple row = XCoord[i][j];
+        //        //            HTuple col = YCoord[i][j];
+
+        //        //            if (Station ==4)
+        //        //            {
+        //        //                HObject NewSide = new HObject();
+        //        //                HOperatorSet.GenContourPolygonXld(out NewSide,row, col);
+        //        //                MyGlobal.hWindow_Final[0].viewWindow.displayHobject(NewSide, "red");
+        //        //            }
+        //        //            for (int k = 0; k < XCoord[i][j].Length; k++)
+        //        //            {
+
+        //        //                double X1 = Math.Round(XCoord[i][j][k], 3);
+        //        //                double Y1 = Math.Round(YCoord[i][j][k], 3);
+        //        //                double Z1 = Math.Round(ZCoord[i][j][k], 3);
+        //        //                if (i == j  && j==k && k == 0)
+        //        //                {
+        //        //                     x0 = X1;
+        //        //                     y0 = Y1;
+        //        //                     z0 = Z1;
+        //        //                }
+        //        //                string lorc = StrLorC[i][j][k];
+        //        //                count++;
+        //        //                Str.Append(count.ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
+
+        //        //            }
+        //        //        }
+        //        //    }
+        //        if (XCoord[Station - 1][len1 - 1] != null)
+        //        {
+        //            strlast = StrLorC[Station - 1][len1 - 1][0];
+        //        }
+        //        else
+        //        {
+        //            strlast = StrLorC[Station - 1][len1 - 2][0];
+
                 //        }
+        //        Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
+
+        //        StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
+        //        //}
+        //        return "OK";
                 //    }
-                if (XCoord[Station - 1][len1 - 1] != null)
-                {
-                    strlast = StrLorC[Station - 1][len1 - 1][0];
-                }
-                else
-                {
-                    strlast = StrLorC[Station - 1][len1 - 2][0];
+        //    catch (Exception ex)
+        //    {
 
-                }
-                Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
-
-                StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
+        //        return "RunSide error :" + ex.Message;
+        //    }
                 //}
-                return "OK";
-            }
-            catch (Exception ex)
-            {
-
-                return "RunSide error :" + ex.Message;
-            }
-        }
         #endregion
 
-        private string RunSide(int Station, HObject IntensityImage, HObject HeightImage,bool SaveBase = false)
+        private string RunSide(int Side,bool isRight, HObject IntensityImage, HObject HeightImage,bool SaveBase = false)
         {
             try
             {
                 double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
                 if (SaveBase)
                 {
-                    MyGlobal.xyzBaseCoord.ZCoord = null;
+                    if (isRight)
+                    {
+                        MyGlobal.xyzBaseCoord_Right.ZCoord = null;
+                    }
+                    else
+                    {
+                        MyGlobal.xyzBaseCoord_Left.ZCoord = null;
+                    }
+                    
                 }
-                string OK = RunFindPoint(Station, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Station - 1], MyGlobal.hWindow_Final[Station - 1]);
+                string OK = RunFindPoint(Side, isRight, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Side - 1], MyGlobal.hWindow_Final[Side - 1]);
 
                 if (x == null)
                 {
@@ -1606,18 +1822,27 @@ namespace SagensVision
                 
                 if (OK != "OK")
                 {
-                    return "第" + Station + "边" + OK;
+                    return "第" + Side + "边" + OK;
                 }
                 if (x[0] == null)
                 {
-                    return "第" + Station + "边未找到边";
+                    return "第" + Side + "边未找到边";
                 }
 
                 XCoord.Add(x);
                 YCoord.Add(y);
                 ZCoord.Add(z);
                 StrLorC.Add(Strlorc);
-                NameOrigin.Add(flset.fParam[Station - 1].DicPointName.ToArray());
+                if (isRight)
+                {
+                    NameOrigin.Add(MyGlobal.Right_findPointTool_Find.fParam[Side - 1].DicPointName.ToArray());
+                }
+                else
+                {
+                    NameOrigin.Add(MyGlobal.Left_findPointTool_Find.fParam[Side - 1].DicPointName.ToArray());
+
+                }
+
                 Yorigin.Add(original[0]);
                 Xorigin.Add(original[1]);
 
@@ -1629,7 +1854,7 @@ namespace SagensVision
                     zval[i] = z[i][0];
                 }
                 Zorigin.Add(zval);
-                if (Station != 4)
+                if (Side != 4)
                 {
                     return "OK";
                 }
@@ -1858,22 +2083,73 @@ namespace SagensVision
                         }
                         tempDist.Add(x1);
                     }
-                    MyGlobal.xyzBaseCoord.Dist = tempDist;
-                    MyGlobal.xyzBaseCoord.intersectCoordList = AnchorList;
-
-                    MyGlobal.xyzBaseCoord.XCoord = Xorigin;
-                    MyGlobal.xyzBaseCoord.YCoord = Yorigin;
-                    MyGlobal.xyzBaseCoord.ZCoord = ZCoord;
-                    StaticOperate.WriteXML(MyGlobal.xyzBaseCoord, MyGlobal.BaseTxtPath);
-                    //读取Z值基准高度】
-                    if (File.Exists(MyGlobal.BaseTxtPath))
+                    if (isRight)
                     {
-                        MyGlobal.xyzBaseCoord = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath, typeof(XYZBaseCoord));
+                        MyGlobal.xyzBaseCoord_Right.Dist = tempDist;
+                        MyGlobal.xyzBaseCoord_Right.intersectCoordList = AnchorList;
+
+                        MyGlobal.xyzBaseCoord_Right.XCoord = Xorigin;
+                        MyGlobal.xyzBaseCoord_Right.YCoord = Yorigin;
+                        MyGlobal.xyzBaseCoord_Right.ZCoord = ZCoord;
+                        
+                        StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Right, MyGlobal.BaseTxtPath_Right);
+                        //读取Z值基准高度】
+                        if (File.Exists(MyGlobal.BaseTxtPath_Right))
+                        {
+                          MyGlobal.xyzBaseCoord_Right = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Right, typeof(XYZBaseCoord));
+                        }                                  
+                    }
+                    else
+                    {
+                        MyGlobal.xyzBaseCoord_Left.Dist = tempDist;
+                        MyGlobal.xyzBaseCoord_Left.intersectCoordList = AnchorList;
+
+                        MyGlobal.xyzBaseCoord_Left.XCoord = Xorigin;
+                        MyGlobal.xyzBaseCoord_Left.YCoord = Yorigin;
+                        MyGlobal.xyzBaseCoord_Left.ZCoord = ZCoord;
+
+                        StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Left, MyGlobal.BaseTxtPath_Left);
+                    //读取Z值基准高度】
+                        if (File.Exists(MyGlobal.BaseTxtPath_Left))
+                    {
+                            MyGlobal.xyzBaseCoord_Left = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Left, typeof(XYZBaseCoord));
+                        }
                     }
                 }
                 //判断X Y 
                 //计算到中心点距离
-                if (MyGlobal.xyzBaseCoord.Dist != null)
+                if (isRight)
+                {
+                    if (MyGlobal.xyzBaseCoord_Right.Dist != null && !SaveBase)
+                    {
+                        for (int i = 0; i < Xorigin.Count; i++)
+                        {
+
+                            for (int j = 0; j < Xorigin[i].Length; j++)
+                            {
+                                HTuple Dist = 0;
+                                HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], centerR, centerC, out Dist);
+                                double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
+                                double Sub = (Dist.D - MyGlobal.xyzBaseCoord_Right.Dist[i][j]) * xyResolution;
+                                if (Sub > MyGlobal.globalPointSet_Right.XYMax || Sub < MyGlobal.globalPointSet_Right.XYMin)
+                                {
+                                    if (MyGlobal.hWindow_Final[i] != null)
+                                    {
+                                        Action sw = () =>
+                                        {
+                                            MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-XY NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                        };
+                                        this.Invoke(sw);
+                                    }
+                                    return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (MyGlobal.xyzBaseCoord_Left.Dist != null && !SaveBase)
                 {
                     for (int i = 0; i < Xorigin.Count; i++)
                     {
@@ -1883,8 +2159,8 @@ namespace SagensVision
                             HTuple Dist = 0;
                             HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], centerR, centerC, out Dist);
                             double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
-                            double Sub = (Dist.D - MyGlobal.xyzBaseCoord.Dist[i][j])* xyResolution;
-                            if (Sub > MyGlobal.globalConfig.XYMax || Sub < MyGlobal.globalConfig.XYMin)
+                                double Sub = (Dist.D - MyGlobal.xyzBaseCoord_Left.Dist[i][j]) * xyResolution;
+                                if (Sub > MyGlobal.globalPointSet_Left.XYMax || Sub < MyGlobal.globalPointSet_Left.XYMin)
                             {
                                 if (MyGlobal.hWindow_Final[i] != null)
                                 {
@@ -1899,10 +2175,13 @@ namespace SagensVision
                         }
                     }
                 }
+                }
                 #endregion
 
                 HTuple SubX = new HTuple(); HTuple SubY = new HTuple();
-                if (MyGlobal.xyzBaseCoord.Dist != null)
+                if (isRight)
+                {
+                    if (MyGlobal.xyzBaseCoord_Right.Dist != null)
                 {
                     #region 重复性数据
                     //将当前数据转换到模板数据取差值                 
@@ -1910,21 +2189,49 @@ namespace SagensVision
                     {
                         HTuple HomMat = new HTuple();
                         HTuple ModelX = new HTuple(); HTuple ModelY = new HTuple();
-                        HOperatorSet.VectorAngleToRigid(AnchorList[i].Row, AnchorList[i].Col, AnchorList[i].Angle, MyGlobal.xyzBaseCoord.intersectCoordList[i].Row,
-                            MyGlobal.xyzBaseCoord.intersectCoordList[i].Col, MyGlobal.xyzBaseCoord.intersectCoordList[i].Angle, out HomMat);
+                            HOperatorSet.VectorAngleToRigid(AnchorList[i].Row, AnchorList[i].Col, AnchorList[i].Angle, MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row,
+                                MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Col, MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Angle, out HomMat);
                         HOperatorSet.AffineTransPoint2d(HomMat, new HTuple(Yorigin[i]), new HTuple(Xorigin[i]), out ModelY, out ModelX);
 
                         //HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.XCoord[i])*Xresolution;
                         //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
-                        HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.intersectCoordList[i].Col) * Xresolution;
-                        HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.intersectCoordList[i].Row) * Yresolution;
+                            HTuple subX = (ModelX - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Col) * Xresolution;
+                            HTuple subY = (ModelY - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row) * Yresolution;
                         SubX = SubX.TupleConcat(subX);
                         SubY = SubY.TupleConcat(subY);
 
                     }
+                        #endregion
+                    }
+                }
+                else
+                {
+                    if (MyGlobal.xyzBaseCoord_Left.Dist != null)
+                    {
+                        #region 重复性数据
+                        //将当前数据转换到模板数据取差值                 
+                        for (int i = 0; i < 4; i++)
+                        {
+                            HTuple HomMat = new HTuple();
+                            HTuple ModelX = new HTuple(); HTuple ModelY = new HTuple();
+                            HOperatorSet.VectorAngleToRigid(AnchorList[i].Row, AnchorList[i].Col, AnchorList[i].Angle, MyGlobal.xyzBaseCoord_Left.intersectCoordList[i].Row,
+                                MyGlobal.xyzBaseCoord_Left.intersectCoordList[i].Col, MyGlobal.xyzBaseCoord_Left.intersectCoordList[i].Angle, out HomMat);
+                            HOperatorSet.AffineTransPoint2d(HomMat, new HTuple(Yorigin[i]), new HTuple(Xorigin[i]), out ModelY, out ModelX);
 
+                            //HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.XCoord[i])*Xresolution;
+                            //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
+                            HTuple subX = (ModelX - MyGlobal.xyzBaseCoord_Left.intersectCoordList[i].Col) * Xresolution;
+                            HTuple subY = (ModelY - MyGlobal.xyzBaseCoord_Left.intersectCoordList[i].Row) * Yresolution;
+                            SubX = SubX.TupleConcat(subX);
+                            SubY = SubY.TupleConcat(subY);
+
+                        }
                     #endregion
                 }
+                }
+
+
+
 
 
 
@@ -1970,7 +2277,16 @@ namespace SagensVision
 
                             orginalR[ind] = Yorigin[i][j];
                             orginalC[ind] = Xorigin[i][j];
-                            sigleTitle[ind] = flset.fParam[i].DicPointName[j];
+                            if (isRight)
+                            {
+                                sigleTitle[ind] = MyGlobal.Right_findPointTool_Find.fParam[i].DicPointName[j];
+                            }
+                            else
+                            {
+                                sigleTitle[ind] = MyGlobal.Left_findPointTool_Find.fParam[i].DicPointName[j];
+
+                            }
+
                             ind2++;
 
                             keypt[ind] = StrLorC[i][j][k];
@@ -1992,14 +2308,16 @@ namespace SagensVision
                 StringBuilder StrOrginalData = new StringBuilder();
                 StringBuilder StrAxisData = new StringBuilder();
                 StringBuilder StrRelative = new StringBuilder();
-
+                //重复性
+                StringBuilder Repeat = new StringBuilder();
+                StringBuilder RepeatHeader = new StringBuilder();
                 //test
                 StringBuilder pix = new StringBuilder();
 
 
                 string saveTime = DateTime.Now.ToString("HHmmss");
 
-                int Start = MyGlobal.globalConfig.Startpt;
+                int Start = isRight ? MyGlobal.globalPointSet_Right.Startpt :MyGlobal.globalPointSet_Left.Startpt;
                 double[] OrginalX1 = orginalC; double[] OrginalY1 = orginalR;
 
                 #region 锚定点转换机械坐标
@@ -2079,11 +2397,19 @@ namespace SagensVision
 
                     double Xrelative = X1 - AxisC;
                     double Yrelative = Y1 - AxisR;
-                    
-                    double Xrelative1 = MyGlobal.xyzBaseCoord.Dist == null ? 0 : SubX[i].D;
-                    double Yrelative1 = MyGlobal.xyzBaseCoord.Dist == null ? 0 : SubY[i].D;
-
-
+                    double Xrelative1 = 0;
+                    double Yrelative1 = 0;
+                    if (isRight)
+                       {
+                            Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
+                            Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
+                            
+                        }
+                        else
+                        {
+                            Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
+                            Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+                        }
 
                     if (i == 0)
                     {
@@ -2113,6 +2439,20 @@ namespace SagensVision
                         StrOrginalData.Append(saveTime + "\t" + xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(saveTime + "\t" + Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrRelative.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+
+                        //重复性
+                        if (sigleTitle[i].Contains("C"))
+                        {
+                            RepeatHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y"  + "\t");
+                            Repeat.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t");
+                        }
+                        else
+                        {
+                            RepeatHeader.Append("Time" + "\t" + sigleTitle[i] + "_X" + "\t");
+                            Repeat.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t");
+                        }
+
+
                         //test
                         pix.Append(saveTime + "\t" + Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
@@ -2124,31 +2464,47 @@ namespace SagensVision
                         StrAxisData.Append(Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrRelative.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
 
+
+                        //重复性
+                        if (sigleTitle[i].Contains("C"))
+                        {
+                            RepeatHeader.Append(sigleTitle[i] + "_X" + "\t" + sigleTitle[i] + "_Y" + "\t");
+                            Repeat.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t");
+                        }
+                        else
+                        {
+                            RepeatHeader.Append( sigleTitle[i] + "_X" + "\t");
+                            Repeat.Append( Xrelative1.ToString("0.000") + "\t");
+                        }
+
                         //test
                         pix.Append(Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                     }
 
-                    if (Station == 4 && i == xcoord.Length - 1)
+                    if (Side == 4 && i == xcoord.Length - 1)
                     {
                         StrOrginalHeader.Append("\r\n");
                         StrOrginalData.Append("\r\n");
                         StrAxisData.Append("\r\n");
                         StrRelative.Append("\r\n");
+                        //重复性
+                        RepeatHeader.Append("\r\n");
+                        Repeat.Append("\r\n");
 
                         //test
                         pix.Append("\r\n");
                     }
                 }
                 string strlast = "0;";
-                int len1 = XCoord[Station - 1].GetLength(0);
+                int len1 = XCoord[Side - 1].GetLength(0);
 
-                if (XCoord[Station - 1][len1 - 1] != null)
+                if (XCoord[Side - 1][len1 - 1] != null)
                 {
-                    strlast = StrLorC[Station - 1][len1 - 1][0];
+                    strlast = StrLorC[Side - 1][len1 - 1][0];
                 }
                 else
                 {
-                    strlast = StrLorC[Station - 1][len1 - 2][0];
+                    strlast = StrLorC[Side - 1][len1 - 2][0];
 
                 }
                 Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
@@ -2160,13 +2516,14 @@ namespace SagensVision
                 }
                 StaticOperate.writeTxt("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d\\Laser3D_1.txt", Str.ToString());
 
-                if (Station == 4)
+                if (Side == 4)
                 {
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrOrginalData.ToString(), "Origin");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrAxisData.ToString(), "Axis");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrRelative.ToString(), "Relative");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), pix.ToString(), "pix");
-                   
+                    StaticOperate.SaveExcelData(RepeatHeader.ToString(), Repeat.ToString(), "Repeatability");
+
                     for (int i = 0; i < 4; i++)
                     {
                         HTuple deg = 0;
@@ -2377,7 +2734,8 @@ namespace SagensVision
                             ShowProfile.HalconWindow.ClearWindow();
                             if (MyGlobal.ReceiveMsg.Contains("Start") && MyGlobal.globalConfig.isSaveFileDat)
                             {
-                                MyGlobal.GoSDK.SaveDatFileDirectory = MyGlobal.SaveDatFileDirectory + DateTime.Now.ToString("yyyyMMddHHmmss") + "\\";
+                                string LorR = MyGlobal.IsRight ? "Right" : "Left";
+                                MyGlobal.GoSDK.SaveDatFileDirectory = MyGlobal.SaveDatFileDirectory + DateTime.Now.ToString("yyyyMMddHHmmss")+ "\\" + LorR + "\\";
 
                             }
                         }
@@ -2464,7 +2822,7 @@ namespace SagensVision
                                 Action RunDetect = () =>
                                 {
                                     sp.Restart();
-                                    string ok1 = RunSuface(Side);
+                                    string ok1 = RunSuface(Side,true);
                                     sp.Stop();
                                     ShowAndSaveMsg(sp.ElapsedMilliseconds.ToString());
                                     if (ok1 != "OK")
@@ -2882,6 +3240,14 @@ namespace SagensVision
             
                 try
                 {
+                    if (ImagePath.Contains("Left"))
+                    {
+                        MyGlobal.IsRight = false;
+                    }
+                    else
+                    {
+                        MyGlobal.IsRight = true;
+                    }
                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                     {
                         for (int j = 0; j < 2; j++)
@@ -2918,26 +3284,27 @@ namespace SagensVision
                    
                     if (OK != "OK")
                         {
-                           
-                                //for (int j = 0; j < MyGlobal.ImageMulti.Count; j++)
-                                //{
-                                //    for (int k = 0; j < k; j++)
-                                //    {
-                                //        if (MyGlobal.ImageMulti[j][j]!=null)
-                                //        {
-                                //            MyGlobal.ImageMulti[j][j].Dispose();
-                                //        }                               
-                                //    }
 
-                                //}
-                                //MyGlobal.ImageMulti.Clear();
-                                //sidelist.Clear();
-                                if (errstr.Length > 0)
+                        //for (int j = 0; j < MyGlobal.ImageMulti.Count; j++)
+                        //{
+                        //    for (int k = 0; j < k; j++)
+                        //    {
+                        //        if (MyGlobal.ImageMulti[j][j]!=null)
+                        //        {
+                        //            MyGlobal.ImageMulti[j][j].Dispose();
+                        //        }                               
+                        //    }
+
+                        //}
+                        //MyGlobal.ImageMulti.Clear();
+                        //sidelist.Clear();
+                             ShowAndSaveMsg(OK);
+                             if (errstr.Length > 0)
                             {
                                 ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
                             }
-                            break;
-                        }
+                        break;
+                    }
 
                         if (i == 3)
                         {
@@ -2965,7 +3332,7 @@ namespace SagensVision
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        string OK = RunOutLine(i + 1, i, true);
+                        string OK = RunOutLine(i + 1, i, MyGlobal.IsRight);
                         if (OK != "OK")
                         {
                             ShowAndSaveMsg(OK);
@@ -3066,6 +3433,15 @@ namespace SagensVision
                 MyGlobal.ImageMulti.Clear();
                 sidelist.Clear();
                 int len = openfile.FileNames.Length;
+
+                if (openfile.FileName.Contains("Left"))
+                {
+                    MyGlobal.IsRight = false;
+                }
+                else
+                {
+                    MyGlobal.IsRight = true;
+                }
 
                 string[] namesI;
                 string[] namesH;
@@ -3306,8 +3682,8 @@ namespace SagensVision
 
         private void barButtonItem11_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ImgRotateFrm imgrotatefrm = new ImgRotateFrm();
-            imgrotatefrm.Show();
+            //ImgRotateFrm imgrotatefrm = new ImgRotateFrm();
+            //imgrotatefrm.Show();
         }
 
         private void btn_clearbuffer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -3342,8 +3718,8 @@ namespace SagensVision
 
         private void barSubItem4_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            NewProduct nProduct = new NewProduct();
-            nProduct.ShowDialog();
+            //NewProduct nProduct = new NewProduct();
+            //nProduct.ShowDialog();
         }
 
         ShowCapacityFrm scf;

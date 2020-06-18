@@ -15,8 +15,8 @@ namespace SagensVision.VisionTool
             // Default settings used in HDevelop 
             HOperatorSet.SetSystem("width", 25000);
             HOperatorSet.SetSystem("height", 25000);
-            if (HalconAPI.isWindows)
-                HOperatorSet.SetSystem("use_window_thread", "true");
+            //if (HalconAPI.isWindows)
+            //    HOperatorSet.SetSystem("use_window_thread", "true");
             //action();
         }
 #endif
@@ -3989,14 +3989,14 @@ namespace SagensVision.VisionTool
             HTuple hv_ObjectModel3D = null, hv_PoseOut = null;
             for (int i = 0; i < x.Length; i++)
             {
-                hv_x[i] = x[i];
-                hv_y[i] = y[i];
-                hv_z[i] = z[i];
+                hv_x[i] = x[i] ;
+                hv_y[i] = y[i] ;
+                hv_z[i] = z[i] ;
             }
 
-            HOperatorSet.GenObjectModel3dFromPoints(hv_x, hv_y, hv_z, out hv_ObjectModel3D);
+            HOperatorSet.GenObjectModel3dFromPoints(hv_y, hv_x, hv_z, out hv_ObjectModel3D);
             HObject contour;
-            HOperatorSet.GenContourPolygonXld(out contour, hv_x, hv_y);
+            HOperatorSet.GenContourPolygonXld(out contour, hv_y, hv_x);
             HTuple Row, Column, Phi, Length1, Length2, PointOrder;
             HOperatorSet.FitRectangle2ContourXld(contour, "regression", -1, 0, 0, 3, 2, out Row, out Column, out Phi, out Length1, out Length2, out PointOrder);
             contour.Dispose();
@@ -4012,7 +4012,9 @@ namespace SagensVision.VisionTool
                     breakOut = false;
                     HTuple Pose1 = new HTuple();
                     //HOperatorSet.SetLineWidth(windowhandle, 50);
-                    HOperatorSet.CreatePose(-Row.TupleRound().ToIArr()[0], -Column.TupleRound().ToIArr()[0], 0, 0, 0, 0, "Rp+T", "gba", "point",out  Pose1);
+                    HOperatorSet.CreatePose(-Row.TupleRound().ToIArr()[0], Column.TupleRound().ToIArr()[0],0, 180, 0, 0, "Rp+T", "gba", "point", out Pose1);
+
+                    //HOperatorSet.CreatePose(-Row.TupleRound().ToIArr()[0], -Column.TupleRound().ToIArr()[0], 0,180, 0, 0, "Rp+T", "gba", "point",out  Pose1);
                     //                visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
                     //new HTuple("alpha").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("color").TupleConcat("disp_background"),
                     //(new HTuple(0.5)).TupleConcat("false").TupleConcat("true").TupleConcat(2.5).TupleConcat("red").TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);

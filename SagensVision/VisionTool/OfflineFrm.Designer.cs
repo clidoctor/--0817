@@ -38,11 +38,11 @@
             this.cb_runMode = new System.Windows.Forms.CheckBox();
             this.tb_PathName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb_RunAll = new System.Windows.Forms.CheckBox();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_next = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_pathImport = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_pathSelect = new DevExpress.XtraEditors.SimpleButton();
-            this.cb_RunAll = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.listBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +50,7 @@
             // tb_checkNum
             // 
             this.tb_checkNum.Location = new System.Drawing.Point(555, 353);
-            this.tb_checkNum.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_checkNum.Margin = new System.Windows.Forms.Padding(4);
             this.tb_checkNum.Name = "tb_checkNum";
             this.tb_checkNum.Size = new System.Drawing.Size(105, 22);
             this.tb_checkNum.TabIndex = 10;
@@ -58,7 +58,7 @@
             // tb_FileNum
             // 
             this.tb_FileNum.Location = new System.Drawing.Point(195, 354);
-            this.tb_FileNum.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_FileNum.Margin = new System.Windows.Forms.Padding(4);
             this.tb_FileNum.Name = "tb_FileNum";
             this.tb_FileNum.Size = new System.Drawing.Size(101, 22);
             this.tb_FileNum.TabIndex = 11;
@@ -126,13 +126,23 @@
             this.groupBox1.Controls.Add(this.tb_PathName);
             this.groupBox1.Controls.Add(this.cb_runMode);
             this.groupBox1.Location = new System.Drawing.Point(25, 257);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(651, 158);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "操作";
+            // 
+            // cb_RunAll
+            // 
+            this.cb_RunAll.ForeColor = System.Drawing.Color.Black;
+            this.cb_RunAll.Location = new System.Drawing.Point(455, 62);
+            this.cb_RunAll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cb_RunAll.Name = "cb_RunAll";
+            this.cb_RunAll.Size = new System.Drawing.Size(80, 23);
+            this.cb_RunAll.TabIndex = 15;
+            this.cb_RunAll.Text = "运行所有";
             // 
             // simpleButton2
             // 
@@ -174,16 +184,6 @@
             this.sBtn_pathSelect.Text = "路径选择";
             this.sBtn_pathSelect.Click += new System.EventHandler(this.sBtn_pathSelect_Click);
             // 
-            // cb_RunAll
-            // 
-            this.cb_RunAll.ForeColor = System.Drawing.Color.Black;
-            this.cb_RunAll.Location = new System.Drawing.Point(455, 62);
-            this.cb_RunAll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.cb_RunAll.Name = "cb_RunAll";
-            this.cb_RunAll.Size = new System.Drawing.Size(80, 23);
-            this.cb_RunAll.TabIndex = 15;
-            this.cb_RunAll.Text = "运行所有";
-            // 
             // OfflineFrm
             // 
             this.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(236)))), ((int)(((byte)(239)))));
@@ -201,6 +201,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OfflineFrm";
             this.Text = "离线测试";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OfflineFrm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OfflineFrm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.listBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);

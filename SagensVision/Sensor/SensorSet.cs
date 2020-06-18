@@ -26,7 +26,7 @@ namespace SagensVision.Sensor
             {
                 string ip = textBox1.Text.ToString();
                 MyGlobal.globalConfig.SensorIP = ip;
-                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.AllTypePath + "Global.xml");
                 MessageBox.Show("保存成功！");
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace SagensVision.Sensor
 
                     MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
                     MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
-                    StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
+                    StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.AllTypePath + "Global.xml");
                 }
                 MessageBox.Show(Error);
             }

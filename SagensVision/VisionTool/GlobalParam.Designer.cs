@@ -65,8 +65,10 @@
             this.label12 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.checkedListBox_save_data = new System.Windows.Forms.CheckedListBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.checkBox_useAnchorDeg = new System.Windows.Forms.CheckBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -74,14 +76,13 @@
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textBox_Start);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(356, 210);
+            this.groupBox1.Location = new System.Drawing.Point(356, 256);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(266, 72);
             this.groupBox1.TabIndex = 3;
@@ -110,7 +111,7 @@
             this.groupBox6.Controls.Add(this.label9);
             this.groupBox6.Controls.Add(this.textBox_ColorMin);
             this.groupBox6.Controls.Add(this.textBox_ColorMax);
-            this.groupBox6.Location = new System.Drawing.Point(12, 12);
+            this.groupBox6.Location = new System.Drawing.Point(12, 58);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(266, 93);
             this.groupBox6.TabIndex = 66;
@@ -186,7 +187,7 @@
             this.groupBox3.Controls.Add(this.textBox_xOffset);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(356, 12);
+            this.groupBox3.Location = new System.Drawing.Point(356, 58);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(265, 192);
             this.groupBox3.TabIndex = 75;
@@ -272,7 +273,7 @@
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.textBox_HeightMin);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(12, 246);
+            this.groupBox2.Location = new System.Drawing.Point(12, 292);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(266, 93);
             this.groupBox2.TabIndex = 76;
@@ -315,7 +316,7 @@
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(176, 507);
+            this.simpleButton1.Location = new System.Drawing.Point(172, 537);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(90, 23);
             this.simpleButton1.TabIndex = 77;
@@ -324,7 +325,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(360, 507);
+            this.simpleButton2.Location = new System.Drawing.Point(356, 537);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(90, 23);
             this.simpleButton2.TabIndex = 78;
@@ -336,7 +337,7 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label18);
             this.groupBox4.Controls.Add(this.textBox_totalZ);
-            this.groupBox4.Location = new System.Drawing.Point(357, 288);
+            this.groupBox4.Location = new System.Drawing.Point(357, 334);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(265, 72);
             this.groupBox4.TabIndex = 79;
@@ -345,7 +346,7 @@
             // 
             // simpleButton3
             // 
-            this.simpleButton3.Location = new System.Drawing.Point(25, 472);
+            this.simpleButton3.Location = new System.Drawing.Point(458, 457);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(90, 23);
             this.simpleButton3.TabIndex = 80;
@@ -358,7 +359,7 @@
             this.groupBox5.Controls.Add(this.label11);
             this.groupBox5.Controls.Add(this.textBox_XYMin);
             this.groupBox5.Controls.Add(this.label12);
-            this.groupBox5.Location = new System.Drawing.Point(12, 356);
+            this.groupBox5.Location = new System.Drawing.Point(12, 402);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(266, 93);
             this.groupBox5.TabIndex = 81;
@@ -402,7 +403,7 @@
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.checkedListBox_save_data);
-            this.groupBox7.Location = new System.Drawing.Point(12, 111);
+            this.groupBox7.Location = new System.Drawing.Point(12, 157);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(266, 129);
             this.groupBox7.TabIndex = 82;
@@ -421,33 +422,54 @@
             this.checkedListBox_save_data.Size = new System.Drawing.Size(237, 72);
             this.checkedListBox_save_data.TabIndex = 0;
             // 
-            // groupBox8
+            // comboBox2
             // 
-            this.groupBox8.Controls.Add(this.checkBox_useAnchorDeg);
-            this.groupBox8.Location = new System.Drawing.Point(356, 366);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(265, 83);
-            this.groupBox8.TabIndex = 83;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "锚定选项";
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Right",
+            "Left"});
+            this.comboBox2.Location = new System.Drawing.Point(84, 12);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(100, 22);
+            this.comboBox2.TabIndex = 83;
+            this.comboBox2.Text = "Right";
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
-            // checkBox_useAnchorDeg
+            // label14
             // 
-            this.checkBox_useAnchorDeg.AutoSize = true;
-            this.checkBox_useAnchorDeg.Location = new System.Drawing.Point(103, 35);
-            this.checkBox_useAnchorDeg.Name = "checkBox_useAnchorDeg";
-            this.checkBox_useAnchorDeg.Size = new System.Drawing.Size(98, 18);
-            this.checkBox_useAnchorDeg.TabIndex = 0;
-            this.checkBox_useAnchorDeg.Text = "启用锚定角度";
-            this.checkBox_useAnchorDeg.UseVisualStyleBackColor = true;
-            this.checkBox_useAnchorDeg.CheckedChanged += new System.EventHandler(this.checkBox_useAnchorDeg_CheckedChanged);
+            this.label14.Location = new System.Drawing.Point(22, 15);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(56, 14);
+            this.label14.TabIndex = 84;
+            this.label14.Text = "工位切换";
+            // 
+            // simpleButton4
+            // 
+            this.simpleButton4.Location = new System.Drawing.Point(357, 15);
+            this.simpleButton4.Name = "simpleButton4";
+            this.simpleButton4.Size = new System.Drawing.Size(90, 23);
+            this.simpleButton4.TabIndex = 85;
+            this.simpleButton4.Text = "型号设置";
+            this.simpleButton4.Click += new System.EventHandler(this.simpleButton4_Click);
+            // 
+            // simpleButton5
+            // 
+            this.simpleButton5.Location = new System.Drawing.Point(459, 15);
+            this.simpleButton5.Name = "simpleButton5";
+            this.simpleButton5.Size = new System.Drawing.Size(90, 23);
+            this.simpleButton5.TabIndex = 86;
+            this.simpleButton5.Text = "图像旋转设置";
+            this.simpleButton5.Click += new System.EventHandler(this.simpleButton5_Click);
             // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 572);
-            this.Controls.Add(this.groupBox8);
+            this.Controls.Add(this.simpleButton5);
+            this.Controls.Add(this.simpleButton4);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.simpleButton3);
@@ -475,8 +497,6 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox7.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -519,7 +539,9 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckedListBox checkedListBox_save_data;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.CheckBox checkBox_useAnchorDeg;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label14;
+        private DevExpress.XtraEditors.SimpleButton simpleButton4;
+        private DevExpress.XtraEditors.SimpleButton simpleButton5;
     }
 }
