@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using DevExpress.XtraEditors.Repository;
 using SagensVision.UserLoginIn;
 using DevExpress.XtraCharts;
+using DevExpress.XtraEditors;
 
 namespace SagensVision
 {
@@ -629,6 +630,8 @@ namespace SagensVision
             }
             barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
             isLoading = false;
+            setValue(true);
+            setValue(false);
         }
 
 
@@ -1100,7 +1103,7 @@ namespace SagensVision
                                     });
                                 }
                             }
-                            scf?.setValue(isRight);
+                            setValue(isRight);
                             if (isRight)
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
@@ -1228,7 +1231,7 @@ namespace SagensVision
                                     });
                                 }
                             }
-                            scf?.setValue(isRight);
+                            setValue(isRight);
                             if (isRight)
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
@@ -3730,7 +3733,7 @@ namespace SagensVision
                 scf = new ShowCapacityFrm();
                 btn_show_capacity.Text = "关闭生产数据";
                 scf.SetDesktopLocation(Screen.PrimaryScreen.Bounds.Width -100 - scf.Width, Screen.PrimaryScreen.Bounds.Height- 100 - scf.Height);
-                scf.setValue();
+                scf.setValue(true);
                 scf.Show();
             }
             else
@@ -3777,21 +3780,95 @@ namespace SagensVision
 
         }
 
-        public void setValue()
+        public void setValue(bool IsRight)
         {
-            
-            chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalConfig.OkCnt };
-            chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalConfig.AnchorErrorCnt };
-            chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalConfig.FindEgdeErrorCnt };
-            chartControl1.Series[0].Points[3].Values = new double[] { MyGlobal.globalConfig.ExploreHeightErrorCnt };
-            Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl1.Series[0].View;
-            int totalCnt = MyGlobal.globalConfig.OkCnt + MyGlobal.globalConfig.AnchorErrorCnt +
-                MyGlobal.globalConfig.FindEgdeErrorCnt + MyGlobal.globalConfig.ExploreHeightErrorCnt;
-            if (totalCnt == 0)
+            if (IsRight)
+            {
+                chartControl3.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Right.OkCnt };
+                chartControl3.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Right.AnchorErrorCnt };
+                chartControl3.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
+                chartControl3.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
+                Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl3.Series[0].View;
+                int totalCnt = MyGlobal.globalPointSet_Right.OkCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt +
+                    MyGlobal.globalPointSet_Right.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt;
+                if (totalCnt == 0)
+                {
+                    chartControl3.Series[0].Points[0].Values = new double[] { 1 };
+                }
+                pie3DSeriesView.Titles[0].Text = $"右工位：{totalCnt}";
+            }
+            else
+            {
+                chartControl2.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt };
+                chartControl2.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt };
+                chartControl2.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt };
+                chartControl2.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt };
+                Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl1.Series[0].View;
+                int totalCnt = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
+                    MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt;
+                if (totalCnt == 0)
+                {
+                    chartControl2.Series[0].Points[0].Values = new double[] { 1 };
+                }
+                pie3DSeriesView.Titles[0].Text = $"左工位：{totalCnt}";
+            }
+            chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt+MyGlobal.globalPointSet_Right.OkCnt };
+            chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt+MyGlobal.globalPointSet_Right.AnchorErrorCnt };
+            chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt +MyGlobal.globalPointSet_Right.FindEgdeErrorCnt};
+            chartControl1.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt +MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt};
+            Pie3DSeriesView pie3DSeriesView1 = (Pie3DSeriesView)chartControl1.Series[0].View;
+            int totalCnt1 = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
+                MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt +
+                MyGlobal.globalPointSet_Right.OkCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt +
+                MyGlobal.globalPointSet_Right.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt;
+            if (totalCnt1 == 0)
             {
                 chartControl1.Series[0].Points[0].Values = new double[] { 1 };
             }
-            pie3DSeriesView.Titles[0].Text = $"总产能：{totalCnt}";
+            pie3DSeriesView1.Titles[0].Text = $"总产能：{totalCnt1}";
+
+        }
+
+        private void btn_clear_curr_capacity_Click(object sender, EventArgs e)
+        {
+            SimpleButton btn = (SimpleButton)sender;
+            if (MessageBox.Show("确认清空生产数据?", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                switch (btn.Name)
+                {
+                    case "btn_clear_curr_capacity1":
+                        MyGlobal.globalPointSet_Right.OkCnt = 0;
+                        MyGlobal.globalPointSet_Right.AnchorErrorCnt = 0;
+                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt = 0;
+                        MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt = 0;
+                        MyGlobal.globalPointSet_Left.OkCnt = 0;
+                        MyGlobal.globalPointSet_Left.AnchorErrorCnt = 0;
+                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt = 0;
+                        MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt = 0;
+                        setValue(true);
+                        setValue(false);
+                        break;
+                    case "btn_clear_curr_capacity2":
+                        MyGlobal.globalPointSet_Left.OkCnt = 0;
+                        MyGlobal.globalPointSet_Left.AnchorErrorCnt = 0;
+                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt = 0;
+                        MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt = 0;
+                        setValue(false);
+                        break;
+                    case "btn_clear_curr_capacity3":
+                        MyGlobal.globalPointSet_Right.OkCnt = 0;
+                        MyGlobal.globalPointSet_Right.AnchorErrorCnt = 0;
+                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt = 0;
+                        MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt = 0;
+                        setValue(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+            StaticOperate.WriteXML(MyGlobal.globalPointSet_Left, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
+            
         }
     }
 }
