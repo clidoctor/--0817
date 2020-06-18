@@ -4012,7 +4012,7 @@ namespace SagensVision.VisionTool
                     breakOut = false;
                     HTuple Pose1 = new HTuple();
                     //HOperatorSet.SetLineWidth(windowhandle, 50);
-                    HOperatorSet.CreatePose(-Row.TupleRound().ToIArr()[0], -Column.TupleRound().ToIArr()[0], 0, 0, 180, 0, "Rp+T", "gba", "point",out  Pose1);
+                    HOperatorSet.CreatePose(-Row.TupleRound().ToIArr()[0], -Column.TupleRound().ToIArr()[0], 0, 0, 0, 0, "Rp+T", "gba", "point",out  Pose1);
                     //                visualize_object_model_3d(windowhandle, hv_ObjectModel3D, new HTuple(), Pose1,
                     //new HTuple("alpha").TupleConcat("disp_pose").TupleConcat("depth_persistence").TupleConcat("point_size").TupleConcat("color").TupleConcat("disp_background"),
                     //(new HTuple(0.5)).TupleConcat("false").TupleConcat("true").TupleConcat(2.5).TupleConcat("red").TupleConcat("true"), new HTuple(), new HTuple(), new HTuple(), out hv_PoseOut);

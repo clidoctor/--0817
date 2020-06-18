@@ -13,7 +13,7 @@ namespace SagensVision.UserLoginIn
 {
     public partial class UserLogin : DevExpress.XtraEditors.XtraForm
     {
-        public string CurrentUser = "无权限";
+        public static Verify CurrentUser = Verify.操作员;
         public UserLogin()
         {
             InitializeComponent();
@@ -34,26 +34,19 @@ namespace SagensVision.UserLoginIn
             try
             {
                 string AdminName = comboBoxEdit1.SelectedItem.ToString();
-                if (AdminName == "Admin")
+                
+                UserMsg user = null;
+                edit.UserDic.TryGetValue(AdminName, out user);
+                if (textBox1.Text == user.password)
                 {
-                        if (textBox1.Text == "S2020")
-                        {
-                            MessageBox.Show("登录成功");
-                            CurrentUser = "Admin";
-                            simpleButton3.Visible = true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("密码错误！");
-                        }
-                    return;                       
-                }
-                string value = "";
-                edit.UserDic.TryGetValue(AdminName, out value);
-                if (textBox1.Text == value)
-                {
-                    MessageBox.Show("登录成功");
-                    CurrentUser = "Admin";                    
+                    MessageBox.Show($"登录成功,权限为<{user.verify.ToString()}>");
+                    simpleButton4.Visible = true;
+                    CurrentUser = user.verify;
+                    if (user.verify == Verify.管理员)
+                    {
+                        simpleButton3.Visible = true;
+                    }
+                    else { simpleButton3.Visible = false; }
                 }
                 else
                 {
@@ -65,13 +58,14 @@ namespace SagensVision.UserLoginIn
 
                 MessageBox.Show(ex.Message);
             }
+            finally { textBox1.Text = ""; }
         }
         UserEdit edit = new UserEdit();
         private void simpleButton3_Click(object sender, EventArgs e)
         {
             try
             {
-                if (CurrentUser == "Admin")
+                if (CurrentUser == Verify.管理员)
                 {
                    
                     edit.ShowDialog();
@@ -116,6 +110,13 @@ namespace SagensVision.UserLoginIn
 
                 throw;
             }
+        }
+
+        private void simpleButton4_Click(object sender, EventArgs e)
+        {
+            CurrentUser = Verify.操作员;
+            simpleButton4.Visible = false;
+            simpleButton3.Visible = false;
         }
     }
 }

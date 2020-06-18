@@ -60,7 +60,6 @@
     "44354559115;-0.236315115232545;0;0.086107325707421;0.615188101476881;0.783663912" +
     "822841;0;0;0;0;1";
             this.chartControl1.Diagram = simpleDiagram3D1;
-            this.chartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             customLegendItem1.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(229)))), ((int)(((byte)(99)))));
             customLegendItem1.Name = "Custom Legend Item 1";
             customLegendItem1.Text = "OK";
@@ -97,7 +96,7 @@
             series1.View = pie3DSeriesView1;
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1};
-            this.chartControl1.Size = new System.Drawing.Size(477, 416);
+            this.chartControl1.Size = new System.Drawing.Size(478, 416);
             this.chartControl1.TabIndex = 0;
             // 
             // btn_show_clear_data

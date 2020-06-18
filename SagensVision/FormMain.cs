@@ -19,6 +19,8 @@ using SagensVision.VisionTool;
 using SagensSdk;
 using System.Runtime.InteropServices;
 using DevExpress.XtraEditors.Repository;
+using SagensVision.UserLoginIn;
+using DevExpress.XtraCharts;
 
 namespace SagensVision
 {
@@ -947,7 +949,8 @@ namespace SagensVision
                                     });
                                 }
                             }
-                            scf?.setValue();
+                            //scf?.setValue();
+                            setValue();
                             StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.ConfigPath + "Global.xml");
                         }
                        
@@ -3284,6 +3287,7 @@ namespace SagensVision
             MouseClickCnt1 = 0;
             MouseClickCnt2 = 0;
             MouseClickCnt3 = 0;
+            barStaticItem3.Caption = $"当前用户：{UserLogin.CurrentUser.ToString()}";
         }
 
 
@@ -3349,7 +3353,7 @@ namespace SagensVision
             {
                 scf = new ShowCapacityFrm();
                 btn_show_capacity.Text = "关闭生产数据";
-                scf.SetDesktopLocation(0, 0);
+                scf.SetDesktopLocation(Screen.PrimaryScreen.Bounds.Width -100 - scf.Width, Screen.PrimaryScreen.Bounds.Height- 100 - scf.Height);
                 scf.setValue();
                 scf.Show();
             }
@@ -3395,6 +3399,23 @@ namespace SagensVision
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        public void setValue()
+        {
+            
+            chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalConfig.OkCnt };
+            chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalConfig.AnchorErrorCnt };
+            chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalConfig.FindEgdeErrorCnt };
+            chartControl1.Series[0].Points[3].Values = new double[] { MyGlobal.globalConfig.ExploreHeightErrorCnt };
+            Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl1.Series[0].View;
+            int totalCnt = MyGlobal.globalConfig.OkCnt + MyGlobal.globalConfig.AnchorErrorCnt +
+                MyGlobal.globalConfig.FindEgdeErrorCnt + MyGlobal.globalConfig.ExploreHeightErrorCnt;
+            if (totalCnt == 0)
+            {
+                chartControl1.Series[0].Points[0].Values = new double[] { 1 };
+            }
+            pie3DSeriesView.Titles[0].Text = $"总产能：{totalCnt}";
         }
     }
 }
