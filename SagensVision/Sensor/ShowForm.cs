@@ -130,8 +130,8 @@ namespace SagensVision.Sensor
                 }
                 float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                 long SurfaceWidth, SurfaceHeight;
-                SurfaceWidth = MyGlobal.GoSDK.surfaceWidth;
-                SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
+                SurfaceWidth = MyGlobal.GoSDK.SurfaceWidth;
+                SurfaceHeight = MyGlobal.GoSDK.SurfaceHeight;
                 if (SurfacePointZ!=null)
                 {
                     HObject Height = new HObject();
@@ -166,8 +166,8 @@ namespace SagensVision.Sensor
             }
             byte[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
             long SurfaceWidth, SurfaceHeight;
-            SurfaceWidth = MyGlobal.GoSDK.surfaceWidth;
-            SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
+            SurfaceWidth = MyGlobal.GoSDK.SurfaceWidth;
+            SurfaceHeight = MyGlobal.GoSDK.SurfaceHeight;
             if (SurfacePointZ != null)
             {
                 HObject Intensity = new HObject();

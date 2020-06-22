@@ -59,8 +59,7 @@ namespace SagensVision.VisionTool
                 checkedListBox_save_data.SetItemChecked(0, MyGlobal.globalConfig.isSaveKdat);
                 checkedListBox_save_data.SetItemChecked(1, MyGlobal.globalConfig.isSaveFileDat);
                 checkedListBox_save_data.SetItemChecked(2, MyGlobal.globalConfig.isSaveImg);
-                
-                ///task
+                checkBox1.Checked =  MyGlobal.globalConfig.enableAlign;
 
             }
             catch (Exception)
@@ -288,6 +287,11 @@ namespace SagensVision.VisionTool
         {
             ImgRotateFrm imgrotatefrm = new ImgRotateFrm(isRight);
             imgrotatefrm.Show();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            MyGlobal.globalConfig.enableAlign = checkBox1.Checked;
         }
     }
 

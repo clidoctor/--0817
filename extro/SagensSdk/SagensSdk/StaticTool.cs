@@ -11,7 +11,7 @@ namespace SagensSdk
 {
     public class StaticTool
     {
-        public static void WriteSerializable(string filepath,object data)
+        public static void WriteSerializable(string filepath, object data)
         {
             BinaryFormatter binaryFomat = new BinaryFormatter();
             using (FileStream fs = new FileStream(filepath, FileMode.Create))
@@ -25,7 +25,7 @@ namespace SagensSdk
         {
             BinaryFormatter binaryFomat = new BinaryFormatter();
             object obj;
-            using (FileStream fs = new FileStream(filepath,FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate))
             {
                 obj = binaryFomat.Deserialize(fs);
                 fs.Dispose();
@@ -34,11 +34,12 @@ namespace SagensSdk
         }
 
 
-        public static void GetUnlineRunImg(SurfaceZSaveDat ssd, SurfaceIntensitySaveDat sid, double zStart, double z_byte_resolution, out HObject zoomHeightImg, out HObject zoomIntensityImg, out HObject zoomRgbImg)
+        public static void GetUnlineRunImg(SurfaceZSaveDat ssd, SurfaceIntensitySaveDat sid, SurfaceZSaveDat szd, double zStart, double z_byte_resolution, out HObject zoomHeightImg, out HObject zoomIntensityImg, out HObject zoomRgbImg, out HObject zoomPlaneImg)
         {
-            HObject heightImg, intensityImg, byteImg, rgbImg;
+            HObject heightImg, intensityImg, byteImg, rgbImg, planeImg;
             GenHeightImg(ssd, zStart, z_byte_resolution, out heightImg, out byteImg);
             GenIntensityImg(sid, out intensityImg);
+            GenHeightImg(szd, out planeImg);
 
             PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
             byteImg.Dispose();
@@ -48,10 +49,11 @@ namespace SagensSdk
             heightImg.Dispose();
             HOperatorSet.ZoomImageFactor(intensityImg, out zoomIntensityImg, 1, 4, "constant");
             intensityImg.Dispose();
+            HOperatorSet.ZoomImageFactor(planeImg, out zoomPlaneImg, 2, 2, "constant");
             GC.Collect();
         }
 
-        public static void GenHeightImg(SurfaceZSaveDat ssd, double zStart,double z_byte_resolution,out HObject heightImg,out HObject byteImg)
+        public static void GenHeightImg(SurfaceZSaveDat ssd, double zStart, double z_byte_resolution, out HObject heightImg, out HObject byteImg)
         {
             int width = ssd.width;
             int height = ssd.height;
@@ -61,7 +63,7 @@ namespace SagensSdk
             {
                 for (int k = 0; k < width; k++)
                 {
-                    surfaceData[j * width + k] = ssd.points[j * width + k] == -32768 ? -12 : (float)(ssd.offset.z + ssd.resolution.z * ssd.points[j * width + k]);  
+                    surfaceData[j * width + k] = ssd.points[j * width + k] == -32768 ? -12 : (float)(ssd.offset.z + ssd.resolution.z * ssd.points[j * width + k]);
                     if (ssd.points[j * width + k] != -32768)
                     {
                         surfaceDataZByte[j * width + k] = (byte)Math.Ceiling(((ssd.offset.z + ssd.resolution.z * ssd.points[j * width + k]) - zStart) * z_byte_resolution);
@@ -70,16 +72,16 @@ namespace SagensSdk
                     {
                         surfaceDataZByte[j * width + k] = 0;
                     }
-                    
+
                 }
             }
-            
-            GenHalconImage(surfaceData, width, height,out heightImg);
-            GenHalconImage(surfaceDataZByte, width, height,out byteImg);
+
+            GenHalconImage(surfaceData, width, height, out heightImg);
+            GenHalconImage(surfaceDataZByte, width, height, out byteImg);
             GC.Collect();
 
         }
-        public static void GenHeightImg(SurfaceZSaveDat ssd,out HObject heightImg)
+        public static void GenHeightImg(SurfaceZSaveDat ssd, out HObject heightImg)
         {
             int width = ssd.width;
             int height = ssd.height;
@@ -95,7 +97,7 @@ namespace SagensSdk
             GC.Collect();
         }
 
-        public static void GenIntensityImg(SurfaceIntensitySaveDat sid,out HObject intensityImg)
+        public static void GenIntensityImg(SurfaceIntensitySaveDat sid, out HObject intensityImg)
         {
             intensityImg = GenHalconImage(sid.points, sid.width, sid.height);
             GC.Collect();

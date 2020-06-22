@@ -35,6 +35,7 @@ namespace SagensVision.VisionTool
         HObject HeightImage = new HObject();
         HObject IntensityImage = new HObject();
         HObject RGBImage = new HObject();
+        HObject OriginImage = new HObject();
         //public IntersetionCoord[] intersectCoordList = new IntersetionCoord[4];
         //计算输出交点
         IntersetionCoord intersection = new IntersetionCoord();
@@ -709,9 +710,18 @@ namespace SagensVision.VisionTool
 
             string Path1 = "";
             if (MyGlobal.ImageMulti.Count >= Id + 1 && SelectedPath == "")
-            {
-                HeightImage = MyGlobal.ImageMulti[Id][1];
+            {               
                 IntensityImage = MyGlobal.ImageMulti[Id][0];
+                if (MyGlobal.globalConfig.enableAlign)
+                {
+                    HeightImage = MyGlobal.ImageMulti[Id][2];
+                    OriginImage = MyGlobal.ImageMulti[Id][1];
+                }
+                else
+                {
+                    HeightImage = MyGlobal.ImageMulti[Id][1];
+                    OriginImage = MyGlobal.ImageMulti[Id][2];
+                }
             }
             else
             {
@@ -1213,6 +1223,10 @@ namespace SagensVision.VisionTool
             }
 
             //MyGlobal.flset2.Init();
+            MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight);
+            MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight);
+            MyGlobal.Right_findPointTool_Fix.Init("Fix", isRight);
+            MyGlobal.Left_findPointTool_Fix.Init("Fix", isRight);
             MessageBox.Show("保存成功！");
         }
 
@@ -1617,7 +1631,7 @@ namespace SagensVision.VisionTool
                 {
                     //ChangeSide已定位Roi 不用定位     
                     HTuple[] original = new HTuple[2];
-                    string ok = fpTool.FindPoint(Id,isRight, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, out original, null, hwindow_final2, true);
+                    string ok = fpTool.FindPoint(Id,isRight, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, out original, null, hwindow_final2, true,null,OriginImage);
                     if (ok != "OK")
                     {
                         MessageBox.Show(ok);
@@ -5604,9 +5618,11 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
-            MyGlobal.Right_findPointTool_Find.Init(this.Text,isRight);
-            MyGlobal.Left_findPointTool_Find.Init(this.Text, isRight);
+
+            //MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight);
+            //MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight);
+            //MyGlobal.Right_findPointTool_Fix.Init("Fix", isRight);
+            //MyGlobal.Left_findPointTool_Fix.Init("Fix", isRight);
 
             //MyGlobal.flset2.Init();
             if (hwindow_final1.Image != null)

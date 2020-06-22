@@ -150,6 +150,8 @@ namespace SagensSdk
         /// </summary>
         private string warnTime { set; get; } = "16:01:00";
         #endregion
+
+
         private int OnData(DataContext ctx, IntPtr sys, IntPtr data)
         {
             
@@ -180,6 +182,7 @@ namespace SagensSdk
 
             IntPtr MeasurementMsg = IntPtr.Zero;
             MeasurementData measurementData = new MeasurementData();
+            bool isRecSurfaceZOK = false;
             for (uint i = 0; i < GoSdkWrapper.GoDataSet_Count(data); i++)
             {
                 dataObj = GoSdkWrapper.GoDataSet_At(data, i);
@@ -207,9 +210,9 @@ namespace SagensSdk
                         ctx.xOffset = (double)GoSdkWrapper.GoSurfaceMsg_XOffset(SurfaceMsgZ) / 1000;
                         ctx.yOffset = (double)GoSdkWrapper.GoSurfaceMsg_YOffset(SurfaceMsgZ) / 1000;
                         ctx.zOffset = (double)GoSdkWrapper.GoSurfaceMsg_ZOffset(SurfaceMsgZ) / 1000;
-                        surfaceWidth = GoSdkWrapper.GoSurfaceMsg_Width(SurfaceMsgZ);
-                        surfaceHeight = GoSdkWrapper.GoSurfaceMsg_Length(SurfaceMsgZ);
 
+                        uint surfaceWidth = GoSdkWrapper.GoSurfaceMsg_Width(SurfaceMsgZ);
+                        uint surfaceHeight = GoSdkWrapper.GoSurfaceMsg_Length(SurfaceMsgZ);
                         IntPtr surfacePtr = GoSdkWrapper.GoSurfaceMsg_RowAt(SurfaceMsgZ,0);
                         short[] surfacePoints = new short[surfaceWidth * surfaceHeight];
                         float[] surfaceData = new float[surfaceWidth * surfaceHeight];
@@ -231,12 +234,33 @@ namespace SagensSdk
                         Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
 
                         //保存dat
-                        if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
+                        //if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
+                        //{
+                        //    PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                        //    PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                        //    SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset,width = (int)surfaceWidth,height = (int)surfaceHeight };
+                        //    StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_H.dat", ssd);
+                        //}
+                        if (!isRecSurfaceZOK)
                         {
-                            PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
-                            PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
-                            SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset,width = (int)surfaceWidth,height = (int)surfaceHeight };
-                            StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_H.dat", ssd);
+                            if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
+                            {
+                                PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                                PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                                SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
+                                StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_L_H.dat", ssd);
+                            }
+                        }
+                        else
+                        {
+                            //保存dat
+                            if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
+                            {
+                                PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                                PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                                SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
+                                StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_S_H.dat", ssd);
+                            }
                         }
                         sp.Stop();
                         long b = sp.ElapsedMilliseconds;
@@ -249,7 +273,7 @@ namespace SagensSdk
                                 surfaceData[j*surfaceWidth +k ] = surfacePoints[j * surfaceWidth + k] == -32768 ? -12 : (float)(ctx.zOffset + ctx.zResolution * surfacePoints[j * surfaceWidth + k]);
                                 surfaceDataX[j * surfaceWidth + k] = (float)(ctx.xOffset + ctx.xResolution * k);
                                 surfaceDataY[j * surfaceWidth + k] = (float)(ctx.yOffset + ctx.yResolution * j);
-                                if (IsRecSurfaceDataZByte)
+                                if (IsRecSurfaceDataZByte && (!isRecSurfaceZOK))
                                 {
                                     if (surfacePoints[j * surfaceWidth + k] != -32768)
                                     {
@@ -264,11 +288,22 @@ namespace SagensSdk
                         }
                         sp.Stop();
                         long a = sp.ElapsedMilliseconds;
-
-                        this.SurfaceDataZByte = surfaceDataZByte;
-                        this.surfaceDataX = surfaceDataX;
-                        this.surfaceDataY = surfaceDataY;
-                        this.SurfaceDataZ = surfaceData;
+                        if (!isRecSurfaceZOK)
+                        {
+                            this.SurfaceWidth = surfaceWidth;
+                            this.SurfaceHeight = surfaceHeight;
+                            this.SurfaceDataZ = surfaceData;
+                            this.SurfaceDataZByte = surfaceDataZByte;
+                            this.surfaceDataX = surfaceDataX;
+                            this.surfaceDataY = surfaceDataY;
+                            isRecSurfaceZOK = true;
+                        }
+                        else {
+                            this.SurfaceAlignData = surfaceData;
+                            this.SurfaceAlignWidth = surfaceWidth;
+                            this.SurfaceAlignHeight = surfaceHeight;
+                        }
+                        
                         
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_SURFACE_INTENSITY:
@@ -466,6 +501,8 @@ namespace SagensSdk
         private float[] surfaceDataX;
         private float[] surfaceDataY;
 
+        private float[] surfaceAlignData;
+
         private byte[] surfaceDataIntensity;//亮度数据
         private Profile sigleProfile;//单个轮廓数据
         private List<Profile> profileDataZ { set; get; }//轮廓数据
@@ -510,6 +547,19 @@ namespace SagensSdk
             get { return surfaceDataY; }
         }
 
+        public float[] SurfaceAlignData
+        {
+            set {
+                surfaceAlignData = value;
+                if (surfaceAlignData != null)
+                {
+                    SurfaceAlignRecFinish?.Invoke();
+                }
+            }
+            get { return surfaceAlignData; }
+        }
+        public uint SurfaceAlignWidth { set; get; }
+        public uint SurfaceAlignHeight { set; get; }
         public byte[] SurfaceDataIntensity
         {
             get
@@ -737,8 +787,8 @@ namespace SagensSdk
 
 
         public uint profileWidth { set; get; }
-        public uint surfaceWidth { set; get; }
-        public uint surfaceHeight { set; get; }
+        public uint SurfaceWidth { set; get; }
+        public uint SurfaceHeight { set; get; }
 
         private bool isRecProfileZ;
 
@@ -750,6 +800,7 @@ namespace SagensSdk
         public event Action SurfaceIntensityRecFinish;
         public event Action MeasurementRecFinish;
         public event Action SigleProfileRecFinish;
+        public event Action SurfaceAlignRecFinish;
         
     }
 

@@ -69,6 +69,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -82,7 +83,7 @@
             // 
             this.groupBox1.Controls.Add(this.textBox_Start);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(356, 256);
+            this.groupBox1.Location = new System.Drawing.Point(356, 308);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(266, 72);
             this.groupBox1.TabIndex = 3;
@@ -187,7 +188,7 @@
             this.groupBox3.Controls.Add(this.textBox_xOffset);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(356, 58);
+            this.groupBox3.Location = new System.Drawing.Point(356, 110);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(265, 192);
             this.groupBox3.TabIndex = 75;
@@ -337,7 +338,7 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label18);
             this.groupBox4.Controls.Add(this.textBox_totalZ);
-            this.groupBox4.Location = new System.Drawing.Point(357, 334);
+            this.groupBox4.Location = new System.Drawing.Point(357, 386);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(265, 72);
             this.groupBox4.TabIndex = 79;
@@ -346,7 +347,7 @@
             // 
             // simpleButton3
             // 
-            this.simpleButton3.Location = new System.Drawing.Point(458, 457);
+            this.simpleButton3.Location = new System.Drawing.Point(458, 472);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(90, 23);
             this.simpleButton3.TabIndex = 80;
@@ -461,11 +462,23 @@
             this.simpleButton5.Text = "图像旋转设置";
             this.simpleButton5.Click += new System.EventHandler(this.simpleButton5_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(357, 68);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(122, 18);
+            this.checkBox1.TabIndex = 87;
+            this.checkBox1.Text = "启用角落曲面校正";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 572);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.simpleButton5);
             this.Controls.Add(this.simpleButton4);
             this.Controls.Add(this.label14);
@@ -498,6 +511,7 @@
             this.groupBox5.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -543,5 +557,6 @@
         private System.Windows.Forms.Label label14;
         private DevExpress.XtraEditors.SimpleButton simpleButton4;
         private DevExpress.XtraEditors.SimpleButton simpleButton5;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

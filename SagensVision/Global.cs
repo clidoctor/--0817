@@ -82,7 +82,8 @@ namespace SagensVision
         public bool isSaveFileDat;
         public bool isSaveImg;
         //public bool isUseAnchorDeg = true;
-       
+
+        public bool enableAlign;
     }
 
     public class GlobalPointSet

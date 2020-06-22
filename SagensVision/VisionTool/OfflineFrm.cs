@@ -99,7 +99,7 @@ namespace SagensVision
                 //Thread.Sleep(100);
                 //run之前先判断该路径下面的文件是否齐全
                 path = (listBox1.Items[listBox1.SelectedIndex]).ToString();
-                string[] fileNames = Directory.GetFiles(path, "*.tiff");
+                string[] fileNames = Directory.GetFiles(path, "*.*");
                 if (fileNames.Length != 8 && fileNames.Length != 12)
                     MessageBox.Show("当前物料文件不齐全，请确认目录缺失文件");
                 else

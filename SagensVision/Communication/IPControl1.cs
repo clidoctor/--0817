@@ -61,11 +61,19 @@ namespace SagensVision.Communication
             {
                 return;
             }
-            MotorIpAddress = textBox_MotorIp.Text.ToString();
-            MotorPort = Convert.ToInt32(textBox_port.Text.ToString());
-            okmsg = textBox1.Text.ToString();
-            MyGlobal.globalConfig.MotorIpAddress = MotorIpAddress;
-            MyGlobal.globalConfig.MotorPort = MotorPort;
+            try
+            {
+                MotorIpAddress = textBox_MotorIp.Text.ToString();
+                MotorPort = Convert.ToInt32(textBox_port.Text.ToString());
+                okmsg = textBox1.Text.ToString();
+                MyGlobal.globalConfig.MotorIpAddress = MotorIpAddress;
+                MyGlobal.globalConfig.MotorPort = MotorPort;
+            }
+            catch (Exception)
+            {
+                
+            }
+            
         }
 
         

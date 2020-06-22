@@ -1662,7 +1662,7 @@ namespace SagensVision.VisionTool
         }
 
         private int Ignore = 0;
-        public string FindPoint(int SideId,bool IsRight, HObject IntesityImage, HObject HeightImage, out double[][] RowCoord, out double[][] ColCoord, out double[][] ZCoord, out string[][] StrLineOrCircle, out HTuple[] originalPoint, HTuple HomMat3D = null, HWindow_Final hwind = null, bool debug = false, HTuple homMatFix = null)
+        public string FindPoint(int SideId,bool IsRight, HObject IntesityImage, HObject HeightImage, out double[][] RowCoord, out double[][] ColCoord, out double[][] ZCoord, out string[][] StrLineOrCircle, out HTuple[] originalPoint, HTuple HomMat3D = null, HWindow_Final hwind = null, bool debug = false, HTuple homMatFix = null,HObject OriginImage = null)
         {
             //HObject RIntesity = new HObject(), RHeight = new HObject();
             StringBuilder Str = new StringBuilder();
@@ -2350,7 +2350,14 @@ namespace SagensVision.VisionTool
                         HOperatorSet.GetRegionPoints(Circle, out rows, out cols);
                         try
                         {
-                            HOperatorSet.GetGrayval(HeightImage, rows, cols, out Zpt);
+                            if (OriginImage!=null)
+                            {
+                                HOperatorSet.GetGrayval(OriginImage, rows, cols, out Zpt);
+                            }
+                            else
+                            {
+                                HOperatorSet.GetGrayval(HeightImage, rows, cols, out Zpt);
+                            }
                             HTuple greater = new HTuple();
                             HOperatorSet.TupleGreaterElem(Zpt, -10, out greater);
                             HTuple greaterId = greater.TupleFind(1);

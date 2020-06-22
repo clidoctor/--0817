@@ -249,11 +249,10 @@ namespace SagensVision
             MyGlobal.hWindow_Final[2].Show3dTrackDel += Show3dImg;
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
 
-            ShowProfile.MouseLeave += ShowProfile_MouseLeave;
-            ShowProfile.MouseClick += ShowProfile_MouseClick;
+            ShowProfile.HMouseDown += ShowProfile_HMouseDown;
         }
 
-        private void ShowProfile_MouseClick(object sender, MouseEventArgs e)
+        private void ShowProfile_HMouseDown(object sender, HMouseEventArgs e)
         {
             //if (ClassShow3D.breakOut == false)
             //{
@@ -262,11 +261,8 @@ namespace SagensVision
             //ShowProfileToWindow(this.recordXCoord, this.recordYCoord, this.recordZCoord, this.recordSigleTitle, false, true);
         }
 
-        private void ShowProfile_MouseLeave(object sender, EventArgs e)
-        {
-            //ClassShow3D.breakOut = true;
-            
-        }
+
+   
 
      
 
@@ -414,7 +410,7 @@ namespace SagensVision
             }
         }
 
-        string RunFindPoint(int Side,bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HTuple Homat3D, HWindow_Final Hwnd)
+        string RunFindPoint(int Side,bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HTuple Homat3D, HWindow_Final Hwnd,HObject OriginImage = null)
         {
             X = null; Y = null; Z = null; Str = null; original = new HTuple[2];
             try
@@ -445,16 +441,15 @@ namespace SagensVision
                     orignalDeg = MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Angle ;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Col,
                     orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
-                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side,isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
+                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side,isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix,OriginImage);
 
                 }
                 else
                 {
                     orignalDeg = MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Col,
-                orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
-                    OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix);
-
+                    orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                    OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix, OriginImage);
                 }
 
 
@@ -802,6 +797,7 @@ namespace SagensVision
 
                     StaticOperate.SaveImage(IntensityImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "I.tiff", true);
                     StaticOperate.SaveImage(HeightImage, MyGlobal.globalConfig.Count.ToString(), SideName[Station - 1] + "H.tiff", true);
+             
 
                     string OK = RunSide(Station,true, IntensityImage, HeightImage);
 
@@ -851,7 +847,7 @@ namespace SagensVision
         }
 
         //点云
-        private string RunSuface(int Station,bool isRight ,bool outline = false)
+        private string RunSuface(int Station, bool isRight, bool outline = false)
         {
             try
             {
@@ -888,22 +884,23 @@ namespace SagensVision
                             MyGlobal.hWindow_Final[i].ClearWindow();
                         }
                     }
-                    
+
                 }
 
                 if (MyGlobal.GoSDK.SurfaceDataZ != null)
                 {
 
                     long SurfaceWidth, SurfaceHeight;
-                    SurfaceWidth = MyGlobal.GoSDK.surfaceWidth;
-                    SurfaceHeight = MyGlobal.GoSDK.surfaceHeight;
-                    HObject tempHeightImg, tempInteImg, tempByteImg;
-                    HObject HeightImage, IntensityImage, byteImg;
-                    HObject ZoomHeightImg, ZoomIntensityImg;
+                    SurfaceWidth = MyGlobal.GoSDK.SurfaceWidth;
+                    SurfaceHeight = MyGlobal.GoSDK.SurfaceHeight;
+                    HObject HeightImage, rotateHeightImg, ZoomHeightImg;
+                    HObject tempInteImg, ZoomIntensityImg, IntensityImage;
+                    HObject tempByteImg, byteImg;
                     HObject rgbImg;
                     HObject zoomRgbImg;
+                    HObject tempAlignImg, zoomAlignImg, tileImg, rotateAlignImg;
 
-                    HOperatorSet.GenEmptyObj(out tempHeightImg);
+                    HOperatorSet.GenEmptyObj(out rotateHeightImg);
                     HOperatorSet.GenEmptyObj(out tempInteImg);
                     HOperatorSet.GenEmptyObj(out tempByteImg);
                     HOperatorSet.GenEmptyObj(out HeightImage);
@@ -913,21 +910,29 @@ namespace SagensVision
                     HOperatorSet.GenEmptyObj(out ZoomIntensityImg);
                     HOperatorSet.GenEmptyObj(out rgbImg);
                     HOperatorSet.GenEmptyObj(out zoomRgbImg);
+
+                    HOperatorSet.GenEmptyObj(out tempAlignImg);
+                    HOperatorSet.GenEmptyObj(out rotateAlignImg);
+                    HOperatorSet.GenEmptyObj(out zoomAlignImg);
+                    HOperatorSet.GenEmptyObj(out tileImg);
                     try
                     {
 
 
                         float[] SurfacePointZ = MyGlobal.GoSDK.SurfaceDataZ;
                         byte[] IntesitySurfacePointZ = MyGlobal.GoSDK.SurfaceDataIntensity;
-                        
+                        float[] SurfaceAlignData = MyGlobal.GoSDK.SurfaceAlignData;
+                        uint surfaceAlignWidth = MyGlobal.GoSDK.SurfaceAlignWidth;
+                        uint surfaceAlignHeight = MyGlobal.GoSDK.SurfaceAlignHeight;
+
                         isLastImgRecOK = true;
                         if (SurfacePointZ != null)
                         {
                             long encoder = MyGlobal.GoSDK.Stamp.encoder;
                             ShowAndSaveMsg($"Stamp 结束位编码器数值{encoder.ToString()}");
                             //ShowAndSaveMsg($"结束编码器数值2 --- 》{ MyGlobal.GoSDK.GetSensorEncode()}");
-                            tempHeightImg.Dispose();
-                            MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out tempHeightImg);
+                            HeightImage.Dispose();
+                            MyGlobal.GoSDK.GenHalconImage(SurfacePointZ, SurfaceWidth, SurfaceHeight, out HeightImage);
                             MyGlobal.GoSDK.SurfaceDataZ = null;
                         }
                         else { return "高度值为空"; }
@@ -940,7 +945,8 @@ namespace SagensVision
                         }
                         else { return "亮度值为空"; }
 
-                        
+
+
                         ////
                         ////生成并显示伪彩色图
                         if (!MyGlobal.isShowHeightImg)
@@ -969,19 +975,46 @@ namespace SagensVision
                         ////
 
 
-                        HeightImage.Dispose();
+                        ZoomHeightImg.Dispose();
+                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 4, "constant");
+                        if (MyGlobal.globalConfig.enableAlign && SurfaceAlignData != null)//使用角落校正的图像
+                        {
+                            tempAlignImg.Dispose();
+                            MyGlobal.GoSDK.GenHalconImage(SurfaceAlignData, surfaceAlignWidth, surfaceAlignHeight, out tempAlignImg);
+                            zoomAlignImg.Dispose();
+                            HOperatorSet.ZoomImageFactor(tempAlignImg, out zoomAlignImg, 2, 2, "constant");
+                            bool isUp = Station == 4 || Station == 2;
+                            tileImg.Dispose();
+                            TileImg(zoomAlignImg, ZoomHeightImg, out tileImg, isUp);
+
+
+                            rotateAlignImg.Dispose();
+                            if (isRight)
+                            {
+                                HOperatorSet.RotateImage(tileImg, out rotateAlignImg, MyGlobal.globalPointSet_Right.imgRotateArr[Station - 1], "constant");
+                            }
+                            else
+                            {
+                                HOperatorSet.RotateImage(tileImg, out rotateAlignImg, MyGlobal.globalPointSet_Left.imgRotateArr[Station - 1], "constant");
+                            }
+
+                            SurfaceAlignData = null;
+                        }
+
+
+                        rotateHeightImg.Dispose();
                         if (isRight)
                         {
-                            HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.globalPointSet_Right.imgRotateArr[Station - 1], "constant");
+                            HOperatorSet.RotateImage(ZoomHeightImg, out rotateHeightImg, MyGlobal.globalPointSet_Right.imgRotateArr[Station - 1], "constant");
                         }
                         else
                         {
-                            HOperatorSet.RotateImage(tempHeightImg, out HeightImage, MyGlobal.globalPointSet_Left.imgRotateArr[Station - 1], "constant");
-
+                            HOperatorSet.RotateImage(ZoomHeightImg, out rotateHeightImg, MyGlobal.globalPointSet_Left.imgRotateArr[Station - 1], "constant");
                         }
 
-                        ZoomHeightImg.Dispose();
-                        HOperatorSet.ZoomImageFactor(HeightImage, out ZoomHeightImg, 1, 4, "constant");
+
+
+
 
                         IntensityImage.Dispose();
                         if (isRight)
@@ -995,15 +1028,9 @@ namespace SagensVision
                         ZoomIntensityImg.Dispose();
                         HOperatorSet.ZoomImageFactor(IntensityImage, out ZoomIntensityImg, 1, 4, "constant");
 
-                        if (MyGlobal.isShowHeightImg)
-                        {
-                            MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
-                        }
-                        else
-                        {
-                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
-                            this.Invoke(asd);
-                        }
+
+
+
 
                         if (Station == 1)
 
@@ -1023,8 +1050,42 @@ namespace SagensVision
                         //});
 
 
-                        string OK = RunSide(Station,isRight, ZoomIntensityImg, ZoomHeightImg);
-                        HObject[] temp = { MyGlobal.hWindow_Final[Side - 1].Image, ZoomHeightImg };
+                        if (MyGlobal.isShowHeightImg)
+                        {
+                            if (rotateAlignImg.CountObj() != 0)
+                            {
+                                MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rotateAlignImg);
+                            }
+                            else { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg); }
+
+                        }
+                        else
+                        {
+                            Action asd = () => { MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(zoomRgbImg); };
+                            this.Invoke(asd);
+                        }
+                        string OK = "";
+                        if (MyGlobal.globalConfig.enableAlign)
+                        {
+                            if (rotateAlignImg.CountObj() != 0)
+                            {
+                                OK = RunSide(Station, isRight, ZoomIntensityImg, rotateAlignImg, false, rotateHeightImg);
+                            }
+                            else
+                            {
+                                OK = "曲面拟合图像接收失败";
+                            }
+                        }
+                        else
+                        {
+                            OK = RunSide(Station, isRight, ZoomIntensityImg, rotateHeightImg, false, null);
+                        }
+
+                        HObject[] temp = new HObject[3];
+                        temp[0] = MyGlobal.hWindow_Final[Side - 1].Image;
+                        temp[1] = rotateHeightImg;
+                        temp[2] = MyGlobal.globalConfig.enableAlign ? rotateAlignImg : null;
+
                         MyGlobal.ImageMulti.Add(temp);
 
                         //while (!isSaveImgOK);//等待图片保存完成
@@ -1037,136 +1098,8 @@ namespace SagensVision
                                 {
                                     if (isRight)
                                     {
-                                        MyGlobal.globalPointSet_Right.AnchorErrorCnt++ ;
-                                }
-                                    else
-                                    {
-                                        MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
-
-                                    }
-                                }
-                                else if (errstr.ToString().Contains("抓边") || errstr.ToString().Contains("RunFindPoint"))
-                                {
-                                   
-                                    if (isRight)
-                                    {
-                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
-                                }
-                                    else
-                                    {
-                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
-
-                                    }
-                                }
-                                else if (errstr.ToString().Contains("探高"))
-                                {
-                                   
-                                    if (isRight)
-                                    {
-                                        MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
-                                }
-                                else
-                                {
-                                        MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
-                                }
-                                }
-                                else
-                                {
-                                    if (isRight)
-                                    {
-                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
-                                    }
-                                    else
-                                    {
-                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
-                                    }
-                                    
-                                }
-                                string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
-                                ShowAndSaveErrorMsg(errstr.ToString(), path + saveImageTime);
-                                ThreadPool.QueueUserWorkItem(delegate
-                                {
-                                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
-                                    {
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff",isRight);
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                if (isRight)
-                                {
-                                    MyGlobal.globalPointSet_Right.OkCnt++;
-                                }
-                                else
-                                {
-                                    MyGlobal.globalPointSet_Left.OkCnt++;
-
-                                }
-                                if (MyGlobal.globalConfig.isSaveImg)
-                                {
-                                    ThreadPool.QueueUserWorkItem(delegate
-                                    {
-                                        for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
-                                        {
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
-                                        }
-                                    });
-                                }
-                            }
-                            setValue(isRight);
-                            if (isRight)
-                            {
-                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
-                        }
-                            else
-                            {
-                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
-                       
-                            }
-
-                        }
-                       
-                        return OK;
-                    }
-                    catch (Exception ex)
-                    {
-                        return "RunSurfae --> " + ex.Message;
-                    }
-                    finally
-                    {
-                        tempByteImg.Dispose();
-                        rgbImg.Dispose();
-                        byteImg.Dispose();
-                        zoomRgbImg.Dispose();
-
-                        tempHeightImg.Dispose();
-                        HeightImage.Dispose();
-
-                        tempInteImg.Dispose();
-                        IntensityImage.Dispose();
-                        ZoomIntensityImg.Dispose();
-                    }
-                }
-                else
-                {
-                    //判断是否离线测试
-                    if (outline)
-                    {
-                        string OK = RunSide(Station,isRight, MyGlobal.ImageMulti[Station - 1][0], MyGlobal.ImageMulti[Station - 1][1]);
-                        if (Station == 4)
-                        {
-                            outline = false;
-                            if (errstr.Length > 0)
-                            {
-                                if (errstr.ToString().Contains("定位"))
-                                {
-                                    if (isRight)
-                                    {
                                         MyGlobal.globalPointSet_Right.AnchorErrorCnt++;
-                                }
+                                    }
                                     else
                                     {
                                         MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
@@ -1179,7 +1112,7 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
-                                }
+                                    }
                                     else
                                     {
                                         MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
@@ -1192,11 +1125,11 @@ namespace SagensVision
                                     if (isRight)
                                     {
                                         MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
-                                }
-                                else
-                                {
+                                    }
+                                    else
+                                    {
                                         MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
-                                }
+                                    }
                                 }
                                 else
                                 {
@@ -1217,7 +1150,11 @@ namespace SagensVision
                                     for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                     {
                                         StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
+                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "L_H.tiff", isRight);
+                                        if (rotateAlignImg.CountObj() > 0)
+                                        {
+                                            StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][2], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "S_H.tiff", isRight);
+                                        }
                                     }
                                 });
                             }
@@ -1239,7 +1176,11 @@ namespace SagensVision
                                         for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                         {
                                             StaticOperate.SaveImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
-                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "H.tiff", isRight);
+                                            StaticOperate.SaveImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "L_H.tiff", isRight);
+                                            if (rotateAlignImg.CountObj() > 0)
+                                            {
+                                                StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][2], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "S_H.tiff", isRight);
+                                            }
                                         }
                                     });
                                 }
@@ -1248,7 +1189,129 @@ namespace SagensVision
                             if (isRight)
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+                            }
+                            else
+                            {
+                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
+
+                            }
+
                         }
+
+                        return OK;
+                    }
+                    catch (Exception ex)
+                    {
+                        return "RunSurfae --> " + ex.Message;
+                    }
+                    finally
+                    {
+                        tempByteImg.Dispose();
+                        rgbImg.Dispose();
+                        byteImg.Dispose();
+                        zoomRgbImg.Dispose();
+
+                        ZoomHeightImg.Dispose();
+                        HeightImage.Dispose();
+
+                        tempInteImg.Dispose();
+                        IntensityImage.Dispose();
+                        ZoomIntensityImg.Dispose();
+
+                        tempAlignImg.Dispose();
+                        zoomAlignImg.Dispose();
+                        tileImg.Dispose();
+                    }
+                }
+                else
+                {
+                    //判断是否离线测试
+                    if (outline)
+                    {
+                        string OK = "";
+                        if (MyGlobal.globalConfig.enableAlign)
+                        {
+                            OK = RunSide(Station, isRight, MyGlobal.ImageMulti[Station - 1][0], MyGlobal.ImageMulti[Station - 1][2], false, MyGlobal.ImageMulti[Station - 1][1]);
+                        }
+                        else
+                        {
+                            OK = RunSide(Station, isRight, MyGlobal.ImageMulti[Station - 1][0], MyGlobal.ImageMulti[Station - 1][1], false);
+                        }
+
+                        if (Station == 4)
+                        {
+                            outline = false;
+                            if (errstr.Length > 0)
+                            {
+                                if (errstr.ToString().Contains("定位"))
+                                {
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.AnchorErrorCnt++;
+                                    }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.AnchorErrorCnt++;
+
+                                    }
+                                }
+                                else if (errstr.ToString().Contains("抓边") || errstr.ToString().Contains("RunFindPoint"))
+                                {
+
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
+                                    }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
+
+                                    }
+                                }
+                                else if (errstr.ToString().Contains("探高"))
+                                {
+
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt++;
+                                    }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt++;
+                                    }
+                                }
+                                else
+                                {
+                                    if (isRight)
+                                    {
+                                        MyGlobal.globalPointSet_Right.FindEgdeErrorCnt++;
+                                    }
+                                    else
+                                    {
+                                        MyGlobal.globalPointSet_Left.FindEgdeErrorCnt++;
+                                    }
+
+                                }
+
+                            }
+                            else
+                            {
+                                if (isRight)
+                                {
+                                    MyGlobal.globalPointSet_Right.OkCnt++;
+                                }
+                                else
+                                {
+                                    MyGlobal.globalPointSet_Left.OkCnt++;
+
+                                }
+
+                            }
+                            setValue(isRight);
+                            if (isRight)
+                            {
+                                StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
+                            }
                             else
                             {
                                 StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
@@ -1262,7 +1325,7 @@ namespace SagensVision
                         return "RunSurfae --> 高度数据为空";
                     }
 
-                    
+
                 }
             }
             catch (Exception ex)
@@ -1275,6 +1338,40 @@ namespace SagensVision
             }
         }
 
+
+
+        public void TileImg(HObject ho_Plane, HObject ho_Zoomheightimg, out HObject ho_TiledImage, bool isUp)
+        {
+            HObject ho_ObjectsConcat;
+
+            // Local control variables 
+
+            HTuple hv_Width = null, hv_Height = null, hv_Width1 = null;
+            HTuple hv_Height1 = null, hv_row = null;
+            // Initialize local and output iconic variables 
+            HOperatorSet.GenEmptyObj(out ho_TiledImage);
+            HOperatorSet.GenEmptyObj(out ho_ObjectsConcat);
+            HOperatorSet.GetImageSize(ho_Plane, out hv_Width, out hv_Height);
+            HOperatorSet.GetImageSize(ho_Zoomheightimg, out hv_Width1, out hv_Height1);
+            if (isUp)
+            {
+                hv_row = 0;
+            }
+            else { hv_row = hv_Height1 - hv_Height; }
+
+
+            ho_ObjectsConcat.Dispose();
+            HOperatorSet.ConcatObj(ho_Zoomheightimg, ho_Plane, out ho_ObjectsConcat);
+
+            ho_TiledImage.Dispose();
+            HOperatorSet.TileImagesOffset(ho_ObjectsConcat, out ho_TiledImage, (new HTuple(0)).TupleConcat(
+                hv_row), (new HTuple(0)).TupleConcat(0), (new HTuple(-1)).TupleConcat(0),
+                (new HTuple(-1)).TupleConcat(0), (new HTuple(-1)).TupleConcat(hv_Height-30), (new HTuple(-1)).TupleConcat(
+                hv_Width), hv_Width1, hv_Height1);
+            ho_ObjectsConcat.Dispose();
+
+            return;
+        }
         private string RunOutLine(int Station, int id,bool SaveBase = false)
         {
 
@@ -1296,7 +1393,16 @@ namespace SagensVision
                 return "加载高度图和亮度图 Ng";
             }
 
-            string Ok = RunSide(Station,true, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], SaveBase);
+            string Ok = "";
+
+            if (MyGlobal.ImageMulti[id].Length==3)
+            {
+                Ok = RunSide(Station, true, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][2], SaveBase, MyGlobal.ImageMulti[id][1]);
+            }
+            else
+            {
+                Ok = RunSide(Station, true, MyGlobal.ImageMulti[id][0], MyGlobal.ImageMulti[id][1], SaveBase);
+            }
 
             if (Ok != "OK")
             {
@@ -1795,7 +1901,7 @@ namespace SagensVision
                 //}
         #endregion
 
-        private string RunSide(int Side,bool isRight, HObject IntensityImage, HObject HeightImage,bool SaveBase = false)
+        private string RunSide(int Side,bool isRight, HObject IntensityImage, HObject HeightImage,bool SaveBase = false,HObject OriginImage = null)
         {
             try
             {
@@ -1812,7 +1918,7 @@ namespace SagensVision
                     }
                     
                 }
-                string OK = RunFindPoint(Side, isRight, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Side - 1], MyGlobal.hWindow_Final[Side - 1]);
+                string OK = RunFindPoint(Side, isRight, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Side - 1], MyGlobal.hWindow_Final[Side - 1], OriginImage);
 
                 if (x == null)
                 {
@@ -2664,7 +2770,8 @@ namespace SagensVision
 
 
         bool TcpIsConnect = false;
-        string[] JobName = { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" };
+        //string[] JobName = { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" };
+        string[] JobName;
         int Side = 0;
         Stopwatch sp = new Stopwatch();
 
@@ -2707,6 +2814,12 @@ namespace SagensVision
                 int len = MyGlobal.sktClient.Receive(buffer);
                 try
                 {
+                    if (MyGlobal.globalConfig.enableAlign)
+                    {
+                        JobName = new string[] { "R_1_zi_align", "R_2_zi_align", "R_3_zi_align", "R_4_zi_align" };
+                    }
+                    else { JobName = new string[] { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" }; }
+
                     byte[] temp = new byte[len];
                     Array.Copy(buffer, temp, len);
                     MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
@@ -2753,7 +2866,7 @@ namespace SagensVision
                             if (MyGlobal.ReceiveMsg.Contains("Start") && MyGlobal.globalConfig.isSaveFileDat)
                             {
                                 string LorR = MyGlobal.IsRight ? "Right" : "Left";
-                                MyGlobal.GoSDK.SaveDatFileDirectory = MyGlobal.SaveDatFileDirectory + DateTime.Now.ToString("yyyyMMddHHmmss")+ "\\" + LorR + "\\";
+                                MyGlobal.GoSDK.SaveDatFileDirectory = MyGlobal.SaveDatFileDirectory + LorR + "\\" + DateTime.Now.ToString("yyyyMMddHHmmss")+ "\\"  ;
 
                             }
                         }
@@ -2824,6 +2937,19 @@ namespace SagensVision
                                         sp.Reset();
                                         ShowAndSaveMsg($"图像接收超时！");
                                         break;
+                                    }
+                                }
+                                if (MyGlobal.globalConfig.enableAlign)
+                                {
+                                    sp.Start();
+                                    while (MyGlobal.GoSDK.SurfaceAlignData == null)
+                                    {
+                                        if (sp.ElapsedMilliseconds > 10000)
+                                        {
+                                            sp.Reset();
+                                            ShowAndSaveMsg($"图像接收超时！");
+                                            break;
+                                        }
                                     }
                                 }
                                 ShowAndSaveMsg($"接收图像耗时-->{sp.ElapsedMilliseconds}");
@@ -3255,91 +3381,43 @@ namespace SagensVision
         public void RunOffline(string ImagePath)
         {
 
-            
-                try
+
+            try
+            {
+                
+
+                LoadImageData(ImagePath);
+
+                for (int i = 0; i < 4; i++)
                 {
-                    if (ImagePath.Contains("Left"))
-                    {
-                        MyGlobal.IsRight = false;
-                    }
-                    else
-                    {
-                        MyGlobal.IsRight = true;
-                    }
-                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
-                    {
-                        for (int j = 0; j < 2; j++)
-                        {
-                            MyGlobal.ImageMulti[i][j].Dispose();
-                        }
+                    string OK = RunOutLine(i + 1, i);
 
-                    }
-                    MyGlobal.ImageMulti.Clear();
-                    sidelist.Clear();
-
-                    string[] HeightStr = { "Side1H.tiff", "Side2H.tiff", "Side3H.tiff", "Side4H.tiff" };
-                    string[] Intensity = { "Side1I.tiff", "Side2I.tiff", "Side3I.tiff", "Side4I.tiff" };
-                    string[] RBG = { "Side1B.tiff", "Side2B.tiff", "Side3B.tiff", "Side4B.tiff" };
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        HObject[] image = new HObject[2];
-
-                        if (MyGlobal.isShowHeightImg)
-                            HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + Intensity[i]);
-                        else
-                            HOperatorSet.ReadImage(out image[0], ImagePath + "\\" + RBG[i]);
-
-                        HOperatorSet.ReadImage(out image[1], ImagePath + "\\" + HeightStr[i]);
-                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
-                        MyGlobal.ImageMulti.Add(image);
-
-                    }
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        string OK = RunOutLine(i + 1, i);
-                   
                     if (OK != "OK")
+                    {
+                        ShowAndSaveMsg(OK);
+                        if (errstr.Length > 0)
                         {
-
-                        //for (int j = 0; j < MyGlobal.ImageMulti.Count; j++)
-                        //{
-                        //    for (int k = 0; j < k; j++)
-                        //    {
-                        //        if (MyGlobal.ImageMulti[j][j]!=null)
-                        //        {
-                        //            MyGlobal.ImageMulti[j][j].Dispose();
-                        //        }                               
-                        //    }
-
-                        //}
-                        //MyGlobal.ImageMulti.Clear();
-                        //sidelist.Clear();
-                             ShowAndSaveMsg(OK);
-                             if (errstr.Length > 0)
-                            {
-                                ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
-                            }
+                            ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
+                        }
                         break;
                     }
 
-                        if (i == 3)
+                    if (i == 3)
+                    {
+                        ShowAndSaveMsg(OK);
+                        if (errstr.Length > 0)
                         {
-                            ShowAndSaveMsg(OK);
-                            if (errstr.Length > 0)
-                            {
-                                ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
-                            }
+                            ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
                         }
                     }
                 }
-                catch (Exception ex)
-                {
+            }
+            catch (Exception ex)
+            {
 
-                    ShowAndSaveMsg("RunOffline :" + ex.Message);
-                }
-          
+                ShowAndSaveMsg("RunOffline :" + ex.Message);
+            }
+
         }
 
         public void RunBaseHeight()
@@ -3428,6 +3506,179 @@ namespace SagensVision
         }
 
         List<int> sidelist = new List<int>();
+        //private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        //{
+        //    //打开图片
+        //    OpenFileDialog openfile = new OpenFileDialog();
+        //    openfile.Multiselect = true;
+        //    if (openfile.ShowDialog() == DialogResult.OK)
+        //    {
+        //        ShowProfile.HalconWindow.ClearWindow();
+        //        for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+        //        {
+        //            for (int j = 0; j < 2; j++)
+        //            {
+        //                if (MyGlobal.ImageMulti[i][j] != null)
+        //                {
+        //                    MyGlobal.ImageMulti[i][j].Dispose();
+        //                }
+
+        //            }
+
+        //        }
+        //        MyGlobal.ImageMulti.Clear();
+        //        sidelist.Clear();
+        //        int len = openfile.FileNames.Length;
+
+        //        if (openfile.FileName.Contains("Left"))
+        //        {
+        //            MyGlobal.IsRight = false;
+        //        }
+        //        else
+        //        {
+        //            MyGlobal.IsRight = true;
+        //        }
+
+        //        string[] namesI;
+        //        string[] namesH;
+        //        string[] namesB;
+        //        if (len < 10)
+        //        {
+        //            namesI = new string[len / 2];
+        //            namesH = new string[len / 2];
+        //            namesB = null;
+        //        }
+        //        else
+        //        {
+        //            namesI = new string[len / 3];
+        //            namesH = new string[len / 3];
+        //            namesB = new string[len / 3];
+        //        }
+        //        if (len < 2)
+        //        {
+        //            return;
+        //        }
+
+        //        if (Path.GetExtension(openfile.FileNames[0]) == ".dat")
+        //        {
+        //            int orderi = 0; int orderh = 0;
+        //            foreach (var item in openfile.FileNames)
+        //            {
+        //                if (item.Contains("H.dat"))
+        //                {
+        //                    namesH[orderh] = item;
+        //                    orderh++;
+        //                }
+        //                else if (item.Contains("I.dat"))
+        //                {
+        //                    namesI[orderi] = item;
+        //                    orderi++;
+        //                }
+        //            }
+        //            if (namesH[0] == null)
+        //            {
+        //                return;
+        //            }
+
+        //            for (int i = 0; i < namesH.Length; i++)
+        //            {
+        //                HObject[] image = new HObject[2];
+
+        //                HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg;
+
+        //                SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
+
+        //                SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
+        //                StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg);
+
+        //                image[1] = zoomHeightImg;
+        //                if (!MyGlobal.isShowHeightImg)
+        //                {
+        //                    image[0] = zoomRgbImg;
+        //                    zoomIntensityImg.Dispose();
+        //                }
+        //                else
+        //                {
+        //                    image[0] = zoomIntensityImg;
+        //                    zoomRgbImg.Dispose();
+        //                }
+        //                MyGlobal.ImageMulti.Add(image);
+        //                MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+        //                GC.Collect();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            int orderi = 0; int orderh = 0; int orderB = 0;
+        //            foreach (var item in openfile.FileNames)
+        //            {
+        //                for (int i = orderi; i < namesH.Length; i++)
+        //                {
+        //                    for (int j = 0; j < 4; j++)
+        //                    {
+        //                        if (item.Contains((j + 1).ToString() + "I.tiff"))
+        //                        {
+        //                            namesI[i] = item;
+        //                            orderi = i + 1;
+        //                            sidelist.Add(j + 1);
+        //                            break;
+        //                        }
+        //                    }
+        //                    break;
+        //                }
+        //                for (int i = orderh; i < namesH.Length; i++)
+        //                {
+        //                    for (int j = 0; j < 4; j++)
+        //                    {
+        //                        if (item.Contains((j + 1).ToString() + "H.tiff"))
+        //                        {
+        //                            namesH[i] = item;
+        //                            orderh = i + 1;
+        //                            break;
+        //                        }
+        //                    }
+        //                    break;
+        //                }
+
+        //                if (item.Contains("B.tiff"))
+        //                {
+        //                    namesB[orderB] = item;
+        //                    orderB++;
+        //                }
+        //            }
+
+
+        //            if (namesH[0] == null)
+        //            {
+        //                return;
+        //            }
+        //            for (int i = 0; i < namesH.Length; i++)
+        //            {
+        //                HObject[] image = new HObject[2];
+
+        //                if (MyGlobal.isShowHeightImg || namesB == null)
+        //                {
+        //                    HOperatorSet.ReadImage(out image[0], namesI[i]);
+        //                }
+        //                else
+        //                {
+        //                    HOperatorSet.ReadImage(out image[0], namesB[i]);
+        //                }
+
+        //                HOperatorSet.ReadImage(out image[1], namesH[i]);
+
+        //                MyGlobal.ImageMulti.Add(image);
+
+        //                MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+
+        //            }
+        //        }
+
+
+
+        //    }
+        //}
+
         private void barButtonItem5_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //打开图片
@@ -3464,6 +3715,388 @@ namespace SagensVision
                 string[] namesI;
                 string[] namesH;
                 string[] namesB;
+                if (len < 9)
+                {
+                    namesI = new string[len / 2];
+                    namesH = new string[len / 2];
+                    namesB = null;
+                }
+                else
+                {
+                    namesI = new string[(int)Math.Ceiling((double)len / 3)];
+                    namesH = new string[(int)Math.Ceiling((double)len / 3)];
+                    namesB = new string[(int)Math.Ceiling((double)len / 3)];
+                }
+                if (len < 2)
+                {
+                    return;
+                }
+
+                if (Path.GetExtension(openfile.FileNames[0]) == ".dat")
+                {
+                    int orderi = 0; int orderh = 0; int orderb = 0;
+                    foreach (var item in openfile.FileNames)
+                    {
+                        if (item.Contains("L_H.dat"))
+                        {
+                            namesH[orderh] = item;
+                            orderh++;
+                        }
+                        else if (item.Contains("I.dat"))
+                        {
+                            namesI[orderi] = item;
+                            orderi++;
+                        }
+                        else if (item.Contains("S_H.dat"))
+                        {
+                            namesB[orderb] = item;
+                            orderb++;
+                        }
+                    }
+                    if (namesH[0] == null)
+                    {
+                        return;
+                    }
+
+                    for (int i = 0; i < namesH.Length; i++)
+                    {
+                        HObject[] image = new HObject[3];
+
+                        HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg, planeImg, tileImg;
+
+                        SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
+
+                        SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
+
+                        SurfaceZSaveDat szd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesB[i], typeof(SurfaceZSaveDat));
+
+                        StaticTool.GetUnlineRunImg(ssd, sid, szd, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg, out planeImg);
+
+                        bool isUp = i == 3 || i == 1;
+                        TileImg(planeImg, zoomHeightImg, out tileImg, isUp);
+
+                        HObject rotate = new HObject();
+                        HObject rotate_Height = new HObject();
+                        if (MyGlobal.IsRight)
+                        {
+                            HOperatorSet.RotateImage(tileImg, out rotate, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+                            HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+
+                            HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+                        }
+                        else
+                        {
+                            HOperatorSet.RotateImage(tileImg, out rotate, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+                            HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+
+                            HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+                        }
+
+                       
+                        image[1] = rotate_Height;
+                        image[2] = rotate;
+                        if (!MyGlobal.isShowHeightImg)
+                        {
+                            image[0] = zoomRgbImg;
+                            zoomIntensityImg.Dispose();
+                        }
+                        else
+                        {
+                            image[0] = zoomIntensityImg;
+                            zoomRgbImg.Dispose();
+                        }
+                        MyGlobal.ImageMulti.Add(image);
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[2]);
+                        planeImg.Dispose();
+                        zoomHeightImg.Dispose();
+                        GC.Collect();
+                    }
+                }
+                else
+                {
+                    int orderi = 0; int orderh = 0; int orderB = 0;
+                    foreach (var item in openfile.FileNames)
+                    {
+                        for (int i = orderi; i < namesH.Length; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (item.Contains((j + 1).ToString() + "I.tiff") || item.Contains((j + 1).ToString() + "B.tiff"))
+                                {
+                                    namesI[i] = item;
+                                    orderi = i + 1;
+                                    sidelist.Add(j + 1);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        for (int i = orderh; i < namesH.Length; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (item.Contains((j + 1).ToString() + "L_H.tiff"))
+                                {
+                                    namesH[i] = item;
+                                    orderh = i + 1;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+
+                        if (item.Contains("S_H.tiff"))
+                        {
+                            namesB[orderB] = item;
+                            orderB++;
+                        }
+                    }
+
+
+                    if (namesH[0] == null)
+                    {
+                        return;
+                    }
+                    for (int i = 0; i < namesH.Length; i++)
+                    {
+                        HObject[] image;
+                        if (orderB > 0)
+                        {
+                            image = new HObject[3];
+                        }
+                        else { image = new HObject[2]; }
+
+                        HOperatorSet.ReadImage(out image[0], namesI[i]);
+
+                        HOperatorSet.ReadImage(out image[1], namesH[i]);
+
+                        if (orderB > 0)
+                        {
+                            HOperatorSet.ReadImage(out image[2], namesB[i]);
+                        }
+
+                        
+
+                        MyGlobal.ImageMulti.Add(image);
+
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+
+                    }
+                }
+
+
+
+            }
+        }
+
+        //void LoadImageData(string FilePath)
+        //{
+        //    try
+        //    {
+        //        ShowProfile.HalconWindow.ClearWindow();
+        //        for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+        //        {
+        //            for (int j = 0; j < 2; j++)
+        //            {
+        //                if (MyGlobal.ImageMulti[i][j] != null)
+        //                {
+        //                    MyGlobal.ImageMulti[i][j].Dispose();
+        //                }
+
+        //            }
+
+        //        }
+        //        MyGlobal.ImageMulti.Clear();
+        //        sidelist.Clear();
+        //        DirectoryInfo dinfo = new DirectoryInfo(FilePath);
+        //        FileInfo[] finfo = dinfo.GetFiles();
+
+        //        int len = finfo.Length;
+        //        if (FilePath.Contains("Left"))
+        //        {
+        //            MyGlobal.IsRight = false;
+        //        }
+        //        else
+        //        {
+        //            MyGlobal.IsRight = true;
+        //        }
+
+        //        string[] namesI;
+        //        string[] namesH;
+        //        string[] namesB;
+        //        if (len < 10)
+        //        {
+        //            namesI = new string[len / 2];
+        //            namesH = new string[len / 2];
+        //            namesB = null;
+        //        }
+        //        else
+        //        {
+        //            namesI = new string[len / 3];
+        //            namesH = new string[len / 3];
+        //            namesB = new string[len / 3];
+        //        }
+        //        if (len < 2)
+        //        {
+        //            return;
+        //        }
+
+        //        if (Path.GetExtension(finfo[0].FullName) == ".dat")
+        //        {
+        //            int orderi = 0; int orderh = 0;
+        //            foreach (var item in finfo)
+        //            {
+        //                if (item.FullName.Contains("H.dat"))
+        //                {
+        //                    namesH[orderh] = item.FullName;
+        //                    orderh++;
+        //                }
+        //                else if (item.FullName.Contains("I.dat"))
+        //                {
+        //                    namesI[orderi] = item.FullName;
+        //                    orderi++;
+        //                }
+        //            }
+        //            if (namesH[0] == null)
+        //            {
+        //                return;
+        //            }
+
+        //            for (int i = 0; i < namesH.Length; i++)
+        //            {
+        //                HObject[] image = new HObject[2];
+
+        //                HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg;
+
+        //                SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
+
+        //                SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
+        //                StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg);
+
+        //                image[1] = zoomHeightImg;
+        //                if (!MyGlobal.isShowHeightImg)
+        //                {
+        //                    image[0] = zoomRgbImg;
+        //                    zoomIntensityImg.Dispose();
+        //                }
+        //                else
+        //                {
+        //                    image[0] = zoomIntensityImg;
+        //                    zoomRgbImg.Dispose();
+        //                }
+        //                MyGlobal.ImageMulti.Add(image);
+        //                MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+        //                GC.Collect();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            int orderi = 0; int orderh = 0; int orderB = 0;
+        //            foreach (var item in finfo)
+        //            {
+        //                for (int i = orderi; i < namesH.Length; i++)
+        //                {
+        //                    for (int j = 0; j < 4; j++)
+        //                    {
+        //                        if (item.FullName.Contains((j + 1).ToString() + "I.tiff"))
+        //                        {
+        //                            namesI[i] = item.FullName;
+        //                            orderi = i + 1;
+        //                            sidelist.Add(j + 1);
+        //                            break;
+        //                        }
+        //                    }
+        //                    break;
+        //                }
+        //                for (int i = orderh; i < namesH.Length; i++)
+        //                {
+        //                    for (int j = 0; j < 4; j++)
+        //                    {
+        //                        if (item.FullName.Contains((j + 1).ToString() + "H.tiff"))
+        //                        {
+        //                            namesH[i] = item.FullName;
+        //                            orderh = i + 1;
+        //                            break;
+        //                        }
+        //                    }
+        //                    break;
+        //                }
+
+        //                if (item.FullName.Contains("B.tiff"))
+        //                {
+        //                    namesB[orderB] = item.FullName;
+        //                    orderB++;
+        //                }
+        //            }
+
+
+        //            if (namesH[0] == null)
+        //            {
+        //                return;
+        //            }
+        //            for (int i = 0; i < namesH.Length; i++)
+        //            {
+        //                HObject[] image = new HObject[2];
+
+        //                if (MyGlobal.isShowHeightImg || namesB == null)
+        //                {
+        //                    HOperatorSet.ReadImage(out image[0], namesI[i]);
+        //                }
+        //                else
+        //                {
+        //                    HOperatorSet.ReadImage(out image[0], namesB[i]);
+        //                }
+
+        //                HOperatorSet.ReadImage(out image[1], namesH[i]);
+
+        //                MyGlobal.ImageMulti.Add(image);
+
+        //                MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+        void LoadImageData(string FilePath)
+        {
+            try
+            {
+                ShowProfile.HalconWindow.ClearWindow();
+                for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        if (MyGlobal.ImageMulti[i][j] != null)
+                        {
+                            MyGlobal.ImageMulti[i][j].Dispose();
+                        }
+
+                    }
+
+                }
+                MyGlobal.ImageMulti.Clear();
+                sidelist.Clear();
+                DirectoryInfo dinfo = new DirectoryInfo(FilePath);
+                FileInfo[] finfo = dinfo.GetFiles();
+
+                int len = finfo.Length;
+                if (FilePath.Contains("Left"))
+                {
+                    MyGlobal.IsRight = false;
+                }
+                else
+                {
+                    MyGlobal.IsRight = true;
+                }
+
+                string[] namesI;
+                string[] namesH;
+                string[] namesB;
                 if (len < 10)
                 {
                     namesI = new string[len / 2];
@@ -3481,20 +4114,25 @@ namespace SagensVision
                     return;
                 }
 
-                if (Path.GetExtension(openfile.FileNames[0]) == ".dat")
+                if (Path.GetExtension(finfo[0].FullName) == ".dat")
                 {
-                    int orderi = 0; int orderh = 0;
-                    foreach (var item in openfile.FileNames)
+                    int orderi = 0; int orderh = 0; int orderb = 0;
+                    foreach (var item in finfo)
                     {
-                        if (item.Contains("H.dat"))
+                        if (item.FullName.Contains("L_H.dat"))
                         {
-                            namesH[orderh] = item;
+                            namesH[orderh] = item.FullName;
                             orderh++;
                         }
-                        else if (item.Contains("I.dat"))
+                        else if (item.FullName.Contains("I.dat"))
                         {
-                            namesI[orderi] = item;
+                            namesI[orderi] = item.FullName;
                             orderi++;
+                        }
+                        else if (item.FullName.Contains("S_H.dat"))
+                        {
+                            namesB[orderb] = item.FullName;
+                            orderb++;
                         }
                     }
                     if (namesH[0] == null)
@@ -3504,16 +4142,41 @@ namespace SagensVision
 
                     for (int i = 0; i < namesH.Length; i++)
                     {
-                        HObject[] image = new HObject[2];
+                        HObject[] image = new HObject[3];
 
-                        HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg;
+                        HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg, planeImg, tileImg;
 
                         SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
 
                         SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
-                        StaticTool.GetUnlineRunImg(ssd, sid, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg);
 
-                        image[1] = zoomHeightImg;
+                        SurfaceZSaveDat szd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesB[i], typeof(SurfaceZSaveDat));
+
+                        StaticTool.GetUnlineRunImg(ssd, sid, szd, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg, out planeImg);
+
+                        bool isUp = i == 3 || i == 1;
+                        TileImg(planeImg, zoomHeightImg, out tileImg, isUp);
+
+                        HObject rotate = new HObject();
+                        HObject rotate_Height = new HObject();
+                        if (MyGlobal.IsRight)
+                        {
+                            HOperatorSet.RotateImage(tileImg, out rotate, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+                            HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+
+                            HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+                        }
+                        else
+                        {
+                            HOperatorSet.RotateImage(tileImg, out rotate, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+                            HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+
+                            HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+                        }
+
+
+                        image[1] = rotate_Height;
+                        image[2] = rotate;
                         if (!MyGlobal.isShowHeightImg)
                         {
                             image[0] = zoomRgbImg;
@@ -3525,22 +4188,24 @@ namespace SagensVision
                             zoomRgbImg.Dispose();
                         }
                         MyGlobal.ImageMulti.Add(image);
-                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[2]);
+                        planeImg.Dispose();
+                        zoomHeightImg.Dispose();
                         GC.Collect();
                     }
                 }
                 else
                 {
                     int orderi = 0; int orderh = 0; int orderB = 0;
-                    foreach (var item in openfile.FileNames)
+                    foreach (var item in finfo)
                     {
                         for (int i = orderi; i < namesH.Length; i++)
                         {
                             for (int j = 0; j < 4; j++)
                             {
-                                if (item.Contains((j + 1).ToString() + "I.tiff"))
+                                if (item.FullName.Contains((j + 1).ToString() + "I.tiff"))
                                 {
-                                    namesI[i] = item;
+                                    namesI[i] = item.FullName;
                                     orderi = i + 1;
                                     sidelist.Add(j + 1);
                                     break;
@@ -3552,9 +4217,9 @@ namespace SagensVision
                         {
                             for (int j = 0; j < 4; j++)
                             {
-                                if (item.Contains((j + 1).ToString() + "H.tiff"))
+                                if (item.FullName.Contains((j + 1).ToString() + "H.tiff"))
                                 {
-                                    namesH[i] = item;
+                                    namesH[i] = item.FullName;
                                     orderh = i + 1;
                                     break;
                                 }
@@ -3562,9 +4227,9 @@ namespace SagensVision
                             break;
                         }
 
-                        if (item.Contains("B.tiff"))
+                        if (item.FullName.Contains("B.tiff"))
                         {
-                            namesB[orderB] = item;
+                            namesB[orderB] = item.FullName;
                             orderB++;
                         }
                     }
@@ -3576,18 +4241,23 @@ namespace SagensVision
                     }
                     for (int i = 0; i < namesH.Length; i++)
                     {
-                        HObject[] image = new HObject[2];
+                        HObject[] image;
+                        if (orderB > 0)
+                        {
+                            image = new HObject[3];
+                        }
+                        else { image = new HObject[2]; }
 
-                        if (MyGlobal.isShowHeightImg || namesB == null)
-                        {
-                            HOperatorSet.ReadImage(out image[0], namesI[i]);
-                        }
-                        else
-                        {
-                            HOperatorSet.ReadImage(out image[0], namesB[i]);
-                        }
+                        HOperatorSet.ReadImage(out image[0], namesI[i]);
 
                         HOperatorSet.ReadImage(out image[1], namesH[i]);
+
+                        if (orderB > 0)
+                        {
+                            HOperatorSet.ReadImage(out image[2], namesB[i]);
+                        }
+
+
 
                         MyGlobal.ImageMulti.Add(image);
 
@@ -3595,9 +4265,11 @@ namespace SagensVision
 
                     }
                 }
+            }
+            catch (Exception)
+            {
 
-
-
+                throw;
             }
         }
 
@@ -3884,6 +4556,16 @@ namespace SagensVision
             StaticOperate.WriteXML(MyGlobal.globalPointSet_Right, MyGlobal.AllTypePath + "GlobalPoint_Right.xml");
             StaticOperate.WriteXML(MyGlobal.globalPointSet_Left, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
             
+        }
+
+        private void 适应窗口ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //HObject obj;
+            //HOperatorSet.GenImageConst(out obj, "byte", ShowProfile.Width, ShowProfile.Height);
+            //ClassShow3D.breakOut = true;
+            //HOperatorSet.DispObj(obj, ShowProfile.HalconWindow);
+            //obj.Dispose();
+            ShowProfileToWindow(this.recordXCoord, this.recordYCoord, this.recordZCoord, this.recordSigleTitle, false, true);
         }
     }
 }
