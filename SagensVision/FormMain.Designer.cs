@@ -617,7 +617,7 @@
             // 
             // barStaticItem2
             // 
-            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.1.3";
+            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.1.4";
             this.barStaticItem2.Id = 32;
             this.barStaticItem2.Name = "barStaticItem2";
             // 

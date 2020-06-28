@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace SagensVision.VisionTool
 {
@@ -16,6 +17,7 @@ namespace SagensVision.VisionTool
         public delegate void RunOff();
         public RunOff Run;
         bool isRight;
+        public static event Action<string> ChangeType;
         public GlobalParam()
         {
             InitializeComponent();
@@ -221,6 +223,48 @@ namespace SagensVision.VisionTool
                 {
                     StaticOperate.WriteXML(MyGlobal.globalPointSet_Left, MyGlobal.AllTypePath + "GlobalPoint_Left.xml");
                 }
+
+                //切换物料  Surface_Curvature
+                try
+                {
+                        if (MyGlobal.globalConfig.enableAlign)
+                        {
+                           
+                            if (MyGlobal.PathName.CurrentType.Contains("_SurfaceCurvature"))
+                            {
+                                return;
+                            }
+                            string Currenttype = MyGlobal.PathName.CurrentType + "_SurfaceCurvature";
+                            if (!Directory.Exists(MyGlobal.AllTypePath + MyGlobal.PathName.CurrentType + "_SurfaceCurvature"))
+                            {
+                                string pathCurrent = isRight ? MyGlobal.ConfigPath_Right : MyGlobal.ConfigPath_Left;
+                                MyGlobal.PathName.CurrentType = Currenttype;
+
+                                CopyFiles(pathCurrent, MyGlobal.ConfigPath_Right);
+
+                                CopyFiles(pathCurrent, MyGlobal.ConfigPath_Left);
+                            }
+                            MyGlobal.PathName.CurrentType = Currenttype;
+                            ChangeType?.Invoke(Currenttype);
+                        }
+                        else
+                        {
+                            if (MyGlobal.PathName.CurrentType.Contains("_SurfaceCurvature"))
+                            {
+                                int ind = MyGlobal.PathName.CurrentType.IndexOf("_SurfaceCurvature");
+                                string Currenttype = MyGlobal.PathName.CurrentType.Substring(0, ind);
+                                MyGlobal.PathName.CurrentType = Currenttype;
+                            }                                                     
+                            ChangeType?.Invoke(MyGlobal.PathName.CurrentType);
+                        }
+                   
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show("物料切换失败" + ex.Message);
+                }
+
                 MessageBox.Show("保存成功！");
             }
             catch (Exception ex)
@@ -288,11 +332,36 @@ namespace SagensVision.VisionTool
             ImgRotateFrm imgrotatefrm = new ImgRotateFrm(isRight);
             imgrotatefrm.Show();
         }
+        void CopyFiles(string FilePath, string NewPath)
+        {
+            DirectoryInfo dirinf = new DirectoryInfo(FilePath);
+            FileSystemInfo[] fileinfo = dirinf.GetFileSystemInfos();
+            for (int i = 0; i < fileinfo.Length; i++)
+            {
+                if (fileinfo[i] is FileInfo)
+                {
+                    File.Copy(fileinfo[i].FullName, NewPath + fileinfo[i].Name);
+                }
+                else
+                {
+                    string dir = "\\" + fileinfo[i].Name + "\\";
+                    if (!Directory.Exists(NewPath + dir))
+                    {
+                        Directory.CreateDirectory(NewPath + dir);
+                    }
+                    CopyFiles(FilePath + dir, NewPath + dir);
+                }
+            }
+
+        }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             MyGlobal.globalConfig.enableAlign = checkBox1.Checked;
         }
+
+
+
     }
 
     

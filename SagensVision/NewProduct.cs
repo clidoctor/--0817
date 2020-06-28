@@ -131,6 +131,10 @@ namespace SagensVision
                 else
                 {
                     string dir = "\\" + fileinfo[i].Name+ "\\";
+                    if (!Directory.Exists(NewPath + dir))
+                    {
+                        Directory.CreateDirectory(NewPath + dir);
+                    }
                     CopyFiles(FilePath + dir, NewPath + dir);
                 }           
             }

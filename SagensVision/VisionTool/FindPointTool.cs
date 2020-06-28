@@ -156,8 +156,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "参数设置加载失败:" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "参数设置加载失败:" + ex.Message + RowNum;
             }
 
         }
@@ -280,10 +283,14 @@ namespace SagensVision.VisionTool
                 Row = mZRow;
                 Col = maxZCol;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                
             }
         }
 
@@ -448,7 +455,11 @@ namespace SagensVision.VisionTool
             catch (Exception ex)
             {
                 hv_colout = new HTuple(); hv_rowout = new HTuple();
-                return "PeakTroughOfWave：" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "PeakTroughOfWave：" + ex.Message + RowNum;
             }
         }
 
@@ -560,8 +571,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "GetInflection error " + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "GetInflection error " + ex.Message + RowNum;
             }
         }
 
@@ -888,8 +902,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "FindMaxPt error" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "FindMaxPt error" + ex.Message + RowNum;
             }
 
         }
@@ -1160,8 +1177,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "FindMaxPt error" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "FindMaxPt error" + ex.Message + RowNum;
             }
 
         }
@@ -1233,8 +1253,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "FindEdge error" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "FindEdge error" + ex.Message + RowNum;
             }
 
         }
@@ -1340,8 +1363,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "FindIntersectPoint error" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "FindIntersectPoint error" + ex.Message + RowNum;
             }
         }
 
@@ -1511,8 +1537,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "GenSection error" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "GenSection error" + ex.Message + RowNum;
             }
         }
 
@@ -1610,10 +1639,13 @@ namespace SagensVision.VisionTool
                 {
                     HOperatorSet.GetGrayval(HeightImage, Rarray1, Carray1, out Zpoint);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
-                    return "GenProfileCoord error: 区域位于图像之外";
+                    string a = ex.StackTrace;
+                    int ind = a.IndexOf("行号");
+                    int start = ind;
+                    string RowNum = "--" + a.Substring(start, a.Length - start);
+                    return "GenProfileCoord error: 区域位于图像之外" + RowNum;
                 }
 
                 HRarray = Rarray1; HCarray = Carray1;
@@ -1657,7 +1689,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-                return "GenProfileCoord error:" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "GenProfileCoord error:" + ex.Message + RowNum;
             }
         }
 
@@ -2014,12 +2050,23 @@ namespace SagensVision.VisionTool
                     HTuple zcoord = new HTuple();
                     try
                     {
-                        HOperatorSet.GetGrayval(HeightImage, row, col, out zcoord);
+                        if (MyGlobal.globalConfig.enableAlign)
+                        {
+                            HOperatorSet.GetGrayval(OriginImage, row, col, out zcoord);
+                        }
+                        else
+                        {
+                            HOperatorSet.GetGrayval(HeightImage, row, col, out zcoord);
+                        }
+                            
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
-                        return "偏移点" + msg + "设置在图像之外";
+                        string a = ex.StackTrace;
+                        int ind = a.IndexOf("行号");
+                        int start = ind;
+                        string RowNum ="--"+ a.Substring(start, a.Length - start);
+                        return "偏移点" + msg + "设置在图像之外" + RowNum;
                     }
 
                     #region MyRegion
@@ -2350,7 +2397,7 @@ namespace SagensVision.VisionTool
                         HOperatorSet.GetRegionPoints(Circle, out rows, out cols);
                         try
                         {
-                            if (OriginImage!=null)
+                            if (MyGlobal.globalConfig.enableAlign)
                             {
                                 HOperatorSet.GetGrayval(OriginImage, rows, cols, out Zpt);
                             }
@@ -2382,10 +2429,13 @@ namespace SagensVision.VisionTool
                             //}
 
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-
-                            return "偏移点" + fParam[Sid].DicPointName[i] + "设置在图像之外";
+                            string a = ex.StackTrace;
+                            int ind = a.IndexOf("行号");
+                            int start = ind;
+                            string RowNum = "--" + a.Substring(start, a.Length - start);
+                            return "偏移点" + fParam[Sid].DicPointName[i] + "设置在图像之外" + RowNum;
                         }
                     }
                     else
@@ -2470,7 +2520,11 @@ namespace SagensVision.VisionTool
 
                 //RIntesity.Dispose();
                 //RHeight.Dispose();
-                return "FindPoint error:" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "FindPoint error:" + ex.Message + RowNum;
             }
         }
 
@@ -2887,7 +2941,11 @@ namespace SagensVision.VisionTool
 
                 //RIntesity.Dispose();
                 //RHeight.Dispose();
-                return "FindPoint error:" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "FindPoint error:" + ex.Message + RowNum;
             }
         }
 
@@ -2937,8 +2995,11 @@ namespace SagensVision.VisionTool
             }
             catch (Exception ex)
             {
-
-                return "IgnorPoint error" + ex.Message;
+                string a = ex.StackTrace;
+                int ind = a.IndexOf("行号");
+                int start = ind;
+                string RowNum = "--" + a.Substring(start, a.Length - start);
+                return "IgnorPoint error" + ex.Message + RowNum;
             }
         }
 

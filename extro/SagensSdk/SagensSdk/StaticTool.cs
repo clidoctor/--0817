@@ -36,10 +36,16 @@ namespace SagensSdk
 
         public static void GetUnlineRunImg(SurfaceZSaveDat ssd, SurfaceIntensitySaveDat sid, SurfaceZSaveDat szd, double zStart, double z_byte_resolution, out HObject zoomHeightImg, out HObject zoomIntensityImg, out HObject zoomRgbImg, out HObject zoomPlaneImg)
         {
-            HObject heightImg, intensityImg, byteImg, rgbImg, planeImg;
+            HObject heightImg, intensityImg, byteImg, rgbImg, planeImg ;
+            zoomPlaneImg = null;
             GenHeightImg(ssd, zStart, z_byte_resolution, out heightImg, out byteImg);
             GenIntensityImg(sid, out intensityImg);
-            GenHeightImg(szd, out planeImg);
+            if (szd!=null)
+            {
+                GenHeightImg(szd, out planeImg);
+                HOperatorSet.ZoomImageFactor(planeImg, out zoomPlaneImg, 2, 2, "constant");
+            }
+            
 
             PseudoColor.GrayToPseudoColor(byteImg, out rgbImg);
             byteImg.Dispose();
@@ -49,7 +55,6 @@ namespace SagensSdk
             heightImg.Dispose();
             HOperatorSet.ZoomImageFactor(intensityImg, out zoomIntensityImg, 1, 4, "constant");
             intensityImg.Dispose();
-            HOperatorSet.ZoomImageFactor(planeImg, out zoomPlaneImg, 2, 2, "constant");
             GC.Collect();
         }
 

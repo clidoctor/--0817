@@ -77,6 +77,7 @@ namespace SagensVision
                     path = (listBox1.Items[listBox1.SelectedIndex + 1]).ToString();
                     listBox1.SetSelected(listBox1.SelectedIndex + 1, true);
                     tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
+                    listBox1.ShowFocusRect = true;
                 }
 
             }
@@ -126,6 +127,10 @@ namespace SagensVision
                                 Action show = () =>
                                  {
                                      listBox1.SetSelected(listBox1.SelectedIndex + 1, true);
+                                     //Point pt = new Point(listBox1.AutoScrollOffset.X, listBox1.AutoScrollOffset.Y);
+
+                                     //listBox1.AutoScrollOffset = pt;
+                                     
                                  };
                                 this.Invoke(show);
                             }

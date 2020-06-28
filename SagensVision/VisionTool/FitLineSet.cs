@@ -83,6 +83,38 @@ namespace SagensVision.VisionTool
             hwindow_final2.viewWindow.setEditModel(true);
             checkBoxRoi.Checked = true;
             ChangeSide();
+            hwindow_final2.hWindowControl.MouseDown += Hwindow_final2_MouseDown;
+        }
+
+        private void Hwindow_final2_MouseDown(object sender, MouseEventArgs e)
+        {
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            ArrayList array = roiController2.ROIList;
+            int currentId = -1; string Name = "";
+            if (dataGridView1.CurrentCell == null || CurrentRowIndex == -1)
+            {
+                currentId = 0;
+            }
+            else
+            {
+                currentId = dataGridView1.CurrentCell.RowIndex;
+                currentId = CurrentRowIndex;
+                //ID
+                Name = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
+            }
+            int ActiveId = roiController2.getActiveROIIdx();
+            if (!SelectAll)
+            {
+                if (ActiveId != currentId)
+                {
+                    roiController2.EditModel =false;                 
+                }
+                else
+                {
+                    roiController2.EditModel = true;
+
+                }
+            }
         }
 
         public void ROiMove(int value)
@@ -206,6 +238,15 @@ namespace SagensVision.VisionTool
 
 
                         int ActiveId = roiController2.getActiveROIIdx();
+                        if (!SelectAll)
+                        {
+                            if (ActiveId!= currentId)
+                            {
+                                RoiIsMoving = false;
+                                return;
+                            }
+                        }
+
                         if (array.Count == 1)
                         {
                             ROI te = (ROI)array[0];
@@ -720,7 +761,7 @@ namespace SagensVision.VisionTool
                 else
                 {
                     HeightImage = MyGlobal.ImageMulti[Id][1];
-                    OriginImage = MyGlobal.ImageMulti[Id][2];
+                    OriginImage = null;
                 }
             }
             else
