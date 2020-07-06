@@ -223,12 +223,10 @@ namespace SagensSdk
                         //保存Kdat
                         Stopwatch sp = new Stopwatch();
                         sp.Start();
-                        //if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy))
+
+                        //if (surfacePoints.Length==0)
                         //{
-                        //    Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
-                        //    Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
-                        //    GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
-                        //    GoSdkWrapper.SaveSufaceToFile($"{SaveKdatDirectoy}/{DateTime.Now.ToFileTimeUtc().ToString()}.kdat", ref insurface, false);
+                        //    break;
                         //}
 
                         Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
@@ -250,6 +248,15 @@ namespace SagensSdk
                                 SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
                                 StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_L_H.dat", ssd);
                             }
+
+                            if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy) && RunSide!=null)
+                            {
+                                
+                                Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                                Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                                GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
+                                GoSaveSurfaceGraphic.SaveSufaceToFile($"{SaveKdatDirectoy}{DateTime.Now.ToString("yyyyMMdd_HHmmss")}_Side{RunSide}_L.kdat", ref insurface, false);
+                            }
                         }
                         else
                         {
@@ -260,6 +267,13 @@ namespace SagensSdk
                                 PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
                                 SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
                                 StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_S_H.dat", ssd);
+                            }
+                            if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy) && RunSide != null)
+                            {
+                                Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                                Point3d64f pscale = new Point3d64f() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                                GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)surfaceWidth, height = (int)surfaceHeight, offset = poffset, scale = pscale };
+                                GoSaveSurfaceGraphic.SaveSufaceToFile($"{SaveKdatDirectoy}{DateTime.Now.ToString("yyyyMMdd_HHmmss")}_Side{RunSide}_S.kdat", ref insurface, false);
                             }
                         }
                         sp.Stop();

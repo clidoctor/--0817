@@ -32,6 +32,7 @@ namespace SagensVision
         public static string BaseTxtPath_Left = AppDomain.CurrentDomain.BaseDirectory + "Config_Left\\" + "BaseHeight.xml";
 
         public static string SaveDatFileDirectory = "Data\\datfile\\";
+        public static string SaveKdatDirectoy = "SaveKdatDirectoy\\";
 
         public static SagensSdk.GoSdkMaker GoSDK = new GoSdkMaker();
         
@@ -59,7 +60,13 @@ namespace SagensVision
         public static FindPointTool Left_findPointTool_Fix = new FindPointTool();
         public static FindPointTool Right_findPointTool_Find = new FindPointTool();
         public static FindPointTool Right_findPointTool_Fix = new FindPointTool();
+        public static FindPointTool Right_Calib_Fix = new FindPointTool();
+        public static FindPointTool Left_Calib_Fix = new FindPointTool();
         public static bool IsRight = true;
+        public const string FindPointType_FitLineSet = "FitLineSet";
+        public const string FindPointType_Fix = "Fix";
+        public const string ToolType_GlueGuide = "GlueGuide";
+        public const string ToolType_Calib = "Calib";
     }
 
     public  class GlobalConfig
@@ -84,6 +91,7 @@ namespace SagensVision
         //public bool isUseAnchorDeg = true;
 
         public bool enableAlign;
+        public bool enableFeature;//特征显示
     }
 
     public class GlobalPointSet

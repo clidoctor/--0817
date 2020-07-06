@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FitLineSet));
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
@@ -44,12 +45,12 @@
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.checkBox_zZoom = new System.Windows.Forms.CheckBox();
             this.checkBox_center = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox_SmoothCont = new System.Windows.Forms.TextBox();
             this.checkBox_Far = new System.Windows.Forms.CheckBox();
             this.checkBox_midPt = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_Clipping = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
@@ -126,7 +127,6 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarControl1.Properties)).BeginInit();
@@ -179,6 +179,19 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(968, 74);
             this.panel1.TabIndex = 2;
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Items.AddRange(new object[] {
+            "Right",
+            "Left"});
+            this.comboBox3.Location = new System.Drawing.Point(89, 27);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(100, 22);
+            this.comboBox3.TabIndex = 14;
+            this.comboBox3.Text = "Right";
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // simpleButton3
             // 
@@ -304,12 +317,12 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.checkBox_zZoom);
             this.groupBox7.Controls.Add(this.checkBox_center);
             this.groupBox7.Controls.Add(this.label12);
             this.groupBox7.Controls.Add(this.textBox_SmoothCont);
             this.groupBox7.Controls.Add(this.checkBox_Far);
             this.groupBox7.Controls.Add(this.checkBox_midPt);
-            this.groupBox7.Controls.Add(this.label2);
             this.groupBox7.Controls.Add(this.label1);
             this.groupBox7.Controls.Add(this.textBox_Clipping);
             this.groupBox7.Controls.Add(this.label34);
@@ -327,6 +340,17 @@
             this.groupBox7.TabIndex = 67;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
+            // 
+            // checkBox_zZoom
+            // 
+            this.checkBox_zZoom.AutoSize = true;
+            this.checkBox_zZoom.Location = new System.Drawing.Point(89, 86);
+            this.checkBox_zZoom.Name = "checkBox_zZoom";
+            this.checkBox_zZoom.Size = new System.Drawing.Size(71, 18);
+            this.checkBox_zZoom.TabIndex = 101;
+            this.checkBox_zZoom.Text = "Z_Zoom";
+            this.checkBox_zZoom.UseVisualStyleBackColor = true;
+            this.checkBox_zZoom.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // checkBox_center
             // 
@@ -378,21 +402,13 @@
             this.checkBox_midPt.UseVisualStyleBackColor = true;
             this.checkBox_midPt.CheckedChanged += new System.EventHandler(this.checkBox_midPt_CheckedChanged);
             // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(194, 180);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 22);
-            this.label2.TabIndex = 95;
-            this.label2.Text = "%";
-            // 
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(18, 183);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 22);
             this.label1.TabIndex = 94;
-            this.label1.Text = "忽略点";
+            this.label1.Text = "Z缩放系数";
             // 
             // textBox_Clipping
             // 
@@ -400,7 +416,7 @@
             this.textBox_Clipping.Name = "textBox_Clipping";
             this.textBox_Clipping.Size = new System.Drawing.Size(100, 22);
             this.textBox_Clipping.TabIndex = 93;
-            this.textBox_Clipping.Text = "0";
+            this.textBox_Clipping.Text = "1";
             this.textBox_Clipping.TextChanged += new System.EventHandler(this.textBox_OffsetX_TextChanged);
             // 
             // label34
@@ -1113,19 +1129,6 @@
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
             // 
-            // comboBox3
-            // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Items.AddRange(new object[] {
-            "Right",
-            "Left"});
-            this.comboBox3.Location = new System.Drawing.Point(89, 27);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(100, 22);
-            this.comboBox3.TabIndex = 14;
-            this.comboBox3.Text = "Right";
-            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
-            // 
             // FitLineSet
             // 
             this.Appearance.ForeColor = System.Drawing.Color.White;
@@ -1256,7 +1259,6 @@
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.TextBox textBox_downDist;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_Clipping;
         private System.Windows.Forms.CheckBox checkBox_midPt;
@@ -1265,5 +1267,6 @@
         private System.Windows.Forms.TextBox textBox_SmoothCont;
         private System.Windows.Forms.CheckBox checkBox_center;
         private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.CheckBox checkBox_zZoom;
     }
 }

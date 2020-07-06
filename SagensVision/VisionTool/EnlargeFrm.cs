@@ -39,6 +39,10 @@ namespace SagensVision.VisionTool
                 }
                 for (int j = 0; j < FormMain.NameOrigin[idx].Length; j++)
                 {
+                    if (FormMain.NameOrigin[idx][j] ==null)
+                    {
+                        break;
+                    }
                     hWindow_Final1.viewWindow.dispMessage($"{FormMain.NameOrigin[idx][j]}({Math.Round( FormMain.Zorigin[idx][j],3)})", "blue", FormMain.Yorigin[idx][j], FormMain.Xorigin[idx][j]);
                 }
                 if (FormMain.AnchorList[idx].Row !=0 || FormMain.AnchorList[idx].Col != 0)

@@ -39,8 +39,26 @@ namespace SagensVision.VisionTool
         //public IntersetionCoord[] intersectCoordList = new IntersetionCoord[4];
         //计算输出交点
         IntersetionCoord intersection = new IntersetionCoord();
-        FindPointTool fpTool = new FindPointTool();
+        public FindPointTool fpTool = new FindPointTool();
         bool isRight = true;
+
+        List<HTuple> _lines = new List<HTuple>();
+        public List<HTuple> H_Lines
+        {
+            get
+            {
+                return _lines;
+            }
+        }
+
+        /// <summary>
+        /// "工具类型 Calib  or GlueGuide"
+        /// </summary>
+        public string ToolType = "";
+        /// <summary>
+        /// 找线方式 "Fix" or "FitLineSet"
+        /// </summary>
+        public string FindType = "";
         public FitLineSet(string text = "")
         {
             InitializeComponent();
@@ -48,17 +66,17 @@ namespace SagensVision.VisionTool
             {
                 this.Text = text;
             }
-            
+
         }
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
             isRight = MyGlobal.IsRight;
-            string ok = fpTool.Init(this.Text,isRight);
-            if (ok != "OK")
-            {
-                MessageBox.Show(ok);
-            }
+            string ok = fpTool.Init(FindType, isRight, ToolType);
+            //if (ok != "OK")
+            //{
+            //    MessageBox.Show(ok);
+            //}
             this.MaximizeBox = true;
             CurrentSide = "";
             isSave = true;
@@ -77,7 +95,7 @@ namespace SagensVision.VisionTool
             roiController2.NotifyRCObserver = new IconicDelegate(ROiMove2);
             comboBox2.SelectedIndex = 0;
             comboBox1.SelectedIndex = 0;
-            
+
             CurrentSide = "";
             hwindow_final1.viewWindow.setEditModel(true);
             hwindow_final2.viewWindow.setEditModel(true);
@@ -107,7 +125,7 @@ namespace SagensVision.VisionTool
             {
                 if (ActiveId != currentId)
                 {
-                    roiController2.EditModel =false;                 
+                    roiController2.EditModel = false;
                 }
                 else
                 {
@@ -146,7 +164,7 @@ namespace SagensVision.VisionTool
                         //记录当前锚定点坐标
 
                         HTuple row, col;
-                        fpTool.FindFirstAnchor(Id, out row, out col,CurrentIndex);
+                        fpTool.FindFirstAnchor(Id, out row, out col, CurrentIndex);
                         fpTool.fParam[Id - 1].roiP[RowId].AnchorRow = row.D;
                         fpTool.fParam[Id - 1].roiP[RowId].AnchorCol = col.D;
 
@@ -154,7 +172,7 @@ namespace SagensVision.VisionTool
                         if (pt.Type == "ROIPoint")
                         {
                             HTuple PointTemp = pt.getModelData(); HTuple row1, col1;
-                            fpTool.FindMaxPt(Id, CurrentIndex - 1, out row1, out col1, out row, out col, null, ShowSection, false,null);
+                            fpTool.FindMaxPt(Id, CurrentIndex - 1, out row1, out col1, out row, out col, null, ShowSection, false, null);
                             switch (PtOrder)
                             {
                                 case 0:
@@ -238,9 +256,9 @@ namespace SagensVision.VisionTool
 
 
                         int ActiveId = roiController2.getActiveROIIdx();
-                        if (!SelectAll)
+                        if (!SelectAll && !isGenSection)
                         {
-                            if (ActiveId!= currentId)
+                            if (ActiveId != currentId)
                             {
                                 RoiIsMoving = false;
                                 return;
@@ -445,7 +463,8 @@ namespace SagensVision.VisionTool
                 isLoading = true;
                 //刷新Roi参数
                 UpdateRoiParam();
-                ParamPath.ParaName = comboBox1.SelectedItem.ToString();
+                ParamPath.ToolType = ToolType;
+                ParamPath.ParaName = FindType + "_" + comboBox1.SelectedItem.ToString();
                 ParamPath.IsRight = isRight;
                 if (isRight)
                 {
@@ -489,6 +508,7 @@ namespace SagensVision.VisionTool
                     checkBox_midPt.Checked = fpTool.fParam[Index].roiP[0].useMidPt;
                     checkBox_Far.Checked = !fpTool.fParam[Index].roiP[0].useNear;
                     checkBox_center.Checked = fpTool.fParam[Index].roiP[0].useCenter;
+                    checkBox_zZoom.Checked = fpTool.fParam[Index].roiP[0].useZzoom;
 
                     textBox_downDist.Text = fpTool.fParam[Index].roiP[0].TopDownDist.ToString();
                     textBox_xDist.Text = fpTool.fParam[Index].roiP[0].xDist.ToString();
@@ -548,21 +568,21 @@ namespace SagensVision.VisionTool
                 }
                 if (fpTool.fParam[Id - 1].roiP[roiID].SelectedType == 0)
                 {
-                   
+
                     if (fpTool.fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fpTool.fParam[Id - 1].roiP[roiID].xDist != 0)
                     {
                         //极值点下降
-                        fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                        fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                     }
                     else
                     {
-                        fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection,false,hwindow_final1);
+                        fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection, false, hwindow_final1);
                     }
                 }
                 else
                 {
-                    
-                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+
+                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                 }
             }
         }
@@ -608,7 +628,7 @@ namespace SagensVision.VisionTool
                 MessageBox.Show("打开成功！");
             }
         }
-  
+
 
         ///// <summary>
         /////保存的数据
@@ -661,7 +681,7 @@ namespace SagensVision.VisionTool
                     //HOperatorSet.WriteImage(IntensityImage, "tiff", 0, MyGlobal.ModelPath + "\\" + SideName + "I.tiff");
                     MyGlobal.hWindow_Final[0].HobjectToHimage(IntensityImage);
                 }
-               
+
                 if (MyGlobal.GoSDK.SurfaceDataZ == null)
                 {
                     MessageBox.Show("未收到数据");
@@ -714,7 +734,7 @@ namespace SagensVision.VisionTool
                 FolderBrowserDialog opf = new FolderBrowserDialog();
 
 
-                opf.SelectedPath =  "\\";
+                opf.SelectedPath = "\\";
                 if (opf.ShowDialog() == DialogResult.OK)
                 {
                     //string file = opf.FileName;
@@ -740,8 +760,8 @@ namespace SagensVision.VisionTool
         bool NotUseFix = false;
         private void ChangeSide()
         {
-            CurrentRowIndex = -1;
-            fpTool.Init(this.Text,isRight);
+            CurrentRowIndex = 0;
+            fpTool.Init(FindType, isRight, ToolType);
             textBox_Current.Text = "0";
             textBox_Total.Text = "0";
 
@@ -750,11 +770,18 @@ namespace SagensVision.VisionTool
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
 
             string Path1 = "";
+            
             if (MyGlobal.ImageMulti.Count >= Id + 1 && SelectedPath == "")
-            {               
+            {
+
                 IntensityImage = MyGlobal.ImageMulti[Id][0];
                 if (MyGlobal.globalConfig.enableAlign)
                 {
+                    if (MyGlobal.ImageMulti[Id].Length < 3)
+                    {
+                        MessageBox.Show("请重新加载数据");
+                        return;
+                    }
                     HeightImage = MyGlobal.ImageMulti[Id][2];
                     OriginImage = MyGlobal.ImageMulti[Id][1];
                 }
@@ -766,6 +793,7 @@ namespace SagensVision.VisionTool
             }
             else
             {
+                return;
                 //读取指定路径下或选择路径下图片
                 if (File.Exists(Path1 + "\\" + SideName + "H.tiff"))
                 {
@@ -787,30 +815,45 @@ namespace SagensVision.VisionTool
             //PseudoColor.GrayToPseudoColor(HeightImage, out RGBImage, true, -20, 10);
             //PseudoColor.HeightAreaToPseudoColor(HeightImage, out RGBImage, -20, 10, fpTool.fParam[Id].MinZ, fpTool.fParam[Id].MaxZ);
             //hwindow_final2.HobjectToHimage(RGBImage);
+
             hwindow_final2.HobjectToHimage(IntensityImage);
 
 
 
-            if (!NotUseFix && this.Text != "Fix")
+            if (!NotUseFix && !FindType.Contains("Fix"))
             {
-                //IntersetionCoord intersect = new IntersetionCoord();
                 string ok = "";
-                if (isRight)
+                if (ToolType == MyGlobal.ToolType_GlueGuide)
                 {
-                     ok = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                    if (isRight)
+                    {
+                        ok = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                    }
+                    else
+                    {
+                        ok = MyGlobal.Left_findPointTool_Fix.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                    }
                 }
                 else
                 {
-                     ok = MyGlobal.Left_findPointTool_Fix.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                    //标定
+                    if (isRight)
+                    {
+                        ok = MyGlobal.Right_Calib_Fix.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                    }
+                    else
+                    {
+                        ok = MyGlobal.Left_Calib_Fix.FindIntersectPoint(Id + 1, HeightImage, out intersection, hwindow_final2, true);
+                    }
                 }
-                
+
                 if (ok != "OK")
                 {
                     MessageBox.Show(ok);
                 }
                 HTuple homMaxFix = new HTuple();
-                double orignalDeg =  fpTool.intersectCoordList[Id].Angle ;
-                double currentDeg = intersection.Angle ;
+                double orignalDeg = fpTool.intersectCoordList[Id].Angle;
+                double currentDeg = intersection.Angle;
                 HOperatorSet.VectorAngleToRigid(fpTool.intersectCoordList[Id].Row, fpTool.intersectCoordList[Id].Col,
                 orignalDeg, intersection.Row, intersection.Col, currentDeg, out homMaxFix);
 
@@ -834,7 +877,7 @@ namespace SagensVision.VisionTool
                 if (fpTool.roiList2[Id].Count > 0)
                 {
                     fpTool.roiList2[Id].Clear();
-                    fpTool.Init(this.Text,isRight);
+                    fpTool.Init(FindType, isRight, ToolType);
                     hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[Id]);
                 }
             }
@@ -868,7 +911,7 @@ namespace SagensVision.VisionTool
                     fpTool.fParam[i].roiP[j].CenterCol = roiData[1];
                     fpTool.fParam[i].roiP[j].phi = roiData[2];
                     fpTool.fParam[i].roiP[j].Len1 = roiData[3];
-                    fpTool.fParam[i].roiP[j].Len2 = roiData[4];                    
+                    fpTool.fParam[i].roiP[j].Len2 = roiData[4];
                 }
             }
         }
@@ -936,18 +979,18 @@ namespace SagensVision.VisionTool
                 {
                     if (fpTool.fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fpTool.fParam[Id - 1].roiP[roiID].xDist != 0)
                     {
-                        fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                        fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                     }
                     else
                     {
-                        fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection,false,hwindow_final1);
+                        fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection, false, hwindow_final1);
                     }
 
-                        
+
                 }
                 else
                 {
-                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                 }
                 //if (trackBarValue1<trackBarValue2)
                 //{
@@ -984,11 +1027,11 @@ namespace SagensVision.VisionTool
         {
             if (trackBarValue1 < trackBarValue2 && FindPointTool.RArray.GetLength(0) > 0)
             {
-                
+
 
                 if (trackBarValue1 < trackBarValue2)
                 {
-                    HTuple row2 =new HTuple(), col2 = new HTuple();
+                    HTuple row2 = new HTuple(), col2 = new HTuple();
                     //ShowProfile(CurrentIndex - 1, out row2, out col2);
 
                     HTuple newRow = row2; HTuple newCol = col2;
@@ -1129,17 +1172,17 @@ namespace SagensVision.VisionTool
                 {
                     if (fpTool.fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fpTool.fParam[Id - 1].roiP[roiID].xDist != 0)
                     {
-                        fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                        fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                     }
                     else
                     {
-                        fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection,false,hwindow_final1);
+                        fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection, false, hwindow_final1);
                     }
-                   
+
                 }
                 else
                 {
-                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                 }
             }
         }
@@ -1186,17 +1229,17 @@ namespace SagensVision.VisionTool
             {
                 if (fpTool.fParam[Id - 1].roiP[roiID].TopDownDist != 0 && fpTool.fParam[Id - 1].roiP[roiID].xDist != 0)
                 {
-                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                    fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                 }
                 else
                 {
-                    fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection,false,hwindow_final1);
+                    fpTool.FindMaxPt(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection, false, hwindow_final1);
                 }
-                
+
             }
             else
             {
-                fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                fpTool.FindMaxPtFallDown(Id, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
             }
 
         }
@@ -1210,38 +1253,37 @@ namespace SagensVision.VisionTool
         public void FitLineParamSave()
         {
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            ParamPath.ParaName = SideName;
+            ParamPath.ToolType = ToolType;
+            ParamPath.ParaName = FindType + "_" + SideName;
             ParamPath.IsRight = isRight;
-            string Name = this.Text;
-            if (Name != "Fix")
-            {
-                //GetCurrentFix();               
-                //StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.AllTypePath + "Global.xml");
-                if (isRight)
-                {
-                    StaticOperate.WriteXML(fpTool.fParam[Id], MyGlobal.ConfigPath_Right + SideName + ".xml");
-                    hwindow_final1.viewWindow.saveROI(fpTool.roiList[Id], MyGlobal.ConfigPath_Right + SideName + "_Section.roi");
-                    hwindow_final2.viewWindow.saveROI(fpTool.roiList2[Id], MyGlobal.ConfigPath_Right + SideName + "_Region.roi");
-                }
-                else
-                {
-                    StaticOperate.WriteXML(fpTool.fParam[Id], MyGlobal.ConfigPath_Left + SideName + ".xml");
-                    hwindow_final1.viewWindow.saveROI(fpTool.roiList[Id], MyGlobal.ConfigPath_Left + SideName + "_Section.roi");
-                    hwindow_final2.viewWindow.saveROI(fpTool.roiList2[Id], MyGlobal.ConfigPath_Left + SideName + "_Region.roi");
-                }
-                               
-            }
-            else
-            {
-                StaticOperate.WriteXML(fpTool.fParam[Id], ParamPath.ParamDir + SideName + ".xml");
-                hwindow_final1.viewWindow.saveROI(fpTool.roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
-                hwindow_final2.viewWindow.saveROI(fpTool.roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
-            }
+            string Name = ToolType;
+            //if (Name != "Fix")
+            //{
 
-           
+            //    if (isRight)
+            //    {
+            //        StaticOperate.WriteXML(fpTool.fParam[Id], ParamPath.ParamDir + SideName + ".xml");
+            //        hwindow_final1.viewWindow.saveROI(fpTool.roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
+            //        hwindow_final2.viewWindow.saveROI(fpTool.roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
+            //    }
+            //    else
+            //    {
+            //        StaticOperate.WriteXML(fpTool.fParam[Id], ParamPath.ParamDir + SideName + ".xml");
+            //        hwindow_final1.viewWindow.saveROI(fpTool.roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
+            //        hwindow_final2.viewWindow.saveROI(fpTool.roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
+            //    }
+
+            //}
+            //else
+            //{
+            StaticOperate.WriteXML(fpTool.fParam[Id], ParamPath.ParamDir + SideName + ".xml");
+            hwindow_final1.viewWindow.saveROI(fpTool.roiList[Id], ParamPath.ParamDir + SideName + "_Section.roi");
+            hwindow_final2.viewWindow.saveROI(fpTool.roiList2[Id], ParamPath.ParamDir + SideName + "_Region.roi");
+            //}
+
             isSave = true;
-           
-            if (Name == "Fix")
+
+            if (FindType == "Fix")
             {
                 if (MessageBox.Show("是否重新写入模板位置？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
@@ -1254,20 +1296,46 @@ namespace SagensVision.VisionTool
                 if (intersection.Row == 0 && intersection.Col == 0)
                 {
                     MessageBox.Show("保存成功！");
-                    return;
                 }
                 else
                 {
+                    ParamPath.ParaName = "Fix" + "_" + SideName;
                     fpTool.intersectCoordList[Id] = intersection;
                     StaticOperate.WriteXML(fpTool.intersectCoordList[Id], ParamPath.Path_Param);
                 }
+                                             
             }
 
             //MyGlobal.flset2.Init();
-            MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight);
-            MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight);
-            MyGlobal.Right_findPointTool_Fix.Init("Fix", isRight);
-            MyGlobal.Left_findPointTool_Fix.Init("Fix", isRight);
+            if (ToolType == MyGlobal.ToolType_GlueGuide)
+            {
+                if (isRight)
+                {
+                    MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight, ToolType);
+                    MyGlobal.Right_findPointTool_Fix.Init("Fix", isRight, ToolType);
+                }
+                else
+                {
+                    MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight, ToolType);
+                    MyGlobal.Left_findPointTool_Fix.Init("Fix", isRight, ToolType);
+                }
+            }
+            else
+            {
+                if (isRight)
+                {
+                    //MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight, ToolType);
+                    MyGlobal.Right_Calib_Fix.Init("Fix", isRight, ToolType);
+                }
+                else
+                {
+                    //MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight, ToolType);
+                    MyGlobal.Left_Calib_Fix.Init("Fix", isRight, ToolType);
+                }
+            }
+
+
+
             MessageBox.Show("保存成功！");
         }
 
@@ -1275,20 +1343,20 @@ namespace SagensVision.VisionTool
         {
             if (isRight)
             {
-                if (MessageBox.Show("是否保存右工位参数", "提示", MessageBoxButtons.YesNo)== DialogResult.Yes)
+                if (MessageBox.Show("是否保存右工位参数", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     FitLineParamSave();
                 }
             }
             else
             {
-                if (MessageBox.Show( "是否保存左工位参数", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("是否保存左工位参数", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     FitLineParamSave();
                 }
 
             }
-           
+
             //simpleButton7_Click(sender, e);
 
         }
@@ -1333,7 +1401,7 @@ namespace SagensVision.VisionTool
 
 
                 SideName = comboBox1.SelectedItem.ToString();
-                ParamPath.ParaName = SideName;
+                ParamPath.ParaName = FindType + "_" + SideName;
                 ParamPath.IsRight = isRight;
                 hwindow_final1.viewWindow.notDisplayRoi();
                 hwindow_final2.viewWindow.notDisplayRoi();
@@ -1643,42 +1711,63 @@ namespace SagensVision.VisionTool
                 //hwindow_final2.HobjectToHimage(RGBImage);
 
                 hwindow_final2.HobjectToHimage(IntensityImage);
-                if (this.Text == "Fix")
+                if (ToolType == MyGlobal.ToolType_GlueGuide)
                 {
-                    //HObject image = new HObject();
-                    //HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
-
-                    string ok1 = "";
-                    if (isRight)
+                    if (FindType == "Fix")
                     {
-                        ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        //HObject image = new HObject();
+                        //HOperatorSet.GenImageConst(out image, "byte", 1500, 20000);
+
+                        string ok1 = "";
+                        if (isRight)
+                        {
+                            ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        }
+                        else
+                        {
+                            ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        }
+
+                        if (ok1 != "OK")
+                        {
+                            MessageBox.Show(ok1);
+                        }
+
                     }
                     else
                     {
-                        ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        //ChangeSide已定位Roi 不用定位     
+                        HTuple[] original = new HTuple[2];
+                        string ok = fpTool.FindPoint(Id, isRight, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, out original, null, hwindow_final2, true, null, OriginImage);
+                        if (ok != "OK")
+                        {
+                            MessageBox.Show(ok);
+                        }
                     }
-
-                    if (ok1 != "OK")
-                    {
-                        MessageBox.Show(ok1);
-                    }
-                    //else
-                    //{
-                    //    intersectCoordList[Id - 1] = intersection;
-
-                    //}
                 }
                 else
                 {
-                    //ChangeSide已定位Roi 不用定位     
-                    HTuple[] original = new HTuple[2];
-                    string ok = fpTool.FindPoint(Id,isRight, HeightImage, HeightImage, out Rcoord, out Ccoord, out Zcoord, out Str, out original, null, hwindow_final2, true,null,OriginImage);
-                    if (ok != "OK")
+                    //标定
+                    if (FindType == "Fix")
                     {
-                        MessageBox.Show(ok);
+                        string ok1 = "";
+                        ok1 = fpTool.FindIntersectPoint(Id, HeightImage, out intersection, hwindow_final2, true);
+                        if (ok1 != "OK")
+                        {
+                            MessageBox.Show(ok1);
+                        }
+                    }
+                    else
+                    {
+                        //ChangeSide已定位Roi 不用定位     
+                        HTuple[] original = new HTuple[2];
+                        string ok = fpTool.FindPoint(Id, HeightImage, HeightImage, out _lines, hwindow_final2, true, null, OriginImage);
+                        if (ok != "OK")
+                        {
+                            MessageBox.Show(ok);
+                        }
                     }
                 }
-
                 int Total = FindPointTool.RArray.GetLength(0);
                 textBox_Total.Text = Total.ToString();
                 textBox_Current.Text = "1";
@@ -1724,7 +1813,7 @@ namespace SagensVision.VisionTool
         //                Directory.CreateDirectory(ParamPath.ParamDir);
         //            }
         //        }
-        //        if (this.Text == "Fix")
+        //        if (ToolType == "Fix")
         //        {
         //            for (int i = 0; i < 4; i++)
         //            {
@@ -5676,7 +5765,7 @@ namespace SagensVision.VisionTool
                 hwindow_final2.Image.Dispose();
                 hwindow_final2.ClearWindow();
             }
- 
+
             RGBImage.Dispose();
             checkBox1.Checked = false;
             checkBox2.Checked = false;
@@ -5888,14 +5977,14 @@ namespace SagensVision.VisionTool
                     switch (tb.Name)
                     {
                         case "textBox_OffsetX":
-                            fpTool.fParam[SideId].roiP[rowInd[i]].Xoffset = num;                          
+                            fpTool.fParam[SideId].roiP[rowInd[i]].Xoffset = num;
                             break;
                         case "textBox_OffsetY":
-                            
-                            fpTool.fParam[SideId].roiP[rowInd[i]].Yoffset = num;          
+
+                            fpTool.fParam[SideId].roiP[rowInd[i]].Yoffset = num;
                             break;
                         case "textBox_Offset":
-                           
+
                             fpTool.fParam[SideId].roiP[rowInd[i]].offset = num;
                             break;
                         case "textBox_ZFtMax":
@@ -5957,7 +6046,7 @@ namespace SagensVision.VisionTool
                             break;
                     }
                 }
-                
+
             }
 
             catch (Exception)
@@ -6094,18 +6183,18 @@ namespace SagensVision.VisionTool
                 {
                     if (fpTool.fParam[SideId].roiP[CurrentRowIndex].TopDownDist != 0 && fpTool.fParam[SideId].roiP[CurrentRowIndex].xDist != 0)
                     {
-                        fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                        fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
 
                     }
                     else
                     {
-                        fpTool.FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection,false,hwindow_final1);
+                        fpTool.FindMaxPt(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final2, ShowSection, false, hwindow_final1);
 
                     }
                 }
                 else
                 {
-                    fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection,false,hwindow_final2);
+                    fpTool.FindMaxPtFallDown(SideId + 1, CurrentIndex - 1, out row, out col, out anchor, out anchorc, hwindow_final1, ShowSection, false, hwindow_final2);
                 }
 
                 //string[] color = {"red","blue","green", "lime green", "black" };
@@ -6161,6 +6250,7 @@ namespace SagensVision.VisionTool
                 //label20.Text = fpTool.fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
                 checkBox_useLeft.Checked = fpTool.fParam[SideId].roiP[id].useLeft;
                 checkBox_center.Checked = fpTool.fParam[SideId].roiP[id].useCenter;
+                checkBox_zZoom.Checked = fpTool.fParam[SideId].roiP[id].useZzoom;
 
                 checkBox_midPt.Checked = fpTool.fParam[SideId].roiP[id].useMidPt;
                 checkBox_Far.Checked = !fpTool.fParam[SideId].roiP[id].useNear;
@@ -6286,8 +6376,7 @@ namespace SagensVision.VisionTool
                 {
                     dataGridView1.Rows[i].Cells[0].Value = (i + 1);
                 }
-                //dataGridView1.ClearSelection();
-                //dataGridView1.Rows[currentId + 1].Selected = true;
+                dataGridView1.ClearSelection();
             }
             catch (Exception)
             {
@@ -6313,6 +6402,10 @@ namespace SagensVision.VisionTool
                 int currentId = CurrentRowIndex;
                 if (currentId != -1)
                 {
+                    if (dataGridView1.Rows[currentId].Cells[1] == null)
+                    {
+                        return;
+                    }
                     string Value = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
                     if (fpTool.fParam[Id].DicPointName.Contains(Value))
                     {
@@ -6362,7 +6455,7 @@ namespace SagensVision.VisionTool
                 }
             }
 
-           
+
         }
 
         private void checkBox_useLeft_CheckedChanged(object sender, EventArgs e)
@@ -6497,7 +6590,7 @@ namespace SagensVision.VisionTool
             {
                 return;
             }
-            if (comboBox3.SelectedItem.ToString() == "Right" )
+            if (comboBox3.SelectedItem.ToString() == "Right")
             {
                 isRight = true;
                 comboBox3.BackColor = Color.LimeGreen;
@@ -6511,25 +6604,75 @@ namespace SagensVision.VisionTool
             ChangeSide();
             MessageBox.Show("切换成功!");
         }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (isLoading)
+            {
+                return;
+            }
+            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            int currentId = CurrentRowIndex;
+
+            int roiID = dataGridView1.CurrentCell.RowIndex;
+            roiID = CurrentRowIndex;
+
+            int count = dataGridView1.SelectedCells.Count;
+            List<int> rowInd = new List<int>();
+            for (int i = 0; i < count; i++)
+            {
+                int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                if (!rowInd.Contains(Ind))
+                {
+                    rowInd.Add(Ind);
+                }
+            }
+            for (int i = 0; i < rowInd.Count; i++)
+            {
+                currentId = rowInd[i];
+
+                if (currentId != -1)
+                {
+                    fpTool.fParam[Id].roiP[currentId].useZzoom = checkBox_zZoom.Checked;
+                }
+            }
+        }
     }
 
     public class ParamPath
     {
         public static string ParaName = "";
         public static bool IsRight = false;
+        public static string ToolType = "";
         public static string ParamDir
-        {           
+        {
             get
             {
-                if (IsRight)
+                switch (ToolType)
                 {
-                    return MyGlobal.ConfigPath_Right + ParaName + "\\";
+                    case "Calib":
+                        if (IsRight)
+                        {
+                            return AppDomain.CurrentDomain.BaseDirectory + "Calib\\Right\\" + ParaName + "\\";
+                        }
+                        else
+                        {
+                            return AppDomain.CurrentDomain.BaseDirectory + "Calib\\Left\\" + ParaName + "\\";
+                        }
+
+                    case "GlueGuide":
+                        if (IsRight)
+                        {
+                            return MyGlobal.ConfigPath_Right + ParaName + "\\";
+                        }
+                        else
+                        {
+                            return MyGlobal.ConfigPath_Left + ParaName + "\\";
+                        }
+
                 }
-                else
-                {
-                    return MyGlobal.ConfigPath_Left + ParaName + "\\";
-                }
-                //return Application.StartupPath + "\\Config" + "\\" + ParaName + "\\";
+
+                return Application.StartupPath + "\\Config" + "\\" + ParaName + "\\";
             }
         }
         public static string Path_Param
@@ -6547,6 +6690,10 @@ namespace SagensVision.VisionTool
         public static string Path_tup
         {
             get { return ParamDir + "Calibrate" + ".tup"; }
+        }
+        public static string Path_CalibPix
+        {
+            get { return ParamDir + "CalibratePix" + ".txt"; }
         }
 
         public static void WriteTxt(string fileName, string value)
@@ -6696,7 +6843,10 @@ namespace SagensVision.VisionTool
         /// 圆弧处取区域中心点
         /// </summary>
         public bool useCenter = false;
-
+        /// <summary>
+        /// z缩放
+        /// </summary>
+        public bool useZzoom = false;
         public RoiParam Clone()
         {
             RoiParam temp = new RoiParam();

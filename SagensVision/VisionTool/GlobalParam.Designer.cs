@@ -70,6 +70,7 @@
             this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cb_Features = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -473,11 +474,23 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // cb_Features
+            // 
+            this.cb_Features.AutoSize = true;
+            this.cb_Features.Location = new System.Drawing.Point(485, 68);
+            this.cb_Features.Name = "cb_Features";
+            this.cb_Features.Size = new System.Drawing.Size(74, 18);
+            this.cb_Features.TabIndex = 88;
+            this.cb_Features.Text = "特征显示";
+            this.cb_Features.UseVisualStyleBackColor = true;
+            this.cb_Features.CheckedChanged += new System.EventHandler(this.cb_Features_CheckedChanged);
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 572);
+            this.Controls.Add(this.cb_Features);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.simpleButton5);
             this.Controls.Add(this.simpleButton4);
@@ -558,5 +571,6 @@
         private DevExpress.XtraEditors.SimpleButton simpleButton4;
         private DevExpress.XtraEditors.SimpleButton simpleButton5;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cb_Features;
     }
 }

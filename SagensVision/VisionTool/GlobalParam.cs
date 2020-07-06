@@ -62,7 +62,7 @@ namespace SagensVision.VisionTool
                 checkedListBox_save_data.SetItemChecked(1, MyGlobal.globalConfig.isSaveFileDat);
                 checkedListBox_save_data.SetItemChecked(2, MyGlobal.globalConfig.isSaveImg);
                 checkBox1.Checked =  MyGlobal.globalConfig.enableAlign;
-
+                cb_Features.Checked = MyGlobal.globalConfig.enableFeature;
             }
             catch (Exception)
             {
@@ -360,8 +360,10 @@ namespace SagensVision.VisionTool
             MyGlobal.globalConfig.enableAlign = checkBox1.Checked;
         }
 
-
-
+        private void cb_Features_CheckedChanged(object sender, EventArgs e)
+        {
+            MyGlobal.globalConfig.enableFeature = cb_Features.Checked;
+        }
     }
 
     
