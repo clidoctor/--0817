@@ -65,11 +65,16 @@ namespace SagensVision.VisionTool
             for (int i = 0; i < 4; i++)
             {
                 Calibration.ParamPath.ParaName = SideName[i];
+                Calibration.ParamPath.LeftOrRight = "Right";
                 if (File.Exists(Calibration.ParamPath.Path_tup))
                 {
-                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D[i]);
+                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D_Right[i]);
                 }
-
+                Calibration.ParamPath.LeftOrRight = "Left";
+                if (File.Exists(Calibration.ParamPath.Path_tup))
+                {
+                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D_Left[i]);
+                }
             }
         }
     }

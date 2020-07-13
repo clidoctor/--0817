@@ -43,6 +43,7 @@
             this.textBox_Current = new System.Windows.Forms.TextBox();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.checkBox_zZoom = new System.Windows.Forms.CheckBox();
@@ -289,6 +290,7 @@
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.LightGray;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
             this.xtraTabPage1.AutoScroll = true;
+            this.xtraTabPage1.Controls.Add(this.propertyGrid1);
             this.xtraTabPage1.Controls.Add(this.simpleButton6);
             this.xtraTabPage1.Controls.Add(this.groupBox7);
             this.xtraTabPage1.Controls.Add(this.dataGridView1);
@@ -305,6 +307,13 @@
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(962, 316);
             this.xtraTabPage1.Text = "截取轮廓工具";
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(258, 47);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(529, 246);
+            this.propertyGrid1.TabIndex = 68;
             // 
             // simpleButton6
             // 
@@ -334,12 +343,13 @@
             this.groupBox7.Controls.Add(this.label40);
             this.groupBox7.Controls.Add(this.label41);
             this.groupBox7.Controls.Add(this.textBox_downDist);
-            this.groupBox7.Location = new System.Drawing.Point(712, 47);
+            this.groupBox7.Location = new System.Drawing.Point(503, 47);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(225, 246);
+            this.groupBox7.Size = new System.Drawing.Size(67, 246);
             this.groupBox7.TabIndex = 67;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "取点设置";
+            this.groupBox7.Visible = false;
             // 
             // checkBox_zZoom
             // 
@@ -654,12 +664,13 @@
             this.groupBox5.Controls.Add(this.textBox_Offset);
             this.groupBox5.Controls.Add(this.textBox_ZFtMin);
             this.groupBox5.Controls.Add(this.textBox_ZFtRad);
-            this.groupBox5.Location = new System.Drawing.Point(470, 47);
+            this.groupBox5.Location = new System.Drawing.Point(381, 47);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(234, 246);
+            this.groupBox5.Size = new System.Drawing.Size(97, 230);
             this.groupBox5.TabIndex = 61;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "偏移设置";
+            this.groupBox5.Visible = false;
             // 
             // label29
             // 
@@ -851,7 +862,7 @@
             this.groupBox4.Controls.Add(this.simpleButton12);
             this.groupBox4.Controls.Add(this.simpleButton11);
             this.groupBox4.Controls.Add(this.simpleButton5);
-            this.groupBox4.Location = new System.Drawing.Point(943, 47);
+            this.groupBox4.Location = new System.Drawing.Point(800, 50);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(113, 246);
             this.groupBox4.TabIndex = 60;
@@ -912,10 +923,11 @@
             this.groupBox3.Controls.Add(this.textBox_Width);
             this.groupBox3.Location = new System.Drawing.Point(258, 47);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(209, 246);
+            this.groupBox3.Size = new System.Drawing.Size(101, 233);
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "截面";
+            this.groupBox3.Visible = false;
             // 
             // label24
             // 
@@ -1268,5 +1280,6 @@
         private System.Windows.Forms.CheckBox checkBox_center;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.CheckBox checkBox_zZoom;
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }

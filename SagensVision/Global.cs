@@ -47,7 +47,8 @@ namespace SagensVision
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
         public static bool sktOK = false;
-        public static HTuple[] HomMat3D = new HTuple[4];
+        public static HTuple[] HomMat3D_Right = new HTuple[4];
+        public static HTuple[] HomMat3D_Left = new HTuple[4];
         //public static Fixcs fix = new Fixcs();
         public static FitLineSet flset2 = new FitLineSet("Fix");
         public static List<HObject[]> ImageMulti = new List<HObject[]>();

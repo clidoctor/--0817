@@ -43,13 +43,14 @@
             this.sBtn_next = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_pathImport = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_pathSelect = new DevExpress.XtraEditors.SimpleButton();
+            this.cb_kdata = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.listBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tb_checkNum
             // 
-            this.tb_checkNum.Location = new System.Drawing.Point(555, 353);
+            this.tb_checkNum.Location = new System.Drawing.Point(526, 119);
             this.tb_checkNum.Margin = new System.Windows.Forms.Padding(4);
             this.tb_checkNum.Name = "tb_checkNum";
             this.tb_checkNum.Size = new System.Drawing.Size(105, 22);
@@ -57,7 +58,7 @@
             // 
             // tb_FileNum
             // 
-            this.tb_FileNum.Location = new System.Drawing.Point(195, 354);
+            this.tb_FileNum.Location = new System.Drawing.Point(170, 119);
             this.tb_FileNum.Margin = new System.Windows.Forms.Padding(4);
             this.tb_FileNum.Name = "tb_FileNum";
             this.tb_FileNum.Size = new System.Drawing.Size(101, 22);
@@ -67,7 +68,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(428, 100);
+            this.label2.Location = new System.Drawing.Point(421, 122);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 14);
@@ -79,7 +80,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(59, 358);
+            this.label1.Location = new System.Drawing.Point(25, 122);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 14);
@@ -117,9 +118,13 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.White;
+            this.groupBox1.Controls.Add(this.cb_kdata);
             this.groupBox1.Controls.Add(this.cb_RunAll);
+            this.groupBox1.Controls.Add(this.tb_checkNum);
             this.groupBox1.Controls.Add(this.simpleButton2);
+            this.groupBox1.Controls.Add(this.tb_FileNum);
             this.groupBox1.Controls.Add(this.sBtn_next);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.sBtn_pathImport);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.sBtn_pathSelect);
@@ -184,6 +189,16 @@
             this.sBtn_pathSelect.Text = "路径选择";
             this.sBtn_pathSelect.Click += new System.EventHandler(this.sBtn_pathSelect_Click);
             // 
+            // cb_kdata
+            // 
+            this.cb_kdata.ForeColor = System.Drawing.Color.Black;
+            this.cb_kdata.Location = new System.Drawing.Point(455, 91);
+            this.cb_kdata.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cb_kdata.Name = "cb_kdata";
+            this.cb_kdata.Size = new System.Drawing.Size(93, 23);
+            this.cb_kdata.TabIndex = 16;
+            this.cb_kdata.Text = "生成Kdata";
+            // 
             // OfflineFrm
             // 
             this.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(236)))), ((int)(((byte)(239)))));
@@ -194,9 +209,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(715, 435);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.tb_checkNum);
-            this.Controls.Add(this.tb_FileNum);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OfflineFrm";
@@ -207,7 +219,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -226,5 +237,6 @@
         private DevExpress.XtraEditors.SimpleButton sBtn_pathImport;
         private DevExpress.XtraEditors.SimpleButton sBtn_pathSelect;
         private System.Windows.Forms.CheckBox cb_RunAll;
+        private System.Windows.Forms.CheckBox cb_kdata;
     }
 }

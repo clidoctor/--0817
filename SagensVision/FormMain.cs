@@ -214,11 +214,16 @@ namespace SagensVision
             for (int i = 0; i < 4; i++)
             {
                 Calibration.ParamPath.ParaName = SideName[i];
+                Calibration.ParamPath.LeftOrRight = "Right";
                 if (File.Exists(Calibration.ParamPath.Path_tup))
                 {
-                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D[i]);
+                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D_Right[i]);
                 }
-
+                Calibration.ParamPath.LeftOrRight = "Left";
+                if (File.Exists(Calibration.ParamPath.Path_tup))
+                {
+                    HOperatorSet.ReadTuple(Calibration.ParamPath.Path_tup, out MyGlobal.HomMat3D_Left[i]);
+                }
             }
             if (MyGlobal.PathName.CurrentType.Contains("_SurfaceCurvature"))
             {
@@ -439,7 +444,7 @@ namespace SagensVision
         //    }
         //}
 
-        string RunFindPoint(int Side, bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HTuple Homat3D, HWindow_Final Hwnd, HObject OriginImage = null)
+        string RunFindPoint(int Side, bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original,HWindow_Final Hwnd, HObject OriginImage = null)
         {
             X = null; Y = null; Z = null; Str = null; original = new HTuple[2];
             try
@@ -470,7 +475,7 @@ namespace SagensVision
                     orignalDeg = MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Col,
                     orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
-                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
+                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Right[Side -1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
 
                 }
                 else
@@ -478,7 +483,7 @@ namespace SagensVision
                     orignalDeg = MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Col,
                     orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
-                    OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, Homat3D, Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
+                    OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Left[Side - 1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
                 }
 
 
@@ -1112,7 +1117,15 @@ namespace SagensVision
                             //{
                             Action sw = () =>
                             {
-                                MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
+                                if (rotateAlignImg.CountObj() != 0)
+                                {
+                                    MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rotateAlignImg);
+                                }
+                                else
+                                {
+                                    MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(ZoomIntensityImg);
+
+                                }
                             };
                             this.Invoke(sw);
 
@@ -1989,7 +2002,7 @@ namespace SagensVision
                     }
 
                 }
-                string OK = RunFindPoint(Side, isRight, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.HomMat3D[Side - 1], MyGlobal.hWindow_Final[Side - 1], OriginImage);
+                string OK = RunFindPoint(Side, isRight, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.hWindow_Final[Side - 1], OriginImage);
 
                 double[] tz = null;
                 if (x == null)
@@ -2527,7 +2540,8 @@ namespace SagensVision
                 {
                     AnchorR[n] = AnchorList[n].Row;
                     AnchorC[n] = AnchorList[n].Col;
-                    HOperatorSet.AffineTransPoint2d(MyGlobal.HomMat3D[n], AnchorList[n].Row, AnchorList[n].Col, out AxisAnchorR[n], out AxisAnchorC[n]);
+                    HTuple homMat = isRight ? MyGlobal.HomMat3D_Right[n] : MyGlobal.HomMat3D_Left[n];
+                    HOperatorSet.AffineTransPoint2d(homMat, AnchorList[n].Row, AnchorList[n].Col, out AxisAnchorR[n], out AxisAnchorC[n]);
 
                 }
                 #endregion
@@ -3745,10 +3759,10 @@ namespace SagensVision
 
         private void navBarItem10_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
-            //VisionTool.CalibrationForm calibration = new VisionTool.CalibrationForm();
-            //calibration.Show();
-            VisionTool.CalibFormMain calib = new CalibFormMain();
-            calib.ShowDialog();
+            VisionTool.CalibrationForm calibration = new VisionTool.CalibrationForm();
+            calibration.Show();
+            //VisionTool.CalibFormMain calib = new CalibFormMain();
+            //calib.ShowDialog();
         }
 
         //Matching.Form1 match = new Matching.Form1(MyGlobal.fileName1);
@@ -3796,7 +3810,7 @@ namespace SagensVision
         }
 
 
-        public void RunOffline(string ImagePath)
+        public void RunOffline(string ImagePath,bool ReduceKdata)
         {
 
 
@@ -3804,7 +3818,7 @@ namespace SagensVision
             {
 
 
-                string OK1 = LoadImageData(ImagePath);
+                string OK1 = LoadImageData(ImagePath,ReduceKdata);
                 if (OK1 != "OK")
                 {
                     MessageBox.Show(OK1);
@@ -4237,21 +4251,26 @@ namespace SagensVision
                         {
                             continue;
                         }
+                        string Side = "";
                         if (namesH[i].Contains("Side1_"))
                         {
                             CurrentSide = 0;
+                            Side = "Side1";
                         }
                         else if (namesH[i].Contains("Side2_"))
                         {
                             CurrentSide = 1;
+                            Side = "Side2";
                         }
                         else if (namesH[i].Contains("Side3_"))
                         {
                             CurrentSide = 2;
+                            Side = "Side3";
                         }
                         else if (namesH[i].Contains("Side4_"))
                         {
                             CurrentSide = 3;
+                            Side = "Side4";
                         }
                        
                             SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
@@ -4261,6 +4280,9 @@ namespace SagensVision
                         {
                             szd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesB[i], typeof(SurfaceZSaveDat));
                         }
+
+                       
+
                         StaticTool.GetUnlineRunImg(ssd, sid, szd, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg, out planeImg);
                         bool isUp = i == 3 || i == 1;
                         if (planeImg != null)
@@ -4600,7 +4622,7 @@ namespace SagensVision
         //        throw;
         //    }
         //}
-        string LoadImageData(string FilePath)
+        string LoadImageData(string FilePath,bool ReduceKdata)
         {
             try
             {
@@ -4678,9 +4700,29 @@ namespace SagensVision
                     {
                         return "高度数据加载失败！";
                     }
+                  
 
                     for (int i = 0; i < namesH.Length; i++)
                     {
+
+                        string Side = "";
+                        if (namesH[i].Contains("Side1_"))
+                        {                          
+                            Side = "Side1";
+                        }
+                        else if (namesH[i].Contains("Side2_"))
+                        {                          
+                            Side = "Side2";
+                        }
+                        else if (namesH[i].Contains("Side3_"))
+                        {                           
+                            Side = "Side3";
+                        }
+                        else if (namesH[i].Contains("Side4_"))
+                        {                           
+                            Side = "Side4";
+                        }
+
                         HObject[] image;
                         if (orderb > 0 && MyGlobal.globalConfig.enableAlign)
                         {
@@ -4698,6 +4740,25 @@ namespace SagensVision
                         {
                             szd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesB[i], typeof(SurfaceZSaveDat));
                         }
+                        if (!Directory.Exists("Data\\Kdatfile\\"))
+                        {
+                            Directory.CreateDirectory("Data\\Kdatfile\\");
+                        }
+                        string[] names = namesH[i].Split('\\');
+                        string KdataName1 = names[names.Length - 2] +"_"+ names[names.Length - 1];
+                        KdataName1 = KdataName1.Replace(".dat", "");
+                        if (ssd != null)
+                        {
+                            StaticTool.ConvertDataToKdata(ssd, "Data\\Kdatfile\\", KdataName1);
+                        }
+                        string[] names2 = namesB[i].Split('\\');
+                        string KdataName2 = names2[names2.Length - 2] + "_" + names2[names2.Length - 1];
+                        KdataName2 = KdataName2.Replace(".dat", "");
+                        if (szd != null)
+                        {
+                            StaticTool.ConvertDataToKdata(szd, "Data\\Kdatfile\\", KdataName2);
+                        }
+
                         StaticTool.GetUnlineRunImg(ssd, sid, szd, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg, out planeImg);
                         bool isUp = i == 3 || i == 1;
                         if (planeImg != null)

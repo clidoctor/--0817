@@ -54,7 +54,11 @@ namespace SagensVision.VisionTool
                 }
                 for (int i = 0; i < 4; i++)
                 {
-                    ParamPath.ParaName = FindType + "_Side" + (i + 1).ToString();
+                    if (true)
+                    {
+                        ParamPath.ParaName ="Side" + (i + 1).ToString();
+                    }
+                    //ParamPath.ParaName = FindType + "_Side" + (i + 1).ToString();
                     ParamPath.IsRight = IsRight;
                     if (!Directory.Exists(ParamPath.ParamDir))
                     {
@@ -329,6 +333,10 @@ namespace SagensVision.VisionTool
                     return "NG";
                 }
                 HOperatorSet.CreateFunct1dArray(rows, out hv_Function);
+                if (sigma.D==0)
+                {
+                    sigma = 0.5;
+                }
                 if (sigma > ((rows.Length - 2) / 7.8))
                 {
                     sigma = 0.5;
@@ -483,7 +491,7 @@ namespace SagensVision.VisionTool
         /// <param name="isUpDown">以上下方向筛选还是以左右方向筛选</param>
         /// <param name="isMax">是否启用极大值(true 极大值，false 极小值）</param>
         /// <returns></returns>
-        private string GetInflection(HTuple clipRow, HTuple clipCol, HTuple Deg, out HTuple pRow, out HTuple pCol,out HTuple RotateRow,out HTuple RotateCol,out HTuple HomMat,out HTuple rotateMaxR,out HTuple rotateMaxC, HWindow_Final Hwindow = null, bool isUpDown = true, bool isMax = true, bool useLeft = true, bool ifShowFeatures = false,bool UseZzoom=false,double Zzoom =1)
+        private string GetInflection(HTuple clipRow, HTuple clipCol, HTuple Deg, out HTuple pRow, out HTuple pCol,out HTuple RotateRow,out HTuple RotateCol,out HTuple HomMat,out HTuple rotateMaxR,out HTuple rotateMaxC, HWindow_Final Hwindow = null, bool isUpDown = true, bool isMax = true, bool useLeft = true, bool ifShowFeatures = false,bool UseZzoom=false,double Zzoom =1,double sigma = 0.5)
         {
             pRow = new HTuple(); pCol = new HTuple();
             RotateRow = new HTuple();RotateCol = new HTuple();HomMat = new HTuple();
@@ -532,7 +540,7 @@ namespace SagensVision.VisionTool
                     HOperatorSet.SetDraw(Hwindow.HWindowHalconID, "margin");
                 }
       
-                string ware = PeakTroughOfWave(RowO, ColO, 0.5, isUpDown, isMax, out rowPeak, out colPeak, useLeft);
+                string ware = PeakTroughOfWave(RowO, ColO, sigma, isUpDown, isMax, out rowPeak, out colPeak, useLeft);
                 string msg = "";
                 //if (ware=="NG")
                 //{
@@ -727,7 +735,7 @@ namespace SagensVision.VisionTool
 
                     bool ShowFeatures1 = fParam[Id].roiP[roiID].useZzoom  ? false : ShowFeatures;                    
                     GetInflection(RowNew, ColNew, deg, out maxZ, out mZCol,out RotateRow,out RotateCol,out HomMat,out rotateMaxR,out rotateMaxC, hwnd_profile, true, true, true, ShowFeatures1
-                        , fParam[Id].roiP[roiID].useZzoom, fParam[Id].roiP[roiID].ClippingPer);
+                        , fParam[Id].roiP[roiID].useZzoom, fParam[Id].roiP[roiID].ClippingPer, fParam[Id].roiP[roiID].Sigma);
 
                     
                     if (fParam[Id].roiP[roiID].useZzoom)
@@ -806,7 +814,7 @@ namespace SagensVision.VisionTool
                 HOperatorSet.IntersectionContoursXld(Profile, Line, "mutual", out IntersecR, out intersecC, out isOver);
                 if (hwnd_profile != null && ShowFeatures)
                 {
-                    hwnd_profile.viewWindow.displayHobject(Profile, "yellow");
+                    hwnd_profile.viewWindow.displayHobject(Profile, "white");
                     hwnd_profile.viewWindow.displayHobject(Line, "green");
 
                 }
@@ -926,7 +934,7 @@ namespace SagensVision.VisionTool
 
                 }
 
-                if (fParam[Id].roiP[roiID].useZzoom)
+                if (fParam[Id].roiP[roiID].SelectedType == 0 && fParam[Id].roiP[roiID].useZzoom)
                 {
                     LastR = LastR / Zzoom;
                     HOperatorSet.AffineTransPoint2d(HomMat, LastR, LastC, out LastR, out LastC);
@@ -1086,7 +1094,7 @@ namespace SagensVision.VisionTool
            
                 int deg = fParam[Id].roiP[roiID].AngleOfProfile;
                 GetInflection(RowNew, ColNew, deg, out LastR, out LastC,out RotateRow,out RotateCol,out HomMat,out rotateMaxR,out rotateMaxC, hwnd_profile, true, true, true, ShowFeatures
-                    , fParam[Id].roiP[roiID].useZzoom, fParam[Id].roiP[roiID].ClippingPer);
+                    , fParam[Id].roiP[roiID].useZzoom, fParam[Id].roiP[roiID].ClippingPer, fParam[Id].roiP[roiID].Sigma);
 
                 if (LastR.Length == 0)
                 {
@@ -1801,7 +1809,7 @@ namespace SagensVision.VisionTool
                 HTuple origCol = new HTuple();
                 for (int i = 0; i < Len; i++)
                 {
-                    if (i == 11)
+                    if (i == 9)
                     {
                         Debug.WriteLine(i);
                     }

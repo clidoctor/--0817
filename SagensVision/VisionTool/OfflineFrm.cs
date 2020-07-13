@@ -25,9 +25,9 @@ namespace SagensVision
         }
        
         string path = "";
-        public delegate void RunOff(string Path);
+        public delegate void RunOff(string Path,bool ReduceKdata);
         public RunOff Run;
-        public void dmmy(string Path)
+        public void dmmy(string Path,bool ReduceKdata)
         {
 
         }
@@ -110,14 +110,16 @@ namespace SagensVision
 
                         //MessageBox.Show("当前运行物料ID：" + (listBox1.SelectedIndex + 1).ToString());
                         //run（path）
-                        Run(path);
+                        bool reduce = cb_kdata.Checked;
+
+                        Run(path,reduce);
                         if (cb_runMode.Checked)
                         {
                             if ((listBox1.SelectedIndex + 1) == listBox1.Items.Count)
                             {     
                                                            
                                 MessageBox.Show("已到最后一个文件！");
-                                isRunning = false;
+                                isRunning = false;                             
                                 return;
                             }
                             else

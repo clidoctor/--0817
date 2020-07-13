@@ -16,11 +16,13 @@ using ViewWindow.Model;
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace SagensVision.VisionTool
 {
     public partial class FitLineSet : DevExpress.XtraEditors.XtraForm
     {
+               
         int CurrentIndex = 0;
         HWindow_Final hwindow_final1 = new HWindow_Final();
         HWindow_Final hwindow_final2 = new HWindow_Final();
@@ -71,8 +73,10 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_Load(object sender, EventArgs e)
         {
+            RoiParam.isInvoke = false;
+            isLoading = true;
             isRight = MyGlobal.IsRight;
-            string ok = fpTool.Init(FindType, isRight, ToolType);
+            //string ok = fpTool.Init(FindType, isRight, ToolType);
             //if (ok != "OK")
             //{
             //    MessageBox.Show(ok);
@@ -88,7 +92,7 @@ namespace SagensVision.VisionTool
 
             trackBarControl1.Properties.Minimum = 1;
 
-            LoadToUI(0);
+            //LoadToUI(0);
             roiController = hwindow_final1.viewWindow._roiController;
             roiController.NotifyRCObserver = new IconicDelegate(ROiMove);
             roiController2 = hwindow_final2.viewWindow._roiController;
@@ -102,6 +106,179 @@ namespace SagensVision.VisionTool
             checkBoxRoi.Checked = true;
             ChangeSide();
             hwindow_final2.hWindowControl.MouseDown += Hwindow_final2_MouseDown;
+            isLoading = false;
+            RoiParam.isInvoke = true;
+            RoiParam.ChangeSection += RoiParam_ChangeSection;
+            
+        }
+
+        private void RoiParam_ChangeSection(ValueChangedType obj, double value)
+        {
+            try
+            {
+
+                if (isLoading || RoiIsMoving)
+                {
+                    return;
+                }
+                if (RoiParam.isInvoke)
+                {
+                    RoiParam.isInvoke = false;
+                }
+
+                int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+                int roiID = dataGridView1.CurrentCell.RowIndex;
+                roiID = CurrentRowIndex;
+                int count = dataGridView1.SelectedCells.Count;
+                List<int> rowInd = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    int Ind = dataGridView1.SelectedCells[i].RowIndex;
+                    if (!rowInd.Contains(Ind))
+                    {
+                        rowInd.Add(Ind);
+                    }
+                }
+                //for (int i = 0; i < rowInd.Count; i++)
+                //{
+                //    roiID = rowInd[i];
+                //    HTuple[] lineCoord = new HTuple[1];
+                //}
+
+                bool roiUpdate = false;
+                for (int i = 0; i < rowInd.Count; i++)
+                {
+                    roiID = rowInd[i];
+                    HTuple[] lineCoord = new HTuple[1];
+
+                    switch (obj)
+                    {
+                        case ValueChangedType.数量:
+                            fpTool.fParam[SideId].roiP[roiID].NumOfSection = (int)value;
+                            fpTool.DispSection((ROIRectangle2)fpTool.roiList2[SideId][roiID], SideId, roiID, out lineCoord, hwindow_final2);
+                            roiUpdate = true;
+                            break;
+                        case ValueChangedType.长度:
+                            HTuple temp = new HTuple();
+                            List<ROI> temproi = new List<ROI>();
+                            temp = fpTool.roiList2[SideId][roiID].getModelData();
+                            fpTool.fParam[SideId].roiP[roiID].Len1 = value;
+                            hwindow_final2.viewWindow.genRect2(fpTool.fParam[SideId].roiP[roiID].CenterRow, fpTool.fParam[SideId].roiP[roiID].CenterCol, fpTool.fParam[SideId].roiP[roiID].phi, fpTool.fParam[SideId].roiP[roiID].Len1, fpTool.fParam[SideId].roiP[roiID].Len2, ref temproi);
+                            fpTool.roiList2[SideId][roiID] = temproi[0];
+                            roiUpdate = true;
+                            break;
+                        case ValueChangedType.宽度:
+                            HTuple temp3 = new HTuple();
+                            temp3 = fpTool.roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi3 = new List<ROI>();
+                            fpTool.fParam[SideId].roiP[roiID].Len2 = value;
+                            hwindow_final2.viewWindow.genRect2(fpTool.fParam[SideId].roiP[roiID].CenterRow, fpTool.fParam[SideId].roiP[roiID].CenterCol, fpTool.fParam[SideId].roiP[roiID].phi, fpTool.fParam[SideId].roiP[roiID].Len1, fpTool.fParam[SideId].roiP[roiID].Len2, ref temproi3);
+                            fpTool.roiList2[SideId][roiID] = temproi3[0];
+                            roiUpdate = true;
+                            break;
+                        case ValueChangedType.角度:
+                            HTuple temp6 = new HTuple();
+                            temp3 = fpTool.roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi6 = new List<ROI>();
+                            fpTool.fParam[SideId].roiP[roiID].phi = value;
+                            hwindow_final2.viewWindow.genRect2(fpTool.fParam[SideId].roiP[roiID].CenterRow, fpTool.fParam[SideId].roiP[roiID].CenterCol, fpTool.fParam[SideId].roiP[roiID].phi, fpTool.fParam[SideId].roiP[roiID].Len1, fpTool.fParam[SideId].roiP[roiID].Len2, ref temproi6);
+                            fpTool.roiList2[SideId][roiID] = temproi6[0];
+                            roiUpdate = true;
+                            break;
+                        case ValueChangedType.行坐标:
+                            HTuple temp4 = new HTuple();
+                            temp4 = fpTool.roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi4 = new List<ROI>();
+                            fpTool.fParam[SideId].roiP[roiID].CenterRow = value;
+                            hwindow_final2.viewWindow.genRect2(fpTool.fParam[SideId].roiP[roiID].CenterRow, fpTool.fParam[SideId].roiP[roiID].CenterCol, fpTool.fParam[SideId].roiP[roiID].phi, fpTool.fParam[SideId].roiP[roiID].Len1, fpTool.fParam[SideId].roiP[roiID].Len2, ref temproi4);
+                            fpTool.roiList2[SideId][roiID] = temproi4[0];
+                            roiUpdate = true;
+                            break;
+                        case ValueChangedType.列坐标:
+                            HTuple temp5 = new HTuple();
+                            temp3 = fpTool.roiList2[SideId][roiID].getModelData();
+                            List<ROI> temproi5 = new List<ROI>();
+                            fpTool.fParam[SideId].roiP[roiID].CenterCol = value;
+                            hwindow_final2.viewWindow.genRect2(fpTool.fParam[SideId].roiP[roiID].CenterRow, fpTool.fParam[SideId].roiP[roiID].CenterCol, fpTool.fParam[SideId].roiP[roiID].phi, fpTool.fParam[SideId].roiP[roiID].Len1, fpTool.fParam[SideId].roiP[roiID].Len2, ref temproi5);
+                            fpTool.roiList2[SideId][roiID] = temproi5[0];
+                            roiUpdate = true;
+                            break;
+                        case ValueChangedType.Roi方向偏移:
+                            fpTool.fParam[SideId].roiP[roiID].offset = value;
+                            break;
+                        case ValueChangedType.X方向偏移:
+                            fpTool.fParam[SideId].roiP[roiID].Xoffset = value;
+                            break;
+                        case ValueChangedType.Y方向偏移:
+                            fpTool.fParam[SideId].roiP[roiID].Yoffset = value;
+                            break;
+                        case ValueChangedType.Z方向偏移:
+                            fpTool.fParam[SideId].roiP[roiID].Zoffset = value;
+                            break;
+                        case ValueChangedType.X方向距离:
+                            fpTool.fParam[SideId].roiP[roiID].xDist = value;
+                            break;
+                        case ValueChangedType.取最近点还是最远点:
+                            fpTool.fParam[SideId].roiP[roiID].useNear = value ==1 ? true : false;
+                            break;
+                        case ValueChangedType.取轮廓区域中心点:
+                            fpTool.fParam[SideId].roiP[roiID].useCenter = value == 1 ? true : false;
+                            break;
+                        case ValueChangedType.是否取中间点:
+                            fpTool.fParam[SideId].roiP[roiID].useMidPt = value == 1 ? true : false;
+                            break;
+                        case ValueChangedType.是否取左侧值:
+                            fpTool.fParam[SideId].roiP[roiID].useLeft = value == 1 ? true : false;
+                            break;
+                        case ValueChangedType.是否启用Z向缩放:
+                            fpTool.fParam[SideId].roiP[roiID].useZzoom = value == 1 ? true : false;
+                            break;
+                        case ValueChangedType.找线方式设置:
+                            fpTool.fParam[SideId].roiP[roiID].TypeOfFindLine = value == 0 ? "极值" : "最大值";
+                            break;
+                        case ValueChangedType.最高点下降距离:
+                            fpTool.fParam[SideId].roiP[roiID].TopDownDist = value ;
+                            break;
+                        case ValueChangedType.直线滤波系数:
+                            fpTool.fParam[SideId].roiP[roiID].SmoothCont = value ;
+                            break;
+                        case ValueChangedType.轮廓Z向拉伸:
+                            fpTool.fParam[SideId].roiP[roiID].ClippingPer = value;
+                            break;
+                        case ValueChangedType.高度方向滤波最大百分比:
+                            fpTool.fParam[SideId].roiP[roiID].ZftMax = value;
+                            break;
+                        case ValueChangedType.高度方向滤波最小百分比:
+                            fpTool.fParam[SideId].roiP[roiID].ZftMin = value;
+                            break;
+                        case ValueChangedType.高度方向滤波半径:
+                            fpTool.fParam[SideId].roiP[roiID].ZftRad = value;
+                            break;
+                        case ValueChangedType.轮廓平滑:
+                            fpTool.fParam[SideId].roiP[roiID].Sigma = value;
+                            break;
+                        case ValueChangedType.轮廓旋转角度:
+                            fpTool.fParam[SideId].roiP[roiID].AngleOfProfile = (int) value;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (roiUpdate)
+                {
+                    hwindow_final2.viewWindow.notDisplayRoi();
+                    hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[SideId]);
+                    hwindow_final2.viewWindow.selectROI(roiID);
+                }
+                
+
+
+                RoiParam.isInvoke = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Hwindow_final2_MouseDown(object sender, MouseEventArgs e)
@@ -391,23 +568,19 @@ namespace SagensVision.VisionTool
                         fpTool.fParam[Id].roiP[ActiveId].Len2 = ModelData[4];
                         fpTool.fParam[Id].roiP[ActiveId].CenterRow = ModelData[0];
                         fpTool.fParam[Id].roiP[ActiveId].CenterCol = ModelData[1];
+                        
+                        //HTuple phi = ModelData[2];
                         fpTool.fParam[Id].roiP[ActiveId].phi = ModelData[2];
+                        propertyGrid1.SelectedObject = fpTool.fParam[Id].roiP[ActiveId];
+                        //textBox_Len.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].Len1).ToString();
+                        //textBox_Width.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].Len2).ToString();
+                        //textBox_Row.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].CenterRow).ToString();
+                        //textBox_Col.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].CenterCol).ToString();
+                        //HTuple deg = new HTuple();
+                        //HOperatorSet.TupleDeg(ModelData[2], out deg);
+                        //textBox_phi.Text = ((int)deg.D).ToString();
 
-                        textBox_Len.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].Len1).ToString();
-                        textBox_Width.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].Len2).ToString();
-                        textBox_Row.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].CenterRow).ToString();
-                        textBox_Col.Text = ((int)fpTool.fParam[Id].roiP[ActiveId].CenterCol).ToString();
-                        HTuple deg = new HTuple();
-                        HOperatorSet.TupleDeg(ModelData[2], out deg);
-                        textBox_phi.Text = ((int)deg.D).ToString();
 
-                        //listBox1.SelectedItem = ActiveId;
-                        //richTextBox1.SelectedText = key;
-                        //int fId = richTextBox1.GetFirstCharIndexFromLine(currentId);
-                        //string[] lines1 = richTextBox1.Lines;
-
-                        //richTextBox1.Focus();
-                        //richTextBox1.Select(fId, lines1[ActiveId].Length);
                         PreSelect = Name;
 
 
@@ -460,7 +633,7 @@ namespace SagensVision.VisionTool
             try
             {
                 RoiIsMoving = true;
-                isLoading = true;
+                //isLoading = true;
                 //刷新Roi参数
                 UpdateRoiParam();
                 ParamPath.ToolType = ToolType;
@@ -487,38 +660,40 @@ namespace SagensVision.VisionTool
 
                 if (keys.Length > 0)
                 {
-                    textBox_Num.Text = ((int)fpTool.fParam[Index].roiP[0].NumOfSection).ToString();
-                    textBox_Len.Text = ((int)fpTool.fParam[Index].roiP[0].Len1).ToString();
-                    textBox_Width.Text = ((int)fpTool.fParam[Index].roiP[0].Len2).ToString();
-                    textBox_Row.Text = ((int)fpTool.fParam[Index].roiP[0].CenterRow).ToString();
-                    textBox_Col.Text = ((int)fpTool.fParam[Index].roiP[0].CenterCol).ToString();
-                    textBox_Offset.Text = ((int)fpTool.fParam[Index].roiP[0].offset).ToString();
-                    textBox_OffsetX.Text = ((int)fpTool.fParam[Index].roiP[0].Xoffset).ToString();
-                    textBox_OffsetY.Text = ((int)fpTool.fParam[Index].roiP[0].Yoffset).ToString();
-                    textBox_OffsetZ.Text = ((int)fpTool.fParam[Index].roiP[0].Zoffset).ToString();
-                    textBox_ZFtMax.Text = (fpTool.fParam[Index].roiP[0].ZftMax).ToString();
-                    textBox_ZFtMin.Text = (fpTool.fParam[Index].roiP[0].ZftMin).ToString();
-                    textBox_ZFtRad.Text = (fpTool.fParam[Index].roiP[0].ZftRad).ToString();
+                    propertyGrid1.SelectedObject = fpTool.fParam[Index].roiP[0];
 
-                    HTuple deg = new HTuple();
-                    HOperatorSet.TupleDeg(fpTool.fParam[Index].roiP[0].phi, out deg);
-                    textBox_phi.Text = ((int)deg.D).ToString();
-                    textBox_Deg.Text = fpTool.fParam[Index].roiP[0].AngleOfProfile.ToString();
-                    checkBox_useLeft.Checked = fpTool.fParam[Index].roiP[0].useLeft;
-                    checkBox_midPt.Checked = fpTool.fParam[Index].roiP[0].useMidPt;
-                    checkBox_Far.Checked = !fpTool.fParam[Index].roiP[0].useNear;
-                    checkBox_center.Checked = fpTool.fParam[Index].roiP[0].useCenter;
-                    checkBox_zZoom.Checked = fpTool.fParam[Index].roiP[0].useZzoom;
+                    //textBox_Num.Text = ((int)fpTool.fParam[Index].roiP[0].NumOfSection).ToString();
+                    //textBox_Len.Text = ((int)fpTool.fParam[Index].roiP[0].Len1).ToString();
+                    //textBox_Width.Text = ((int)fpTool.fParam[Index].roiP[0].Len2).ToString();
+                    //textBox_Row.Text = ((int)fpTool.fParam[Index].roiP[0].CenterRow).ToString();
+                    //textBox_Col.Text = ((int)fpTool.fParam[Index].roiP[0].CenterCol).ToString();
+                    //textBox_Offset.Text = ((int)fpTool.fParam[Index].roiP[0].offset).ToString();
+                    //textBox_OffsetX.Text = ((int)fpTool.fParam[Index].roiP[0].Xoffset).ToString();
+                    //textBox_OffsetY.Text = ((int)fpTool.fParam[Index].roiP[0].Yoffset).ToString();
+                    //textBox_OffsetZ.Text = ((int)fpTool.fParam[Index].roiP[0].Zoffset).ToString();
+                    //textBox_ZFtMax.Text = (fpTool.fParam[Index].roiP[0].ZftMax).ToString();
+                    //textBox_ZFtMin.Text = (fpTool.fParam[Index].roiP[0].ZftMin).ToString();
+                    //textBox_ZFtRad.Text = (fpTool.fParam[Index].roiP[0].ZftRad).ToString();
 
-                    textBox_downDist.Text = fpTool.fParam[Index].roiP[0].TopDownDist.ToString();
-                    textBox_xDist.Text = fpTool.fParam[Index].roiP[0].xDist.ToString();
-                    textBox_Clipping.Text = fpTool.fParam[Index].roiP[0].ClippingPer.ToString();
-                    textBox_SmoothCont.Text = fpTool.fParam[Index].roiP[0].SmoothCont.ToString();
-                    comboBox_GetPtType.SelectedIndex = 0;
+                    //HTuple deg = new HTuple();
+                    //HOperatorSet.TupleDeg(fpTool.fParam[Index].roiP[0].phi, out deg);
+                    //textBox_phi.Text = ((int)deg.D).ToString();
+                    //textBox_Deg.Text = fpTool.fParam[Index].roiP[0].AngleOfProfile.ToString();
+                    //checkBox_useLeft.Checked = fpTool.fParam[Index].roiP[0].useLeft;
+                    //checkBox_midPt.Checked = fpTool.fParam[Index].roiP[0].useMidPt;
+                    //checkBox_Far.Checked = !fpTool.fParam[Index].roiP[0].useNear;
+                    //checkBox_center.Checked = fpTool.fParam[Index].roiP[0].useCenter;
+                    //checkBox_zZoom.Checked = fpTool.fParam[Index].roiP[0].useZzoom;
+
+                    //textBox_downDist.Text = fpTool.fParam[Index].roiP[0].TopDownDist.ToString();
+                    //textBox_xDist.Text = fpTool.fParam[Index].roiP[0].xDist.ToString();
+                    //textBox_Clipping.Text = fpTool.fParam[Index].roiP[0].ClippingPer.ToString();
+                    //textBox_SmoothCont.Text = fpTool.fParam[Index].roiP[0].SmoothCont.ToString();
+                    //comboBox_GetPtType.SelectedIndex = 0;
                 }
 
                 RoiIsMoving = false;
-                isLoading = false;
+                //isLoading = false;
             }
             catch (Exception)
             {
@@ -793,6 +968,9 @@ namespace SagensVision.VisionTool
             }
             else
             {
+                RoiIsMoving = true;
+                LoadToUI(Id);
+                RoiIsMoving = false;
                 return;
                 //读取指定路径下或选择路径下图片
                 if (File.Exists(Path1 + "\\" + SideName + "H.tiff"))
@@ -870,6 +1048,8 @@ namespace SagensVision.VisionTool
                         hwindow_final2.viewWindow.genRect2(tempR, tempC, orignal[2], orignal[3], orignal[4], ref temproi);
                         fpTool.roiList2[Id][i] = temproi[0];
                     }
+                    roiController2.viewController.ShowAllRoiModel = 0;
+                    roiController2.viewController.repaint(0);
                 }
             }
             else
@@ -879,9 +1059,11 @@ namespace SagensVision.VisionTool
                     fpTool.roiList2[Id].Clear();
                     fpTool.Init(FindType, isRight, ToolType);
                     hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[Id]);
+                    roiController2.viewController.ShowAllRoiModel = 0;
+                    roiController2.viewController.repaint(0);
                 }
             }
-
+            
             RoiIsMoving = true;
             LoadToUI(Id);
             RoiIsMoving = false;
@@ -1341,6 +1523,7 @@ namespace SagensVision.VisionTool
 
         private void button2_Click(object sender, EventArgs e)
         {
+            RoiParam.isInvoke = false;
             if (isRight)
             {
                 if (MessageBox.Show("是否保存右工位参数", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -1356,7 +1539,7 @@ namespace SagensVision.VisionTool
                 }
 
             }
-
+            RoiParam.isInvoke = true;
             //simpleButton7_Click(sender, e);
 
         }
@@ -5695,6 +5878,7 @@ namespace SagensVision.VisionTool
                     {
                         return;
                     }
+                    RoiIsMoving = true;
                     if (roiID >= 0)
                     {
 
@@ -5737,6 +5921,7 @@ namespace SagensVision.VisionTool
                         dataGridView1.Rows[roiID].Cells[2].Value = fpTool.fParam[Id].roiP[roiID].LineOrCircle;
 
                     }
+                    RoiIsMoving = false;
                 }
             }
             catch (Exception)
@@ -5748,7 +5933,8 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+             RoiParam.isInvoke = false;
+            RoiParam.ChangeSection -= RoiParam_ChangeSection;
             //MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight);
             //MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight);
             //MyGlobal.Right_findPointTool_Fix.Init("Fix", isRight);
@@ -5779,6 +5965,7 @@ namespace SagensVision.VisionTool
         bool isInsert = false;
         private void 插入ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+           
             isGenSection = false;
             if (dataGridView1.CurrentCell == null)
             {
@@ -5799,6 +5986,7 @@ namespace SagensVision.VisionTool
             {
                 return;
             }
+            RoiIsMoving = true;
             isInsert = true;
             HTuple coord1 = fpTool.roiList[Id][currentId].getModelData();
             HTuple coord2 = fpTool.roiList2[Id][currentId].getModelData();
@@ -5862,7 +6050,7 @@ namespace SagensVision.VisionTool
             }
 
             //roiController2.setROIShape(new ROIRectangle2());
-
+            RoiIsMoving = false;
         }
 
         int PtOrder = -1;
@@ -6223,40 +6411,40 @@ namespace SagensVision.VisionTool
                 hwindow_final1.viewWindow.notDisplayRoi();
                 hwindow_final1.viewWindow.displayROI(ref temp);
 
+                propertyGrid1.SelectedObject = fpTool.fParam[SideId].roiP[id];
+                //textBox_Num.Text = ((int)fpTool.fParam[SideId].roiP[id].NumOfSection).ToString();
+                //textBox_Len.Text = ((int)fpTool.fParam[SideId].roiP[id].Len1).ToString();
+                //textBox_Width.Text = ((int)fpTool.fParam[SideId].roiP[id].Len2).ToString();
+                //textBox_Row.Text = ((int)fpTool.fParam[SideId].roiP[id].CenterRow).ToString();
+                //textBox_Col.Text = ((int)fpTool.fParam[SideId].roiP[id].CenterCol).ToString();
+                //HTuple deg = new HTuple();
+                //HOperatorSet.TupleDeg(fpTool.fParam[SideId].roiP[id].phi, out deg);
+                //textBox_phi.Text = ((int)deg.D).ToString();
+                //textBox_Deg.Text = fpTool.fParam[SideId].roiP[id].AngleOfProfile.ToString();
+                //textBox_OffsetY.Text = fpTool.fParam[SideId].roiP[id].Yoffset.ToString();
+                //textBox_OffsetX.Text = fpTool.fParam[SideId].roiP[id].Xoffset.ToString();
+                //textBox_Offset.Text = fpTool.fParam[SideId].roiP[id].offset.ToString();
 
-                textBox_Num.Text = ((int)fpTool.fParam[SideId].roiP[id].NumOfSection).ToString();
-                textBox_Len.Text = ((int)fpTool.fParam[SideId].roiP[id].Len1).ToString();
-                textBox_Width.Text = ((int)fpTool.fParam[SideId].roiP[id].Len2).ToString();
-                textBox_Row.Text = ((int)fpTool.fParam[SideId].roiP[id].CenterRow).ToString();
-                textBox_Col.Text = ((int)fpTool.fParam[SideId].roiP[id].CenterCol).ToString();
-                HTuple deg = new HTuple();
-                HOperatorSet.TupleDeg(fpTool.fParam[SideId].roiP[id].phi, out deg);
-                textBox_phi.Text = ((int)deg.D).ToString();
-                textBox_Deg.Text = fpTool.fParam[SideId].roiP[id].AngleOfProfile.ToString();
-                textBox_OffsetY.Text = fpTool.fParam[SideId].roiP[id].Yoffset.ToString();
-                textBox_OffsetX.Text = fpTool.fParam[SideId].roiP[id].Xoffset.ToString();
-                textBox_Offset.Text = fpTool.fParam[SideId].roiP[id].offset.ToString();
+                //textBox_OffsetZ.Text = fpTool.fParam[SideId].roiP[id].Zoffset.ToString();
+                //textBox_ZFtMax.Text = fpTool.fParam[SideId].roiP[id].ZftMax.ToString();
+                //textBox_ZFtMin.Text = fpTool.fParam[SideId].roiP[id].ZftMin.ToString();
+                //textBox_ZFtRad.Text = fpTool.fParam[SideId].roiP[id].ZftRad.ToString();
+                //textBox_Clipping.Text = fpTool.fParam[SideId].roiP[id].ClippingPer.ToString();
+                //textBox_SmoothCont.Text = fpTool.fParam[SideId].roiP[roiID].SmoothCont.ToString();
+                ////textBox_IndEnd2.Text = fpTool.fParam[SideId].roiP[id].EndOffSet2.ToString();
 
-                textBox_OffsetZ.Text = fpTool.fParam[SideId].roiP[id].Zoffset.ToString();
-                textBox_ZFtMax.Text = fpTool.fParam[SideId].roiP[id].ZftMax.ToString();
-                textBox_ZFtMin.Text = fpTool.fParam[SideId].roiP[id].ZftMin.ToString();
-                textBox_ZFtRad.Text = fpTool.fParam[SideId].roiP[id].ZftRad.ToString();
-                textBox_Clipping.Text = fpTool.fParam[SideId].roiP[id].ClippingPer.ToString();
-                textBox_SmoothCont.Text = fpTool.fParam[SideId].roiP[roiID].SmoothCont.ToString();
-                //textBox_IndEnd2.Text = fpTool.fParam[SideId].roiP[id].EndOffSet2.ToString();
+                //comboBox2.SelectedItem = fpTool.fParam[SideId].roiP[id].LineOrCircle;
+                ////label_xoffset2.Text = fpTool.fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
+                ////label20.Text = fpTool.fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
+                //checkBox_useLeft.Checked = fpTool.fParam[SideId].roiP[id].useLeft;
+                //checkBox_center.Checked = fpTool.fParam[SideId].roiP[id].useCenter;
+                //checkBox_zZoom.Checked = fpTool.fParam[SideId].roiP[id].useZzoom;
 
-                comboBox2.SelectedItem = fpTool.fParam[SideId].roiP[id].LineOrCircle;
-                //label_xoffset2.Text = fpTool.fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "旋转角度" : "x终点偏移";
-                //label20.Text = fpTool.fParam[SideId].roiP[id].LineOrCircle == "圆弧段" ? "度" : "pix";
-                checkBox_useLeft.Checked = fpTool.fParam[SideId].roiP[id].useLeft;
-                checkBox_center.Checked = fpTool.fParam[SideId].roiP[id].useCenter;
-                checkBox_zZoom.Checked = fpTool.fParam[SideId].roiP[id].useZzoom;
-
-                checkBox_midPt.Checked = fpTool.fParam[SideId].roiP[id].useMidPt;
-                checkBox_Far.Checked = !fpTool.fParam[SideId].roiP[id].useNear;
-                textBox_downDist.Text = fpTool.fParam[SideId].roiP[id].TopDownDist.ToString();
-                textBox_xDist.Text = fpTool.fParam[SideId].roiP[id].xDist.ToString();
-                comboBox_GetPtType.SelectedIndex = fpTool.fParam[SideId].roiP[id].SelectedType;
+                //checkBox_midPt.Checked = fpTool.fParam[SideId].roiP[id].useMidPt;
+                //checkBox_Far.Checked = !fpTool.fParam[SideId].roiP[id].useNear;
+                //textBox_downDist.Text = fpTool.fParam[SideId].roiP[id].TopDownDist.ToString();
+                //textBox_xDist.Text = fpTool.fParam[SideId].roiP[id].xDist.ToString();
+                //comboBox_GetPtType.SelectedIndex = fpTool.fParam[SideId].roiP[id].SelectedType;
 
                 RoiIsMoving = false;
             }
@@ -6324,6 +6512,7 @@ namespace SagensVision.VisionTool
                 {
                     return;
                 }
+                RoiIsMoving = true;
                 int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 int currentId = dataGridView1.CurrentCell.RowIndex;
                 currentId = CurrentRowIndex;
@@ -6364,7 +6553,7 @@ namespace SagensVision.VisionTool
                 HTuple NewCoord = CopyTemp2.getModelData();
                 RP.CenterRow = NewCoord[0]; RP.CenterCol = NewCoord[1];
                 fpTool.fParam[Id].roiP.Insert(currentId + 1, RP);
-                fpTool.fParam[Id].roiP[currentId + 1].LineOrCircle = comboBox2.SelectedItem.ToString();
+                fpTool.fParam[Id].roiP[currentId + 1].LineOrCircle = RP.LineOrCircle;
                 //insert
                 dataGridView1.Rows.Insert(currentId + 1);
                 dataGridView1.Rows[currentId + 1].Cells[0].Value = currentId + 1;
@@ -6377,6 +6566,7 @@ namespace SagensVision.VisionTool
                     dataGridView1.Rows[i].Cells[0].Value = (i + 1);
                 }
                 dataGridView1.ClearSelection();
+                RoiIsMoving = false;
             }
             catch (Exception)
             {
@@ -6728,9 +6918,720 @@ namespace SagensVision.VisionTool
         public double Angle;
     }
 
+    //[Serializable]
+    //public class FitProfileParam
+    //{
+    //    /// <summary>
+    //    /// 选择最高点左侧
+    //    /// </summary>
+    //    public bool BeLeft = false;
+    //    /// <summary>
+    //    /// 有效轮廓起始点
+    //    /// </summary>
+    //    public int StartPt = 0;
+    //    /// <summary>
+    //    /// 有效轮廓结束点
+    //    /// </summary>
+    //    public int EndPt = 0;
+    //    /// <summary>
+    //    /// 最高点下降距离
+    //    /// </summary>
+    //    public double UpDownDist = 0;
+    //    /// <summary>
+    //    /// 单边高度偏移
+    //    /// </summary>
+    //    public double SigleZoffset = 0;
+    //    /// <summary>
+    //    /// 最小区间高度
+    //    /// </summary>
+    //    public double MinZ = 0;
+    //    /// <summary>
+    //    /// 最大区间高度
+    //    /// </summary>
+    //    public double MaxZ = 0.5;
+
+    //    public List<RoiParam> roiP = new List<RoiParam>();
+    //    public List<string> DicPointName = new List<string>();
+    //    /// <summary>
+    //    /// 使用定位
+    //    /// </summary>
+    //    public bool UseFix = false;
+    //}
+
+    
+    [Serializable]
+    public class RoiParam
+    {
+        public static bool isInvoke = false;
+        public static event Action<ValueChangedType,double> ChangeSection;
+       
+        #region 锚定轮廓roi 
+        [BrowsableAttribute(false)]
+        public double AnchorRow { get; set; } = 0;
+        [BrowsableAttribute(false)]
+        public double AnchorCol { get; set; } = 0;
+        #endregion
+
+        /// <summary>
+        /// 选择直线段 还是圆弧段 连接段
+        /// </summary>
+        [BrowsableAttribute(false)]
+        public string LineOrCircle { get; set; } = "直线段";
+
+        #region 截面设置
+        [Category("截面设置")]
+        [DisplayName("矩形区域截面数量")]
+        [Description("截面数量")]
+        public int NumOfSection
+        {
+            get { return _NumOfSection; }
+            set
+            {
+                if (value==0)
+                {
+                    value = 10;
+                }
+                _NumOfSection = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.数量,_NumOfSection);
+
+                }
+               
+            }
+
+        }
+        int _NumOfSection = 0;
+
+        [Category("截面设置")]
+        [DisplayName("矩形长轴")]
+        [Description("截面矩形长轴的一半 单位pix")]
+        public double Len1
+        {
+            get { return _Len1; }
+            set
+            {
+                if (value == 0)
+                {
+                    value = 100;
+                }
+                _Len1 = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.长度,_Len1);
+                }
+                
+            }
+
+        }
+        double _Len1 = 0;
+
+      [Category("截面设置")]
+        [DisplayName("矩形短轴")]
+        [Description("截面矩形短轴的一半 单位pix")]
+        public double Len2
+        {
+            get { return _Len2; }
+            set
+            {
+                if (value == 0)
+                {
+                    value = 50;
+                }
+                _Len2 = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.宽度,_Len2);
+                }
+               
+            }
+
+        }
+        double _Len2 = 0;
+
+        [Category("截面设置")]
+        [DisplayName("矩形中心行坐标")]
+        [Description("矩形中心行坐标 单位pix")]
+        public double CenterRow
+        {
+            get { return _CenterRow; }
+            set
+            {
+                if (value == 0)
+                {
+                    value = 50;
+                }
+                _CenterRow = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.行坐标,_CenterRow);
+                }
+               
+            }
+
+        }
+        double _CenterRow = 0;
+        [Category("截面设置")]
+        [DisplayName("矩形中心列坐标")]
+        [Description("矩形中心列坐标 单位pix")]
+        public double CenterCol
+        {
+            get { return _CenterCol; }
+            set
+            {
+                if (value == 0)
+                {
+                    value = 50;
+                }
+                _CenterCol = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.列坐标,_CenterCol);
+                }
+                
+            }
+
+        }
+        double _CenterCol = 0;
+        [BrowsableAttribute(false)]
+        [Category("截面设置")]
+        [DisplayName("矩形角度 phi")]
+        [Description("矩形角度 弧度")]
+        public double phi
+        {
+            get
+            {
+                //HTuple rad = new HTuple();
+                //HOperatorSet.TupleRad(_phi, out rad);
+                return _phi;
+            }
+            set
+            {
+                HTuple deg = new HTuple();
+                HOperatorSet.TupleDeg(value, out deg);
+                phi_deg = deg;
+                //if (isInvoke)
+                //{
+                //    ChangeSection?.Invoke(ValueChangedType.角度);
+                //}
+               
+            }
+
+        }
+        [Category("截面设置")]
+        [DisplayName("矩形角度")]
+        [Description("矩形角度 单位度")]
+        public double phi_deg
+        {
+            get
+            {              
+                return _Deg;
+            }
+            set
+            {
+                //HTuple deg = new HTuple();
+                //HOperatorSet.TupleDeg(value, out deg);
+                HTuple rad = new HTuple();
+                HOperatorSet.TupleRad(value, out rad);
+                _phi = rad;
+                _Deg = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.角度,_phi);
+                }
+
+            }
+        }
+        double _phi = 0;
+        double _Deg = 0;
+        #endregion
+
+        #region 拟合直线相对锚定点偏移 取胶槽
+        [BrowsableAttribute(false)]
+        public double Xoffset2 { get; set; } = 0;
+        [BrowsableAttribute(false)]
+        public double Yoffset2 { get; set; } = 0;
+        public Point StartOffSet1 = new Point(0, 0);//拟合直线相对锚定点偏移
+        public Point EndOffSet1  = new Point(0, 0);
+        public Point StartOffSet2  = new Point(0, 0);
+        public Point EndOffSet2 = new Point(0, 0);
+        #endregion
+
+        #region 偏移设置
+        [Category("偏移设置")]
+        [DisplayName("X方向偏移")]
+        [Description("X方向偏移 单位mm")]
+        public double Xoffset
+        {
+            get
+            {
+                return _Xoffset;
+            }
+            set
+            {
+                _Xoffset = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.X方向偏移, _Xoffset);
+                }
+            }
+        }
+        double _Xoffset = 0;
+        [Category("偏移设置")]
+        [DisplayName("Y方向偏移")]
+        [Description("Y方向偏移 单位mm")]
+        public double Yoffset
+        {
+            get
+            {
+                return _Yoffset;
+            }
+            set
+            {
+                _Yoffset = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.Y方向偏移, _Yoffset);
+                }
+            }
+        }
+        double _Yoffset = 0;
+        [Category("偏移设置")]
+        [DisplayName("Roi方向偏移")]
+        [Description("Roi方向偏移 单位mm")]
+        public double offset
+        {
+            get
+            {
+                return _offset;
+            }
+            set
+            {
+                _offset = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.Roi方向偏移, _offset);
+                }
+            }
+        }
+        double _offset = 0;
+        [Category("偏移设置")]
+        [DisplayName("Z方向偏移")]
+        [Description("Z方向偏移 单位mm")]       
+        public double Zoffset
+        {
+            get
+            {
+                return _Zoffset;
+            }
+            set
+            {
+                _Zoffset = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.Z方向偏移, _Zoffset);
+                }
+            }
+        }
+        double _Zoffset = 0;
+
+        #endregion
+
+        #region 轮廓设置
+        [Category("轮廓设置")]
+        [DisplayName("轮廓旋转角度")]
+        [Description("轮廓旋转角度设置 单位度")]
+        public int AngleOfProfile
+        {
+            get { return _AngleOfProfile; }
+            set
+            {
+                if (value >360)
+                {
+                    value = 360;
+                }
+                if (value<-360)
+                {
+                    value = -360;
+                }
+                _AngleOfProfile = value;
+                if (isInvoke)
+                {                    
+                    ChangeSection?.Invoke(ValueChangedType.轮廓旋转角度, _AngleOfProfile);
+                }
+            }
+        }
+        int _AngleOfProfile = 0;
+
+        #endregion
+        #region 找线设置
+        [TypeConverter(typeof(FileNameConverter))]
+        [Category("找线设置")]
+        [DisplayName("找线方式设置")]
+        [Description("找线方式设置 0 为极值 1 为最高点下降")]
+        public string TypeOfFindLine
+        {
+            get
+            {
+                return _TypeOfFindLine;
+            }
+            set
+            {
+                _TypeOfFindLine = value;
+                if (isInvoke)
+                {
+                    double a = _TypeOfFindLine == "极值" ? 0 : 1;
+                    ChangeSection?.Invoke(ValueChangedType.找线方式设置, a);
+                }
+            }
+        }
+        string _TypeOfFindLine = "极值";
+
+        [BrowsableAttribute(false)]
+        public int SelectedType
+        {
+            get
+            {
+                if (TypeOfFindLine == "极值")
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 1;
+                }
+            } 
+            set
+            {                
+            }
+        } 
+
+        [Category("找线设置")]
+        [DisplayName("最高点下降距离")]
+        [Description("最高点下降距离 单位mm")]
+        public double TopDownDist
+        {
+            get { return _TopDownDist; }
+            set
+            {
+                if (value > 360)
+                {
+                    value = 360;
+                }
+                if (value < -360)
+                {
+                    value = -360;
+                }
+                _TopDownDist = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.最高点下降距离, _TopDownDist);
+                }
+            }
+        }
+        double _TopDownDist = 0;
+
+        [Category("找线设置")]
+        [DisplayName("X方向距离")]
+        [Description("离最高点或极值点的距离 单位mm")]
+        public double xDist
+        {
+            get { return _xDist; }
+            set
+            {
+                if (value > 360)
+                {
+                    value = 360;
+                }
+                if (value < -360)
+                {
+                    value = -360;
+                }
+                _xDist = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.X方向距离, _xDist);
+                }
+            }
+        }
+        double _xDist = 0;
+
+        [Category("找线设置")]
+        [DisplayName("是否取左侧值")]
+        [Description("在最高点或极值点的左侧 为 true 否则为 false")]
+        public bool useLeft
+        {
+            get { return _useLeft; }
+            set
+            {
+                _useLeft = value;
+                if (isInvoke)
+                {
+                    double a = _useLeft ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.是否取左侧值, a);
+                }
+            }
+        }
+        bool _useLeft = true;
+
+        [Category("找线设置")]
+        [DisplayName("是否取中间点")]
+        [Description("对于长边可选择是否 取最外侧边缘和台阶边缘中间点，取中间点为true 否则为false")]
+        public bool useMidPt
+        {
+            get { return _useMidPt; }
+            set
+            {
+                _useMidPt = value;
+                if (isInvoke)
+                {
+                    double a = _useMidPt ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.是否取中间点, a);
+                }
+            }
+        }
+        bool _useMidPt = false;
+
+        [Category("找线设置")]
+        [DisplayName("取最近点还是最远点")]
+        [Description("是否选择离最高点或极值点的最远距离的点，取最近点为true 否则为false")]
+        public bool useNear
+        {
+            get { return _useNear; }
+            set
+            {
+                _useNear = value;
+                if (isInvoke)
+                {
+                    double a = _useNear ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.取最近点还是最远点, a);
+                }
+            }
+        }
+        bool _useNear = false;
+
+        [Category("找线设置")]
+        [DisplayName("取轮廓区域中心点")]
+        [Description("是否选择区域中心点，取中心点为true 否则为false")]
+        public bool useCenter
+        {
+            get { return _useCenter; }
+            set
+            {
+                _useCenter = value;
+                if (isInvoke)
+                {
+                    double a = _useCenter ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.取轮廓区域中心点, a);
+                }
+            }
+        }
+        bool _useCenter = false;
+
+        [Category("找线设置")]
+        [DisplayName("是否启用Z向缩放")]
+        [Description("是否选择区域中心点，启用缩放为true 否则为false")]
+        public bool useZzoom
+        {
+            get { return _useZzoom; }
+            set
+            {
+                _useZzoom = value;
+                if (isInvoke)
+                {
+                    double a = _useZzoom ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.是否启用Z向缩放, a);
+                }
+            }
+        }
+        bool _useZzoom = false;
+
+        [Category("轮廓设置")]
+        [DisplayName("轮廓Z向拉伸")]
+        [Description("轮廓沿Z向拉伸比列 单位为倍数")]
+        public double ClippingPer
+        {
+            get { return _ClippingPer; }
+            set
+            {
+                _ClippingPer = value;
+                if (isInvoke)
+                {                   
+                    ChangeSection?.Invoke(ValueChangedType.轮廓Z向拉伸, _ClippingPer);
+                }
+            }
+        }
+        double _ClippingPer =0;
+
+        [Category("轮廓设置")]
+        [DisplayName("轮廓平滑")]
+        [Description("轮廓平滑系数 ")]
+        public double Sigma
+        {
+            get { return _Sigma; }
+            set
+            {
+                _Sigma = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.轮廓平滑, _Sigma);
+                }
+            }
+        }
+        double _Sigma = 0.5;
+
+
+        [Category("轮廓设置")]
+        [DisplayName("直线滤波系数")]
+        [Description("直线找点滤波系数 范围设置0-0.5")]
+        public double SmoothCont
+        {
+            get { return _SmoothCont; }
+
+            set
+            {
+                if (value<0)
+                {
+                    value = 0;
+                }
+                if (value>0.5)
+                {
+                    value = 0.5;
+                }
+                _SmoothCont = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.直线滤波系数, _SmoothCont);
+                }
+            }
+        }
+        double _SmoothCont = 0;
+       //滤波系数
+
+       [Category("轮廓设置")]
+        [DisplayName("高度方向滤波最大百分比")]
+        [Description("高度方向滤波最大百分比 范围设置0-100")]
+       
+        public double ZftMax
+        {
+            get
+            { return _ZftMax; }
+            set
+            {
+                if (value > 100)
+                {
+                    value = 100;
+                }
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                _ZftMax = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.高度方向滤波最大百分比, _ZftMax);
+                }
+            }
+        }
+        double _ZftMax = 0;
+
+        [Category("轮廓设置")]
+        [DisplayName("高度方向滤波最小百分比")]
+        [Description("高度方向滤波最小百分比 范围设置0-100")]
+        public double ZftMin
+        {
+            get
+            { return _ZftMin; }
+            set
+            {
+                if (value > 100)
+                {
+                    value = 100;
+                }
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                _ZftMin = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.高度方向滤波最小百分比, _ZftMin);
+                }
+            }
+        }
+        double _ZftMin = 0;
+        [Category("轮廓设置")]
+        [DisplayName("高度方向滤波半径")]
+        [Description("高度方向滤波半径 单位mm")]
+        public double ZftRad
+        {
+            get { return _ZftRad; }
+            set
+            {
+                _ZftRad = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.高度方向滤波半径, _ZftRad);
+                }
+            }
+        }
+        double _ZftRad = 0.5;
+        #endregion
+
+        public RoiParam Clone()
+        {
+            RoiParam temp = new RoiParam();
+            temp = (RoiParam)this.MemberwiseClone();
+            return temp;
+        }
+        public class FileNameConverter : StringConverter
+        {
+            public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+            {
+                return true;
+            }
+            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+            {
+                return new StandardValuesCollection(new string[] {"极值","最高点下降"});
+            }
+        }
+    }
+
+    public enum ValueChangedType
+    {
+        数量 = 1,
+        长度 = 2,
+        宽度 = 3,
+        角度 = 4,
+        行坐标 = 5,
+        列坐标 = 6,
+        X方向偏移 =7,
+        Y方向偏移 =8,
+        Roi方向偏移 =9,
+        Z方向偏移 = 10,
+        轮廓旋转角度 = 11,
+        最高点下降距离 =12,
+        X方向距离 =13,
+        是否取左侧值 =14,
+        是否取中间点 =15,
+        取最近点还是最远点 =16,
+        取轮廓区域中心点 =17,
+        是否启用Z向缩放 =18,
+        轮廓Z向拉伸 =19,
+        轮廓平滑 =20,
+        直线滤波系数 =21,
+        高度方向滤波最大百分比 =22,
+        高度方向滤波最小百分比 =23,
+        高度方向滤波半径 =24,
+        找线方式设置 = 25
+    }
+
     [Serializable]
     public class FitProfileParam
     {
+        #region 截面参数设置
+       
+        #endregion
         /// <summary>
         /// 选择最高点左侧
         /// </summary>
@@ -6768,90 +7669,6 @@ namespace SagensVision.VisionTool
         public bool UseFix = false;
     }
 
-    [Serializable]
-    public class RoiParam
-    {
-        /// <summary>
-        /// 矩形区域截面数量
-        /// </summary>
-        public int NumOfSection = 2;
-        /// <summary>
-        /// 矩形长轴
-        /// </summary>
-        public double Len1 = 100;
-        /// <summary>
-        /// 矩形短轴
-        /// </summary>
-        public double Len2 = 50;
-        /// <summary>
-        /// 矩形中心行坐标
-        /// </summary>
-        public double CenterRow = 0;
-        /// <summary>
-        /// 矩形中心列坐标
-        /// </summary>
-        public double CenterCol = 0;
-        /// <summary>
-        /// 矩形角度
-        /// </summary>
-        public double phi = 0;
-        /// <summary>
-        /// 轮廓旋转角度
-        /// </summary>
-        public int AngleOfProfile = -20;
+   
 
-        public double AnchorRow = 0;
-        public double AnchorCol = 0;
-        /// <summary>
-        /// 选择直线段 还是圆弧段 连接段
-        /// </summary>
-        public string LineOrCircle = "直线段";
-        public double Xoffset = 0;
-        public double Yoffset = 0;
-        public double offset = 0;
-        public double Zoffset = 0;
-        public double Xoffset2 = 0;
-        public double Yoffset2 = 0;
-        public Point StartOffSet1 = new Point(0, 0);//拟合直线相对锚定点偏移
-        public Point EndOffSet1 = new Point(0, 0);
-        public Point StartOffSet2 = new Point(0, 0);
-        public Point EndOffSet2 = new Point(0, 0);
-        public int ZftMax = 0;
-        public int ZftMin = 0;
-        public double ZftRad = 0;
-        public double TopDownDist = 0;
-        public double xDist = 0;
-        public double ClippingPer = 0;//忽略点百分比
-        public double SmoothCont = 0;//滤波系数
-        /// <summary>
-        ///  0 极值 1 最高点下降
-        /// </summary>
-        public int SelectedType = 0;
-        /// <summary>
-        /// 取左侧值
-        /// </summary>
-        public bool useLeft = true;
-        /// <summary>
-        /// 取中间点
-        /// </summary>
-        public bool useMidPt = false;
-        /// <summary>
-        /// 取最近点还是最远点
-        /// </summary>
-        public bool useNear = false;
-        /// <summary>
-        /// 圆弧处取区域中心点
-        /// </summary>
-        public bool useCenter = false;
-        /// <summary>
-        /// z缩放
-        /// </summary>
-        public bool useZzoom = false;
-        public RoiParam Clone()
-        {
-            RoiParam temp = new RoiParam();
-            temp = (RoiParam)this.MemberwiseClone();
-            return temp;
-        }
-    }
 }
