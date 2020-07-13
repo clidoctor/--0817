@@ -214,8 +214,8 @@ namespace SagensVision.VisionTool
                 //double s1 = Math.Abs(Math.Cos(Phi[ProfileId][4]));
                 //double s2 = Math.Abs(Math.Sin(Phi[ProfileId][4]));
 
-                double s1 = Math.Cos(Phi[ProfileId][4]);
-                double s2 = Math.Sin(Phi[ProfileId][4]);
+                double s1 = Math.Abs(Math.Cos(Phi[ProfileId][4]));
+                double s2 = Math.Abs(Math.Sin(Phi[ProfileId][4]));
 
                 double scale = 0;
 
@@ -718,6 +718,7 @@ namespace SagensVision.VisionTool
                 HTuple ColNew = temp_2[IntersetID];
                 double Zzoom = 0;
                 HTuple maxZ = new HTuple(); HTuple mZCol = new HTuple();
+                HObject Profile = new HObject();
                 //最高点下降
                 if (fParam[Id].roiP[roiID].SelectedType == 1)
                 {
@@ -727,6 +728,11 @@ namespace SagensVision.VisionTool
                     mZCol = ColNew[mZColId];
                     RotateRow = row;
                     RotateCol = col;
+                    HOperatorSet.GenContourPolygonXld(out Profile, RotateRow, RotateCol);
+                    if (hwnd_profile != null && ShowFeatures)
+                    {
+                        hwnd_profile.viewWindow.displayHobject(Profile, "white");
+                    }
                 }
                 else
                 {
@@ -755,7 +761,9 @@ namespace SagensVision.VisionTool
                         RotateRow = row;
                         RotateCol = col;
                     }
-
+                   
+                    HOperatorSet.GenContourPolygonXld(out Profile, RotateRow, RotateCol);
+                    
                     if (maxZ.Length == 0)
                     {
                         return "Ignore";
@@ -805,16 +813,16 @@ namespace SagensVision.VisionTool
 
 
                 //求交点
-                HObject Line = new HObject(); HObject Profile = new HObject(); HObject Intersect = new HObject();
+                HObject Line = new HObject();  HObject Intersect = new HObject();
                 HOperatorSet.GenContourPolygonXld(out Line, rowStart.TupleConcat(rowEnd), colStart.TupleConcat(colEnd));
 
            
-                HOperatorSet.GenContourPolygonXld(out Profile, RotateRow, RotateCol);
+               
                 HTuple IntersecR, intersecC, isOver;
                 HOperatorSet.IntersectionContoursXld(Profile, Line, "mutual", out IntersecR, out intersecC, out isOver);
                 if (hwnd_profile != null && ShowFeatures)
                 {
-                    hwnd_profile.viewWindow.displayHobject(Profile, "white");
+                    //hwnd_profile.viewWindow.displayHobject(Profile, "white");
                     hwnd_profile.viewWindow.displayHobject(Line, "green");
 
                 }
