@@ -1133,21 +1133,6 @@
         rwED/gtPhKgGMZyDxQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="barCheckItem2.ImageOptions.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EwAACxMBAJqcGAAAAAZ0RVh0VGl0bGUAqO7SJwAAADVJREFUOE9j+P//P0UYqyApGEwYGxv/JwcTMgAk
-        jg+PGgBUM2oAHQwgiOEGUIKxChKP/zMAABHdwxjukJvYAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="barCheckItem2.ImageOptions.LargeImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EwAACxMBAJqcGAAAABt0RVh0VGl0bGUARmlsdGVyO0xlZnRQYW5lbDtNZW51UdpgqAAAAE5JREFUWEft
-        zrEJADAMA8Hs5P1nU0iTJuoMMoEvHoxwcUvSaHZMZsdkdkx2j6pSsi7g/HcCAAAAAAAAAAAAAOB/QLsH
-        MJUdk9kxmR1zaW14UOybbJSIkwAAAABJRU5ErkJggg==
-</value>
-  </data>
   <data name="btn_clearbuffer.ImageOptions.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m

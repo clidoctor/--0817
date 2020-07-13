@@ -44,6 +44,7 @@ namespace SagensVision
         public static GlobalPointSet globalPointSet_Left = new GlobalPointSet();
 
         public static bool isShowHeightImg;
+        public static bool isShowSurfaceImg;
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
         public static bool sktOK = false;

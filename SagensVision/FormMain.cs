@@ -689,7 +689,6 @@ namespace SagensVision
             //MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
             //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
-            barCheckItem2.Checked = true;
             NewProduct.AddToFormain += ChangeBarEditValue;
             VisionTool.GlobalParam.ChangeType += ChangeBarEditValue;
             //加载config
@@ -704,8 +703,33 @@ namespace SagensVision
             isLoading = false;
             setValue(true);
             setValue(false);
+
+            RepositoryItemComboBox w = (RepositoryItemComboBox)barEditItem2.Edit;
+            w.Items.Add("亮度图");
+            w.Items.Add("曲面图");
+            w.Items.Add("彩色图");
+            barEditItem2.EditValueChanged += ShowImgTypeChanged;
+            barEditItem2.EditValue = "亮度图";
         }
 
+        private void ShowImgTypeChanged(object sender, EventArgs e)
+        {
+            if ("亮度图" == barEditItem2.EditValue.ToString())
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = false;
+            }
+            else if ("曲面图" == barEditItem2.EditValue.ToString())
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = true;
+            }
+            else
+            {
+                MyGlobal.isShowHeightImg = false;
+                MyGlobal.isShowSurfaceImg = false;
+            }
+        }
 
         void ConnectTcp()
         {
@@ -1138,7 +1162,7 @@ namespace SagensVision
                             //{
                             Action sw = () =>
                             {
-                                if (rotateAlignImg.CountObj() != 0)
+                                if (rotateAlignImg.CountObj() != 0 && MyGlobal.isShowSurfaceImg)
                                 {
                                     MyGlobal.hWindow_Final[Station - 1].HobjectToHimage(rotateAlignImg);
                                 }
@@ -5732,19 +5756,7 @@ namespace SagensVision
         }
 
 
-        private void barCheckItem2_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            MyGlobal.isShowHeightImg = barCheckItem2.Checked;
-            //if (MyGlobal.isShowHeightImg)
-            //{
-            //    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
-            //    {
-            //        MyGlobal.hWindow_Final[i].HobjectToHimage(MyGlobal.ImageMulti[MyGlobal.ImageMulti.Count - 1][0]);
-            //    }
-
-            //}
-        }
-
+     
         private void barButtonItem11_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //ImgRotateFrm imgrotatefrm = new ImgRotateFrm();
