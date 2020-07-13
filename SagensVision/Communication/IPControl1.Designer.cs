@@ -34,11 +34,13 @@
             this.textBox_port = new System.Windows.Forms.TextBox();
             this.textBox_MotorIp = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.cb_Client = new System.Windows.Forms.CheckBox();
             this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.cb_Client);
             this.groupBox6.Controls.Add(this.label1);
             this.groupBox6.Controls.Add(this.textBox1);
             this.groupBox6.Controls.Add(this.textBox_port);
@@ -114,6 +116,17 @@
             this.label14.TabIndex = 26;
             this.label14.Text = "运动控制IP地址";
             // 
+            // cb_Client
+            // 
+            this.cb_Client.AutoSize = true;
+            this.cb_Client.Location = new System.Drawing.Point(14, 134);
+            this.cb_Client.Name = "cb_Client";
+            this.cb_Client.Size = new System.Drawing.Size(63, 21);
+            this.cb_Client.TabIndex = 33;
+            this.cb_Client.Text = "客户端";
+            this.cb_Client.UseVisualStyleBackColor = true;
+            this.cb_Client.CheckedChanged += new System.EventHandler(this.cb_Client_CheckedChanged);
+            // 
             // IPControl1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -135,5 +148,6 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox cb_Client;
     }
 }

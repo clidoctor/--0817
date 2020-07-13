@@ -47,7 +47,8 @@ namespace SagensVision
         public static HWindow_Final[] hWindow_Final = new HWindow_Final[4];
         public static Thread thdWaitForClientAndMessage;
         public static bool sktOK = false;
-        public static HTuple[] HomMat3D = new HTuple[4];
+        public static HTuple[] HomMat3D_Right = new HTuple[4];
+        public static HTuple[] HomMat3D_Left = new HTuple[4];
         //public static Fixcs fix = new Fixcs();
         public static FitLineSet flset2 = new FitLineSet("Fix");
         public static List<HObject[]> ImageMulti = new List<HObject[]>();
@@ -77,6 +78,7 @@ namespace SagensVision
         public  string SendMsg = "";
         public  string MotorIpAddress = "127.0.0.1";
         public  int MotorPort = 8080;
+        public  bool IsTcpClient = true;
         public DataContext dataContext = new DataContext();
         public int Count = 0;
         public double zRange;//扫描z范围
@@ -105,7 +107,7 @@ namespace SagensVision
         public GlobalParam[] gbParam = new GlobalParam[4];
         //图像旋转角度
         public int[] imgRotateArr = new int[4];
-
+        public bool[] IsUp = new bool[4];//拼图方向在上还是在下
         //产能
         public int OkCnt = 0;
         public int AnchorErrorCnt = 0;

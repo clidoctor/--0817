@@ -34,6 +34,19 @@ namespace SagensSdk
             return obj;
         }
 
+        public static void ConvertDataToKdata(SurfaceZSaveDat ssd, string SaveKdatDirectoy, string Side)
+        {
+            PointMsg pmoffset = ssd.offset;
+            PointMsg pmscale = ssd.resolution; ;
+            Point3d64f poffset = new Point3d64f() { x = pmoffset.x, y = pmoffset.y, z = pmoffset.z };
+            Point3d64f pscale = new Point3d64f() { x = pmscale.x, y = pmscale.y, z = pmscale.z };
+            int size = Marshal.SizeOf(typeof(short));
+            IntPtr surfacePtr = Marshal.AllocHGlobal(size * ssd.points.Length);
+            Marshal.Copy(ssd.points, 0, surfacePtr, ssd.points.Length);
+            GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)ssd.width, height = (int)ssd.height, offset = poffset, scale = pscale };
+            GoSaveSurfaceGraphic.SaveSufaceToFile($"{SaveKdatDirectoy}{Side}.kdat", ref insurface, false);
+            Marshal.FreeHGlobal(surfacePtr);
+        }
 
         public static void GetUnlineRunImg(SurfaceZSaveDat ssd, SurfaceIntensitySaveDat sid, SurfaceZSaveDat szd, double zStart, double z_byte_resolution, out HObject zoomHeightImg, out HObject zoomIntensityImg, out HObject zoomRgbImg, out HObject zoomPlaneImg)
         {
@@ -188,18 +201,6 @@ namespace SagensSdk
             }
         }
 
-        public static void ConvertDataToKdata(SurfaceZSaveDat ssd, string SaveKdatDirectoy, string Side)
-        {
-            PointMsg pmoffset = ssd.offset;
-            PointMsg pmscale = ssd.resolution; ;
-            Point3d64f poffset = new Point3d64f() { x = pmoffset.x, y = pmoffset.y, z = pmoffset.z };
-            Point3d64f pscale = new Point3d64f() { x = pmscale.x, y = pmscale.y, z = pmscale.z };
-            int size = Marshal.SizeOf(typeof(short));
-            IntPtr surfacePtr = Marshal.AllocHGlobal(size * ssd.points.Length);
-            Marshal.Copy(ssd.points, 0, surfacePtr, ssd.points.Length);
-            GoSurface insurface = new GoSurface() { data = surfacePtr, width = (int)ssd.width, height = (int)ssd.height, offset = poffset, scale = pscale };
-            GoSaveSurfaceGraphic.SaveSufaceToFile($"{SaveKdatDirectoy}{Side}.kdat", ref insurface, false);
-            Marshal.FreeHGlobal(surfacePtr);
-        }
+     
     }
 }

@@ -44,6 +44,7 @@ namespace SagensVision.VisionTool
                     textBox_totalZ.Text = MyGlobal.globalPointSet_Right.TotalZoffset.ToString();
                     textBox_xOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Xoffset.ToString();
                     textBox_yOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Yoffset.ToString();
+                    cb_IsUp.Checked = MyGlobal.globalPointSet_Right.IsUp[0];
                 }
                 else
                 {
@@ -56,6 +57,7 @@ namespace SagensVision.VisionTool
                     textBox_totalZ.Text = MyGlobal.globalPointSet_Left.TotalZoffset.ToString();
                     textBox_xOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Xoffset.ToString();
                     textBox_yOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Yoffset.ToString();
+                    cb_IsUp.Checked = MyGlobal.globalPointSet_Left.IsUp[0];
                 }
 
                 checkedListBox_save_data.SetItemChecked(0, MyGlobal.globalConfig.isSaveKdat);
@@ -189,6 +191,20 @@ namespace SagensVision.VisionTool
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SideName = comboBox1.SelectedItem.ToString();
+            int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            if (isRight)
+            {
+                textBox_xOffset.Text = MyGlobal.globalPointSet_Right.gbParam[SideId].Xoffset.ToString();
+                textBox_yOffset.Text = MyGlobal.globalPointSet_Right.gbParam[SideId].Yoffset.ToString();
+                cb_IsUp.Checked = MyGlobal.globalPointSet_Right.IsUp[SideId];
+            }
+            else
+            {
+                textBox_xOffset.Text = MyGlobal.globalPointSet_Left.gbParam[SideId].Xoffset.ToString();
+                textBox_yOffset.Text = MyGlobal.globalPointSet_Left.gbParam[SideId].Yoffset.ToString();
+                cb_IsUp.Checked = MyGlobal.globalPointSet_Left.IsUp[SideId];
+            }
+            
         }
 
         private void simpleButton1_Click(object sender, EventArgs e)
@@ -363,6 +379,21 @@ namespace SagensVision.VisionTool
         private void cb_Features_CheckedChanged(object sender, EventArgs e)
         {
             MyGlobal.globalConfig.enableFeature = cb_Features.Checked;
+        }
+
+        private void cb_IsUp_CheckedChanged(object sender, EventArgs e)
+        {
+            SideName = comboBox1.SelectedItem.ToString();
+            int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
+            if (isRight)
+            {
+                MyGlobal.globalPointSet_Right.IsUp[SideId] = cb_IsUp.Checked;
+            }
+            else
+            {
+                MyGlobal.globalPointSet_Left.IsUp[SideId] = cb_IsUp.Checked;
+
+            }
         }
     }
 

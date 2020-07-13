@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace SagensVision.Communication
 {
@@ -37,6 +38,7 @@ namespace SagensVision.Communication
             load = true;
             textBox_MotorIp.Text = MyGlobal.globalConfig.MotorIpAddress.ToString();
             textBox_port.Text = MyGlobal.globalConfig.MotorPort.ToString();
+            cb_Client.Checked = MyGlobal.globalConfig.IsTcpClient;
             load = false;
 
         }
@@ -55,6 +57,11 @@ namespace SagensVision.Communication
             }
         }
 
+        private void cb_Client_CheckedChanged(object sender, EventArgs e)
+        {
+            MyGlobal.globalConfig.IsTcpClient = cb_Client.Checked;
+        }
+
         private void textBox_MotorIp_TextChanged(object sender, EventArgs e)
         {
             if (load)
@@ -63,6 +70,11 @@ namespace SagensVision.Communication
             }
             try
             {
+                bool ok = Regex.IsMatch(textBox_port.Text.ToString(), @"^([-]?)\d*$");//是否为整数
+                if (!ok)
+                {
+                    return;
+                }
                 MotorIpAddress = textBox_MotorIp.Text.ToString();
                 MotorPort = Convert.ToInt32(textBox_port.Text.ToString());
                 okmsg = textBox1.Text.ToString();

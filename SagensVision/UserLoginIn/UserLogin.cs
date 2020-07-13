@@ -58,7 +58,7 @@ namespace SagensVision.UserLoginIn
 
                 MessageBox.Show(ex.Message);
             }
-            finally { textBox1.Text = ""; }
+            finally { /*textBox1.Text = "";*/ }
         }
         UserEdit edit = new UserEdit();
         private void simpleButton3_Click(object sender, EventArgs e)

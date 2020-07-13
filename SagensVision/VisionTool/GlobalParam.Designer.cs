@@ -71,6 +71,8 @@
             this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.cb_Features = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.cb_IsUp = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -181,6 +183,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.cb_IsUp);
+            this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.comboBox1);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.textBox_yOffset);
@@ -194,7 +198,7 @@
             this.groupBox3.Size = new System.Drawing.Size(265, 192);
             this.groupBox3.TabIndex = 75;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "单边偏移";
+            this.groupBox3.Text = "单边参数";
             // 
             // comboBox1
             // 
@@ -221,7 +225,7 @@
             // 
             // textBox_yOffset
             // 
-            this.textBox_yOffset.Location = new System.Drawing.Point(102, 139);
+            this.textBox_yOffset.Location = new System.Drawing.Point(102, 108);
             this.textBox_yOffset.Name = "textBox_yOffset";
             this.textBox_yOffset.Size = new System.Drawing.Size(100, 22);
             this.textBox_yOffset.TabIndex = 74;
@@ -230,7 +234,7 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(208, 142);
+            this.label4.Location = new System.Drawing.Point(208, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 22);
             this.label4.TabIndex = 75;
@@ -238,7 +242,7 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(21, 142);
+            this.label5.Location = new System.Drawing.Point(22, 108);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(75, 22);
             this.label5.TabIndex = 73;
@@ -246,7 +250,7 @@
             // 
             // textBox_xOffset
             // 
-            this.textBox_xOffset.Location = new System.Drawing.Point(102, 84);
+            this.textBox_xOffset.Location = new System.Drawing.Point(102, 73);
             this.textBox_xOffset.Name = "textBox_xOffset";
             this.textBox_xOffset.Size = new System.Drawing.Size(100, 22);
             this.textBox_xOffset.TabIndex = 71;
@@ -255,7 +259,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(208, 86);
+            this.label3.Location = new System.Drawing.Point(208, 75);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(27, 22);
             this.label3.TabIndex = 72;
@@ -263,7 +267,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(21, 87);
+            this.label2.Location = new System.Drawing.Point(21, 76);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(75, 22);
             this.label2.TabIndex = 70;
@@ -485,6 +489,25 @@
             this.cb_Features.UseVisualStyleBackColor = true;
             this.cb_Features.CheckedChanged += new System.EventHandler(this.cb_Features_CheckedChanged);
             // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(22, 144);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(61, 22);
+            this.label15.TabIndex = 79;
+            this.label15.Text = "拼图方向";
+            // 
+            // cb_IsUp
+            // 
+            this.cb_IsUp.AutoSize = true;
+            this.cb_IsUp.Location = new System.Drawing.Point(102, 143);
+            this.cb_IsUp.Name = "cb_IsUp";
+            this.cb_IsUp.Size = new System.Drawing.Size(74, 18);
+            this.cb_IsUp.TabIndex = 89;
+            this.cb_IsUp.Text = "位于上侧";
+            this.cb_IsUp.UseVisualStyleBackColor = true;
+            this.cb_IsUp.CheckedChanged += new System.EventHandler(this.cb_IsUp_CheckedChanged);
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -572,5 +595,7 @@
         private DevExpress.XtraEditors.SimpleButton simpleButton5;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox cb_Features;
+        private System.Windows.Forms.CheckBox cb_IsUp;
+        private System.Windows.Forms.Label label15;
     }
 }
