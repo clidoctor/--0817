@@ -38,12 +38,12 @@
             this.cb_runMode = new System.Windows.Forms.CheckBox();
             this.tb_PathName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb_kdata = new System.Windows.Forms.CheckBox();
             this.cb_RunAll = new System.Windows.Forms.CheckBox();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_next = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_pathImport = new DevExpress.XtraEditors.SimpleButton();
             this.sBtn_pathSelect = new DevExpress.XtraEditors.SimpleButton();
-            this.cb_kdata = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.listBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -95,6 +95,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(651, 234);
             this.listBox1.TabIndex = 13;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged_1);
             // 
             // cb_runMode
             // 
@@ -138,6 +139,16 @@
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "操作";
+            // 
+            // cb_kdata
+            // 
+            this.cb_kdata.ForeColor = System.Drawing.Color.Black;
+            this.cb_kdata.Location = new System.Drawing.Point(455, 91);
+            this.cb_kdata.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cb_kdata.Name = "cb_kdata";
+            this.cb_kdata.Size = new System.Drawing.Size(93, 23);
+            this.cb_kdata.TabIndex = 16;
+            this.cb_kdata.Text = "生成Kdata";
             // 
             // cb_RunAll
             // 
@@ -188,16 +199,6 @@
             this.sBtn_pathSelect.TabIndex = 11;
             this.sBtn_pathSelect.Text = "路径选择";
             this.sBtn_pathSelect.Click += new System.EventHandler(this.sBtn_pathSelect_Click);
-            // 
-            // cb_kdata
-            // 
-            this.cb_kdata.ForeColor = System.Drawing.Color.Black;
-            this.cb_kdata.Location = new System.Drawing.Point(455, 91);
-            this.cb_kdata.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.cb_kdata.Name = "cb_kdata";
-            this.cb_kdata.Size = new System.Drawing.Size(93, 23);
-            this.cb_kdata.TabIndex = 16;
-            this.cb_kdata.Text = "生成Kdata";
             // 
             // OfflineFrm
             // 

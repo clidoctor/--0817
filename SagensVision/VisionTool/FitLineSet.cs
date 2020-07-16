@@ -1033,7 +1033,8 @@ namespace SagensVision.VisionTool
                 double orignalDeg = fpTool.intersectCoordList[Id].Angle;
                 double currentDeg = intersection.Angle;
                 HOperatorSet.VectorAngleToRigid(fpTool.intersectCoordList[Id].Row, fpTool.intersectCoordList[Id].Col,
-                orignalDeg, intersection.Row, intersection.Col, currentDeg, out homMaxFix);
+                    orignalDeg, intersection.Row, intersection.Col, currentDeg, out homMaxFix);
+                //HOperatorSet.VectorAngleToRigid(0, 0, 0, 0, 0, 0, out homMaxFix);
 
                 //转换Roi
                 if (fpTool.roiList2[Id].Count > 0 && homMaxFix.Length > 0)

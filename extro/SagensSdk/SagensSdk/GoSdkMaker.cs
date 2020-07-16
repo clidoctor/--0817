@@ -239,16 +239,17 @@ namespace SagensSdk
                         //    SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset,width = (int)surfaceWidth,height = (int)surfaceHeight };
                         //    StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_H.dat", ssd);
                         //}
+
+                        PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                        PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                        SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
                         if (!isRecSurfaceZOK)
                         {
                             if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
                             {
-                                PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
-                                PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
-                                SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
                                 StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_L_H.dat", ssd);
                             }
-
+                            sddList_L.Add(ssd);
                             if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy) && RunSide!=null)
                             {
                                 
@@ -263,11 +264,12 @@ namespace SagensSdk
                             //保存dat
                             if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
                             {
-                                PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
-                                PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
-                                SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
+                                //PointMsg pmoffset = new PointMsg() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
+                                //PointMsg pmscale = new PointMsg() { x = ctx.xResolution, y = ctx.yResolution, z = ctx.zResolution };
+                                //SurfaceZSaveDat ssd = new SurfaceZSaveDat() { points = surfacePoints, resolution = pmscale, offset = pmoffset, width = (int)surfaceWidth, height = (int)surfaceHeight };
                                 StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_S_H.dat", ssd);
                             }
+                            sddList_S.Add(ssd);
                             if (SaveKdatDirectoy != null && !string.IsNullOrEmpty(SaveKdatDirectoy) && RunSide != null)
                             {
                                 Point3d64f poffset = new Point3d64f() { x = ctx.xOffset, y = ctx.yOffset, z = ctx.zOffset };
@@ -328,11 +330,12 @@ namespace SagensSdk
                         byte[] intensityArr = new byte[surfaceWidth * surfaceHeight];
                         Marshal.Copy(intensityPtr, intensityArr, 0, intensityArr.Length);
                         SurfaceDataIntensity = intensityArr;
+                        SurfaceIntensitySaveDat sid = new SurfaceIntensitySaveDat() { points = intensityArr, width = (int)surfaceWidth, height = (int)surfaceHeight };
                         if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))
                         {
-                            SurfaceIntensitySaveDat ssd = new SurfaceIntensitySaveDat() { points = intensityArr, width = (int)surfaceWidth, height = (int)surfaceHeight };
-                            StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_I.dat", ssd);
+                            StaticTool.WriteSerializable($"{SaveDatFileDirectory}Side{RunSide}_I.dat", sid);
                         }
+                        sddList_I.Add(sid);
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_RESAMPLED_PROFILE:
                         if (!EnableProfle)
@@ -396,6 +399,10 @@ namespace SagensSdk
             GC.Collect();
             return 1;
         }
+
+        public List<SurfaceZSaveDat> sddList_L = new List<SurfaceZSaveDat>();
+        public List<SurfaceZSaveDat> sddList_S = new List<SurfaceZSaveDat>();
+        public List<SurfaceIntensitySaveDat> sddList_I = new List<SurfaceIntensitySaveDat>();
 
         #region 操作传感器
         public bool Stop(ref string errMsg)

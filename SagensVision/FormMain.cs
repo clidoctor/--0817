@@ -222,7 +222,7 @@ namespace SagensVision
                 else
                 {
                     ShowAndSaveMsg("右工位标定文件加载失败!");
-                    break;
+                    //break;
                 }
                 Calibration.ParamPath.LeftOrRight = "Left";
                 if (File.Exists(Calibration.ParamPath.Path_tup))
@@ -232,7 +232,7 @@ namespace SagensVision
                 else
                 {
                     ShowAndSaveMsg("左工位标定文件加载失败!");
-                    break;
+                    //break;
                 }
 
             }
@@ -485,7 +485,8 @@ namespace SagensVision
                 {
                     orignalDeg = MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Col,
-                    orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                        orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                    //HOperatorSet.VectorAngleToRigid(0, 0, 0, 0, 0, 0, out homMaxFix);
                     OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Right[Side -1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
 
                 }
@@ -493,7 +494,8 @@ namespace SagensVision
                 {
                     orignalDeg = MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
                     HOperatorSet.VectorAngleToRigid(MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Row, MyGlobal.Left_findPointTool_Fix.intersectCoordList[Side - 1].Col,
-                    orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                        orignalDeg, intersect.Row, intersect.Col, currentDeg, out homMaxFix);
+                    //HOperatorSet.VectorAngleToRigid(0, 0, 0, 0, 0, 0, out homMaxFix);
                     OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Left[Side - 1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
                 }
 
@@ -951,7 +953,6 @@ namespace SagensVision
                     Zorigin.Clear();
                     NameOrigin.Clear();
                     AnchorList.Clear();
-
                     errstr.Clear();
 
                     MyGlobal.globalConfig.Count++;
@@ -1261,20 +1262,46 @@ namespace SagensVision
                                     }
 
                                 }
-                                string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
-                                ShowAndSaveErrorMsg(errstr.ToString(), path + saveImageTime);
-                                //ThreadPool.QueueUserWorkItem(delegate
+                                //string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+                                //ShowAndSaveErrorMsg(errstr.ToString(), path + saveImageTime);
+                                //for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                                 //{
-                                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                                //    StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
+                                //    StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "L_H.tiff", isRight);
+                                //    if (rotateAlignImg.CountObj() > 0)
+                                //    {
+                                //        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][2], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "S_H.tiff", isRight);
+                                //    }
+                                //}
+
+
+                                string errorDatDate = MyGlobal.DataPath + "ErrorDat\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
+                                if (!Directory.Exists(errorDatDate))
+                                {
+                                    Directory.CreateDirectory(errorDatDate);
+                                }
+                                string errorDatTime = DateTime.Now.ToString("hhmmssff");
+                                string errorDatPath = errorDatDate + errorDatTime+"\\";
+                                if (!Directory.Exists(errorDatPath))
+                                {
+                                    Directory.CreateDirectory(errorDatPath);
+                                }
+                                ShowAndSaveErrorMsg(errstr.ToString(), errorDatPath + saveImageTime);
+                                for (int i = 0; i < MyGlobal.GoSDK.sddList_L.Count; i++)
+                                {
+                                    StaticTool.WriteSerializable($"{errorDatPath}Side{i+1}_L_H.dat", MyGlobal.GoSDK.sddList_L[i]);
+                                    if (MyGlobal.GoSDK.sddList_I.Count>i)
                                     {
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][0], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "I.tiff", isRight);
-                                        StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][1], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "L_H.tiff", isRight);
-                                        if (rotateAlignImg.CountObj() > 0)
-                                        {
-                                            StaticOperate.SaveErrorImage(MyGlobal.ImageMulti[i][2], MyGlobal.globalConfig.Count.ToString(), SideName[i] + "S_H.tiff", isRight);
-                                        }
+                                        StaticTool.WriteSerializable($"{errorDatPath}Side{i + 1}_I.dat", MyGlobal.GoSDK.sddList_I[i]);
                                     }
-                                //});
+                                    if (MyGlobal.GoSDK.sddList_S.Count>i)
+                                    {
+                                        StaticTool.WriteSerializable($"{errorDatPath}Side{i + 1}_S_H.dat", MyGlobal.GoSDK.sddList_S[i]);
+                                    }
+                                }
+                                MyGlobal.GoSDK.sddList_L.Clear();
+                                MyGlobal.GoSDK.sddList_I.Clear();
+                                MyGlobal.GoSDK.sddList_S.Clear();
                             }
                             else
                             {
@@ -2566,6 +2593,8 @@ namespace SagensVision
                 StringBuilder StrOrginalData = new StringBuilder();
                 StringBuilder StrAxisData = new StringBuilder();
                 StringBuilder StrRelative = new StringBuilder();
+                //StringBuilder csvStr = new StringBuilder();
+                StringBuilder StrWorldData = new StringBuilder();
                 //重复性
                 StringBuilder Repeat = new StringBuilder();
                 StringBuilder RepeatHeader = new StringBuilder();
@@ -2699,7 +2728,7 @@ namespace SagensVision
 
 
                     Str.Append((i + 1).ToString() + "," + X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + "," + lorc + "\r\n");
-
+                    //csvStr.Append(X1.ToString("0.000") + "," + Y1.ToString("0.000") + "," + Z1.ToString("0.000") + ",");
 
                     if (i == 0)
                     {
@@ -2707,7 +2736,7 @@ namespace SagensVision
                         StrOrginalData.Append(saveTime + "\t" + xorigin.ToString("0.000") + "\t" + yorigin.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrAxisData.Append(saveTime + "\t" + Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrRelative.Append(saveTime + "\t" + Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
-
+                        StrWorldData.Append(saveTime + "\t" + X1.ToString("0.000") + "\t" + Y1.ToString("0.000") + "\t" + "0.000" + "\t");
                         //重复性
                         if (sigleTitle[i].Contains("C"))
                         {
@@ -2732,7 +2761,7 @@ namespace SagensVision
                         StrAxisData.Append(Xrelative.ToString("0.000") + "\t" + Yrelative.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
                         StrRelative.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
 
-
+                        StrWorldData.Append(X1.ToString("0.000") + "\t" + Y1.ToString("0.000") + "\t" + "0.000" + "\t");
                         //重复性
                         if (sigleTitle[i].Contains("C"))
                         {
@@ -2755,6 +2784,7 @@ namespace SagensVision
                         StrOrginalData.Append("\r\n");
                         StrAxisData.Append("\r\n");
                         StrRelative.Append("\r\n");
+                        StrWorldData.Append("\r\n");
                         //重复性
                         RepeatHeader.Append("\r\n");
                         Repeat.Append("\r\n");
@@ -2777,13 +2807,17 @@ namespace SagensVision
                 //}
 
                 Str.Append((totalNum + 1).ToString() + "," + x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000") + "," + strlast + "\r\n");
+                //csvStr.Append(x0.ToString("0.000") + "," + y0.ToString("0.000") + "," + z0.ToString("0.000")+"\r\n");
+
+                //File.AppendAllText($"Data//Excel//{DateTime.Now.ToString("yyyy年7月dd日")}//Index.csv", csvStr.ToString());
+                    //StaticOperate.writeTxt($"Data//Excel//{DateTime.Now.ToString("yyyy年7月dd日")}//Index.csv", csvStr.ToString());
                 //StaticOperate.writeTxt("D:\\Laser3D_1.txt", Str.ToString());
                 //C:\IT7000\data\11\C#@Users@AR9XX@Desktop@PK@guiji@3d
-                if (!Directory.Exists("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d"))
+                if (!Directory.Exists("C:\\Twinwin\\data\\Right"))
                 {
-                    Directory.CreateDirectory("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d");
+                    Directory.CreateDirectory("C:\\Twinwin\\data\\Right");
                 }
-                StaticOperate.writeTxt("C:\\IT7000\\data\\11\\C#@Users@AR9XX@Desktop@PK@guiji@3d\\Laser3D_1.txt", Str.ToString());
+                StaticOperate.writeTxt("C:\\Twinwin\\data\\Right\\Laser3D_1.txt", Str.ToString());
 
                 if (Side == 4)
                 {
@@ -2792,6 +2826,7 @@ namespace SagensVision
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrRelative.ToString(), "Relative");
                     StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), pix.ToString(), "pix");
                     StaticOperate.SaveExcelData(RepeatHeader.ToString(), Repeat.ToString(), "Repeatability");
+                    StaticOperate.SaveExcelData(StrOrginalHeader.ToString(), StrWorldData.ToString(), "WorldIndex");
 
                     for (int i = 0; i < 4; i++)
                     {
@@ -3898,7 +3933,12 @@ namespace SagensVision
                                         }
                                         else { MyGlobal.GoSDK.SaveKdatDirectoy = null; }
                                         spRunTime.Start();
+                                        MyGlobal.GoSDK.sddList_L.Clear();
+                                        MyGlobal.GoSDK.sddList_I.Clear();
+                                        MyGlobal.GoSDK.sddList_S.Clear();
                                     }
+
+                                    
                                 }
                                 ok = Encoding.UTF8.GetBytes(ReturnStr + "_OK");
                                 ng = Encoding.UTF8.GetBytes(ReturnStr + "_NG");

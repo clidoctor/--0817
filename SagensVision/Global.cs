@@ -330,6 +330,8 @@ namespace SagensVision
 
         }
 
+        
+
         public static void SaveLog(string info)
         {
             string dir = MyGlobal.DataPath + "Log";

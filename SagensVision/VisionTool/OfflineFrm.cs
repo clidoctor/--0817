@@ -245,5 +245,10 @@ namespace SagensVision
                 e.Cancel = true;
             }
         }
+
+        private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            tb_checkNum.Text = (listBox1.SelectedIndex + 1).ToString();
+        }
     }
 }
