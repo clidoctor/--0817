@@ -91,8 +91,9 @@ namespace SagensVision
         public bool isSaveKdat;
         public bool isSaveFileDat;
         public bool isSaveImg;
-        //public bool isUseAnchorDeg = true;
 
+        public bool isUseFix = true;
+        public bool isUseSelfOffset = false;//启用自动补偿
         public bool enableAlign;
         public bool enableFeature;//特征显示
     }
@@ -260,13 +261,13 @@ namespace SagensVision
         public static void SaveErrorImage(HObject Image, string Count, string Product,bool isRight)
         {
             string RorL = isRight ? "Right" : "Left";
-            string path = MyGlobal.DataPath + "ErrorImage\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\" + RorL + "\\";
+            string path = MyGlobal.DataPath + "ErrorImage\\" + RorL + "\\";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            string[] dirs = Directory.GetDirectories(MyGlobal.DataPath + "ErrorImage\\");
+            string[] dirs = Directory.GetDirectories(path);
 
             for (int i = 0; i < dirs.Length; i++)
             {
@@ -302,6 +303,62 @@ namespace SagensVision
 
 
         }
+        public static void DeleteFile(string Path)
+        {
+            string[] dirs = Directory.GetDirectories(Path);
+
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                DateTime dt = File.GetCreationTime(dirs[i]);
+                TimeSpan ts = DateTime.Now - dt;
+                if (ts.Days > 2)
+                {
+                    Directory.Delete(dirs[i], true);
+
+                }
+            }
+            //数量大于500时
+            DirectoryInfo dirinf = new DirectoryInfo(Path);
+            FileInfo[] files = dirinf.GetFiles();
+
+            Array.Sort<FileInfo>(files, new FileCompare());            
+            if (files.Length > 2)
+            {
+                for (int i = 0; i < files.Length - 17; i++)
+                {
+                    File.Delete(files[i].FullName);
+                }
+
+            }
+        }
+        public static void DeleteDirectoy(string Path)
+        {
+            string[] dirs = Directory.GetDirectories(Path);
+
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                DateTime dt = File.GetCreationTime(dirs[i]);
+                TimeSpan ts = DateTime.Now - dt;
+                if (ts.Days > 2)
+                {
+                    Directory.Delete(dirs[i], true);
+
+                }
+            }
+            //数量大于500时
+            DirectoryInfo dirinf = new DirectoryInfo(Path);
+            DirectoryInfo[] files = dirinf.GetDirectories();
+            SortAsTime(ref files);
+            if (files.Length > 2)
+            {
+                for (int i = 0; i < files.Length - 50; i++)
+                {
+                    Directory.Delete(files[i].FullName, true);                   
+                }
+
+            }
+        }
+
         public class FileCompare : IComparer<FileInfo>
         {
             public int Compare(FileInfo x, FileInfo y)
@@ -309,6 +366,12 @@ namespace SagensVision
                 return x.LastWriteTime.CompareTo(y.LastWriteTime);//递增
             }
         }
+
+        public static void SortAsTime(ref DirectoryInfo[] aFFi)
+        {
+            Array.Sort(aFFi, delegate (DirectoryInfo x, DirectoryInfo y) { return x.LastWriteTime.CompareTo(y.LastWriteTime); });//递增
+        }
+
         public static void writeTxt(string path, string data)
         {
             try

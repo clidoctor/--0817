@@ -124,7 +124,6 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl5 = new DevExpress.XtraEditors.SplitContainerControl();
             this.splitContainerControl6 = new DevExpress.XtraEditors.SplitContainerControl();
@@ -279,11 +278,10 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(968, 345);
+            this.xtraTabControl1.Size = new System.Drawing.Size(968, 329);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
-            this.xtraTabPage1,
-            this.xtraTabPage2});
+            this.xtraTabPage1});
             // 
             // xtraTabPage1
             // 
@@ -305,19 +303,21 @@
             this.xtraTabPage1.Controls.Add(this.checkBox2);
             this.xtraTabPage1.Controls.Add(this.checkBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(962, 316);
+            this.xtraTabPage1.Size = new System.Drawing.Size(962, 300);
             this.xtraTabPage1.Text = "截取轮廓工具";
             // 
             // propertyGrid1
             // 
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.propertyGrid1.Location = new System.Drawing.Point(258, 47);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(529, 246);
+            this.propertyGrid1.Size = new System.Drawing.Size(529, 250);
             this.propertyGrid1.TabIndex = 68;
             // 
             // simpleButton6
             // 
-            this.simpleButton6.Location = new System.Drawing.Point(800, 10);
+            this.simpleButton6.Location = new System.Drawing.Point(718, 11);
             this.simpleButton6.Name = "simpleButton6";
             this.simpleButton6.Size = new System.Drawing.Size(75, 23);
             this.simpleButton6.TabIndex = 14;
@@ -517,6 +517,8 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -530,7 +532,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(244, 246);
+            this.dataGridView1.Size = new System.Drawing.Size(244, 253);
             this.dataGridView1.TabIndex = 66;
             this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_CurrentCellChanged);
@@ -849,7 +851,7 @@
             // 
             // simpleButton7
             // 
-            this.simpleButton7.Location = new System.Drawing.Point(712, 10);
+            this.simpleButton7.Location = new System.Drawing.Point(630, 11);
             this.simpleButton7.Name = "simpleButton7";
             this.simpleButton7.Size = new System.Drawing.Size(75, 23);
             this.simpleButton7.TabIndex = 24;
@@ -868,6 +870,7 @@
             this.groupBox4.TabIndex = 60;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "拟合直线";
+            this.groupBox4.Visible = false;
             // 
             // simpleButton13
             // 
@@ -1092,12 +1095,6 @@
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // xtraTabPage2
-            // 
-            this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(962, 316);
-            this.xtraTabPage2.Text = "找线设置";
-            // 
             // splitContainerControl4
             // 
             this.splitContainerControl4.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1106,7 +1103,7 @@
             this.splitContainerControl4.Panel1.Text = "Panel1";
             this.splitContainerControl4.Panel2.Controls.Add(this.splitContainerControl5);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(1327, 717);
+            this.splitContainerControl4.Size = new System.Drawing.Size(1327, 701);
             this.splitContainerControl4.SplitterPosition = 354;
             this.splitContainerControl4.TabIndex = 3;
             this.splitContainerControl4.Text = "splitContainerControl4";
@@ -1121,7 +1118,7 @@
             this.splitContainerControl5.Panel1.Text = "Panel1";
             this.splitContainerControl5.Panel2.Controls.Add(this.splitContainerControl6);
             this.splitContainerControl5.Panel2.Text = "Panel2";
-            this.splitContainerControl5.Size = new System.Drawing.Size(968, 717);
+            this.splitContainerControl5.Size = new System.Drawing.Size(968, 701);
             this.splitContainerControl5.SplitterPosition = 74;
             this.splitContainerControl5.TabIndex = 0;
             this.splitContainerControl5.Text = "splitContainerControl5";
@@ -1136,7 +1133,7 @@
             this.splitContainerControl6.Panel2.AutoScroll = true;
             this.splitContainerControl6.Panel2.Controls.Add(this.xtraTabControl1);
             this.splitContainerControl6.Panel2.Text = "Panel2";
-            this.splitContainerControl6.Size = new System.Drawing.Size(968, 638);
+            this.splitContainerControl6.Size = new System.Drawing.Size(968, 622);
             this.splitContainerControl6.SplitterPosition = 288;
             this.splitContainerControl6.TabIndex = 0;
             this.splitContainerControl6.Text = "splitContainerControl6";
@@ -1147,7 +1144,7 @@
             this.Appearance.Options.UseForeColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1327, 717);
+            this.ClientSize = new System.Drawing.Size(1327, 701);
             this.Controls.Add(this.splitContainerControl4);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -1198,7 +1195,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 删除所有ToolStripMenuItem;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage2;
         private System.Windows.Forms.TextBox textBox_Num;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label4;

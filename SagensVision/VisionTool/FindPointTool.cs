@@ -519,7 +519,12 @@ namespace SagensVision.VisionTool
 
                 HOperatorSet.AreaCenter(IntersectionO, out area, out row, out col);
                 HOperatorSet.VectorAngleToRigid(row, col, 0, row, col, Phi, out homMat2D);
-                HOperatorSet.AffineTransContourXld(ContourO, out ContourO, homMat2D);              
+                HOperatorSet.AffineTransContourXld(ContourO, out ContourO, homMat2D);
+                if (sigma<3)
+                {
+                    sigma = 3;
+                }
+                HOperatorSet.SmoothContoursXld(ContourO, out ContourO, sigma);            
                 HOperatorSet.GetContourXld(ContourO, out RowO, out ColO);
                 
                 if (UseZzoom)
@@ -755,6 +760,7 @@ namespace SagensVision.VisionTool
                         {
                             Zzoom = fParam[Id].roiP[roiID].ClippingPer;
                         }
+                       
                     }
                     else
                     {
@@ -763,7 +769,10 @@ namespace SagensVision.VisionTool
                     }
                    
                     HOperatorSet.GenContourPolygonXld(out Profile, RotateRow, RotateCol);
-                    
+                    if (hwnd_profile != null && ShowFeatures && fParam[Id].roiP[roiID].useZzoom)
+                    {
+                        hwnd_profile.viewWindow.displayHobject(Profile, "white");
+                    }
                     if (maxZ.Length == 0)
                     {
                         return "Ignore";
@@ -1788,7 +1797,7 @@ namespace SagensVision.VisionTool
         }
 
         private int Ignore = 0;
-        public string FindPoint(int SideId, bool IsRight, HObject IntesityImage, HObject HeightImage, out double[][] RowCoord, out double[][] ColCoord, out double[][] ZCoord, out string[][] StrLineOrCircle, out HTuple[] originalPoint, HTuple HomMat3D = null, HWindow_Final hwind = null, bool debug = false, HTuple homMatFix = null, HObject OriginImage = null,bool ShowFeatures = true)
+        public string FindPoint(int SideId, bool IsRight, HObject IntesityImage, HObject HeightImage, out double[][] RowCoord, out double[][] ColCoord, out double[][] ZCoord, out string[][] StrLineOrCircle, out HTuple[] originalPoint, HTuple HomMat3D = null, HWindow_Final hwind = null, bool debug = false, HTuple homMatFix = null, HObject OriginImage = null,bool ShowFeatures = true,bool UseSelfOffset = false)
         {
             //HObject RIntesity = new HObject(), RHeight = new HObject();
             StringBuilder Str = new StringBuilder();
@@ -2468,13 +2477,99 @@ namespace SagensVision.VisionTool
 
                 for (int i = 0; i < ZCoord.GetLength(0); i++)
                 {
-                    //在当前点附近取圆 
+
+
+                    #region 判断高度范围
+                    string msg = fParam[Sid].DicPointName[i] + "(" + Math.Round(ZCoord[i][0], 3).ToString() + ")";
+                    if (hwind != null && ShowFeatures)
+                    {
+
+                        Action sw = () =>
+                        {
+                            hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
+                        };
+                        hwind.Invoke(sw);
+                    }
+                    if (IsRight)
+                    {
+                        ////判断 Z 值高度
+                        if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
+                        {
+                            if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[Sid].GetLength(0))
+                            {
+                                return "请重新设置基准值";
+                            }
+                            double sub = ZCoord[i][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[Sid][i][0];
+                            if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
+                            {
+                                if (UseSelfOffset) //启用自动补偿
+                                {
+                                    ZCoord[i][0] -= sub;
+                                }
+                                else
+                                {
+                                    if (hwind != null && ShowFeatures)
+                                    {
+
+                                        Action sw = () =>
+                                        {
+                                            hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
+                                        };
+                                        hwind.Invoke(sw);
+                                    }
+                                    return $"{msg}高度超出范围" + Math.Round(sub, 3);
+                                }
+
+
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        ////判断 Z 值高度
+                        if (MyGlobal.xyzBaseCoord_Left.ZCoord != null && MyGlobal.xyzBaseCoord_Left.ZCoord.Count != 0)
+                        {
+                            if (i >= MyGlobal.xyzBaseCoord_Left.ZCoord[Sid].GetLength(0))
+                            {
+                                return "请重新设置基准值";
+                            }
+                            double sub = ZCoord[i][0] - MyGlobal.xyzBaseCoord_Left.ZCoord[Sid][i][0];
+                            if (sub > MyGlobal.globalPointSet_Left.HeightMax || sub < MyGlobal.globalPointSet_Left.HeightMin)
+                            {
+                                if (UseSelfOffset) //启用自动补偿
+                                {
+                                    ZCoord[i][0] += sub;
+                                }
+                                else
+                                {
+                                    if (hwind != null && ShowFeatures)
+                                    {
+
+                                        Action sw = () =>
+                                        {
+                                            hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
+                                        };
+                                        hwind.Invoke(sw);
+                                    }
+                                    return $"{msg}高度超出范围" + Math.Round(ZCoord[i][0], 3);
+                                }
+
+                            }
+
+                        }
+                    }
+                    #endregion
+
+                    #region 高度滤波
+
+                    //在当前点附近取圆
                     HObject Circle = new HObject();
                     double radius = fParam[Sid].roiP[i].ZftRad;
-                    if (ZCoord[i][0] < -10 && radius == 0)
-                    {
-                        radius = 0.05;
-                    }
+                    //if (ZCoord[i][0] < -10 && radius == 0)
+                    //{
+                    //    radius = 0.05;
+                    //}
                     double Xresolution = MyGlobal.globalConfig.dataContext.xResolution;
                     radius = radius / Xresolution;
                     if (radius != 0)
@@ -2519,6 +2614,8 @@ namespace SagensVision.VisionTool
                             //{
                             //    ZCoord[i][0] = Zgreater.TupleMean();
                             //}
+                            #endregion
+                             
 
                         }
                         catch (Exception ex)
@@ -2530,72 +2627,7 @@ namespace SagensVision.VisionTool
                             return "偏移点" + fParam[Sid].DicPointName[i] + "设置在图像之外" + RowNum;
                         }
                     }
-                    else
-                    {
-
-                    }
-                    string msg = fParam[Sid].DicPointName[i] + "(" + Math.Round(ZCoord[i][0], 3).ToString() + ")";
-                    if (hwind != null && ShowFeatures)
-                    {
-
-                        Action sw = () =>
-                        {
-                            hwind.viewWindow.dispMessage(msg, "blue", origRow[i], origCol[i]);
-                        };
-                        hwind.Invoke(sw);
-                    }
-                    if (IsRight)
-                    {
-                        ////判断 Z 值高度
-                        if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
-                        {
-                            if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[Sid].GetLength(0))
-                            {
-                                return "请重新设置基准值";
-                            }
-                            double sub = ZCoord[i][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[Sid][i][0];
-                            if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
-                            {
-                                if (hwind != null && ShowFeatures)
-                                {
-
-                                    Action sw = () =>
-                                    {
-                                        hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
-                                    };
-                                    hwind.Invoke(sw);
-                                }
-                                return $"{msg}高度超出范围" + Math.Round(sub, 3);
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        ////判断 Z 值高度
-                        if (MyGlobal.xyzBaseCoord_Left.ZCoord != null && MyGlobal.xyzBaseCoord_Left.ZCoord.Count != 0)
-                        {
-                            if (i >= MyGlobal.xyzBaseCoord_Left.ZCoord[Sid].GetLength(0))
-                            {
-                                return "请重新设置基准值";
-                            }
-                            if (ZCoord[i][0] - MyGlobal.xyzBaseCoord_Left.ZCoord[Sid][i][0] > MyGlobal.globalPointSet_Left.HeightMax || ZCoord[i][0] - MyGlobal.xyzBaseCoord_Left.ZCoord[Sid][i][0] < MyGlobal.globalPointSet_Left.HeightMin)
-                            {
-                                if (hwind != null && ShowFeatures)
-                                {
-
-                                    Action sw = () =>
-                                    {
-                                        hwind.viewWindow.dispMessage(msg + "-Height NG", "red", origRow[i], origCol[i]);
-                                    };
-                                    hwind.Invoke(sw);
-                                }
-                                return $"{msg}高度超出范围" + Math.Round(ZCoord[i][0], 3);
-                            }
-
-                        }
-                    }
-
+                    
                 }
 
                 if (HomMat3D == null)

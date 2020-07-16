@@ -26,12 +26,12 @@ namespace SagensVision.VisionTool
             this.MaximizeBox = false;
         }
 
-        private void OnGetIdxDelegate(string idx)
+        private void OnGetIdxDelegate(string idx,string LorR)
         {
             byte[] buffer = new byte[128];
             try
             {
-                MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("POS"));
+                MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes(LorR + "POS"));
             }
             catch (Exception)
             {
@@ -40,7 +40,7 @@ namespace SagensVision.VisionTool
             
             ThreadPool.QueueUserWorkItem(delegate
             {
-                while (!MyGlobal.ReceiveMsg.Contains("POS"))
+                while (!MyGlobal.ReceiveMsg.Contains(LorR + "POS"))
                 {
                     Thread.Sleep(100);
                 }
