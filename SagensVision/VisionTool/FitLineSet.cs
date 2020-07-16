@@ -1475,7 +1475,7 @@ namespace SagensVision.VisionTool
             }
             else
             {
-                if (intersection.Row == 0 && intersection.Col == 0)
+                if (intersection.Row == 0 && intersection.Col == 0 && NotUseFix)
                 {
                     MessageBox.Show("保存成功！");
                 }
@@ -1590,9 +1590,9 @@ namespace SagensVision.VisionTool
                 hwindow_final2.viewWindow.notDisplayRoi();
                 hwindow_final1.ClearWindow();
                 hwindow_final2.ClearWindow();
-
+                RoiParam.isInvoke = false;
                 ChangeSide();
-
+                RoiParam.isInvoke = true;
                 if (!HeightImage.IsInitialized())
                 {
                     return;
@@ -6247,6 +6247,10 @@ namespace SagensVision.VisionTool
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             NotUseFix = checkBox4.Checked;
+            RoiParam.isInvoke = false;
+            LoadToUI();
+            ChangeSide();
+            RoiParam.isInvoke = true;
         }
 
         private void richTextBox1_MouseMove(object sender, MouseEventArgs e)
@@ -6790,8 +6794,10 @@ namespace SagensVision.VisionTool
                 isRight = false;
                 comboBox3.BackColor = Color.Yellow;
             }
+            RoiParam.isInvoke = false;
             LoadToUI();
             ChangeSide();
+            RoiParam.isInvoke = true;
             MessageBox.Show("切换成功!");
         }
 
@@ -6964,7 +6970,6 @@ namespace SagensVision.VisionTool
     {
         public static bool isInvoke = false;
         public static event Action<ValueChangedType,double> ChangeSection;
-       
         #region 锚定轮廓roi 
         [BrowsableAttribute(false)]
         public double AnchorRow { get; set; } = 0;
@@ -6979,7 +6984,7 @@ namespace SagensVision.VisionTool
         public string LineOrCircle { get; set; } = "直线段";
 
         #region 截面设置
-        [Category("截面设置")]
+        [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形区域截面数量")]
         [Description("截面数量")]
         public int NumOfSection
@@ -7003,7 +7008,7 @@ namespace SagensVision.VisionTool
         }
         int _NumOfSection = 0;
 
-        [Category("截面设置")]
+        [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形长轴")]
         [Description("截面矩形长轴的一半 单位pix")]
         public double Len1
@@ -7026,7 +7031,7 @@ namespace SagensVision.VisionTool
         }
         double _Len1 = 0;
 
-      [Category("截面设置")]
+      [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形短轴")]
         [Description("截面矩形短轴的一半 单位pix")]
         public double Len2
@@ -7049,7 +7054,7 @@ namespace SagensVision.VisionTool
         }
         double _Len2 = 0;
 
-        [Category("截面设置")]
+        [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形中心行坐标")]
         [Description("矩形中心行坐标 单位pix")]
         public double CenterRow
@@ -7071,7 +7076,7 @@ namespace SagensVision.VisionTool
 
         }
         double _CenterRow = 0;
-        [Category("截面设置")]
+        [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形中心列坐标")]
         [Description("矩形中心列坐标 单位pix")]
         public double CenterCol
@@ -7094,7 +7099,7 @@ namespace SagensVision.VisionTool
         }
         double _CenterCol = 0;
         [BrowsableAttribute(false)]
-        [Category("截面设置")]
+        [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形角度 phi")]
         [Description("矩形角度 弧度")]
         public double phi
@@ -7118,7 +7123,7 @@ namespace SagensVision.VisionTool
             }
 
         }
-        [Category("截面设置")]
+        [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形角度")]
         [Description("矩形角度 单位度")]
         public double phi_deg
@@ -7158,7 +7163,7 @@ namespace SagensVision.VisionTool
         #endregion
 
         #region 偏移设置
-        [Category("偏移设置")]
+        [Category("\t\t偏移设置")]
         [DisplayName("X方向偏移")]
         [Description("X方向偏移 单位mm")]
         public double Xoffset
@@ -7177,7 +7182,7 @@ namespace SagensVision.VisionTool
             }
         }
         double _Xoffset = 0;
-        [Category("偏移设置")]
+        [Category("\t\t偏移设置")]
         [DisplayName("Y方向偏移")]
         [Description("Y方向偏移 单位mm")]
         public double Yoffset
@@ -7196,7 +7201,7 @@ namespace SagensVision.VisionTool
             }
         }
         double _Yoffset = 0;
-        [Category("偏移设置")]
+        [Category("\t\t偏移设置")]
         [DisplayName("Roi方向偏移")]
         [Description("Roi方向偏移 单位mm")]
         public double offset
@@ -7215,7 +7220,7 @@ namespace SagensVision.VisionTool
             }
         }
         double _offset = 0;
-        [Category("偏移设置")]
+        [Category("\t\t偏移设置")]
         [DisplayName("Z方向偏移")]
         [Description("Z方向偏移 单位mm")]       
         public double Zoffset
@@ -7238,7 +7243,7 @@ namespace SagensVision.VisionTool
         #endregion
 
         #region 轮廓设置
-        [Category("轮廓设置")]
+        [Category("\t\t轮廓设置")]
         [DisplayName("轮廓旋转角度")]
         [Description("轮廓旋转角度设置 单位度")]
         public int AngleOfProfile
@@ -7263,12 +7268,30 @@ namespace SagensVision.VisionTool
         }
         int _AngleOfProfile = 0;
 
+        [Category("\t\t轮廓设置")]
+        [DisplayName("轮廓平滑")]
+        [Description("轮廓平滑系数 3-20 ")]
+        public double Sigma
+        {
+            get { return _Sigma; }
+            set
+            {
+                _Sigma = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.轮廓平滑, _Sigma);
+                }
+            }
+        }
+        double _Sigma = 0.5;
+
         #endregion
-        #region 找线设置
+
+        #region 找线方式
         [TypeConverter(typeof(FileNameConverter))]
-        [Category("找线设置")]
-        [DisplayName("找线方式设置")]
-        [Description("找线方式设置 0 为极值 1 为最高点下降")]
+        [Category("\t\t\t\t找线方式")]
+        [DisplayName("\t找线方式设置")]
+        [Description("找线方式设置 极值 或 最高点下降")]
         public string TypeOfFindLine
         {
             get
@@ -7300,13 +7323,13 @@ namespace SagensVision.VisionTool
                 {
                     return 1;
                 }
-            } 
-            set
-            {                
             }
-        } 
+            set
+            {
+            }
+        }
 
-        [Category("找线设置")]
+        [Category("\t\t\t\t找线方式")]
         [DisplayName("最高点下降距离")]
         [Description("最高点下降距离 单位mm")]
         public double TopDownDist
@@ -7331,8 +7354,8 @@ namespace SagensVision.VisionTool
         }
         double _TopDownDist = 0;
 
-        [Category("找线设置")]
-        [DisplayName("X方向距离")]
+        [Category("\t\t\t\t找线方式")]
+        [DisplayName("水平方向距离")]
         [Description("离最高点或极值点的距离 单位mm")]
         public double xDist
         {
@@ -7356,25 +7379,11 @@ namespace SagensVision.VisionTool
         }
         double _xDist = 0;
 
-        [Category("找线设置")]
-        [DisplayName("是否取左侧值")]
-        [Description("在最高点或极值点的左侧 为 true 否则为 false")]
-        public bool useLeft
-        {
-            get { return _useLeft; }
-            set
-            {
-                _useLeft = value;
-                if (isInvoke)
-                {
-                    double a = _useLeft ? 1 : 0;
-                    ChangeSection?.Invoke(ValueChangedType.是否取左侧值, a);
-                }
-            }
-        }
-        bool _useLeft = true;
 
-        [Category("找线设置")]
+        #endregion
+
+        #region 取点方式设置
+        [Category("\t\t\t取点方式设置")]
         [DisplayName("是否取中间点")]
         [Description("对于长边可选择是否 取最外侧边缘和台阶边缘中间点，取中间点为true 否则为false")]
         public bool useMidPt
@@ -7392,25 +7401,7 @@ namespace SagensVision.VisionTool
         }
         bool _useMidPt = false;
 
-        [Category("找线设置")]
-        [DisplayName("取最近点还是最远点")]
-        [Description("是否选择离最高点或极值点的最远距离的点，取最近点为true 否则为false")]
-        public bool useNear
-        {
-            get { return _useNear; }
-            set
-            {
-                _useNear = value;
-                if (isInvoke)
-                {
-                    double a = _useNear ? 1 : 0;
-                    ChangeSection?.Invoke(ValueChangedType.取最近点还是最远点, a);
-                }
-            }
-        }
-        bool _useNear = false;
-
-        [Category("找线设置")]
+        [Category("\t\t\t取点方式设置")]
         [DisplayName("取轮廓区域中心点")]
         [Description("是否选择区域中心点，取中心点为true 否则为false")]
         public bool useCenter
@@ -7428,7 +7419,52 @@ namespace SagensVision.VisionTool
         }
         bool _useCenter = false;
 
-        [Category("找线设置")]
+
+        #endregion
+
+        #region 点筛选
+
+        [Category("\t\t点筛选")]
+        [DisplayName("是否取左侧值")]
+        [Description("在最高点或极值点的左侧 为 true 否则为 false")]
+        public bool useLeft
+        {
+            get { return _useLeft; }
+            set
+            {
+                _useLeft = value;
+                if (isInvoke)
+                {
+                    double a = _useLeft ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.是否取左侧值, a);
+                }
+            }
+        }
+        bool _useLeft = true;
+
+        [Category("\t\t点筛选")]
+        [DisplayName("取最近点还是最远点")]
+        [Description("是否选择离最高点或极值点的最远距离的点，取最近点为true 否则为false")]
+        public bool useNear
+        {
+            get { return _useNear; }
+            set
+            {
+                _useNear = value;
+                if (isInvoke)
+                {
+                    double a = _useNear ? 1 : 0;
+                    ChangeSection?.Invoke(ValueChangedType.取最近点还是最远点, a);
+                }
+            }
+        }
+        bool _useNear = false;
+
+        #endregion
+
+        #region Z方向缩放设置
+
+        [Category("\tZ方向缩放设置")]
         [DisplayName("是否启用Z向缩放")]
         [Description("是否选择区域中心点，启用缩放为true 否则为false")]
         public bool useZzoom
@@ -7446,7 +7482,7 @@ namespace SagensVision.VisionTool
         }
         bool _useZzoom = false;
 
-        [Category("轮廓设置")]
+        [Category("\tZ方向缩放设置")]
         [DisplayName("轮廓Z向拉伸")]
         [Description("轮廓沿Z向拉伸比列 单位为倍数")]
         public double ClippingPer
@@ -7456,62 +7492,21 @@ namespace SagensVision.VisionTool
             {
                 _ClippingPer = value;
                 if (isInvoke)
-                {                   
+                {
                     ChangeSection?.Invoke(ValueChangedType.轮廓Z向拉伸, _ClippingPer);
                 }
             }
         }
-        double _ClippingPer =0;
-
-        [Category("轮廓设置")]
-        [DisplayName("轮廓平滑")]
-        [Description("轮廓平滑系数 ")]
-        public double Sigma
-        {
-            get { return _Sigma; }
-            set
-            {
-                _Sigma = value;
-                if (isInvoke)
-                {
-                    ChangeSection?.Invoke(ValueChangedType.轮廓平滑, _Sigma);
-                }
-            }
-        }
-        double _Sigma = 0.5;
+        double _ClippingPer = 0;
 
 
-        [Category("轮廓设置")]
-        [DisplayName("直线滤波系数")]
-        [Description("直线找点滤波系数 范围设置0-0.5")]
-        public double SmoothCont
-        {
-            get { return _SmoothCont; }
+        #endregion
 
-            set
-            {
-                if (value<0)
-                {
-                    value = 0;
-                }
-                if (value>0.5)
-                {
-                    value = 0.5;
-                }
-                _SmoothCont = value;
-                if (isInvoke)
-                {
-                    ChangeSection?.Invoke(ValueChangedType.直线滤波系数, _SmoothCont);
-                }
-            }
-        }
-        double _SmoothCont = 0;
-       //滤波系数
-
-       [Category("轮廓设置")]
+        #region 高度滤波设置
+        [Category("高度滤波设置")]
         [DisplayName("高度方向滤波最大百分比")]
         [Description("高度方向滤波最大百分比 范围设置0-100")]
-       
+
         public double ZftMax
         {
             get
@@ -7535,7 +7530,7 @@ namespace SagensVision.VisionTool
         }
         double _ZftMax = 0;
 
-        [Category("轮廓设置")]
+        [Category("高度滤波设置")]
         [DisplayName("高度方向滤波最小百分比")]
         [Description("高度方向滤波最小百分比 范围设置0-100")]
         public double ZftMin
@@ -7560,7 +7555,7 @@ namespace SagensVision.VisionTool
             }
         }
         double _ZftMin = 0;
-        [Category("轮廓设置")]
+        [Category("高度滤波设置")]
         [DisplayName("高度方向滤波半径")]
         [Description("高度方向滤波半径 单位mm")]
         public double ZftRad
@@ -7575,8 +7570,39 @@ namespace SagensVision.VisionTool
                 }
             }
         }
-        double _ZftRad = 0.5;
+        double _ZftRad = 0;
+
         #endregion
+
+        #region 直线拟合设置
+        [Category("\t直线拟合设置")]
+        [DisplayName("直线滤波系数")]
+        [Description("直线找点滤波系数 范围设置0-0.5")]
+        public double SmoothCont
+        {
+            get { return _SmoothCont; }
+
+            set
+            {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+                if (value > 0.5)
+                {
+                    value = 0.5;
+                }
+                _SmoothCont = value;
+                if (isInvoke)
+                {
+                    ChangeSection?.Invoke(ValueChangedType.直线滤波系数, _SmoothCont);
+                }
+            }
+        }
+        double _SmoothCont = 0;
+
+        #endregion
+
 
         public RoiParam Clone()
         {

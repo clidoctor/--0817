@@ -65,6 +65,8 @@ namespace SagensVision.VisionTool
                 checkedListBox_save_data.SetItemChecked(2, MyGlobal.globalConfig.isSaveImg);
                 checkBox1.Checked =  MyGlobal.globalConfig.enableAlign;
                 cb_Features.Checked = MyGlobal.globalConfig.enableFeature;
+                cb_UseFix.Checked = MyGlobal.globalConfig.isUseFix;
+                cb_UseSelfOffset.Checked = MyGlobal.globalConfig.isUseSelfOffset;
             }
             catch (Exception)
             {
@@ -394,6 +396,18 @@ namespace SagensVision.VisionTool
                 MyGlobal.globalPointSet_Left.IsUp[SideId] = cb_IsUp.Checked;
 
             }
+        }
+
+        private void cb_UseFix_CheckedChanged(object sender, EventArgs e)
+        {
+            MyGlobal.globalConfig.isUseFix = cb_UseFix.Checked;
+            
+        }
+
+        private void cb_UseSelfOffset_CheckedChanged(object sender, EventArgs e)
+        {
+            MyGlobal.globalConfig.isUseSelfOffset = cb_UseSelfOffset.Checked;
+
         }
     }
 

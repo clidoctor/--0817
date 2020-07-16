@@ -41,6 +41,8 @@
             this.textBox_totalZ = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cb_IsUp = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox_yOffset = new System.Windows.Forms.TextBox();
@@ -71,8 +73,8 @@
             this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.cb_Features = new System.Windows.Forms.CheckBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.cb_IsUp = new System.Windows.Forms.CheckBox();
+            this.cb_UseFix = new System.Windows.Forms.CheckBox();
+            this.cb_UseSelfOffset = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -86,7 +88,7 @@
             // 
             this.groupBox1.Controls.Add(this.textBox_Start);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(356, 308);
+            this.groupBox1.Location = new System.Drawing.Point(357, 345);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(266, 72);
             this.groupBox1.TabIndex = 3;
@@ -193,12 +195,31 @@
             this.groupBox3.Controls.Add(this.textBox_xOffset);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(356, 110);
+            this.groupBox3.Location = new System.Drawing.Point(358, 144);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(265, 192);
             this.groupBox3.TabIndex = 75;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "单边参数";
+            // 
+            // cb_IsUp
+            // 
+            this.cb_IsUp.AutoSize = true;
+            this.cb_IsUp.Location = new System.Drawing.Point(102, 143);
+            this.cb_IsUp.Name = "cb_IsUp";
+            this.cb_IsUp.Size = new System.Drawing.Size(74, 18);
+            this.cb_IsUp.TabIndex = 89;
+            this.cb_IsUp.Text = "位于上侧";
+            this.cb_IsUp.UseVisualStyleBackColor = true;
+            this.cb_IsUp.CheckedChanged += new System.EventHandler(this.cb_IsUp_CheckedChanged);
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(22, 144);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(61, 22);
+            this.label15.TabIndex = 79;
+            this.label15.Text = "拼图方向";
             // 
             // comboBox1
             // 
@@ -322,7 +343,7 @@
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(172, 537);
+            this.simpleButton1.Location = new System.Drawing.Point(172, 614);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(90, 23);
             this.simpleButton1.TabIndex = 77;
@@ -331,7 +352,7 @@
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(356, 537);
+            this.simpleButton2.Location = new System.Drawing.Point(356, 614);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(90, 23);
             this.simpleButton2.TabIndex = 78;
@@ -343,7 +364,7 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label18);
             this.groupBox4.Controls.Add(this.textBox_totalZ);
-            this.groupBox4.Location = new System.Drawing.Point(357, 386);
+            this.groupBox4.Location = new System.Drawing.Point(356, 423);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(265, 72);
             this.groupBox4.TabIndex = 79;
@@ -352,7 +373,7 @@
             // 
             // simpleButton3
             // 
-            this.simpleButton3.Location = new System.Drawing.Point(458, 472);
+            this.simpleButton3.Location = new System.Drawing.Point(485, 565);
             this.simpleButton3.Name = "simpleButton3";
             this.simpleButton3.Size = new System.Drawing.Size(90, 23);
             this.simpleButton3.TabIndex = 80;
@@ -489,30 +510,35 @@
             this.cb_Features.UseVisualStyleBackColor = true;
             this.cb_Features.CheckedChanged += new System.EventHandler(this.cb_Features_CheckedChanged);
             // 
-            // label15
+            // cb_UseFix
             // 
-            this.label15.Location = new System.Drawing.Point(22, 144);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(61, 22);
-            this.label15.TabIndex = 79;
-            this.label15.Text = "拼图方向";
+            this.cb_UseFix.AutoSize = true;
+            this.cb_UseFix.Location = new System.Drawing.Point(565, 68);
+            this.cb_UseFix.Name = "cb_UseFix";
+            this.cb_UseFix.Size = new System.Drawing.Size(74, 18);
+            this.cb_UseFix.TabIndex = 89;
+            this.cb_UseFix.Text = "启用定位";
+            this.cb_UseFix.UseVisualStyleBackColor = true;
+            this.cb_UseFix.CheckedChanged += new System.EventHandler(this.cb_UseFix_CheckedChanged);
             // 
-            // cb_IsUp
+            // cb_UseSelfOffset
             // 
-            this.cb_IsUp.AutoSize = true;
-            this.cb_IsUp.Location = new System.Drawing.Point(102, 143);
-            this.cb_IsUp.Name = "cb_IsUp";
-            this.cb_IsUp.Size = new System.Drawing.Size(74, 18);
-            this.cb_IsUp.TabIndex = 89;
-            this.cb_IsUp.Text = "位于上侧";
-            this.cb_IsUp.UseVisualStyleBackColor = true;
-            this.cb_IsUp.CheckedChanged += new System.EventHandler(this.cb_IsUp_CheckedChanged);
+            this.cb_UseSelfOffset.AutoSize = true;
+            this.cb_UseSelfOffset.Location = new System.Drawing.Point(356, 112);
+            this.cb_UseSelfOffset.Name = "cb_UseSelfOffset";
+            this.cb_UseSelfOffset.Size = new System.Drawing.Size(98, 18);
+            this.cb_UseSelfOffset.TabIndex = 90;
+            this.cb_UseSelfOffset.Text = "启用自动补偿";
+            this.cb_UseSelfOffset.UseVisualStyleBackColor = true;
+            this.cb_UseSelfOffset.CheckedChanged += new System.EventHandler(this.cb_UseSelfOffset_CheckedChanged);
             // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 572);
+            this.ClientSize = new System.Drawing.Size(679, 671);
+            this.Controls.Add(this.cb_UseSelfOffset);
+            this.Controls.Add(this.cb_UseFix);
             this.Controls.Add(this.cb_Features);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.simpleButton5);
@@ -597,5 +623,7 @@
         private System.Windows.Forms.CheckBox cb_Features;
         private System.Windows.Forms.CheckBox cb_IsUp;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.CheckBox cb_UseFix;
+        private System.Windows.Forms.CheckBox cb_UseSelfOffset;
     }
 }
