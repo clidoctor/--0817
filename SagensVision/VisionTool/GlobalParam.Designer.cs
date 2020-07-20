@@ -75,6 +75,7 @@
             this.cb_Features = new System.Windows.Forms.CheckBox();
             this.cb_UseFix = new System.Windows.Forms.CheckBox();
             this.cb_UseSelfOffset = new System.Windows.Forms.CheckBox();
+            this.cb_Reverse = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -532,11 +533,24 @@
             this.cb_UseSelfOffset.UseVisualStyleBackColor = true;
             this.cb_UseSelfOffset.CheckedChanged += new System.EventHandler(this.cb_UseSelfOffset_CheckedChanged);
             // 
+            // cb_Reverse
+            // 
+            this.cb_Reverse.AutoSize = true;
+            this.cb_Reverse.Location = new System.Drawing.Point(485, 114);
+            this.cb_Reverse.Name = "cb_Reverse";
+            this.cb_Reverse.Size = new System.Drawing.Size(86, 18);
+            this.cb_Reverse.TabIndex = 91;
+            this.cb_Reverse.Text = "点位顺时针";
+            this.cb_Reverse.UseVisualStyleBackColor = true;
+            this.cb_Reverse.Visible = false;
+            this.cb_Reverse.CheckedChanged += new System.EventHandler(this.cb_Reverse_CheckedChanged);
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 671);
+            this.Controls.Add(this.cb_Reverse);
             this.Controls.Add(this.cb_UseSelfOffset);
             this.Controls.Add(this.cb_UseFix);
             this.Controls.Add(this.cb_Features);
@@ -625,5 +639,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.CheckBox cb_UseFix;
         private System.Windows.Forms.CheckBox cb_UseSelfOffset;
+        private System.Windows.Forms.CheckBox cb_Reverse;
     }
 }

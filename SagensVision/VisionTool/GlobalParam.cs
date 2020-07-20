@@ -31,6 +31,8 @@ namespace SagensVision.VisionTool
         {
             try
             {
+                isLoading = true;
+                comboBox1.SelectedIndex = 0;
                 textBox_ColorMin.Text = MyGlobal.globalConfig.Color_min.ToString();
                 textBox_ColorMax.Text = MyGlobal.globalConfig.Color_max.ToString();
                 if (isRight)
@@ -42,9 +44,11 @@ namespace SagensVision.VisionTool
 
                     textBox_Start.Text = MyGlobal.globalPointSet_Right.Startpt.ToString();
                     textBox_totalZ.Text = MyGlobal.globalPointSet_Right.TotalZoffset.ToString();
+                    
                     textBox_xOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Xoffset.ToString();
                     textBox_yOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Yoffset.ToString();
                     cb_IsUp.Checked = MyGlobal.globalPointSet_Right.IsUp[0];
+                    cb_Reverse.Checked = MyGlobal.globalPointSet_Right.IsReverse;
                 }
                 else
                 {
@@ -58,6 +62,8 @@ namespace SagensVision.VisionTool
                     textBox_xOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Xoffset.ToString();
                     textBox_yOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Yoffset.ToString();
                     cb_IsUp.Checked = MyGlobal.globalPointSet_Left.IsUp[0];
+                    cb_Reverse.Checked = MyGlobal.globalPointSet_Left.IsReverse;
+
                 }
 
                 checkedListBox_save_data.SetItemChecked(0, MyGlobal.globalConfig.isSaveKdat);
@@ -67,6 +73,7 @@ namespace SagensVision.VisionTool
                 cb_Features.Checked = MyGlobal.globalConfig.enableFeature;
                 cb_UseFix.Checked = MyGlobal.globalConfig.isUseFix;
                 cb_UseSelfOffset.Checked = MyGlobal.globalConfig.isUseSelfOffset;
+                isLoading = false;
             }
             catch (Exception)
             {
@@ -74,6 +81,78 @@ namespace SagensVision.VisionTool
                 throw;
             }
         }
+       
+        private void ChangeAxisName(int StartPt)
+        {
+            try
+            {
+               
+               
+                FindPointTool fptool = new FindPointTool();               
+                fptool = isRight ? MyGlobal.Right_findPointTool_Find:MyGlobal.Left_findPointTool_Find;
+                int count = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < fptool.fParam[i].DicPointName.Count; j++)
+                    {
+                        count++;
+                    }
+                }
+                string[] LastName = new string[count];
+                for (int i = 0; i < count; i++)
+                {
+                    int start = StartPt;
+                    if (StartPt - 1 + i >= count)
+                    {
+                        start = StartPt - 1 + i - count;
+                    }
+                    else
+                    {
+                        start = StartPt - 1 + i;
+                    }
+                    LastName[i] = "_" + (start + 1).ToString();
+                }
+
+
+                int n = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    List<string> NewDicPointName = fptool.fParam[i].DicPointName;//C1(边）_1（点)_1(顺序）_
+                    for (int j = 0; j < fptool.fParam[i].DicPointName.Count; j++)
+                    {
+                        string name = fptool.fParam[i].DicPointName[j];                       
+                        string[] ArrayName = name.Split('_');
+                        if (ArrayName.Length == 3)
+                        {
+                            NewDicPointName[j] += LastName[n];
+                        }
+                        if (ArrayName.Length < 3)
+                        {
+                            NewDicPointName[j] += LastName[n];
+                            NewDicPointName[j] += LastName[n];
+                        }
+                        if (ArrayName.Length > 3)
+                        {
+                            //ArrayName[3] = LastName[n];
+                            NewDicPointName[j] = NewDicPointName[j].Replace(ArrayName[3],LastName[n]);
+                        }
+
+                        n++;             
+                    }
+                    ParamPath.ToolType = MyGlobal.ToolType_GlueGuide;
+                    ParamPath.ParaName = MyGlobal.FindPointType_FitLineSet + "_" + "Side"+(i+1).ToString();
+                    ParamPath.IsRight = isRight;
+                    StaticOperate.WriteXML(fptool.fParam[i], ParamPath.ParamDir + "Side" + (i + 1).ToString() + ".xml");
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         string SideName = "Side1";
         private void textBox_ColorMin_TextChanged(object sender, EventArgs e)
         {
@@ -84,7 +163,7 @@ namespace SagensVision.VisionTool
             //bool ok = Regex.IsMatch(index, @"(?i)^(\-[0-9]{1,}[.][0-9]*)+$") || Regex.IsMatch(index, @"(?i)^(\-[0-9]{1,}[0-9]*)+$") || Regex.IsMatch(index, @"(?i)^([0-9]{1,}[0-9]*)+$") || Regex.IsMatch(index, @"(?i)^(\[0-9]{1,}[0-9]*)+$");
             bool ok = Regex.IsMatch(index, @"^[-]?\d+[.]?\d*$");//是否为数字
                                                                 //bool ok = Regex.IsMatch(index, @"^([-]?)\d*$");//是否为整数
-            if (!ok)
+            if (!ok || isLoading)
             {
                 return;
             }
@@ -142,6 +221,7 @@ namespace SagensVision.VisionTool
                     {
                         MyGlobal.globalPointSet_Left.Startpt = (int)num;
                     }
+                    ChangeAxisName(MyGlobal.globalPointSet_Right.Startpt);
                     break;
                 case "textBox_xOffset":
                     if (isRight)
@@ -302,9 +382,10 @@ namespace SagensVision.VisionTool
         {
             Run();
         }
-
+        bool isLoading = false;
         private void GlobalParam_Load(object sender, EventArgs e)
         {
+            isLoading = true;
             isRight = MyGlobal.IsRight;
             LoadToUi();
             
@@ -318,12 +399,13 @@ namespace SagensVision.VisionTool
                 comboBox2.SelectedIndex = 1;
                 comboBox2.BackColor = Color.Yellow;
             }
-          
+            isLoading = false;
         }
 
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             if (comboBox2.SelectedItem.ToString() == "Right")
             {
                 isRight = true;
@@ -335,7 +417,6 @@ namespace SagensVision.VisionTool
                 comboBox2.BackColor = Color.Yellow;
             }
             LoadToUi();
-            MessageBox.Show("切换成功!");
         }
 
         private void simpleButton4_Click(object sender, EventArgs e)
@@ -408,6 +489,19 @@ namespace SagensVision.VisionTool
         {
             MyGlobal.globalConfig.isUseSelfOffset = cb_UseSelfOffset.Checked;
 
+        }
+
+        private void cb_Reverse_CheckedChanged(object sender, EventArgs e)
+        {
+            if (isRight)
+            {
+                MyGlobal.globalPointSet_Right.IsReverse = cb_Reverse.Checked;
+            }
+            else
+            {
+                MyGlobal.globalPointSet_Left.IsReverse = cb_Reverse.Checked;
+
+            }
         }
     }
 

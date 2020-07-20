@@ -125,7 +125,7 @@ namespace SagensVision.VisionTool
                 {
                     RoiParam.isInvoke = false;
                 }
-
+                isSave = false;
                 int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 int roiID = dataGridView1.CurrentCell.RowIndex;
                 roiID = CurrentRowIndex;
@@ -323,6 +323,8 @@ namespace SagensVision.VisionTool
                     //case ROIController.EVENT_DELETED_ALL_ROIS:
                     case ROIController.EVENT_UPDATE_ROI:
 
+                        isSave = false;
+
                         int Id = Convert.ToInt32(SideName.Substring(4, 1));
                         if (dataGridView1.CurrentCell == null)
                         {
@@ -405,6 +407,7 @@ namespace SagensVision.VisionTool
                     //case ROIController.EVENT_DELETED_ACTROI:
                     //case ROIController.EVENT_DELETED_ALL_ROIS:
                     case ROIController.EVENT_UPDATE_ROI:
+                      
                         RoiIsMoving = true;
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                         ArrayList array = roiController2.ROIList;
@@ -609,6 +612,7 @@ namespace SagensVision.VisionTool
                         CurrentRowIndex = ActiveId;
                         //记录当前锚定点坐标
                         RoiIsMoving = false;
+                        isSave = false;
 
                         break;
                     //case HWndCtrl.ERR_READING_IMG:
@@ -1562,7 +1566,7 @@ namespace SagensVision.VisionTool
             {
                 if (isSave)
                 {
-                    isSave = false;
+                    //isSave = false;
 
                 }
                 else
@@ -5934,7 +5938,23 @@ namespace SagensVision.VisionTool
 
         private void FitLineSet_FormClosing(object sender, FormClosingEventArgs e)
         {
-             RoiParam.isInvoke = false;
+
+            if (isSave)
+            {
+              
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show("当前参数未保存，是否关闭?", "提示：", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            RoiParam.isInvoke = false;
             RoiParam.ChangeSection -= RoiParam_ChangeSection;
             //MyGlobal.Right_findPointTool_Find.Init("FitLineSet", isRight);
             //MyGlobal.Left_findPointTool_Find.Init("FitLineSet", isRight);
@@ -5958,8 +5978,8 @@ namespace SagensVision.VisionTool
             checkBox2.Checked = false;
             checkBox4.Checked = false;
             checkBoxRoi.Checked = false;
-            comboBox1.SelectedIndex = 0;
-            comboBox2.SelectedIndex = 0;
+            //comboBox1.SelectedIndex = 0;
+            //comboBox2.SelectedIndex = 0;
             isCloing = true;
             CurrentSide = "";
         }

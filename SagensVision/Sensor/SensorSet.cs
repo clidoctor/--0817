@@ -60,12 +60,13 @@ namespace SagensVision.Sensor
                     MyGlobal.globalConfig.dataContext.xResolution = MyGlobal.GoSDK.context.xResolution / 1;
                     MyGlobal.globalConfig.dataContext.yResolution = MyGlobal.GoSDK.context.yResolution / 4;
                     StaticOperate.WriteXML(MyGlobal.globalConfig, MyGlobal.AllTypePath + "Global.xml");
+                    MyGlobal.SensorConnected = true;
                 }
                 MessageBox.Show(Error);
             }
             catch (Exception ex)
             {
-
+                MyGlobal.SensorConnected = false;
                 MessageBox.Show(ex.Message);
             }
         }
@@ -77,10 +78,11 @@ namespace SagensVision.Sensor
                 string Error = "断开成功！";
                 MyGlobal.GoSDK.DisConnect(ref Error);
                 MessageBox.Show(Error);
+                MyGlobal.SensorConnected = false;
             }
             catch (Exception ex)
             {
-
+                MyGlobal.SensorConnected = false;
                 MessageBox.Show(ex.Message);
             }
         }
