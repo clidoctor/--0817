@@ -26,7 +26,7 @@ using System.Text.RegularExpressions;
 namespace SagensVision
 {
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
-    {
+    { 
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
         public static List<double[][]> ZCoord = new List<double[][]>();
