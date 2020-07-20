@@ -228,8 +228,16 @@ namespace SagensSdk
                         //{
                         //    break;
                         //}
+                        try
+                        {
+                            Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
+                        }
+                        catch (Exception)
+                        {
 
-                        Marshal.Copy(surfacePtr, surfacePoints, 0, surfacePoints.Length);
+                            return -1;
+                        }
+                       
 
                         //保存dat
                         //if (SaveDatFileDirectory != null && !string.IsNullOrEmpty(SaveDatFileDirectory))

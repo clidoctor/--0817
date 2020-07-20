@@ -65,6 +65,7 @@ namespace SagensVision
         public static FindPointTool Right_Calib_Fix = new FindPointTool();
         public static FindPointTool Left_Calib_Fix = new FindPointTool();
         public static bool IsRight = true;
+        public static bool SensorConnected = false;
         public const string FindPointType_FitLineSet = "FitLineSet";
         public const string FindPointType_Fix = "Fix";
         public const string ToolType_GlueGuide = "GlueGuide";
@@ -110,12 +111,13 @@ namespace SagensVision
         //图像旋转角度
         public int[] imgRotateArr = new int[4];
         public bool[] IsUp = new bool[4];//拼图方向在上还是在下
+        public bool IsReverse = false;//点位是否逆时针
         //产能
         public int OkCnt = 0;
         public int AnchorErrorCnt = 0;
         public int FindEgdeErrorCnt = 0;
         public int ExploreHeightErrorCnt = 0;
-
+        
         public GlobalPointSet()
         {
             for (int i = 0; i < 4; i++)
@@ -447,12 +449,12 @@ namespace SagensVision
             sw.Close();
         }
 
-        public static void SaveExcelData(int boardNum, string Height, string Width, string Area, string index ="")
+        public static void SaveExcelData(string boardNum, string Height, string Width, string Area, string index ="")
         {
             try
             {
                 string filePath = MyGlobal.DataPath + "Excel\\" + string.Format("{0}年{1}月{2}日", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day) + "\\";
-                string fileName = filePath + string.Format("第{0}工位", boardNum) + ".xls";
+                string fileName = filePath + string.Format("{0}工位", boardNum) + ".xls";
 
                 if (!Directory.Exists(filePath))
                 {
