@@ -481,6 +481,7 @@ namespace SagensVision
                 string OK = "";
                 double orignalDeg = 0;
                 double currentDeg = intersect.Angle;
+               
                 if (isRight)
                 {
                     orignalDeg = MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
@@ -2449,7 +2450,9 @@ namespace SagensVision
                     }
                 }
                 //判断X Y 
-                //计算到中心点距离
+
+               
+                //计算到中心点距离               
                 if (isRight)
                 {
                     
@@ -2468,6 +2471,7 @@ namespace SagensVision
                                 double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
                                 double Dist1 = Dist.D * xyResolution;
                                 double Sub = (Dist1 - MyGlobal.xyzBaseCoord_Right.Dist[i][j]);
+                               
                                 if (Sub > MyGlobal.globalPointSet_Right.XYMax || Sub < MyGlobal.globalPointSet_Right.XYMin)
                                 {
                                     if (MyGlobal.globalConfig.isUseSelfOffset)// 启用偏移校正
@@ -2563,7 +2567,7 @@ namespace SagensVision
                                 double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
                                 double Dist1 = Dist.D * xyResolution;
                                 double Sub = (Dist1 - MyGlobal.xyzBaseCoord_Left.Dist[i][j]);
-
+                               
                                 if (Sub > MyGlobal.globalPointSet_Left.XYMax || Sub < MyGlobal.globalPointSet_Left.XYMin)
                                 {
                                     if (MyGlobal.globalConfig.isUseSelfOffset)// 启用偏移校正
@@ -2655,10 +2659,10 @@ namespace SagensVision
                             //HTuple subX = (ModelX - MyGlobal.xyzBaseCoord.XCoord[i])*Xresolution;
                             //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
                             HTuple subX = (ModelX - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Col) * Xresolution;
-                            HTuple subY = (ModelY - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row) * Yresolution;
+                            HTuple subY = (ModelY - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row) * Yresolution;                          
+
                             SubX = SubX.TupleConcat(subX);
                             SubY = SubY.TupleConcat(subY);
-
                         }
                         #endregion
                     }
@@ -2783,10 +2787,12 @@ namespace SagensVision
                 #region 锚定点转换机械坐标
                 HTuple[] AxisAnchorR = new HTuple[4]; HTuple[] AxisAnchorC = new HTuple[4];
                 HTuple[] AnchorR = new HTuple[4]; HTuple[] AnchorC = new HTuple[4];
+                HTuple[] AnchorAngle = new HTuple[4];
                 for (int n = 0; n < AnchorList.Count; n++)
                 {
                     AnchorR[n] = AnchorList[n].Row;
                     AnchorC[n] = AnchorList[n].Col;
+                    AnchorAngle[n] = AnchorList[n].Angle;
                     HTuple homMat = isRight ? MyGlobal.HomMat3D_Right[n] : MyGlobal.HomMat3D_Left[n];
                     if (homMat == null)
                     {
@@ -2820,10 +2826,12 @@ namespace SagensVision
 
                     double PixC = 0; double PixR = 0;
                     double AxisC = 0; double AxisR = 0;
+                    double PixAngle = 0;
                     if (Acount >= 0 && Acount < XCoord[0].Length)
                     {
                         PixC = AnchorC[0];
                         PixR = AnchorR[0];
+                        PixAngle =AnchorAngle[0];
                         AxisC = AxisAnchorC[0];
                         AxisR = AxisAnchorR[0];
                     }
@@ -2831,6 +2839,7 @@ namespace SagensVision
                     {
                         PixC = AnchorC[1];
                         PixR = AnchorR[1];
+                        PixAngle = AnchorAngle[1];
                         AxisC = AxisAnchorC[1];
                         AxisR = AxisAnchorR[1];
                     }
@@ -2838,6 +2847,7 @@ namespace SagensVision
                     {
                         PixC = AnchorC[2];
                         PixR = AnchorR[2];
+                        PixAngle = AnchorAngle[2];
                         AxisC = AxisAnchorC[2];
                         AxisR = AxisAnchorR[2];
                     }
@@ -2845,6 +2855,7 @@ namespace SagensVision
                     {
                         PixC = AnchorC[3];
                         PixR = AnchorR[3];
+                        PixAngle = AnchorAngle[3];
                         AxisC = AxisAnchorC[3];
                         AxisR = AxisAnchorR[3];
                     }
@@ -2864,30 +2875,46 @@ namespace SagensVision
                     double Yrelative = Y1 - AxisR;
                     double Xrelative1 = 0;
                     double Yrelative1 = 0;
-                    if (isRight)
-                    {
-                        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
-                        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
 
-                    }
-                    else
+                    HTuple angle1, angle2;
+                    HOperatorSet.AngleLx(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);//线角度
+                    HOperatorSet.LineOrientation(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);
+                    angle2 = PixAngle;//料角度
+                    if (angle2<-Math.PI/2)
                     {
-                        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
-                        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+                        angle2 = angle2 + Math.PI;
+                    }
+                    else if(angle2> Math.PI/2)
+                    {
+                        angle2 = Math.PI - angle2 ;
+                    }
+                    if (angle1<0)
+                    {
+                        angle1 = angle1 + Math.PI;
                     }
 
-                    //if (i == 0)
+                    double subAngle =Math.Abs( Math.Abs(angle1.D) - Math.Abs(angle2.D));
+                    HTuple dist = 0;
+                    HOperatorSet.DistancePp(OrginalY1[start], OrginalX1[start], PixR, PixC, out dist);
+                    Xrelative1 = dist.D * Math.Sin(subAngle)* Xresolution;
+                    Yrelative1 = dist.D * Math.Cos(subAngle) * Yresolution;
+
+                    //if (isRight)
                     //{
-                    //    int[] keys = everySeg.Keys.ToArray();
-                    //    for (int m = 0; m < keys.Length; m++)
-                    //    {
-                    //        if (Start >= keys[m])
-                    //        {
-                    //            lorc = everySeg[keys[m]];
-                    //            break;
-                    //        }
-                    //    }
+                        
+
+                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
+                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
+                        
                     //}
+                    //else
+                    //{
+                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
+                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+                   
+                    //}
+
+                 
                     if (i == 0)
                     {
                         x0 = X1;
@@ -2938,8 +2965,8 @@ namespace SagensVision
                         //重复性
                         if (sigleTitle[start].Contains("C"))
                         {
-                            RepeatHeader.Append(sigleTitle[start] + "_X" + "\t" + sigleTitle[start] + "_Y" + "\t");
-                            Repeat.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000") + "\t");
+                            RepeatHeader.Append(sigleTitle[start] + "_X" + "\t" + sigleTitle[start] + "_Y" +"\t");
+                            Repeat.Append(Xrelative1.ToString("0.000") + "\t" + Yrelative1.ToString("0.000")  + "\t");
                         }
                         else
                         {
@@ -4195,6 +4222,7 @@ namespace SagensVision
                                         ShowAndSaveMsg(" Wait Data time:--->" + sp1.ElapsedMilliseconds.ToString());
                                         //打开激光
                                         MyGlobal.GoSDK.EnableProfle = false;
+                                        MyGlobal.GoSDK.IsOnline = true;
                                         if (Side == 1)
                                         {
                                             //string Msg3 = "关闭激光";
@@ -4279,6 +4307,7 @@ namespace SagensVision
                                         string Msg2 = "扫描结束";
                                         if (MyGlobal.GoSDK.Stop(ref Msg2))
                                         {
+                                            MyGlobal.GoSDK.IsOnline = false;
                                             ShowAndSaveMsg($"关闭激光成功！");
                                         }
 
@@ -5823,7 +5852,14 @@ namespace SagensVision
                         }
                         Action sw = () =>
                         {
-                            MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                            if (image.Length == 3 && MyGlobal.isShowSurfaceImg)
+                            {
+                                MyGlobal.hWindow_Final[i].HobjectToHimage(image[2]);
+                            }
+                            else
+                            {
+                                MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                            }
                         };
                         this.Invoke(sw);
 
@@ -6193,8 +6229,8 @@ namespace SagensVision
                 chartControl2.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt };
                 chartControl2.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt };
                 chartControl2.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt };
-                //Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl1.Series[0].View;
-                PieSeriesView pie3DSeriesView = (PieSeriesView)chartControl1.Series[0].View;
+                //Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl3.Series[0].View;
+                PieSeriesView pie3DSeriesView = (PieSeriesView)chartControl3.Series[0].View;
                 int totalCnt = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
                     MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt;
                 if (totalCnt == 0)
@@ -6203,19 +6239,19 @@ namespace SagensVision
                 }
                 pie3DSeriesView.Titles[0].Text = $"左工位：{totalCnt}";
             }
-            chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Right.OkCnt };
-            chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt };
-            chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
-            chartControl1.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
-            //Pie3DSeriesView pie3DSeriesView1 = (Pie3DSeriesView)chartControl1.Series[0].View;
-            PieSeriesView pie3DSeriesView1 = (PieSeriesView)chartControl1.Series[0].View;
+            chartControl3.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Right.OkCnt };
+            chartControl3.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt };
+            chartControl3.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
+            chartControl3.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
+            //Pie3DSeriesView pie3DSeriesView1 = (Pie3DSeriesView)chartControl3.Series[0].View;
+            PieSeriesView pie3DSeriesView1 = (PieSeriesView)chartControl3.Series[0].View;
             int totalCnt1 = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
                 MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt +
                 MyGlobal.globalPointSet_Right.OkCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt +
                 MyGlobal.globalPointSet_Right.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt;
             if (totalCnt1 == 0)
             {
-                chartControl1.Series[0].Points[0].Values = new double[] { 1 };
+                chartControl3.Series[0].Points[0].Values = new double[] { 1 };
             }
             pie3DSeriesView1.Titles[0].Text = $"总产能：{totalCnt1}";
 

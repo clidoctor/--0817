@@ -166,6 +166,12 @@ namespace SagensSdk
                 MessageBox.Show(warnMsg);
                 return 0;
             }
+
+            if (!IsOnline)
+            {
+                return 1;
+            }
+
             IntPtr dataObj = IntPtr.Zero;
 
             IntPtr StampMsg = IntPtr.Zero;
@@ -235,7 +241,7 @@ namespace SagensSdk
                         catch (Exception)
                         {
 
-                            return -1;
+                            return 1;
                         }
                        
 
@@ -822,7 +828,8 @@ namespace SagensSdk
         private bool isRecProfileZ;
 
         public bool EnableProfle = false;
-       
+        public bool IsOnline = false;
+
         public event Action StampRecFinish;
         public event Action ProfileRecFinish;
         public event Action SurfaceZRecFinish;

@@ -674,7 +674,7 @@
             // 
             // barStaticItem2
             // 
-            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.2.2";
+            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.2.3";
             this.barStaticItem2.Id = 32;
             this.barStaticItem2.Name = "barStaticItem2";
             // 
@@ -1060,7 +1060,7 @@
             this.splitContainerControl1.Panel2.Controls.Add(this.xtraTabControl2);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(271, 743);
-            this.splitContainerControl1.SplitterPosition = 465;
+            this.splitContainerControl1.SplitterPosition = 392;
             this.splitContainerControl1.TabIndex = 9;
             this.splitContainerControl1.Text = "splitContainerControl1";
             // 
@@ -1070,7 +1070,7 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(271, 465);
+            this.xtraTabControl1.Size = new System.Drawing.Size(271, 392);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
@@ -1080,13 +1080,13 @@
             this.xtraTabPage1.Controls.Add(this.simpleButton1);
             this.xtraTabPage1.Controls.Add(this.textBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(265, 436);
+            this.xtraTabPage1.Size = new System.Drawing.Size(265, 363);
             this.xtraTabPage1.Text = "工位信息";
             // 
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.simpleButton1.Location = new System.Drawing.Point(0, 406);
+            this.simpleButton1.Location = new System.Drawing.Point(0, 333);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(265, 30);
@@ -1102,7 +1102,7 @@
             this.textBox1.Location = new System.Drawing.Point(2, 3);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(265, 401);
+            this.textBox1.Size = new System.Drawing.Size(265, 328);
             this.textBox1.TabIndex = 0;
             // 
             // xtraTabControl2
@@ -1111,7 +1111,7 @@
             this.xtraTabControl2.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabPage2;
-            this.xtraTabControl2.Size = new System.Drawing.Size(271, 273);
+            this.xtraTabControl2.Size = new System.Drawing.Size(271, 346);
             this.xtraTabControl2.TabIndex = 9;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage2,
@@ -1123,7 +1123,7 @@
             this.xtraTabPage2.Controls.Add(this.chartControl1);
             this.xtraTabPage2.Controls.Add(this.btn_clear_curr_capacity1);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(265, 244);
+            this.xtraTabPage2.Size = new System.Drawing.Size(265, 317);
             this.xtraTabPage2.Text = "产能统计";
             // 
             // chartControl1
@@ -1187,13 +1187,13 @@
             series1.View = pieSeriesView1;
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1};
-            this.chartControl1.Size = new System.Drawing.Size(259, 206);
+            this.chartControl1.Size = new System.Drawing.Size(259, 279);
             this.chartControl1.TabIndex = 6;
             // 
             // btn_clear_curr_capacity1
             // 
             this.btn_clear_curr_capacity1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_clear_curr_capacity1.Location = new System.Drawing.Point(0, 214);
+            this.btn_clear_curr_capacity1.Location = new System.Drawing.Point(0, 287);
             this.btn_clear_curr_capacity1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_clear_curr_capacity1.Name = "btn_clear_curr_capacity1";
             this.btn_clear_curr_capacity1.Size = new System.Drawing.Size(265, 30);
@@ -1206,7 +1206,7 @@
             this.xtraTabPage3.Controls.Add(this.chartControl2);
             this.xtraTabPage3.Controls.Add(this.btn_clear_curr_capacity2);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(265, 244);
+            this.xtraTabPage3.Size = new System.Drawing.Size(265, 317);
             this.xtraTabPage3.Text = "左工位";
             // 
             // chartControl2
@@ -1270,13 +1270,13 @@
             series2.View = pieSeriesView2;
             this.chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series2};
-            this.chartControl2.Size = new System.Drawing.Size(259, 206);
+            this.chartControl2.Size = new System.Drawing.Size(259, 279);
             this.chartControl2.TabIndex = 6;
             // 
             // btn_clear_curr_capacity2
             // 
             this.btn_clear_curr_capacity2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_clear_curr_capacity2.Location = new System.Drawing.Point(0, 214);
+            this.btn_clear_curr_capacity2.Location = new System.Drawing.Point(0, 287);
             this.btn_clear_curr_capacity2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_clear_curr_capacity2.Name = "btn_clear_curr_capacity2";
             this.btn_clear_curr_capacity2.Size = new System.Drawing.Size(265, 30);
@@ -1289,7 +1289,7 @@
             this.xtraTabPage4.Controls.Add(this.chartControl3);
             this.xtraTabPage4.Controls.Add(this.btn_clear_curr_capacity3);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(265, 244);
+            this.xtraTabPage4.Size = new System.Drawing.Size(265, 317);
             this.xtraTabPage4.Text = "右工位";
             // 
             // chartControl3
@@ -1357,13 +1357,13 @@
             series3.View = pieSeriesView3;
             this.chartControl3.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series3};
-            this.chartControl3.Size = new System.Drawing.Size(259, 206);
+            this.chartControl3.Size = new System.Drawing.Size(259, 279);
             this.chartControl3.TabIndex = 5;
             // 
             // btn_clear_curr_capacity3
             // 
             this.btn_clear_curr_capacity3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_clear_curr_capacity3.Location = new System.Drawing.Point(0, 214);
+            this.btn_clear_curr_capacity3.Location = new System.Drawing.Point(0, 287);
             this.btn_clear_curr_capacity3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_clear_curr_capacity3.Name = "btn_clear_curr_capacity3";
             this.btn_clear_curr_capacity3.Size = new System.Drawing.Size(265, 30);

@@ -511,8 +511,8 @@ namespace SagensVision.VisionTool
                         {
                             RoiParam RP = new RoiParam();
 
-                            RP.AngleOfProfile = Convert.ToInt32(textBox_Deg.Text);
-                            RP.NumOfSection = Convert.ToInt32(textBox_Num.Text);
+                            //RP.AngleOfProfile = Convert.ToInt32(textBox_Deg.Text);
+                            //RP.NumOfSection = Convert.ToInt32(textBox_Num.Text);
 
                             fpTool.fParam[Id].roiP.Add(RP);
                             fpTool.fParam[Id].roiP[ActiveId].LineOrCircle = comboBox2.SelectedItem.ToString();
@@ -657,9 +657,17 @@ namespace SagensVision.VisionTool
                 string[] keys = fpTool.fParam[Index].DicPointName.ToArray();
 
                 dataGridView1.Rows.Clear();
+                cb_x1.Items.Clear();
+                cb_y1.Items.Clear();
                 for (int i = 0; i < keys.Length; i++)
                 {
                     AddToDataGrid(keys[i], fpTool.fParam[Index].roiP[i].LineOrCircle);
+                    //添加到锚定设置
+                    if (FindType== MyGlobal.FindPointType_Fix)
+                    {
+                        cb_x1.Items.Add(keys[i]);
+                        cb_y1.Items.Add(keys[i]);
+                    }
                 }
 
                 if (keys.Length > 0)
@@ -1050,7 +1058,12 @@ namespace SagensVision.VisionTool
                         HTuple orignal = fpTool.roiList2[Id][i].getModelData();
                         HOperatorSet.AffineTransPoint2d(homMaxFix, orignal[0], orignal[1], out tempR, out tempC);
                         roiController2.viewController.ShowAllRoiModel = -1;
-                        hwindow_final2.viewWindow.genRect2(tempR, tempC, orignal[2], orignal[3], orignal[4], ref temproi);
+                        //角度
+                        //角度                      
+                        HTuple sx, sy, theta, deltaAngle, tx, ty;
+                        HOperatorSet.HomMat2dToAffinePar(homMaxFix, out sx, out sy, out deltaAngle, out theta, out tx, out ty);
+                        double tempPhi = orignal[2] + deltaAngle;
+                        hwindow_final2.viewWindow.genRect2(tempR, tempC, tempPhi, orignal[3], orignal[4], ref temproi);
                         fpTool.roiList2[Id][i] = temproi[0];
                     }
                     roiController2.viewController.ShowAllRoiModel = 0;
@@ -1475,7 +1488,15 @@ namespace SagensVision.VisionTool
                 if (MessageBox.Show("是否重新写入模板位置？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     fpTool.intersectCoordList[Id] = intersection;
-                    StaticOperate.WriteXML(fpTool.intersectCoordList[Id], ParamPath.Path_Param);
+                    if (intersection.Row==0 && intersection.Col==0)
+                    {
+                        MessageBox.Show("当前模板未运行！请运行成功后再写入！");
+                    }
+                    else
+                    {
+                        StaticOperate.WriteXML(fpTool.intersectCoordList[Id], ParamPath.Path_Param);
+
+                    }
                 }
             }
             else
@@ -6212,30 +6233,30 @@ namespace SagensVision.VisionTool
                             fpTool.fParam[SideId].roiP[rowInd[i]].xDist = num;
                             break;
                         case "textBox_Clipping":
-                            if (num > 50)
-                            {
-                                textBox_Clipping.Text = "50";
-                                num = 50;
-                            }
-                            if (num < 0)
-                            {
-                                textBox_Clipping.Text = "0";
-                                num = 0;
-                            }
+                            //if (num > 50)
+                            //{
+                            //    textBox_Clipping.Text = "50";
+                            //    num = 50;
+                            //}
+                            //if (num < 0)
+                            //{
+                            //    textBox_Clipping.Text = "0";
+                            //    num = 0;
+                            //}
                             fpTool.fParam[SideId].roiP[rowInd[i]].ClippingPer = num;
                             break;
 
                         case "textBox_SmoothCont":
-                            if (num > 1)
-                            {
-                                textBox_SmoothCont.Text = "1";
-                                num = 50;
-                            }
-                            if (num < 0)
-                            {
-                                textBox_SmoothCont.Text = "0";
-                                num = 0;
-                            }
+                            //if (num > 1)
+                            //{
+                            //    textBox_SmoothCont.Text = "1";
+                            //    num = 50;
+                            //}
+                            //if (num < 0)
+                            //{
+                            //    textBox_SmoothCont.Text = "0";
+                            //    num = 0;
+                            //}
                             fpTool.fParam[SideId].roiP[rowInd[i]].SmoothCont = num;
                             break;
                         case "textBox_OffsetZ":
@@ -6365,8 +6386,6 @@ namespace SagensVision.VisionTool
                     return;
                 }
 
-
-                textBox_Num.Text = fpTool.fParam[SideId].roiP[id].NumOfSection.ToString();
                 HTuple[] lineCoord = new HTuple[1];
                 //if (SelectAll)
                 //{
@@ -6638,167 +6657,7 @@ namespace SagensVision.VisionTool
             }
         }
 
-        private void comboBox_GetPtType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (isLoading)
-            {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            int currentId = CurrentRowIndex;
-
-            int roiID = dataGridView1.CurrentCell.RowIndex;
-            roiID = CurrentRowIndex;
-
-            int count = dataGridView1.SelectedCells.Count;
-            List<int> rowInd = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                int Ind = dataGridView1.SelectedCells[i].RowIndex;
-                if (!rowInd.Contains(Ind))
-                {
-                    rowInd.Add(Ind);
-                }
-            }
-            for (int i = 0; i < rowInd.Count; i++)
-            {
-                currentId = rowInd[i];
-                if (currentId != -1)
-                {
-                    fpTool.fParam[Id].roiP[currentId].SelectedType = comboBox_GetPtType.SelectedIndex;
-
-                }
-            }
-
-
-        }
-
-        private void checkBox_useLeft_CheckedChanged(object sender, EventArgs e)
-        {
-            if (isLoading)
-            {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            int currentId = CurrentRowIndex;
-            int roiID = dataGridView1.CurrentCell.RowIndex;
-            roiID = CurrentRowIndex;
-
-            int count = dataGridView1.SelectedCells.Count;
-            List<int> rowInd = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                int Ind = dataGridView1.SelectedCells[i].RowIndex;
-                if (!rowInd.Contains(Ind))
-                {
-                    rowInd.Add(Ind);
-                }
-            }
-            for (int i = 0; i < rowInd.Count; i++)
-            {
-                currentId = rowInd[i];
-                if (currentId != -1)
-                {
-                    fpTool.fParam[Id].roiP[currentId].useLeft = checkBox_useLeft.Checked;
-                }
-            }
-        }
-
-        private void checkBox_midPt_CheckedChanged(object sender, EventArgs e)
-        {
-            if (isLoading)
-            {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            int currentId = CurrentRowIndex;
-            int roiID = dataGridView1.CurrentCell.RowIndex;
-            roiID = CurrentRowIndex;
-
-            int count = dataGridView1.SelectedCells.Count;
-            List<int> rowInd = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                int Ind = dataGridView1.SelectedCells[i].RowIndex;
-                if (!rowInd.Contains(Ind))
-                {
-                    rowInd.Add(Ind);
-                }
-            }
-            for (int i = 0; i < rowInd.Count; i++)
-            {
-                currentId = rowInd[i];
-                if (currentId != -1)
-                {
-                    fpTool.fParam[Id].roiP[currentId].useMidPt = checkBox_midPt.Checked;
-                }
-            }
-        }
-
-        private void checkBox_Near_CheckedChanged(object sender, EventArgs e)
-        {
-            if (isLoading)
-            {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            int currentId = CurrentRowIndex;
-            int roiID = dataGridView1.CurrentCell.RowIndex;
-            roiID = CurrentRowIndex;
-
-            int count = dataGridView1.SelectedCells.Count;
-            List<int> rowInd = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                int Ind = dataGridView1.SelectedCells[i].RowIndex;
-                if (!rowInd.Contains(Ind))
-                {
-                    rowInd.Add(Ind);
-                }
-            }
-            for (int i = 0; i < rowInd.Count; i++)
-            {
-                currentId = rowInd[i];
-                if (currentId != -1)
-                {
-                    fpTool.fParam[Id].roiP[currentId].useNear = !checkBox_Far.Checked;
-                }
-            }
-        }
-
-        private void checkBox_center_CheckedChanged(object sender, EventArgs e)
-        {
-            if (isLoading)
-            {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            int currentId = CurrentRowIndex;
-
-            int roiID = dataGridView1.CurrentCell.RowIndex;
-            roiID = CurrentRowIndex;
-
-            int count = dataGridView1.SelectedCells.Count;
-            List<int> rowInd = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                int Ind = dataGridView1.SelectedCells[i].RowIndex;
-                if (!rowInd.Contains(Ind))
-                {
-                    rowInd.Add(Ind);
-                }
-            }
-            for (int i = 0; i < rowInd.Count; i++)
-            {
-                currentId = rowInd[i];
-
-                if (currentId != -1)
-                {
-                    fpTool.fParam[Id].roiP[currentId].useCenter = checkBox_center.Checked;
-                }
-            }
-        }
-
+       
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isLoading)
@@ -6822,36 +6681,20 @@ namespace SagensVision.VisionTool
             MessageBox.Show("切换成功!");
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        private void simpleButton1_Click_1(object sender, EventArgs e)
         {
-            if (isLoading)
+            try
             {
-                return;
-            }
-            int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            int currentId = CurrentRowIndex;
-
-            int roiID = dataGridView1.CurrentCell.RowIndex;
-            roiID = CurrentRowIndex;
-
-            int count = dataGridView1.SelectedCells.Count;
-            List<int> rowInd = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                int Ind = dataGridView1.SelectedCells[i].RowIndex;
-                if (!rowInd.Contains(Ind))
+                if (cb_x1.SelectedItem!=null)
                 {
-                    rowInd.Add(Ind);
-                }
-            }
-            for (int i = 0; i < rowInd.Count; i++)
-            {
-                currentId = rowInd[i];
 
-                if (currentId != -1)
-                {
-                    fpTool.fParam[Id].roiP[currentId].useZzoom = checkBox_zZoom.Checked;
                 }
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
             }
         }
     }

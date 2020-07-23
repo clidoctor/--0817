@@ -76,6 +76,8 @@
             this.cb_UseFix = new System.Windows.Forms.CheckBox();
             this.cb_UseSelfOffset = new System.Windows.Forms.CheckBox();
             this.cb_Reverse = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -545,11 +547,29 @@
             this.cb_Reverse.Visible = false;
             this.cb_Reverse.CheckedChanged += new System.EventHandler(this.cb_Reverse_CheckedChanged);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(104, 511);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 92;
+            this.textBox1.Text = "0";
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(22, 514);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(43, 14);
+            this.label16.TabIndex = 93;
+            this.label16.Text = "起始点";
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 671);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cb_Reverse);
             this.Controls.Add(this.cb_UseSelfOffset);
             this.Controls.Add(this.cb_UseFix);
@@ -640,5 +660,7 @@
         private System.Windows.Forms.CheckBox cb_UseFix;
         private System.Windows.Forms.CheckBox cb_UseSelfOffset;
         private System.Windows.Forms.CheckBox cb_Reverse;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label16;
     }
 }

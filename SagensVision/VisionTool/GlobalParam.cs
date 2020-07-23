@@ -131,10 +131,23 @@ namespace SagensVision.VisionTool
                             NewDicPointName[j] += LastName[n];
                             NewDicPointName[j] += LastName[n];
                         }
-                        if (ArrayName.Length > 3)
+                        //if (ArrayName.Length == 4)
+                        //{
+                        //    //ArrayName[3] = LastName[n];
+                        //    NewDicPointName[j] = NewDicPointName[j].Replace(ArrayName[3],LastName[n]);
+                        //}
+                        if (ArrayName.Length >= 4)
                         {
-                            //ArrayName[3] = LastName[n];
-                            NewDicPointName[j] = NewDicPointName[j].Replace(ArrayName[3],LastName[n]);
+                            if (ArrayName[1]!="")
+                            {
+                                NewDicPointName[j] = ArrayName[0] + "_" + ArrayName[1] + LastName[n];
+                            }
+                            else
+                            {
+                                NewDicPointName[j] = ArrayName[0]  + LastName[n] + LastName[n];
+                            }
+
+
                         }
 
                         n++;             
