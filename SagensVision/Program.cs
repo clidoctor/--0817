@@ -26,17 +26,17 @@ namespace SagensVision
             Process Current = Process.GetCurrentProcess();
             Process[] Processs = Process.GetProcessesByName(Current.ProcessName);
             
-            if (Processs.Length > 1)
-            {
-                MessageBox.Show("警告本机已打开胶路引导程序", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);               
-                return;
-            }
-            else
-            {
-                Application.Run(new FormMain());
-            }
+            //if (Processs.Length > 1)
+            //{
+            //    MessageBox.Show("警告本机已打开胶路引导程序", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);               
+            //    return;
+            //}
+            //else
+            //{
+            //    Application.Run(new FormMain());
+            //}
 
-            
+            Application.Run(new FormMain());
         }
     }
 }

@@ -348,6 +348,7 @@ namespace SagensSdk
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_RESAMPLED_PROFILE:
                         if (!EnableProfle)
                         {
+                            Thread.Sleep(100);
                             break;
 
                         }
@@ -382,8 +383,8 @@ namespace SagensSdk
                             {
                                 mProfile.points[j].Intensity = profileIntensityArr[j];
                             }
-
                         }
+                        else { Thread.Sleep(100); }
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_MEASUREMENT:
                         MeasurementMsg = dataObj;

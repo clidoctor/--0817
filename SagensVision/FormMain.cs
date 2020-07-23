@@ -2993,7 +2993,7 @@ namespace SagensVision
                 //StaticOperate.writeTxt("C:\\Twinwin\\data\\Right\\Laser3D_1.txt", Str.ToString());
 
                 string LorR = MyGlobal.IsRight ? "Right" : "Left";
-                string Path = MyGlobal.IsRight ? "C:\\IT7000\\data\\11\\C#@IT7000@db@RightStationFile\\" : "C:\\IT7000\\data\\11\\C#@IT7000@db@LeftStationFile\\";
+                string Path = MyGlobal.IsRight ? "C:\\Twinwin\\data\\Right\\" : "C:\\Twinwin\\data\\Left\\";
                 if (!Directory.Exists(Path))
                 {
                     Directory.CreateDirectory(Path);
@@ -4049,6 +4049,9 @@ namespace SagensVision
                         }
                         else
                         {
+                            byte[] temp = new byte[len];
+                            Array.Copy(buffer, temp, len);
+                            MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
                             ShowAndSaveMsg(string.Format("收到数据{0}", MyGlobal.ReceiveMsg));
                         }
 
@@ -4056,9 +4059,7 @@ namespace SagensVision
                         {
                            
 
-                            byte[] temp = new byte[len];
-                            Array.Copy(buffer, temp, len);
-                            MyGlobal.ReceiveMsg = Encoding.UTF8.GetString(temp);
+                           
                             if (MyGlobal.ReceiveMsg == "Test")
                             {
                                 for (int i = 0; i < 4; i++)
@@ -4089,6 +4090,8 @@ namespace SagensVision
                             }
                             if (MyGlobal.ReceiveMsg.Contains("Right"))
                             {
+                                string errMsg11 = "";
+                                MyGlobal.GoSDK.Stop(ref errMsg11);
                                 while (!isLastImgRecOK)
                                 {
 
@@ -4099,6 +4102,8 @@ namespace SagensVision
                             }
                             if (MyGlobal.ReceiveMsg.Contains("Left"))
                             {
+                                string errMsg11 = "";
+                                MyGlobal.GoSDK.Stop(ref errMsg11);
                                 while (!isLastImgRecOK)
                                 {
 
@@ -6194,7 +6199,7 @@ namespace SagensVision
                 chartControl2.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt };
                 chartControl2.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt };
                 //Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl1.Series[0].View;
-                PieSeriesView pie3DSeriesView = (PieSeriesView)chartControl1.Series[0].View;
+                PieSeriesView pie3DSeriesView = (PieSeriesView)chartControl2.Series[0].View;
                 int totalCnt = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
                     MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt;
                 if (totalCnt == 0)
