@@ -76,6 +76,10 @@
             this.cb_UseFix = new System.Windows.Forms.CheckBox();
             this.cb_UseSelfOffset = new System.Windows.Forms.CheckBox();
             this.cb_Reverse = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.comboBoxEdit1 = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -83,6 +87,7 @@
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit1.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -545,11 +550,52 @@
             this.cb_Reverse.Visible = false;
             this.cb_Reverse.CheckedChanged += new System.EventHandler(this.cb_Reverse_CheckedChanged);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(104, 511);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 92;
+            this.textBox1.Text = "0";
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(22, 514);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(43, 14);
+            this.label16.TabIndex = 93;
+            this.label16.Text = "起始点";
+            // 
+            // comboBoxEdit1
+            // 
+            this.comboBoxEdit1.Location = new System.Drawing.Point(458, 513);
+            this.comboBoxEdit1.Name = "comboBoxEdit1";
+            this.comboBoxEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.comboBoxEdit1.Properties.Items.AddRange(new object[] {
+            "亮度图",
+            "曲面图",
+            "彩色图"});
+            this.comboBoxEdit1.Size = new System.Drawing.Size(100, 20);
+            this.comboBoxEdit1.TabIndex = 94;
+            // 
+            // labelControl1
+            // 
+            this.labelControl1.Location = new System.Drawing.Point(370, 514);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(72, 14);
+            this.labelControl1.TabIndex = 95;
+            this.labelControl1.Text = "图像显示类型";
+            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 671);
+            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.comboBoxEdit1);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cb_Reverse);
             this.Controls.Add(this.cb_UseSelfOffset);
             this.Controls.Add(this.cb_UseFix);
@@ -586,6 +632,7 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxEdit1.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -640,5 +687,9 @@
         private System.Windows.Forms.CheckBox cb_UseFix;
         private System.Windows.Forms.CheckBox cb_UseSelfOffset;
         private System.Windows.Forms.CheckBox cb_Reverse;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label16;
+        private DevExpress.XtraEditors.ComboBoxEdit comboBoxEdit1;
+        private DevExpress.XtraEditors.LabelControl labelControl1;
     }
 }

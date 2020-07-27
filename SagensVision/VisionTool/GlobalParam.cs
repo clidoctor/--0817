@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 using System.Text.RegularExpressions;
 using System.IO;
+using DevExpress.XtraEditors.Repository;
 
 namespace SagensVision.VisionTool
 {
@@ -131,10 +132,23 @@ namespace SagensVision.VisionTool
                             NewDicPointName[j] += LastName[n];
                             NewDicPointName[j] += LastName[n];
                         }
-                        if (ArrayName.Length > 3)
+                        //if (ArrayName.Length == 4)
+                        //{
+                        //    //ArrayName[3] = LastName[n];
+                        //    NewDicPointName[j] = NewDicPointName[j].Replace(ArrayName[3],LastName[n]);
+                        //}
+                        if (ArrayName.Length >= 4)
                         {
-                            //ArrayName[3] = LastName[n];
-                            NewDicPointName[j] = NewDicPointName[j].Replace(ArrayName[3],LastName[n]);
+                            if (ArrayName[1]!="")
+                            {
+                                NewDicPointName[j] = ArrayName[0] + "_" + ArrayName[1] + LastName[n];
+                            }
+                            else
+                            {
+                                NewDicPointName[j] = ArrayName[0]  + LastName[n] + LastName[n];
+                            }
+
+
                         }
 
                         n++;             
@@ -188,7 +202,7 @@ namespace SagensVision.VisionTool
                     }
                     break;
                 case "textBox_HeightMax":
-                   
+
                     if (isRight)
                     {
                         MyGlobal.globalPointSet_Right.HeightMax = num;
@@ -221,7 +235,7 @@ namespace SagensVision.VisionTool
                     {
                         MyGlobal.globalPointSet_Left.Startpt = (int)num;
                     }
-                    ChangeAxisName(MyGlobal.globalPointSet_Right.Startpt);
+                    //ChangeAxisName(MyGlobal.globalPointSet_Right.Startpt);
                     break;
                 case "textBox_xOffset":
                     if (isRight)
@@ -244,7 +258,7 @@ namespace SagensVision.VisionTool
                     }
                     break;
                 case "textBox_XYMax":
-                   
+
                     if (isRight)
                     {
                         MyGlobal.globalPointSet_Right.XYMax = num;
@@ -255,7 +269,7 @@ namespace SagensVision.VisionTool
                     }
                     break;
                 case "textBox_XYMin":
-                   
+
                     if (isRight)
                     {
                         MyGlobal.globalPointSet_Right.XYMin = num;
@@ -267,8 +281,8 @@ namespace SagensVision.VisionTool
                     break;
             }
 
-           
-            }
+
+        }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -400,8 +414,34 @@ namespace SagensVision.VisionTool
                 comboBox2.BackColor = Color.Yellow;
             }
             isLoading = false;
-        }
 
+
+            //RepositoryItemComboBox w = (RepositoryItemComboBox)barEditItem2.Edit;
+            //w.Items.Add("亮度图");
+            //w.Items.Add("曲面图");
+            //w.Items.Add("彩色图");
+            comboBoxEdit1.EditValueChanged += ShowImgTypeChanged;
+            comboBoxEdit1.EditValue = MyGlobal.globalConfig.ShowImgType;
+        }
+        private void ShowImgTypeChanged(object sender, EventArgs e)
+        {
+            if ("亮度图" == comboBoxEdit1.EditValue.ToString())
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = false;
+            }
+            else if ("曲面图" == comboBoxEdit1.EditValue.ToString())
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = true;
+            }
+            else
+            {
+                MyGlobal.isShowHeightImg = false;
+                MyGlobal.isShowSurfaceImg = false;
+            }
+            MyGlobal.globalConfig.ShowImgType = comboBoxEdit1.EditValue.ToString();
+        }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {

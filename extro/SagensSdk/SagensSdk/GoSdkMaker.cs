@@ -166,6 +166,12 @@ namespace SagensSdk
                 MessageBox.Show(warnMsg);
                 return 0;
             }
+
+            if (!IsOnline)
+            {
+                return 1;
+            }
+
             IntPtr dataObj = IntPtr.Zero;
 
             IntPtr StampMsg = IntPtr.Zero;
@@ -235,7 +241,7 @@ namespace SagensSdk
                         catch (Exception)
                         {
 
-                            return -1;
+                            return 1;
                         }
                        
 
@@ -348,9 +354,7 @@ namespace SagensSdk
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_RESAMPLED_PROFILE:
                         if (!EnableProfle)
                         {
-                            Thread.Sleep(100);
                             break;
-
                         }
                         ProfileMsgZ = dataObj;
                         ctx.xResolution = ((double)GoSdkWrapper.GoProfileMsg_XResolution(ProfileMsgZ))/1000000;
@@ -384,7 +388,6 @@ namespace SagensSdk
                                 mProfile.points[j].Intensity = profileIntensityArr[j];
                             }
                         }
-                        else { Thread.Sleep(100); }
                         break;
                     case GoDataMessageTypes.GO_DATA_MESSAGE_TYPE_MEASUREMENT:
                         MeasurementMsg = dataObj;
@@ -823,7 +826,8 @@ namespace SagensSdk
         private bool isRecProfileZ;
 
         public bool EnableProfle = false;
-       
+        public bool IsOnline = false;
+
         public event Action StampRecFinish;
         public event Action ProfileRecFinish;
         public event Action SurfaceZRecFinish;

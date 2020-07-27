@@ -26,7 +26,7 @@ using System.Text.RegularExpressions;
 namespace SagensVision
 {
     public partial class FormMain : DevExpress.XtraEditors.XtraForm
-    { 
+    {
         public static List<double[][]> XCoord = new List<double[][]>();
         public static List<double[][]> YCoord = new List<double[][]>();
         public static List<double[][]> ZCoord = new List<double[][]>();
@@ -98,7 +98,7 @@ namespace SagensVision
                 }
                 else
                 {
-                    ShowAndSaveMsg("右工位基准值配置文件加载失败!");
+                    ShowAndSaveMsg("右工位基准值配置文件加载失败!", false);
                 }
                 if (File.Exists(MyGlobal.BaseTxtPath_Left))
                 {
@@ -106,19 +106,19 @@ namespace SagensVision
                 }
                 else
                 {
-                    ShowAndSaveMsg("左工位基准值配置文件加载失败!");
+                    ShowAndSaveMsg("左工位基准值配置文件加载失败!", false);
                 }
 
             }
             else
             {
-                ShowAndSaveMsg("基准值配置文件加载失败!");
+                ShowAndSaveMsg("基准值配置文件加载失败!", false);
             }
 
             string ok1 = MyGlobal.Right_findPointTool_Find.Init(MyGlobal.FindPointType_FitLineSet, true, MyGlobal.ToolType_GlueGuide);
             if (ok1 != "OK")
             {
-                ShowAndSaveMsg("右工位引导-" + ok1);
+                ShowAndSaveMsg("右工位引导-" + ok1, false);
             }
             else
             {
@@ -127,7 +127,7 @@ namespace SagensVision
             string ok2 = MyGlobal.Right_findPointTool_Fix.Init(MyGlobal.FindPointType_Fix, true, MyGlobal.ToolType_GlueGuide);
             if (ok2 != "OK")
             {
-                ShowAndSaveMsg("右工位引导-" + ok2);
+                ShowAndSaveMsg("右工位引导-" + ok2, false);
             }
             else
             {
@@ -137,7 +137,7 @@ namespace SagensVision
             string ok3 = MyGlobal.Left_findPointTool_Find.Init(MyGlobal.FindPointType_FitLineSet, false, MyGlobal.ToolType_GlueGuide);
             if (ok3 != "OK")
             {
-                ShowAndSaveMsg("左工位引导-" + ok3);
+                ShowAndSaveMsg("左工位引导-" + ok3, false);
             }
             else
             {
@@ -146,7 +146,7 @@ namespace SagensVision
             string ok4 = MyGlobal.Left_findPointTool_Fix.Init(MyGlobal.FindPointType_Fix, false, MyGlobal.ToolType_GlueGuide);
             if (ok4 != "OK")
             {
-                ShowAndSaveMsg("左工位引导-" + ok4);
+                ShowAndSaveMsg("左工位引导-" + ok4, false);
             }
             else
             {
@@ -155,7 +155,7 @@ namespace SagensVision
             string ok5 = MyGlobal.Left_Calib_Fix.Init(MyGlobal.FindPointType_Fix, false, MyGlobal.ToolType_Calib);
             if (ok5 != "OK")
             {
-                ShowAndSaveMsg("左工位标定-" + ok5);
+                ShowAndSaveMsg("左工位标定-" + ok5, false);
             }
             else
             {
@@ -164,7 +164,7 @@ namespace SagensVision
             string ok6 = MyGlobal.Right_Calib_Fix.Init(MyGlobal.FindPointType_Fix, true, MyGlobal.ToolType_Calib);
             if (ok6 != "OK")
             {
-                ShowAndSaveMsg("右工位标定-" + ok6);
+                ShowAndSaveMsg("右工位标定-" + ok6, false);
             }
             else
             {
@@ -189,7 +189,7 @@ namespace SagensVision
             }
             else
             {
-                ShowAndSaveMsg("通信参数加载失败!");
+                ShowAndSaveMsg("通信参数加载失败!", false);
             }
             if (File.Exists(MyGlobal.AllTypePath + "GlobalPoint_Right.xml"))
             {
@@ -197,7 +197,7 @@ namespace SagensVision
             }
             else
             {
-                ShowAndSaveMsg("右工位全局参数加载失败!");
+                ShowAndSaveMsg("右工位全局参数加载失败!", false);
 
             }
 
@@ -208,7 +208,7 @@ namespace SagensVision
             }
             else
             {
-                ShowAndSaveMsg("左工位全局参数加载失败!");
+                ShowAndSaveMsg("左工位全局参数加载失败!", false);
             }
 
             for (int i = 0; i < 4; i++)
@@ -221,7 +221,7 @@ namespace SagensVision
                 }
                 else
                 {
-                    ShowAndSaveMsg("右工位标定文件加载失败!");
+                    ShowAndSaveMsg("右工位标定文件加载失败!", false);
                     //break;
                 }
                 Calibration.ParamPath.LeftOrRight = "Left";
@@ -231,7 +231,7 @@ namespace SagensVision
                 }
                 else
                 {
-                    ShowAndSaveMsg("左工位标定文件加载失败!");
+                    ShowAndSaveMsg("左工位标定文件加载失败!", false);
                     //break;
                 }
 
@@ -302,12 +302,6 @@ namespace SagensVision
             //ShowProfileToWindow(this.recordXCoord, this.recordYCoord, this.recordZCoord, this.recordSigleTitle, false, true);
         }
 
-
-
-
-
-
-
         private void Show3dImg(HWindow_Final obj)
         {
             //string hwind_id = obj.Name.Substring(obj.Name.Length - 1, 1);
@@ -320,7 +314,6 @@ namespace SagensVision
             //Show3dImgFrm sif = new Show3dImgFrm(z, w, h);
             //sif.Show();
         }
-
 
         #region 窗口双击放大
         private int MouseClickCnt = 0;
@@ -373,7 +366,7 @@ namespace SagensVision
                 EnlargeFrm enlargefrm = new EnlargeFrm(MyGlobal.hWindow_Final[idx].Image, idx);
                 enlargefrm.Show();
             }
-            
+
         }
 
         private void 点位详情ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -455,7 +448,7 @@ namespace SagensVision
         //    }
         //}
 
-        string RunFindPoint(int Side, bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original,HWindow_Final Hwnd, HObject OriginImage = null)
+        string RunFindPoint(int Side, bool isRight, HObject Intesity, HObject HeightImage, out double[][] X, out double[][] Y, out double[][] Z, out string[][] Str, out HTuple[] original, HWindow_Final Hwnd, HObject OriginImage = null)
         {
             X = null; Y = null; Z = null; Str = null; original = new HTuple[2];
             try
@@ -464,7 +457,7 @@ namespace SagensVision
                 string ok1 = "";
                 if (isRight)
                 {
-                    ok1 = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false,MyGlobal.globalConfig.enableFeature);
+                    ok1 = MyGlobal.Right_findPointTool_Fix.FindIntersectPoint(Side, HeightImage, out intersect, Hwnd, false, MyGlobal.globalConfig.enableFeature);
                 }
                 else
                 {
@@ -481,6 +474,7 @@ namespace SagensVision
                 string OK = "";
                 double orignalDeg = 0;
                 double currentDeg = intersect.Angle;
+
                 if (isRight)
                 {
                     orignalDeg = MyGlobal.Right_findPointTool_Fix.intersectCoordList[Side - 1].Angle;
@@ -490,7 +484,7 @@ namespace SagensVision
                     {
                         homMaxFix = null;
                     }
-                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Right[Side -1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
+                    OK = MyGlobal.Right_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Right[Side - 1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
 
                 }
                 else
@@ -501,7 +495,7 @@ namespace SagensVision
                     if (!MyGlobal.globalConfig.isUseFix)
                     {
                         homMaxFix = null;
-                }
+                    }
                     OK = MyGlobal.Left_findPointTool_Find.FindPoint(Side, isRight, Intesity, HeightImage, out X, out Y, out Z, out Str, out original, MyGlobal.HomMat3D_Left[Side - 1], Hwnd, false, homMaxFix, OriginImage, MyGlobal.globalConfig.enableFeature);
                 }
 
@@ -528,9 +522,7 @@ namespace SagensVision
                 return "RunFindPoint Error :" + ex.Message + RowNum;
             }
         }
-
-
-
+        
         #region 窗口按钮
 
         private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -582,25 +574,27 @@ namespace SagensVision
         }
 
         #endregion
-        public void ShowAndSaveMsg(string msg)
+
+        public void ShowAndSaveMsg(string msg, bool flag = true)
         {
             Action<string> fp = (string msg1) =>
             {
-                if (this.textBox1.Lines.Length > 300)
+                if (this.richTextBox1.Lines.Length > 300)
                 {
-                    int index = this.textBox1.Text.IndexOf(Environment.NewLine);
-                    this.textBox1.Text = this.textBox1.Text.Remove(0, index + Environment.NewLine.Length);
+                    int index = this.richTextBox1.Text.IndexOf(Environment.NewLine);
+                    this.richTextBox1.Text = this.richTextBox1.Text.Remove(0, index + Environment.NewLine.Length);
                 }
                 string formatStr = "HH:mm:ss:ffff";
-
+                richTextBox1.SelectionColor = flag ? Color.Black : Color.Red;
                 string longMsg = string.Format("[{0}]", DateTime.Now.ToString(formatStr)) + msg1;
+                this.richTextBox1.AppendText(Environment.NewLine + longMsg);
 
-                this.textBox1.AppendText(Environment.NewLine + longMsg);
-                this.textBox1.Select(this.textBox1.Text.Length, 0);
-                this.textBox1.ScrollToCaret();
-                this.textBox1.ScrollBars = ScrollBars.Both;
+                this.richTextBox1.Select(this.richTextBox1.Text.Length, 0);
+                this.richTextBox1.ScrollToCaret();
+                //this.richrichTextBox1.ScrollBars = ScrollBars.Both;
                 //Misc.SaveLog(longMsg);
                 StaticOperate.SaveLog(longMsg);
+                richTextBox1.Refresh();
             };
             if (this.InvokeRequired)
             {
@@ -611,6 +605,7 @@ namespace SagensVision
                 fp(msg);
             }
         }
+
         public void ShowAndSaveErrorMsg(string msg, string date)
         {
             Action<string> fp = (string msg1) =>
@@ -630,9 +625,14 @@ namespace SagensVision
             }
         }
 
-        void DispBar( bool Disp)
+        void DispBar(bool Disp)
         {
-            bar2.Visible = Disp;
+            if (MyGlobal.globalConfig.uiStyle == "1")
+            {
+                bar2.Visible = Disp;
+            }
+            else { bar2.Visible = false; }
+            
             navBarGroup1.Visible = Disp;
             navBarGroup3.Visible = Disp;
             if (!MyGlobal.globalConfig.enableFeature)
@@ -641,11 +641,10 @@ namespace SagensVision
                 pictureBox2.Visible = false;
             }
         }
-       
+
         VisionTool.Display3D show3D = new VisionTool.Display3D();
         private void FormMain_Load(object sender, EventArgs e)
         {
-
             DispBar(false);
             isLoading = true;
             InitControl();
@@ -683,7 +682,7 @@ namespace SagensVision
 
                 if (!SecretKey.License.SnOk)
                 {
-                    ShowAndSaveMsg("Sn Fail！");
+                    ShowAndSaveMsg("Sn Fail！", false);
                 }
                 MyGlobal.globalConfig.zStart = MyGlobal.GoSDK.zStart;
                 MyGlobal.globalConfig.zRange = MyGlobal.GoSDK.zRange;
@@ -692,54 +691,61 @@ namespace SagensVision
             else
             {
                 MyGlobal.SensorConnected = false;
-                ShowAndSaveMsg("Sensor连接失败！" + Msg);
+                ShowAndSaveMsg("Sensor连接失败！" + Msg, false);
 
             }
 
             //MyGlobal.GoSDK.SurfaceZRecFinish += GoSDK_SurfaceZRecFinish;
             //MyGlobal.GoSDK.SurfaceIntensityRecFinish += GoSDK_SurfaceIntensityFinish;
             cmu.Conn = ConnectTcp;
-            NewProduct.AddToFormain += ChangeBarEditValue;
-            VisionTool.GlobalParam.ChangeType += ChangeBarEditValue;
+            
             //加载config
-            DirectoryInfo dirinf = new DirectoryInfo(MyGlobal.AllTypePath);
-            DirectoryInfo[] dirinfo = dirinf.GetDirectories();
-            RepositoryItemComboBox q = (RepositoryItemComboBox)barEditItem_CurrentType.Edit;
-            for (int i = 0; i < dirinfo.Length; i++)
+            if (MyGlobal.globalConfig.uiStyle == "1")
             {
-                q.Items.Add(dirinfo[i].Name);
+                bar1.Visible = false;
+                dockPanel1.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Visible;
+                bar2.Visible = true;
+                NewProduct.AddToFormain += ChangeBarEditValue;
+                VisionTool.GlobalParam.ChangeType += ChangeBarEditValue;
+                DirectoryInfo dirinf = new DirectoryInfo(MyGlobal.AllTypePath);
+                DirectoryInfo[] dirinfo = dirinf.GetDirectories();
+                RepositoryItemComboBox q = (RepositoryItemComboBox)barEditItem_CurrentType.Edit;
+                for (int i = 0; i < dirinfo.Length; i++)
+                {
+                    q.Items.Add(dirinfo[i].Name);
+                }
+                barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
+                isLoading = false;
+                setValue(true);
+                setValue(false);
             }
-            barEditItem_CurrentType.EditValue = MyGlobal.PathName.CurrentType;
-            isLoading = false;
-            setValue(true);
-            setValue(false);
+            else if (MyGlobal.globalConfig.uiStyle == "2")
+            {
+                dockPanel1.Visibility = DevExpress.XtraBars.Docking.DockVisibility.Hidden;
+                bar2.Visible = false;
+                bar1.Visible = true;
+                NewProduct.AddToFormain += ChangeBarEditValue_1;
+                VisionTool.GlobalParam.ChangeType += ChangeBarEditValue_1;
+                DirectoryInfo dirinf = new DirectoryInfo(MyGlobal.AllTypePath);
+                DirectoryInfo[] dirinfo = dirinf.GetDirectories();
+                RepositoryItemComboBox q = (RepositoryItemComboBox)barEditItem_CurrentType_1.Edit;
+                for (int i = 0; i < dirinfo.Length; i++)
+                {
+                    q.Items.Add(dirinfo[i].Name);
+                }
+                barEditItem_CurrentType_1.EditValue = MyGlobal.PathName.CurrentType;
+                isLoading = false;
+                setValue(true);
+                setValue(false);
+            }
 
-            RepositoryItemComboBox w = (RepositoryItemComboBox)barEditItem2.Edit;
-            w.Items.Add("亮度图");
-            w.Items.Add("曲面图");
-            w.Items.Add("彩色图");
-            barEditItem2.EditValueChanged += ShowImgTypeChanged;
-            barEditItem2.EditValue = "亮度图";
+            
+
+            
+
         }
 
-        private void ShowImgTypeChanged(object sender, EventArgs e)
-        {
-            if ("亮度图" == barEditItem2.EditValue.ToString())
-            {
-                MyGlobal.isShowHeightImg = true;
-                MyGlobal.isShowSurfaceImg = false;
-            }
-            else if ("曲面图" == barEditItem2.EditValue.ToString())
-            {
-                MyGlobal.isShowHeightImg = true;
-                MyGlobal.isShowSurfaceImg = true;
-            }
-            else
-            {
-                MyGlobal.isShowHeightImg = false;
-                MyGlobal.isShowSurfaceImg = false;
-            }
-        }
+        
 
         void ConnectTcp()
         {
@@ -751,6 +757,7 @@ namespace SagensVision
         }
 
         private int recStateCode;
+
         public int RecStateCode
         {
             get { return recStateCode; }
@@ -765,36 +772,7 @@ namespace SagensVision
             }
 
         }
-        private void HIRecFinish()
-        {
-            if (MyGlobal.globalConfig.SensorIP == "127.0.0.1")
-            {
-                //if (SecretKey.License.SnOk)
-                //{
-                Action run = () =>
-                {
-                    string ok = RunSuface(1, true);
-                    if (ok != "OK")
-                    {
-                        ShowAndSaveMsg(ok);
-                    }
-                };
-                this.Invoke(run);
-                //}
 
-            }
-        }
-
-        private void GoSDK_SurfaceIntensityFinish()
-        {
-            RecStateCode++;
-            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}" + "{ 亮度数据接收成功 }");
-        }
-        private void GoSDK_SurfaceZRecFinish()
-        {
-            RecStateCode++;
-            ShowAndSaveMsg($"RecStateCode-->{RecStateCode}" + "{ 高度数据接收成功 }");
-        }
         void GenIntesityProfile(List<SagensSdk.Profile> profile, out HObject Image)
         {
             int len = profile.Count;
@@ -1084,7 +1062,7 @@ namespace SagensVision
                             bool isUp = false;
                             if (MyGlobal.IsRight)
                             {
-                                isUp = MyGlobal.globalPointSet_Right.IsUp[Station -1];
+                                isUp = MyGlobal.globalPointSet_Right.IsUp[Station - 1];
                             }
                             else
                             {
@@ -1289,7 +1267,7 @@ namespace SagensVision
                                     Directory.CreateDirectory(errorDatDate);
                                 }
                                 string errorDatTime = DateTime.Now.ToString("hhmmssff");
-                                string errorDatPath = errorDatDate + errorDatTime+"\\";
+                                string errorDatPath = errorDatDate + errorDatTime + "\\";
                                 if (!Directory.Exists(errorDatPath))
                                 {
                                     Directory.CreateDirectory(errorDatPath);
@@ -1297,16 +1275,16 @@ namespace SagensVision
                                 ShowAndSaveErrorMsg(errstr.ToString(), errorDatPath + saveImageTime);
                                 for (int i = 0; i < MyGlobal.GoSDK.sddList_L.Count; i++)
                                 {
-                                    StaticTool.WriteSerializable($"{errorDatPath}Side{i+1}_L_H.dat", MyGlobal.GoSDK.sddList_L[i]);
-                                    if (MyGlobal.GoSDK.sddList_I.Count>i)
+                                    StaticTool.WriteSerializable($"{errorDatPath}Side{i + 1}_L_H.dat", MyGlobal.GoSDK.sddList_L[i]);
+                                    if (MyGlobal.GoSDK.sddList_I.Count > i)
                                     {
                                         StaticTool.WriteSerializable($"{errorDatPath}Side{i + 1}_I.dat", MyGlobal.GoSDK.sddList_I[i]);
                                     }
-                                    if (MyGlobal.GoSDK.sddList_S.Count>i)
-                                        {
+                                    if (MyGlobal.GoSDK.sddList_S.Count > i)
+                                    {
                                         StaticTool.WriteSerializable($"{errorDatPath}Side{i + 1}_S_H.dat", MyGlobal.GoSDK.sddList_S[i]);
-                                        }
                                     }
+                                }
                                 MyGlobal.GoSDK.sddList_L.Clear();
                                 MyGlobal.GoSDK.sddList_I.Clear();
                                 MyGlobal.GoSDK.sddList_S.Clear();
@@ -1498,9 +1476,7 @@ namespace SagensVision
                 isLastImgRecOK = true;
             }
         }
-
-
-
+        
         public void TileImg(HObject ho_Plane, HObject ho_Zoomheightimg, out HObject ho_TiledImage, bool isUp)
         {
             HObject ho_ObjectsConcat;
@@ -1533,6 +1509,7 @@ namespace SagensVision
 
             return;
         }
+
         private string RunOutLine(int Station, int id, bool SaveBase = false)
         {
             if (Station == 1)
@@ -2060,9 +2037,7 @@ namespace SagensVision
         //    }
         //}
         #endregion
-
-
-
+            
         private string RunSide(int Side, bool isRight, HObject IntensityImage, HObject HeightImage, bool SaveBase = false, HObject OriginImage = null)
         {
             try
@@ -2449,10 +2424,12 @@ namespace SagensVision
                     }
                 }
                 //判断X Y 
+
+
                 //计算到中心点距离
                 if (isRight)
                 {
-                    
+
                     if (MyGlobal.xyzBaseCoord_Right.Dist != null && !SaveBase)
                     {
                         for (int i = 0; i < Xorigin.Count; i++)
@@ -2468,6 +2445,7 @@ namespace SagensVision
                                 double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
                                 double Dist1 = Dist.D * xyResolution;
                                 double Sub = (Dist1 - MyGlobal.xyzBaseCoord_Right.Dist[i][j]);
+
                                 if (Sub > MyGlobal.globalPointSet_Right.XYMax || Sub < MyGlobal.globalPointSet_Right.XYMin)
                                 {
                                     if (MyGlobal.globalConfig.isUseSelfOffset)// 启用偏移校正
@@ -2481,7 +2459,7 @@ namespace SagensVision
                                         XCoord[i][j][0] = affineX;
                                         YCoord[i][j][0] = affineY;
                                         string msg = NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围已补正";
-                                        ShowAndSaveMsg(msg);
+                                        ShowAndSaveMsg(msg, false);
                                     }
                                     else
                                     {
@@ -2504,40 +2482,40 @@ namespace SagensVision
 
 
                                 #region 判断高度范围
-                                                                   ////判断 Z 值高度
-                                    if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
+                                ////判断 Z 值高度
+                                if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
+                                {
+
+                                    if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[i].GetLength(0))
                                     {
-
-                                        if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[i].GetLength(0))
+                                        return "请重新设置基准值";
+                                    }
+                                    double sub = ZCoord[i][j][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
+                                    if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
+                                    {
+                                        if (MyGlobal.globalConfig.isUseSelfOffset) //启用自动补偿
                                         {
-                                            return "请重新设置基准值";
+                                            ZCoord[i][j][0] = MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
+                                            string msg = NameOrigin[i][j] + $"Z--{Math.Round(sub, 3)}超出范围已补正";
+                                            ShowAndSaveMsg(msg, false);
                                         }
-                                        double sub = ZCoord[i][j][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
-                                        if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
+                                        else
                                         {
-                                            if (MyGlobal.globalConfig.isUseSelfOffset) //启用自动补偿
+                                            if (MyGlobal.hWindow_Final[i] != null)
                                             {
-                                                ZCoord[i][j][0] = MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
-                                                string msg = NameOrigin[i][j] + $"Z--{Math.Round(sub, 3)}超出范围已补正";
-                                                ShowAndSaveMsg(msg);
-                                            }
-                                            else
-                                            {
-                                                if (MyGlobal.hWindow_Final[i] != null )
-                                                {
 
-                                                    Action sw = () =>
-                                                    {
-                                                        MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-Height NG", "red", Yorigin[i][j], Xorigin[i][j]);
-                                                    };
-                                                    MyGlobal.hWindow_Final[i].Invoke(sw);
-                                                }
-                                                return $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
+                                                Action sw = () =>
+                                                {
+                                                    MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-Height NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                                };
+                                                MyGlobal.hWindow_Final[i].Invoke(sw);
                                             }
+                                            return $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
                                         }
                                     }
-                                
-                                
+                                }
+
+
                                 #endregion
 
 
@@ -2577,7 +2555,7 @@ namespace SagensVision
                                         XCoord[i][j][0] = affineX;
                                         YCoord[i][j][0] = affineY;
                                         string msg = NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围已补正";
-                                        ShowAndSaveMsg(msg);
+                                        ShowAndSaveMsg(msg, false);
                                     }
                                     else
                                     {
@@ -2609,7 +2587,7 @@ namespace SagensVision
                                             {
                                                 ZCoord[i][j][0] = MyGlobal.xyzBaseCoord_Left.ZCoord[i][j][0];
                                                 string msg = NameOrigin[i][j] + $"Z--{Math.Round(sub, 3)}超出范围已补正";
-                                                ShowAndSaveMsg(msg);
+                                                ShowAndSaveMsg(msg, false);
                                             }
                                             else
                                             {
@@ -2656,9 +2634,9 @@ namespace SagensVision
                             //HTuple subY = (ModelY - MyGlobal.xyzBaseCoord.YCoord[i])*Yresolution;
                             HTuple subX = (ModelX - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Col) * Xresolution;
                             HTuple subY = (ModelY - MyGlobal.xyzBaseCoord_Right.intersectCoordList[i].Row) * Yresolution;
+
                             SubX = SubX.TupleConcat(subX);
                             SubY = SubY.TupleConcat(subY);
-
                         }
                         #endregion
                     }
@@ -2783,10 +2761,12 @@ namespace SagensVision
                 #region 锚定点转换机械坐标
                 HTuple[] AxisAnchorR = new HTuple[4]; HTuple[] AxisAnchorC = new HTuple[4];
                 HTuple[] AnchorR = new HTuple[4]; HTuple[] AnchorC = new HTuple[4];
+                HTuple[] AnchorAngle = new HTuple[4];
                 for (int n = 0; n < AnchorList.Count; n++)
                 {
                     AnchorR[n] = AnchorList[n].Row;
                     AnchorC[n] = AnchorList[n].Col;
+                    AnchorAngle[n] = AnchorList[n].Angle;
                     HTuple homMat = isRight ? MyGlobal.HomMat3D_Right[n] : MyGlobal.HomMat3D_Left[n];
                     if (homMat == null)
                     {
@@ -2820,10 +2800,12 @@ namespace SagensVision
 
                     double PixC = 0; double PixR = 0;
                     double AxisC = 0; double AxisR = 0;
+                    double PixAngle = 0;
                     if (Acount >= 0 && Acount < XCoord[0].Length)
                     {
                         PixC = AnchorC[0];
                         PixR = AnchorR[0];
+                        PixAngle = AnchorAngle[0];
                         AxisC = AxisAnchorC[0];
                         AxisR = AxisAnchorR[0];
                     }
@@ -2831,6 +2813,7 @@ namespace SagensVision
                     {
                         PixC = AnchorC[1];
                         PixR = AnchorR[1];
+                        PixAngle = AnchorAngle[1];
                         AxisC = AxisAnchorC[1];
                         AxisR = AxisAnchorR[1];
                     }
@@ -2838,6 +2821,7 @@ namespace SagensVision
                     {
                         PixC = AnchorC[2];
                         PixR = AnchorR[2];
+                        PixAngle = AnchorAngle[2];
                         AxisC = AxisAnchorC[2];
                         AxisR = AxisAnchorR[2];
                     }
@@ -2845,6 +2829,7 @@ namespace SagensVision
                     {
                         PixC = AnchorC[3];
                         PixR = AnchorR[3];
+                        PixAngle = AnchorAngle[3];
                         AxisC = AxisAnchorC[3];
                         AxisR = AxisAnchorR[3];
                     }
@@ -2864,30 +2849,46 @@ namespace SagensVision
                     double Yrelative = Y1 - AxisR;
                     double Xrelative1 = 0;
                     double Yrelative1 = 0;
-                    if (isRight)
-                    {
-                        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
-                        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
 
-                    }
-                    else
+                    HTuple angle1, angle2;
+                    HOperatorSet.AngleLx(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);//线角度
+                    HOperatorSet.LineOrientation(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);
+                    angle2 = PixAngle;//料角度
+                    if (angle2 < -Math.PI / 2)
                     {
-                        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
-                        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+                        angle2 = angle2 + Math.PI;
+                    }
+                    else if (angle2 > Math.PI / 2)
+                    {
+                        angle2 = Math.PI - angle2;
+                    }
+                    if (angle1 < 0)
+                    {
+                        angle1 = angle1 + Math.PI;
                     }
 
-                    //if (i == 0)
+                    double subAngle = Math.Abs(Math.Abs(angle1.D) - Math.Abs(angle2.D));
+                    HTuple dist = 0;
+                    HOperatorSet.DistancePp(OrginalY1[start], OrginalX1[start], PixR, PixC, out dist);
+                    Xrelative1 = dist.D * Math.Sin(subAngle) * Xresolution;
+                    Yrelative1 = dist.D * Math.Cos(subAngle) * Yresolution;
+
+                    //if (isRight)
                     //{
-                    //    int[] keys = everySeg.Keys.ToArray();
-                    //    for (int m = 0; m < keys.Length; m++)
-                    //    {
-                    //        if (Start >= keys[m])
-                    //        {
-                    //            lorc = everySeg[keys[m]];
-                    //            break;
-                    //        }
-                    //    }
+
+
+                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
+                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
+
                     //}
+                    //else
+                    //{
+                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
+                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+
+                    //}
+
+
                     if (i == 0)
                     {
                         x0 = X1;
@@ -3051,12 +3052,13 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                return "RunSide error :" + ex.Message + RowNum + "  请检查生成点位顺序" ;
+                return "RunSide error :" + ex.Message + RowNum + "  请检查生成点位顺序";
             }
         }
 
 
         private double[] recordXCoord; double[] recordYCoord; double[] recordZCoord; string[] recordSigleTitle;
+
         public void ShowProfileToWindow(double[] xcoord, double[] ycoord, double[] zcoord, string[] sigleTitle, bool isRun, bool showMsg)
         {
             if (isRun)
@@ -3133,17 +3135,12 @@ namespace SagensVision
             ImageConst.Dispose();
             */
         }
-
-
-
-
+        
         bool TcpIsConnect = false;
-        //string[] JobName = { "R_1_zi", "R_2_zi", "R_3_zi", "R_4_zi" };
         string[] JobName;
         int Side = 0;
         Stopwatch sp = new Stopwatch();
-
-
+        
         private bool isLastImgRecOK = true;
         bool OutlineTest = false;
         [Obsolete]
@@ -3169,7 +3166,7 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                ShowAndSaveMsg(string.Format("本地服务器连接失败！"));
+                ShowAndSaveMsg(string.Format("本地服务器连接失败！"), false);
                 TcpIsConnect = false;
                 MyGlobal.sktOK = false;
                 return;
@@ -3221,7 +3218,7 @@ namespace SagensVision
                     {
                         ShowAndSaveMsg(string.Format("收到数据{0}", MyGlobal.ReceiveMsg));
                     }
-                 
+
 
                     if (true)
                     {
@@ -3310,7 +3307,7 @@ namespace SagensVision
                                 }
 
                                 MyGlobal.GoSDK.RunSide = Side.ToString();
-                                
+
                                 ShowAndSaveMsg(Msg);
 
                                 ShowAndSaveMsg(" Start space time:--->" + sp1.ElapsedMilliseconds.ToString());
@@ -3336,7 +3333,7 @@ namespace SagensVision
                                     if (sp.ElapsedMilliseconds > 10000)
                                     {
                                         sp.Reset();
-                                        ShowAndSaveMsg($"图像接收超时！");
+                                        ShowAndSaveMsg($"图像接收超时！", false);
                                         break;
                                     }
                                 }
@@ -3348,7 +3345,7 @@ namespace SagensVision
                                         if (sp.ElapsedMilliseconds > 10000)
                                         {
                                             sp.Reset();
-                                            ShowAndSaveMsg($"图像接收超时！");
+                                            ShowAndSaveMsg($"图像接收超时！", false);
                                             break;
                                         }
                                     }
@@ -3362,7 +3359,7 @@ namespace SagensVision
                                     ShowAndSaveMsg($"关闭激光成功！");
                                 }
 
-                                
+
                                 if (Side < 4)
                                 {
                                     int jobIdx = Side == 4 ? 0 : Side;
@@ -3371,7 +3368,7 @@ namespace SagensVision
                                     {
                                         ShowAndSaveMsg($"切换作业 {JobName[jobIdx]} 成功！");
                                     }
-                        
+
                                     string Msg1 = "";
                                     if (MyGlobal.GoSDK.Start(ref Msg1))
                                     {
@@ -3379,7 +3376,7 @@ namespace SagensVision
                                         //Thread.Sleep(200);
                                     }
                                 }
-                                
+
                                 ShowAndSaveMsg(Msg2);
                                 Action RunDetect = () =>
                                 {
@@ -3389,10 +3386,10 @@ namespace SagensVision
                                     ShowAndSaveMsg(sp.ElapsedMilliseconds.ToString());
                                     if (ok1 != "OK")
                                     {
-                                        ShowAndSaveMsg(ok1);                                        
-                                        ShowAndSaveMsg("计算点位失败！");
+                                        ShowAndSaveMsg(ok1);
+                                        ShowAndSaveMsg("计算点位失败！", false);
                                         MyGlobal.sktClient.Send(ng);
-                                       
+
 
                                     }
                                     else
@@ -3422,7 +3419,7 @@ namespace SagensVision
                     int ind = a.IndexOf("行号");
                     int start = ind;
                     string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                    ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message + RowNum);
+                    ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message + RowNum, false);
                 }
 
             }
@@ -3452,7 +3449,7 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                ShowAndSaveMsg(string.Format("本地服务器连接失败！"));
+                ShowAndSaveMsg(string.Format("本地服务器连接失败！"), false);
                 TcpIsConnect = false;
                 MyGlobal.sktOK = false;
                 return;
@@ -3617,7 +3614,7 @@ namespace SagensVision
                                     if (sp.ElapsedMilliseconds > 10000)
                                     {
                                         sp.Reset();
-                                        ShowAndSaveMsg($"图像接收超时！");
+                                        ShowAndSaveMsg($"图像接收超时！", false);
                                         break;
                                     }
                                 }
@@ -3629,7 +3626,7 @@ namespace SagensVision
                                         if (sp.ElapsedMilliseconds > 10000)
                                         {
                                             sp.Reset();
-                                            ShowAndSaveMsg($"图像接收超时！");
+                                            ShowAndSaveMsg($"图像接收超时！", false);
                                             break;
                                         }
                                     }
@@ -3662,7 +3659,7 @@ namespace SagensVision
                                         ShowAndSaveMsg(ok1);
                                         //if (Side == 4)
                                         //{
-                                        ShowAndSaveMsg("输出点位失败！");
+                                        ShowAndSaveMsg("输出点位失败！", false);
                                         MyGlobal.sktClient.Send(ng);
                                         //}
 
@@ -3692,7 +3689,7 @@ namespace SagensVision
                     int ind = a.IndexOf("行号");
                     int start = ind;
                     string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                    ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message + RowNum);
+                    ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message + RowNum, false);
                 }
 
             }
@@ -3717,7 +3714,7 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                ShowAndSaveMsg(string.Format("服务器启动失败！"));
+                ShowAndSaveMsg(string.Format("服务器启动失败！"), false);
                 TcpIsConnect = false;
                 MyGlobal.sktOK = false;
                 return;
@@ -3903,7 +3900,7 @@ namespace SagensVision
                                             if (sp.ElapsedMilliseconds > 10000)
                                             {
                                                 sp.Reset();
-                                                ShowAndSaveMsg($"图像接收超时！");
+                                                ShowAndSaveMsg($"图像接收超时！", false);
                                                 break;
                                             }
                                         }
@@ -3915,7 +3912,7 @@ namespace SagensVision
                                                 if (sp.ElapsedMilliseconds > 10000)
                                                 {
                                                     sp.Reset();
-                                                    ShowAndSaveMsg($"图像接收超时！");
+                                                    ShowAndSaveMsg($"图像接收超时！", false);
                                                     break;
                                                 }
                                             }
@@ -3948,7 +3945,7 @@ namespace SagensVision
                                                 ShowAndSaveMsg(ok1);
                                                 //if (Side == 4)
                                                 //{
-                                                ShowAndSaveMsg("输出点位失败！");
+                                                ShowAndSaveMsg("输出点位失败！", false);
                                                 MyGlobal.sktClient.Send(ng);
                                                 //}
 
@@ -3978,7 +3975,7 @@ namespace SagensVision
                             int ind = a.IndexOf("行号");
                             int start = ind;
                             string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                            ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message + RowNum);
+                            ShowAndSaveMsg("TCP_ListenSurface-->" + ex.Message + RowNum, false);
                         }
 
                     }
@@ -3993,6 +3990,7 @@ namespace SagensVision
         }
 
         bool ShowOnece = false;
+
         private void Listen_Surface()
         {
             int nSent = 0;
@@ -4010,7 +4008,7 @@ namespace SagensVision
                         MyGlobal.sktOK = true;
                         ShowAndSaveMsg(string.Format("客户端已连接{0}:{1}", ipEP.Address.ToString(), ipEP.Port));
                     }
-                    
+
                     byte[] buffer = new byte[128];
                     byte[] ok = new byte[128];
                     byte[] ng = new byte[128];
@@ -4032,7 +4030,7 @@ namespace SagensVision
                                     TcpIsConnect = false;
                                     MyGlobal.sktOK = false;
                                 }
-                                
+
                             }
                             else
                             {
@@ -4043,7 +4041,7 @@ namespace SagensVision
                                     TcpIsConnect = false;
                                     MyGlobal.sktOK = false;
                                 }
-                               
+
                             }
                             break;
                         }
@@ -4057,9 +4055,9 @@ namespace SagensVision
 
                         try
                         {
-                           
 
-                           
+
+
                             if (MyGlobal.ReceiveMsg == "Test")
                             {
                                 for (int i = 0; i < 4; i++)
@@ -4085,7 +4083,7 @@ namespace SagensVision
                             //}
                             if (!MyGlobal.SensorConnected)
                             {
-                                ShowAndSaveMsg("Sensor 未连接！");
+                                ShowAndSaveMsg("Sensor 未连接！", false);
                                 continue;
                             }
                             if (MyGlobal.ReceiveMsg.Contains("Right"))
@@ -4177,7 +4175,7 @@ namespace SagensVision
                                         MyGlobal.GoSDK.sddList_S.Clear();
                                     }
 
-                                    
+
                                 }
                                 ok = Encoding.UTF8.GetBytes(ReturnStr + "_OK");
                                 ng = Encoding.UTF8.GetBytes(ReturnStr + "_NG");
@@ -4200,6 +4198,7 @@ namespace SagensVision
                                         ShowAndSaveMsg(" Wait Data time:--->" + sp1.ElapsedMilliseconds.ToString());
                                         //打开激光
                                         MyGlobal.GoSDK.EnableProfle = false;
+                                        MyGlobal.GoSDK.IsOnline = true;
                                         if (Side == 1)
                                         {
                                             //string Msg3 = "关闭激光";
@@ -4214,7 +4213,7 @@ namespace SagensVision
                                             }
                                             else
                                             {
-                                                ShowAndSaveMsg($"切换作业 {JobName[Side - 1]} 失败！");
+                                                ShowAndSaveMsg($"切换作业 {JobName[Side - 1]} 失败！", false);
                                             }
                                         }
 
@@ -4261,7 +4260,7 @@ namespace SagensVision
                                             if (sp.ElapsedMilliseconds > 10000)
                                             {
                                                 sp.Reset();
-                                                ShowAndSaveMsg($"图像接收超时！");
+                                                ShowAndSaveMsg($"图像接收超时！", false);
                                                 break;
                                             }
                                         }
@@ -4273,7 +4272,7 @@ namespace SagensVision
                                                 if (sp.ElapsedMilliseconds > 10000)
                                                 {
                                                     sp.Reset();
-                                                    ShowAndSaveMsg($"图像接收超时！");
+                                                    ShowAndSaveMsg($"图像接收超时！", false);
                                                     break;
                                                 }
                                             }
@@ -4284,6 +4283,7 @@ namespace SagensVision
                                         string Msg2 = "扫描结束";
                                         if (MyGlobal.GoSDK.Stop(ref Msg2))
                                         {
+                                            MyGlobal.GoSDK.IsOnline = false;
                                             ShowAndSaveMsg($"关闭激光成功！");
                                         }
 
@@ -4294,9 +4294,9 @@ namespace SagensVision
                                             ShowAndSaveMsg($"切换作业 {JobName[jobIdx]} 成功！");
                                         }
                                         else
-                                        {                                           
-                                            ShowAndSaveMsg($"切换作业 {JobName[jobIdx]} 失败！");
-                                           
+                                        {
+                                            ShowAndSaveMsg($"切换作业 {JobName[jobIdx]} 失败！", false);
+
                                         }
 
                                         ShowAndSaveMsg(Msg2);
@@ -4308,11 +4308,11 @@ namespace SagensVision
                                             ShowAndSaveMsg(sp.ElapsedMilliseconds.ToString());
                                             if (ok1 != "OK")
                                             {
-                                                ShowAndSaveMsg(ok1);
+                                                ShowAndSaveMsg(ok1, false);
                                                 if (Side == 4)
                                                 {
-                                                ShowAndSaveMsg("输出点位失败！");
-                                                MyGlobal.sktClient.Send(ng);
+                                                    ShowAndSaveMsg("输出点位失败！", false);
+                                                    MyGlobal.sktClient.Send(ng);
                                                 }
 
                                             }
@@ -4341,7 +4341,7 @@ namespace SagensVision
                             int ind = a.IndexOf("行号");
                             int start = ind;
                             string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                            ShowAndSaveMsg("Listen_Surface-->" + ex.Message + RowNum);
+                            ShowAndSaveMsg("Listen_Surface-->" + ex.Message + RowNum, false);
                             TcpIsConnect = false;
                             MyGlobal.sktOK = false;
                         }
@@ -4375,7 +4375,7 @@ namespace SagensVision
                     int ind = a.IndexOf("行号");
                     int start = ind;
                     string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                    ShowAndSaveMsg(string.Format("本地服务器连接失败！"));
+                    ShowAndSaveMsg(string.Format("本地服务器连接失败！"), false);
                     TcpIsConnect = false;
                     MyGlobal.sktOK = false;
                     return;
@@ -4397,15 +4397,13 @@ namespace SagensVision
                     int ind = a.IndexOf("行号");
                     int start = ind;
                     string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                    ShowAndSaveMsg(string.Format("服务器启动失败！"));
+                    ShowAndSaveMsg(string.Format("服务器启动失败！"), false);
                     TcpIsConnect = false;
                     MyGlobal.sktOK = false;
                     return;
                 }
             }
         }
-
-
 
         [Obsolete]
         public void TcpClientListen()
@@ -4431,7 +4429,7 @@ namespace SagensVision
                     int ind = a.IndexOf("行号");
                     int start = ind;
                     string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                    ShowAndSaveMsg(string.Format("连接服务器失败！" + ex.Message + RowNum));
+                    ShowAndSaveMsg(string.Format("连接服务器失败！" + ex.Message + RowNum), false);
                     TcpIsConnect = false;
                     MyGlobal.sktOK = false;
                     return;
@@ -4525,7 +4523,7 @@ namespace SagensVision
                                         if (Side == 4)
                                         {
                                             //SaveSend = Encoding.UTF8.GetBytes("SAVE_NG");
-                                            ShowAndSaveMsg("输出点位失败！");
+                                            ShowAndSaveMsg("输出点位失败！", false);
                                             MyGlobal.sktClient.Send(ng);
                                         }
 
@@ -4643,7 +4641,7 @@ namespace SagensVision
                                         string ok1 = Run(0);
                                         if (ok1 != "OK")
                                         {
-                                            ShowAndSaveMsg(ok1);
+                                            ShowAndSaveMsg(ok1, false);
                                         }
 
                                     };
@@ -4669,7 +4667,7 @@ namespace SagensVision
                                         string ok2 = Run(1);
                                         if (ok2 != "OK")
                                         {
-                                            ShowAndSaveMsg(ok2);
+                                            ShowAndSaveMsg(ok2, false);
                                         }
                                     };
                                     this.Invoke(RunDetect1);
@@ -4738,9 +4736,6 @@ namespace SagensVision
             //calib.ShowDialog();
         }
 
-        //Matching.Form1 match = new Matching.Form1(MyGlobal.fileName1);
-
-
         private void navBarItem11_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
             MyGlobal.flset2.ToolType = "GlueGuide";
@@ -4775,15 +4770,13 @@ namespace SagensVision
             //}
 
         }
-        //VisionTool.FindMax[] FindMax = new VisionTool.FindMax[2];
 
         private void navBarItem5_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
             //FindMax[0].ShowDialog();
         }
 
-
-        public void RunOffline(string ImagePath,bool ReduceKdata)
+        public void RunOffline(string ImagePath, bool ReduceKdata)
         {
 
 
@@ -4791,7 +4784,7 @@ namespace SagensVision
             {
 
 
-                string OK1 = LoadImageData(ImagePath,ReduceKdata);
+                string OK1 = LoadImageData(ImagePath, ReduceKdata);
                 if (OK1 != "OK")
                 {
                     MessageBox.Show(OK1);
@@ -4802,7 +4795,7 @@ namespace SagensVision
 
                     if (OK != "OK")
                     {
-                        ShowAndSaveMsg(OK);
+                        ShowAndSaveMsg(OK, false);
                         if (errstr.Length > 0)
                         {
                             ShowAndSaveErrorMsg(errstr.ToString(), ImagePath);
@@ -4826,7 +4819,7 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                ShowAndSaveMsg("RunOffline :" + ex.Message + RowNum);
+                ShowAndSaveMsg("RunOffline :" + ex.Message + RowNum, false);
             }
 
         }
@@ -4842,7 +4835,7 @@ namespace SagensVision
                         string OK = RunOutLine(i + 1, i, true);
                         if (OK != "OK")
                         {
-                            ShowAndSaveMsg(OK);
+                            ShowAndSaveMsg(OK, false);
                             break;
                         }
                         if (i == 3)
@@ -4858,35 +4851,40 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                ShowAndSaveMsg("RunOffline :" + ex.Message + RowNum);
+                ShowAndSaveMsg("RunOffline :" + ex.Message + RowNum, false);
             }
 
         }
-
 
         private void barButtonItem9_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             barButtonItem9.Enabled = false;
             ThreadPool.QueueUserWorkItem(delegate
             {
-
-                //手动测试
-                if (MyGlobal.ImageMulti.Count == 0)
-                    MessageBox.Show("请加载选择手动运行图片！");
-                for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                try
                 {
-                    string OK = RunOutLine(i + 1, i);
-                    if (OK != "OK")
+                    //手动测试
+                    if (MyGlobal.ImageMulti.Count == 0)
+                        MessageBox.Show("请加载选择手动运行图片！");
+                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
                     {
-                        ShowAndSaveMsg(OK);
-                        barButtonItem9.Enabled = true;
-                    }
-                    if (i == 3)
-                    {
-                        ShowAndSaveMsg(OK);
-                        barButtonItem9.Enabled = true;
+                        string OK = RunOutLine(i + 1, i);
+                        if (OK != "OK")
+                        {
+                            ShowAndSaveMsg(OK, false);
+                        }
+                        if (i == 3)
+                        {
+                            ShowAndSaveMsg(OK);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    ShowAndSaveMsg("手动运行异常！\r\n" + ex.StackTrace, false);
+                }
+                finally { barButtonItem9.Enabled = true; }
+                
 
             });
 
@@ -5170,7 +5168,7 @@ namespace SagensVision
                         namesI = new string[len / 2];
                         namesH = new string[len / 2];
                         namesB = new string[len / 2];
-                    }                    
+                    }
                 }
                 else
                 {
@@ -5209,7 +5207,7 @@ namespace SagensVision
                         return;
                     }
 
-                    
+
 
 
                     for (int i = 0; i < namesH.Length; i++)
@@ -5248,8 +5246,8 @@ namespace SagensVision
                             CurrentSide = 3;
                             Side = "Side4";
                         }
-                       
-                            SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
+
+                        SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
                         SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
                         SurfaceZSaveDat szd = null;
                         if (namesB[i] != null)
@@ -5257,7 +5255,7 @@ namespace SagensVision
                             szd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesB[i], typeof(SurfaceZSaveDat));
                         }
 
-                       
+
 
                         StaticTool.GetUnlineRunImg(ssd, sid, szd, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg, out planeImg);
                         //bool isUp = i == 3 || i == 1;
@@ -5270,7 +5268,7 @@ namespace SagensVision
                         {
                             isUp = MyGlobal.globalPointSet_Left.IsUp[i];
                         }
-                        if (planeImg != null )
+                        if (planeImg != null)
                         {
                             TileImg(planeImg, zoomHeightImg, out tileImg, isUp);
                         }
@@ -5336,8 +5334,8 @@ namespace SagensVision
                         }
 
                         Action sw = () =>
-                        {                                                        
-                            if (image.Length== 3 && MyGlobal.isShowSurfaceImg)
+                        {
+                            if (image.Length == 3 && MyGlobal.isShowSurfaceImg)
                             {
                                 MyGlobal.hWindow_Final[CurrentSide].HobjectToHimage(image[2]);
                             }
@@ -5351,7 +5349,7 @@ namespace SagensVision
                         {
                             HObject[] image1 = new HObject[2];
                             image1[0] = new HObject();
-                            image1[1] = new HObject();   
+                            image1[1] = new HObject();
                             MyGlobal.ImageMulti.Add(image1);
                         }
                         MyGlobal.ImageMulti.Add(image);
@@ -5614,7 +5612,7 @@ namespace SagensVision
         //        throw;
         //    }
         //}
-        string LoadImageData(string FilePath,bool ReduceKdata)
+        string LoadImageData(string FilePath, bool ReduceKdata)
         {
             try
             {
@@ -5692,26 +5690,26 @@ namespace SagensVision
                     {
                         return "高度数据加载失败！";
                     }
-                  
+
 
                     for (int i = 0; i < namesH.Length; i++)
                     {
 
                         string Side = "";
                         if (namesH[i].Contains("Side1_"))
-                        {                          
+                        {
                             Side = "Side1";
                         }
                         else if (namesH[i].Contains("Side2_"))
-                        {                          
+                        {
                             Side = "Side2";
                         }
                         else if (namesH[i].Contains("Side3_"))
-                        {                           
+                        {
                             Side = "Side3";
                         }
                         else if (namesH[i].Contains("Side4_"))
-                        {                           
+                        {
                             Side = "Side4";
                         }
 
@@ -5737,7 +5735,7 @@ namespace SagensVision
                             Directory.CreateDirectory("Data\\Kdatfile\\");
                         }
                         string[] names = namesH[i].Split('\\');
-                        string KdataName1 = names[names.Length - 2] +"_"+ names[names.Length - 1];
+                        string KdataName1 = names[names.Length - 2] + "_" + names[names.Length - 1];
                         KdataName1 = KdataName1.Replace(".dat", "");
                         if (ssd != null && ReduceKdata)
                         {
@@ -5784,7 +5782,7 @@ namespace SagensVision
                             HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
 
                             HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
-                            if (zoomRgbImg!=null)
+                            if (zoomRgbImg != null)
                             {
                                 HOperatorSet.RotateImage(zoomRgbImg, out zoomRgbImg, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
 
@@ -5828,7 +5826,14 @@ namespace SagensVision
                         }
                         Action sw = () =>
                         {
-                            MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                            if (image.Length == 3 && MyGlobal.isShowSurfaceImg)
+                            {
+                                MyGlobal.hWindow_Final[i].HobjectToHimage(image[2]);
+                            }
+                            else
+                            {
+                                MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+                            }
                         };
                         this.Invoke(sw);
 
@@ -5985,6 +5990,7 @@ namespace SagensVision
         }
 
         public static bool runOffLineFrmTag = false;
+
         private void barButtonItem10_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (runOffLineFrmTag == false)
@@ -6003,10 +6009,12 @@ namespace SagensVision
 
         private void simpleButton1_Click(object sender, EventArgs e)
         {
-            textBox1.Text = "";
+            richTextBox1.Text = "";
         }
+
         DateTime datetime = DateTime.Now;
         bool firstLogin = true;
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             MouseClickCnt = 0;
@@ -6014,8 +6022,8 @@ namespace SagensVision
             MouseClickCnt2 = 0;
             MouseClickCnt3 = 0;
             barStaticItem3.Caption = $"当前用户：{UserLogin.CurrentUser.ToString()}";
-           
-            if (UserLogin.CurrentUser!=Verify.操作员 && !MyGlobal.globalConfig.enableFeature)
+
+            if (UserLogin.CurrentUser != Verify.操作员 && !MyGlobal.globalConfig.enableFeature)
             {
                 if (firstLogin)
                 {
@@ -6023,15 +6031,15 @@ namespace SagensVision
                     datetime = DateTime.Now; //开始时间
                 }
                 TimeSpan ts = DateTime.Now - datetime;
-                if (ts.Minutes >2)//注销用户
+                if (ts.Minutes > 2)//注销用户
                 {
                     UserLogin.CurrentUser = Verify.操作员;
                     DispBar(false);
                     firstLogin = true;
                 }
             }
-            
-            
+
+
 
             switch (UserLogin.CurrentUser)
             {
@@ -6051,9 +6059,7 @@ namespace SagensVision
                     break;
             }
         }
-
-
-
+        
         private void barButtonItem11_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             //ImgRotateFrm imgrotatefrm = new ImgRotateFrm();
@@ -6084,7 +6090,7 @@ namespace SagensVision
                 int ind = a.IndexOf("行号");
                 int start = ind;
                 string RowNum = start != -1 ? "--" + a.Substring(start, a.Length - start) : "";
-                ShowAndSaveMsg("清理缓存失败-->" + ex.Message + RowNum);
+                ShowAndSaveMsg("清理缓存失败-->" + ex.Message + RowNum, false);
             }
 
         }
@@ -6138,8 +6144,6 @@ namespace SagensVision
                 MyGlobal.globalConfig.enableAlign = false;
 
             }
-
-
         }
 
         public void ChangeBarEditValue(string Name)
@@ -6167,11 +6171,6 @@ namespace SagensVision
                 MyGlobal.globalConfig.enableAlign = false;
 
             }
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         public void setValue(bool IsRight)
@@ -6208,19 +6207,19 @@ namespace SagensVision
                 }
                 pie3DSeriesView.Titles[0].Text = $"左工位：{totalCnt}";
             }
-            chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Right.OkCnt };
-            chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt };
-            chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
-            chartControl1.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
-            //Pie3DSeriesView pie3DSeriesView1 = (Pie3DSeriesView)chartControl1.Series[0].View;
-            PieSeriesView pie3DSeriesView1 = (PieSeriesView)chartControl1.Series[0].View;
+            chartControl3.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Right.OkCnt };
+            chartControl3.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt };
+            chartControl3.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
+            chartControl3.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
+            //Pie3DSeriesView pie3DSeriesView1 = (Pie3DSeriesView)chartControl3.Series[0].View;
+            PieSeriesView pie3DSeriesView1 = (PieSeriesView)chartControl3.Series[0].View;
             int totalCnt1 = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
                 MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt +
                 MyGlobal.globalPointSet_Right.OkCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt +
                 MyGlobal.globalPointSet_Right.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt;
             if (totalCnt1 == 0)
             {
-                chartControl1.Series[0].Points[0].Values = new double[] { 1 };
+                chartControl3.Series[0].Points[0].Values = new double[] { 1 };
             }
             pie3DSeriesView1.Titles[0].Text = $"总产能：{totalCnt1}";
 
@@ -6278,6 +6277,520 @@ namespace SagensVision
             if (MyGlobal.globalConfig.enableFeature)
             {
                 ShowProfileToWindow(this.recordXCoord, this.recordYCoord, this.recordZCoord, this.recordSigleTitle, false, true);
+
+            }
+        }
+
+
+
+        //---ui更新
+        private void barButtonItem13_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            UserLoginIn.UserLogin user = new UserLoginIn.UserLogin();
+            user.Show();
+        }
+
+        private void barButtonItem14_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            //通信设置
+            cmu.ShowDialog();
+        }
+
+        private void barButtonItem15_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            VisionTool.CalibrationForm calibration = new VisionTool.CalibrationForm();
+            calibration.Show();
+            //VisionTool.CalibFormMain calib = new CalibFormMain();
+            //calib.ShowDialog();
+        }
+
+        private void barButtonItem16_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            flset.ToolType = "GlueGuide";
+            flset.FindType = "FitLineSet";
+            flset.ShowDialog();
+        }
+
+        private void barButtonItem17_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            MyGlobal.flset2.ToolType = "GlueGuide";
+            MyGlobal.flset2.FindType = "Fix";
+            MyGlobal.flset2.ShowDialog();
+        }
+
+        private void barButtonItem18_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            gbParamSet.ShowDialog();
+        }
+
+        private void barButtonItem19_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+
+            //打开图片
+            OpenFileDialog openfile = new OpenFileDialog();
+            openfile.Multiselect = true;
+            if (openfile.ShowDialog() == DialogResult.OK)
+            {
+                ShowProfile.HalconWindow.ClearWindow();
+
+                for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        if (MyGlobal.ImageMulti[i][j] != null)
+                        {
+                            MyGlobal.ImageMulti[i][j].Dispose();
+                        }
+
+                    }
+
+                }
+                MyGlobal.ImageMulti.Clear();
+                sidelist.Clear();
+                int len = openfile.FileNames.Length;
+                double icount = len / 3.0;
+                if (MyGlobal.globalConfig.enableAlign && !Regex.IsMatch(icount.ToString(), @"^([-]?)\d*$"))
+                {
+                    MessageBox.Show("文件数目缺失");
+                    return;
+                }
+                if (openfile.FileName.Contains("Left"))
+                {
+                    MyGlobal.IsRight = false;
+                }
+                else
+                {
+                    MyGlobal.IsRight = true;
+                }
+
+                if (openfile.FileNames[len - 1].Contains("Side1_"))
+                {
+                    len = MyGlobal.globalConfig.enableAlign ? 3 : 2;
+                }
+                else if (openfile.FileNames[len - 1].Contains("Side2_"))
+                {
+                    len = MyGlobal.globalConfig.enableAlign ? 6 : 4;
+                }
+                else if (openfile.FileNames[len - 1].Contains("Side3_"))
+                {
+                    len = MyGlobal.globalConfig.enableAlign ? 9 : 6;
+                }
+                else if (openfile.FileNames[len - 1].Contains("Side4_"))
+                {
+                    len = MyGlobal.globalConfig.enableAlign ? 12 : 8;
+                }
+
+
+                string[] namesI;
+                string[] namesH;
+                string[] namesB;
+                if (len < 9)
+                {
+                    if (MyGlobal.globalConfig.enableAlign)
+                    {
+                        namesI = new string[len / 3];
+                        namesH = new string[len / 3];
+                        namesB = new string[len / 3];
+                    }
+                    else
+                    {
+                        namesI = new string[len / 2];
+                        namesH = new string[len / 2];
+                        namesB = new string[len / 2];
+                    }
+                }
+                else
+                {
+                    namesI = new string[(int)Math.Ceiling((double)len / 3)];
+                    namesH = new string[(int)Math.Ceiling((double)len / 3)];
+                    namesB = new string[(int)Math.Ceiling((double)len / 3)];
+                }
+                if (len < 2)
+                {
+                    return;
+                }
+
+                if (Path.GetExtension(openfile.FileNames[0]) == ".dat")
+                {
+                    int orderi = 0; int orderh = 0; int orderb = 0;
+                    foreach (var item in openfile.FileNames)
+                    {
+                        if (item.Contains("L_H.dat"))
+                        {
+                            namesH[orderh] = item;
+                            orderh++;
+                        }
+                        else if (item.Contains("I.dat"))
+                        {
+                            namesI[orderi] = item;
+                            orderi++;
+                        }
+                        else if (item.Contains("S_H.dat") && MyGlobal.globalConfig.enableAlign)
+                        {
+                            namesB[orderb] = item;
+                            orderb++;
+                        }
+                    }
+                    if (namesH[0] == null)
+                    {
+                        return;
+                    }
+
+
+
+
+                    for (int i = 0; i < namesH.Length; i++)
+                    {
+                        int CurrentSide = 0;
+                        HObject[] image;
+                        if (orderb > 0 && MyGlobal.globalConfig.enableAlign)
+                        {
+                            image = new HObject[3];
+                        }
+                        else { image = new HObject[2]; }
+
+                        HObject zoomRgbImg, zoomHeightImg, zoomIntensityImg, planeImg, tileImg;
+                        if (namesH[i] == null)
+                        {
+                            continue;
+                        }
+                        string Side = "";
+                        if (namesH[i].Contains("Side1_"))
+                        {
+                            CurrentSide = 0;
+                            Side = "Side1";
+                        }
+                        else if (namesH[i].Contains("Side2_"))
+                        {
+                            CurrentSide = 1;
+                            Side = "Side2";
+                        }
+                        else if (namesH[i].Contains("Side3_"))
+                        {
+                            CurrentSide = 2;
+                            Side = "Side3";
+                        }
+                        else if (namesH[i].Contains("Side4_"))
+                        {
+                            CurrentSide = 3;
+                            Side = "Side4";
+                        }
+
+                        SurfaceZSaveDat ssd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesH[i], typeof(SurfaceZSaveDat));
+                        SurfaceIntensitySaveDat sid = (SurfaceIntensitySaveDat)StaticTool.ReadSerializable(namesI[i], typeof(SurfaceIntensitySaveDat));
+                        SurfaceZSaveDat szd = null;
+                        if (namesB[i] != null)
+                        {
+                            szd = (SurfaceZSaveDat)StaticTool.ReadSerializable(namesB[i], typeof(SurfaceZSaveDat));
+                        }
+
+
+
+                        StaticTool.GetUnlineRunImg(ssd, sid, szd, MyGlobal.globalConfig.zStart, 255 / MyGlobal.globalConfig.zRange, out zoomHeightImg, out zoomIntensityImg, out zoomRgbImg, out planeImg);
+                        //bool isUp = i == 3 || i == 1;
+                        bool isUp = false;
+                        if (MyGlobal.IsRight)
+                        {
+                            isUp = MyGlobal.globalPointSet_Right.IsUp[i];
+                        }
+                        else
+                        {
+                            isUp = MyGlobal.globalPointSet_Left.IsUp[i];
+                        }
+                        if (planeImg != null)
+                        {
+                            TileImg(planeImg, zoomHeightImg, out tileImg, isUp);
+                        }
+                        else
+                        {
+                            tileImg = null;
+                        }
+
+
+
+                        HObject rotate = new HObject();
+                        HObject rotate_Height = new HObject();
+                        if (MyGlobal.IsRight)
+                        {
+                            if (tileImg != null)
+                            {
+                                HOperatorSet.RotateImage(tileImg, out rotate, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+                            }
+                            HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+
+                            HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+                            if (zoomRgbImg != null)
+                            {
+                                HOperatorSet.RotateImage(zoomRgbImg, out zoomRgbImg, MyGlobal.globalPointSet_Right.imgRotateArr[i], "constant");
+
+                            }
+                        }
+                        else
+                        {
+                            if (tileImg != null)
+                            {
+                                HOperatorSet.RotateImage(tileImg, out rotate, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+                            }
+                            HOperatorSet.RotateImage(zoomHeightImg, out rotate_Height, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+
+                            HOperatorSet.RotateImage(zoomIntensityImg, out zoomIntensityImg, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+                            if (zoomRgbImg != null)
+                            {
+                                HOperatorSet.RotateImage(zoomRgbImg, out zoomRgbImg, MyGlobal.globalPointSet_Left.imgRotateArr[i], "constant");
+
+                            }
+                        }
+
+                        if (!MyGlobal.isShowHeightImg)
+                        {
+                            image[0] = zoomRgbImg;
+                            zoomIntensityImg.Dispose();
+                        }
+                        else
+                        {
+                            image[0] = zoomIntensityImg;
+                            zoomRgbImg.Dispose();
+                        }
+
+                        if (MyGlobal.globalConfig.enableAlign)
+                        {
+                            image[1] = rotate_Height;
+                            image[2] = rotate;
+                        }
+                        else
+                        {
+                            image[1] = rotate_Height;
+                        }
+
+                        Action sw = () =>
+                        {
+                            if (image.Length == 3 && MyGlobal.isShowSurfaceImg)
+                            {
+                                MyGlobal.hWindow_Final[CurrentSide].HobjectToHimage(image[2]);
+                            }
+                            else
+                            {
+                                MyGlobal.hWindow_Final[CurrentSide].HobjectToHimage(image[0]);
+                            }
+                        };
+                        this.Invoke(sw);
+                        if (i < CurrentSide)
+                        {
+                            HObject[] image1 = new HObject[2];
+                            image1[0] = new HObject();
+                            image1[1] = new HObject();
+                            MyGlobal.ImageMulti.Add(image1);
+                        }
+                        MyGlobal.ImageMulti.Add(image);
+
+                        if (planeImg != null)
+                        {
+                            planeImg.Dispose();
+                        }
+                        zoomHeightImg.Dispose();
+                        GC.Collect();
+                    }
+                }
+                else
+                {
+                    int orderi = 0; int orderh = 0; int orderB = 0;
+                    foreach (var item in openfile.FileNames)
+                    {
+                        for (int i = orderi; i < namesH.Length; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (item.Contains((j + 1).ToString() + "I.tiff") || item.Contains((j + 1).ToString() + "B.tiff"))
+                                {
+                                    namesI[i] = item;
+                                    orderi = i + 1;
+                                    sidelist.Add(j + 1);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        for (int i = orderh; i < namesH.Length; i++)
+                        {
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (item.Contains((j + 1).ToString() + "L_H.tiff"))
+                                {
+                                    namesH[i] = item;
+                                    orderh = i + 1;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+
+                        if (item.Contains("S_H.tiff"))
+                        {
+                            namesB[orderB] = item;
+                            orderB++;
+                        }
+                    }
+
+
+                    if (namesH[0] == null)
+                    {
+                        return;
+                    }
+                    for (int i = 0; i < namesH.Length; i++)
+                    {
+                        HObject[] image;
+                        if (orderB > 0 && MyGlobal.globalConfig.enableAlign)
+                        {
+                            image = new HObject[3];
+                        }
+                        else { image = new HObject[2]; }
+
+                        HOperatorSet.ReadImage(out image[0], namesI[i]);
+
+                        HOperatorSet.ReadImage(out image[1], namesH[i]);
+
+                        if (orderB > 0)
+                        {
+                            HOperatorSet.ReadImage(out image[2], namesB[i]);
+                        }
+
+
+
+                        MyGlobal.ImageMulti.Add(image);
+
+                        MyGlobal.hWindow_Final[i].HobjectToHimage(image[0]);
+
+                    }
+                }
+
+
+
+            }
+        }
+
+        private void barButtonItem20_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            barButtonItem9.Enabled = false;
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                try
+                {
+                    //手动测试
+                    if (MyGlobal.ImageMulti.Count == 0)
+                        MessageBox.Show("请加载选择手动运行图片！");
+                    for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+                    {
+                        string OK = RunOutLine(i + 1, i);
+                        if (OK != "OK")
+                        {
+                            ShowAndSaveMsg(OK, false);
+                        }
+                        if (i == 3)
+                        {
+                            ShowAndSaveMsg(OK);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowAndSaveMsg("手动运行异常！\r\n" + ex.StackTrace, false);
+                }
+                finally { barButtonItem9.Enabled = true; }
+
+
+            });
+
+            //if (OK == "OK" && i == 3)
+            //{
+            //    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_OK"));
+            //}
+            //else
+            //{
+            //    MyGlobal.sktClient.Send(Encoding.UTF8.GetBytes("Stop" + "_NG"));
+
+            //}
+
+
+            //for (int i = 0; i < MyGlobal.ImageMulti.Count; i++)
+            //{
+            //    //MyGlobal.hWindow_Final[0].HobjectToHimage(MyGlobal.ImageMulti[i]);
+            //    //string OK = RunDetect(1, MyGlobal.ImageMulti[i]);
+
+
+            //}
+
+            //if (true)
+            //{
+            //    if (!Directory.Exists(MyGlobal.DataPath + "Image\\"))
+            //    {
+            //        Directory.CreateDirectory(MyGlobal.DataPath + "Image\\");
+            //    }
+            //    string path = MyGlobal.DataPath + "Image\\Image" + DateTime.Now.ToString("HH_mm_ss_ffff");
+            //    HOperatorSet.WriteImage(MyGlobal.hWindow_Final[0].Image, "tiff", 0, path + ".tiff");
+
+            //}
+
+        }
+
+        private void barButtonItem21_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (runOffLineFrmTag == false)
+            {
+                runOffLineFrmTag = true;
+                OfflineFrm OffFram = new OfflineFrm();
+                OffFram.Run = new OfflineFrm.RunOff(RunOffline);
+                OffFram.Show();
+            }
+            else
+            {
+                MessageBox.Show("离线Frm已打开！");
+            }
+        }
+
+        private void barEditItem_CurrentType_1_EditValueChanged(object sender, EventArgs e)
+        {
+            if (isLoading)
+            {
+                return;
+            }
+            string Currenttype = barEditItem_CurrentType_1.EditValue.ToString();
+            MyGlobal.PathName.CurrentType = Currenttype;
+            StaticOperate.WriteXML(MyGlobal.PathName, MyGlobal.AllTypePath + "AllType.xml");
+            Init();
+            if (MyGlobal.PathName.CurrentType.Contains("_SurfaceCurvature"))
+            {
+                MyGlobal.globalConfig.enableAlign = true;
+            }
+            else
+            {
+                MyGlobal.globalConfig.enableAlign = false;
+
+            }
+        }
+
+        public void ChangeBarEditValue_1(string Name)
+        {
+            //barEditItem_CurrentType.
+            //RepositoryItemComboBox q =(RepositoryItemComboBox)barEditItem_CurrentType.Edit;
+            //q.Items.Add(Name);
+            //加载config
+
+            DirectoryInfo dirinf = new DirectoryInfo(MyGlobal.AllTypePath);
+            DirectoryInfo[] dirinfo = dirinf.GetDirectories();
+            RepositoryItemComboBox q = (RepositoryItemComboBox)barEditItem_CurrentType_1.Edit;
+            q.Items.Clear();
+            for (int i = 0; i < dirinfo.Length; i++)
+            {
+                q.Items.Add(dirinfo[i].Name);
+            }
+            barEditItem_CurrentType_1.EditValue = MyGlobal.PathName.CurrentType;
+            if (MyGlobal.PathName.CurrentType.Contains("_SurfaceCurvature"))
+            {
+                MyGlobal.globalConfig.enableAlign = true;
+            }
+            else
+            {
+                MyGlobal.globalConfig.enableAlign = false;
 
             }
         }

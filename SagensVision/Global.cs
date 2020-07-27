@@ -97,6 +97,9 @@ namespace SagensVision
         public bool isUseSelfOffset = false;//启用自动补偿
         public bool enableAlign;
         public bool enableFeature;//特征显示
+
+        public string ShowImgType = "亮度图";
+        public string uiStyle = "1";
     }
 
     public class GlobalPointSet

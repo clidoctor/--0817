@@ -1680,8 +1680,14 @@ namespace SagensVision.VisionTool
                         HTuple CenterR = new HTuple(); HTuple CenterC = new HTuple();
                         List<ROI> temproi = new List<ROI>();
                         HTuple tempR = new HTuple(); HTuple tempC = new HTuple();
+                        //角度                      
+                        HTuple sx, sy, theta,deltaAngle,tx,ty;
+                        HOperatorSet.HomMat2dToAffinePar(Fix, out sx, out sy, out deltaAngle, out theta, out tx, out ty);
+                        double tempPhi = orignal[2] + deltaAngle;
+
                         HOperatorSet.AffineTransPoint2d(Fix, recCoord[0], recCoord[1], out CenterR, out CenterC);
                         temp.Row = CenterR; temp.Column = CenterC;
+                        temp.Phi = tempPhi;
                     }
 
                     DispSection(temp, SId, i, out lineCoord);

@@ -177,8 +177,8 @@
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.xtraTabControl2 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.chartControl1 = new DevExpress.XtraCharts.ChartControl();
@@ -209,6 +209,20 @@
             this.btn_show_capacity = new DevExpress.XtraEditors.SimpleButton();
             this.panelContainer1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel7 = new DevExpress.XtraBars.Docking.DockPanel();
+            this.bar1 = new DevExpress.XtraBars.Bar();
+            this.barButtonItem13 = new DevExpress.XtraBars.BarButtonItem();
+            this.barLargeButtonItem2 = new DevExpress.XtraBars.BarLargeButtonItem();
+            this.barButtonItem14 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem15 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem16 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem17 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem18 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem19 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem20 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem21 = new DevExpress.XtraBars.BarButtonItem();
+            this.barStaticItem6 = new DevExpress.XtraBars.BarStaticItem();
+            this.barEditItem_CurrentType_1 = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemComboBox3 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document3)).BeginInit();
@@ -262,6 +276,7 @@
             this.dockPanel7_Container.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.dockPanel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // documentGroup1
@@ -446,7 +461,8 @@
             // 
             this.barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[] {
             this.bar2,
-            this.bar3});
+            this.bar3,
+            this.bar1});
             this.barManager1.DockControls.Add(this.barDockControlTop);
             this.barManager1.DockControls.Add(this.barDockControlBottom);
             this.barManager1.DockControls.Add(this.barDockControlLeft);
@@ -489,13 +505,26 @@
             this.barHeaderItem4,
             this.barStaticItem5,
             this.barEditItem1,
-            this.barEditItem2});
+            this.barEditItem2,
+            this.barButtonItem13,
+            this.barLargeButtonItem2,
+            this.barButtonItem14,
+            this.barButtonItem15,
+            this.barButtonItem16,
+            this.barButtonItem17,
+            this.barButtonItem18,
+            this.barButtonItem19,
+            this.barButtonItem20,
+            this.barButtonItem21,
+            this.barStaticItem6,
+            this.barEditItem_CurrentType_1});
             this.barManager1.MainMenu = this.bar2;
-            this.barManager1.MaxItemId = 39;
+            this.barManager1.MaxItemId = 51;
             this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemComboBox1,
             this.repositoryItemTextEdit1,
-            this.repositoryItemComboBox2});
+            this.repositoryItemComboBox2,
+            this.repositoryItemComboBox3});
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar2
@@ -514,9 +543,7 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.btn_clearbuffer),
             new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem1),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem_CurrentType, "", false, true, true, 112),
-            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem6, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem5),
-            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem2, "", false, true, true, 93)});
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, this.barButtonItem6, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph)});
             this.bar2.OptionsBar.MultiLine = true;
             this.bar2.OptionsBar.UseWholeRow = true;
             this.bar2.Text = "Main menu";
@@ -674,7 +701,7 @@
             // 
             // barStaticItem2
             // 
-            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.2.2";
+            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.2.3";
             this.barStaticItem2.Id = 32;
             this.barStaticItem2.Name = "barStaticItem2";
             // 
@@ -689,7 +716,7 @@
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(1379, 24);
+            this.barDockControlTop.Size = new System.Drawing.Size(1379, 73);
             // 
             // barDockControlBottom
             // 
@@ -703,17 +730,17 @@
             // 
             this.barDockControlLeft.CausesValidation = false;
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
+            this.barDockControlLeft.Location = new System.Drawing.Point(0, 73);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 770);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 721);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(1379, 24);
+            this.barDockControlRight.Location = new System.Drawing.Point(1379, 73);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 770);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 721);
             // 
             // barLargeButtonItem1
             // 
@@ -856,10 +883,11 @@
             this.dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             this.dockPanel1.FloatSize = new System.Drawing.Size(133, 328);
             this.dockPanel1.ID = new System.Guid("19d979f9-0ad1-47f3-b52e-156227f70c6c");
-            this.dockPanel1.Location = new System.Drawing.Point(0, 24);
+            this.dockPanel1.Location = new System.Drawing.Point(0, 73);
             this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Options.ShowCloseButton = false;
             this.dockPanel1.OriginalSize = new System.Drawing.Size(204, 275);
-            this.dockPanel1.Size = new System.Drawing.Size(204, 770);
+            this.dockPanel1.Size = new System.Drawing.Size(204, 721);
             this.dockPanel1.Text = "功能设置";
             // 
             // dockPanel1_Container
@@ -868,14 +896,14 @@
             this.dockPanel1_Container.Controls.Add(this.navBarControl1);
             this.dockPanel1_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel1_Container.Name = "dockPanel1_Container";
-            this.dockPanel1_Container.Size = new System.Drawing.Size(195, 743);
+            this.dockPanel1_Container.Size = new System.Drawing.Size(195, 694);
             this.dockPanel1_Container.TabIndex = 0;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(3, 705);
+            this.pictureBox2.Location = new System.Drawing.Point(3, 656);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(189, 33);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -915,6 +943,7 @@
             // navBarGroup2
             // 
             this.navBarGroup2.Caption = "权限管理";
+            this.navBarGroup2.Expanded = true;
             this.navBarGroup2.ItemLinks.AddRange(new DevExpress.XtraNavBar.NavBarItemLink[] {
             new DevExpress.XtraNavBar.NavBarItemLink(this.navBarItem2)});
             this.navBarGroup2.Name = "navBarGroup2";
@@ -929,6 +958,7 @@
             // navBarGroup1
             // 
             this.navBarGroup1.Caption = "通讯设置";
+            this.navBarGroup1.Expanded = true;
             this.navBarGroup1.ItemLinks.AddRange(new DevExpress.XtraNavBar.NavBarItemLink[] {
             new DevExpress.XtraNavBar.NavBarItemLink(this.navBarItem1),
             new DevExpress.XtraNavBar.NavBarItemLink(this.navBarItem3),
@@ -1035,18 +1065,20 @@
             this.dockPanel2.Controls.Add(this.dockPanel2_Container);
             this.dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
             this.dockPanel2.ID = new System.Guid("2a08fcca-ef38-4a4b-aefa-fdffbb3950c6");
-            this.dockPanel2.Location = new System.Drawing.Point(1099, 24);
+            this.dockPanel2.Location = new System.Drawing.Point(1099, 73);
             this.dockPanel2.Name = "dockPanel2";
+            this.dockPanel2.Options.ResizeDirection = DevExpress.XtraBars.Docking.Helpers.ResizeDirection.None;
+            this.dockPanel2.Options.ShowCloseButton = false;
             this.dockPanel2.OriginalSize = new System.Drawing.Size(280, 469);
-            this.dockPanel2.Size = new System.Drawing.Size(280, 770);
+            this.dockPanel2.Size = new System.Drawing.Size(280, 721);
             this.dockPanel2.Text = "消息栏";
             // 
             // dockPanel2_Container
             // 
             this.dockPanel2_Container.Controls.Add(this.splitContainerControl1);
-            this.dockPanel2_Container.Location = new System.Drawing.Point(5, 23);
+            this.dockPanel2_Container.Location = new System.Drawing.Point(4, 23);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(271, 743);
+            this.dockPanel2_Container.Size = new System.Drawing.Size(272, 694);
             this.dockPanel2_Container.TabIndex = 0;
             // 
             // splitContainerControl1
@@ -1059,8 +1091,8 @@
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Controls.Add(this.xtraTabControl2);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(271, 743);
-            this.splitContainerControl1.SplitterPosition = 465;
+            this.splitContainerControl1.Size = new System.Drawing.Size(272, 694);
+            this.splitContainerControl1.SplitterPosition = 392;
             this.splitContainerControl1.TabIndex = 9;
             this.splitContainerControl1.Text = "splitContainerControl1";
             // 
@@ -1070,40 +1102,37 @@
             this.xtraTabControl1.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(271, 465);
+            this.xtraTabControl1.Size = new System.Drawing.Size(272, 392);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1});
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.richTextBox1);
             this.xtraTabPage1.Controls.Add(this.simpleButton1);
-            this.xtraTabPage1.Controls.Add(this.textBox1);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(265, 436);
+            this.xtraTabPage1.Size = new System.Drawing.Size(266, 363);
             this.xtraTabPage1.Text = "工位信息";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(258, 325);
+            this.richTextBox1.TabIndex = 2;
+            this.richTextBox1.Text = "";
             // 
             // simpleButton1
             // 
             this.simpleButton1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.simpleButton1.Location = new System.Drawing.Point(0, 406);
+            this.simpleButton1.Location = new System.Drawing.Point(0, 333);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
-            this.simpleButton1.Size = new System.Drawing.Size(265, 30);
+            this.simpleButton1.Size = new System.Drawing.Size(266, 30);
             this.simpleButton1.TabIndex = 1;
             this.simpleButton1.Text = "消息栏信息清除";
             this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(2, 3);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(265, 401);
-            this.textBox1.TabIndex = 0;
             // 
             // xtraTabControl2
             // 
@@ -1111,7 +1140,7 @@
             this.xtraTabControl2.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabPage2;
-            this.xtraTabControl2.Size = new System.Drawing.Size(271, 273);
+            this.xtraTabControl2.Size = new System.Drawing.Size(272, 297);
             this.xtraTabControl2.TabIndex = 9;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage2,
@@ -1123,7 +1152,7 @@
             this.xtraTabPage2.Controls.Add(this.chartControl1);
             this.xtraTabPage2.Controls.Add(this.btn_clear_curr_capacity1);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(265, 244);
+            this.xtraTabPage2.Size = new System.Drawing.Size(266, 268);
             this.xtraTabPage2.Text = "产能统计";
             // 
             // chartControl1
@@ -1158,7 +1187,7 @@
             this.chartControl1.Legend.MarkerSize = new System.Drawing.Size(9, 9);
             this.chartControl1.Legend.Name = "Default Legend";
             this.chartControl1.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            this.chartControl1.Location = new System.Drawing.Point(3, 3);
+            this.chartControl1.Location = new System.Drawing.Point(2, 3);
             this.chartControl1.Name = "chartControl1";
             pieSeriesLabel1.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
             pieSeriesLabel1.LineLength = 1;
@@ -1187,16 +1216,16 @@
             series1.View = pieSeriesView1;
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1};
-            this.chartControl1.Size = new System.Drawing.Size(259, 206);
+            this.chartControl1.Size = new System.Drawing.Size(260, 230);
             this.chartControl1.TabIndex = 6;
             // 
             // btn_clear_curr_capacity1
             // 
             this.btn_clear_curr_capacity1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_clear_curr_capacity1.Location = new System.Drawing.Point(0, 214);
+            this.btn_clear_curr_capacity1.Location = new System.Drawing.Point(0, 238);
             this.btn_clear_curr_capacity1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_clear_curr_capacity1.Name = "btn_clear_curr_capacity1";
-            this.btn_clear_curr_capacity1.Size = new System.Drawing.Size(265, 30);
+            this.btn_clear_curr_capacity1.Size = new System.Drawing.Size(266, 30);
             this.btn_clear_curr_capacity1.TabIndex = 2;
             this.btn_clear_curr_capacity1.Text = "清除当前工位数据";
             this.btn_clear_curr_capacity1.Click += new System.EventHandler(this.btn_clear_curr_capacity_Click);
@@ -1206,7 +1235,7 @@
             this.xtraTabPage3.Controls.Add(this.chartControl2);
             this.xtraTabPage3.Controls.Add(this.btn_clear_curr_capacity2);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(265, 244);
+            this.xtraTabPage3.Size = new System.Drawing.Size(265, 317);
             this.xtraTabPage3.Text = "左工位";
             // 
             // chartControl2
@@ -1270,13 +1299,13 @@
             series2.View = pieSeriesView2;
             this.chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series2};
-            this.chartControl2.Size = new System.Drawing.Size(259, 206);
+            this.chartControl2.Size = new System.Drawing.Size(259, 279);
             this.chartControl2.TabIndex = 6;
             // 
             // btn_clear_curr_capacity2
             // 
             this.btn_clear_curr_capacity2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_clear_curr_capacity2.Location = new System.Drawing.Point(0, 214);
+            this.btn_clear_curr_capacity2.Location = new System.Drawing.Point(0, 287);
             this.btn_clear_curr_capacity2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_clear_curr_capacity2.Name = "btn_clear_curr_capacity2";
             this.btn_clear_curr_capacity2.Size = new System.Drawing.Size(265, 30);
@@ -1289,7 +1318,7 @@
             this.xtraTabPage4.Controls.Add(this.chartControl3);
             this.xtraTabPage4.Controls.Add(this.btn_clear_curr_capacity3);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(265, 244);
+            this.xtraTabPage4.Size = new System.Drawing.Size(265, 317);
             this.xtraTabPage4.Text = "右工位";
             // 
             // chartControl3
@@ -1326,7 +1355,7 @@
             this.chartControl3.Legend.MarkerSize = new System.Drawing.Size(9, 9);
             this.chartControl3.Legend.Name = "Default Legend";
             this.chartControl3.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            this.chartControl3.Location = new System.Drawing.Point(3, 3);
+            this.chartControl3.Location = new System.Drawing.Point(2, 3);
             this.chartControl3.Name = "chartControl3";
             this.chartControl3.PaletteBaseColorNumber = 6;
             this.chartControl3.PaletteName = "Mixed";
@@ -1357,13 +1386,13 @@
             series3.View = pieSeriesView3;
             this.chartControl3.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series3};
-            this.chartControl3.Size = new System.Drawing.Size(259, 206);
+            this.chartControl3.Size = new System.Drawing.Size(259, 279);
             this.chartControl3.TabIndex = 5;
             // 
             // btn_clear_curr_capacity3
             // 
             this.btn_clear_curr_capacity3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_clear_curr_capacity3.Location = new System.Drawing.Point(0, 214);
+            this.btn_clear_curr_capacity3.Location = new System.Drawing.Point(0, 287);
             this.btn_clear_curr_capacity3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_clear_curr_capacity3.Name = "btn_clear_curr_capacity3";
             this.btn_clear_curr_capacity3.Size = new System.Drawing.Size(265, 30);
@@ -1384,7 +1413,7 @@
             this.dockPanel8_Container.Controls.Add(this.panel1);
             this.dockPanel8_Container.Location = new System.Drawing.Point(0, 0);
             this.dockPanel8_Container.Name = "dockPanel8_Container";
-            this.dockPanel8_Container.Size = new System.Drawing.Size(889, 750);
+            this.dockPanel8_Container.Size = new System.Drawing.Size(889, 701);
             this.dockPanel8_Container.TabIndex = 0;
             // 
             // panel1
@@ -1393,7 +1422,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(889, 750);
+            this.panel1.Size = new System.Drawing.Size(889, 701);
             this.panel1.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -1415,7 +1444,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(889, 750);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(889, 701);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // label6
@@ -1423,7 +1452,7 @@
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Location = new System.Drawing.Point(743, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(143, 37);
+            this.label6.Size = new System.Drawing.Size(143, 35);
             this.label6.TabIndex = 4;
             this.label6.Text = "第四条边";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1433,7 +1462,7 @@
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Location = new System.Drawing.Point(595, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(142, 37);
+            this.label5.Size = new System.Drawing.Size(142, 35);
             this.label5.TabIndex = 3;
             this.label5.Text = "第三条边";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1443,7 +1472,7 @@
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Location = new System.Drawing.Point(299, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(290, 37);
+            this.label4.Size = new System.Drawing.Size(290, 35);
             this.label4.TabIndex = 2;
             this.label4.Text = "3D轨迹";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1453,7 +1482,7 @@
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(151, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(142, 37);
+            this.label3.Size = new System.Drawing.Size(142, 35);
             this.label3.TabIndex = 1;
             this.label3.Text = "第二条边";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1463,7 +1492,7 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(142, 37);
+            this.label2.Size = new System.Drawing.Size(142, 35);
             this.label2.TabIndex = 0;
             this.label2.Text = "第一条边";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1570,6 +1599,150 @@
             this.dockPanel7.OriginalSize = new System.Drawing.Size(204, 361);
             this.dockPanel7.Size = new System.Drawing.Size(204, 361);
             // 
+            // bar1
+            // 
+            this.bar1.BarName = "Custom 4";
+            this.bar1.DockCol = 0;
+            this.bar1.DockRow = 1;
+            this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
+            this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem13),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem14),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem15),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem16),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem17),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem18),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem19),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem20),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem21),
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem_CurrentType_1, "", false, true, true, 128)});
+            this.bar1.OptionsBar.MultiLine = true;
+            this.bar1.OptionsBar.UseWholeRow = true;
+            this.bar1.Text = "Custom 4";
+            // 
+            // barButtonItem13
+            // 
+            this.barButtonItem13.Caption = "用户管理";
+            this.barButtonItem13.Id = 39;
+            this.barButtonItem13.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem13.ImageOptions.Image")));
+            this.barButtonItem13.Name = "barButtonItem13";
+            this.barButtonItem13.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem13.Size = new System.Drawing.Size(100, 40);
+            this.barButtonItem13.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem13_ItemClick);
+            // 
+            // barLargeButtonItem2
+            // 
+            this.barLargeButtonItem2.AllowHtmlText = DevExpress.Utils.DefaultBoolean.True;
+            this.barLargeButtonItem2.Caption = "通讯设置";
+            this.barLargeButtonItem2.CaptionAlignment = DevExpress.XtraBars.BarItemCaptionAlignment.Left;
+            this.barLargeButtonItem2.Id = 40;
+            this.barLargeButtonItem2.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barLargeButtonItem2.ImageOptions.Image")));
+            this.barLargeButtonItem2.Name = "barLargeButtonItem2";
+            this.barLargeButtonItem2.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barLargeButtonItem2.Size = new System.Drawing.Size(100, 0);
+            // 
+            // barButtonItem14
+            // 
+            this.barButtonItem14.Caption = "通讯设置";
+            this.barButtonItem14.Id = 41;
+            this.barButtonItem14.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem14.ImageOptions.Image")));
+            this.barButtonItem14.Name = "barButtonItem14";
+            this.barButtonItem14.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem14.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem14.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem14_ItemClick);
+            // 
+            // barButtonItem15
+            // 
+            this.barButtonItem15.Caption = "标定设置";
+            this.barButtonItem15.Id = 42;
+            this.barButtonItem15.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem15.ImageOptions.Image")));
+            this.barButtonItem15.Name = "barButtonItem15";
+            this.barButtonItem15.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem15.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem15.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem15_ItemClick);
+            // 
+            // barButtonItem16
+            // 
+            this.barButtonItem16.Caption = "轮廓设置";
+            this.barButtonItem16.Id = 43;
+            this.barButtonItem16.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem16.ImageOptions.Image")));
+            this.barButtonItem16.Name = "barButtonItem16";
+            this.barButtonItem16.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem16.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem16.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem16_ItemClick);
+            // 
+            // barButtonItem17
+            // 
+            this.barButtonItem17.Caption = "定位设置";
+            this.barButtonItem17.Id = 44;
+            this.barButtonItem17.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem17.ImageOptions.Image")));
+            this.barButtonItem17.Name = "barButtonItem17";
+            this.barButtonItem17.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem17.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem17.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem17_ItemClick);
+            // 
+            // barButtonItem18
+            // 
+            this.barButtonItem18.Caption = "全局参数设置";
+            this.barButtonItem18.Id = 45;
+            this.barButtonItem18.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem18.ImageOptions.Image")));
+            this.barButtonItem18.Name = "barButtonItem18";
+            this.barButtonItem18.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem18.Size = new System.Drawing.Size(130, 0);
+            this.barButtonItem18.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem18_ItemClick);
+            // 
+            // barButtonItem19
+            // 
+            this.barButtonItem19.Caption = "数据导入";
+            this.barButtonItem19.Id = 46;
+            this.barButtonItem19.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem19.ImageOptions.Image")));
+            this.barButtonItem19.Name = "barButtonItem19";
+            this.barButtonItem19.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem19.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem19.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem19_ItemClick);
+            // 
+            // barButtonItem20
+            // 
+            this.barButtonItem20.Caption = "手动运行";
+            this.barButtonItem20.Id = 47;
+            this.barButtonItem20.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.ImageOptions.Image")));
+            this.barButtonItem20.Name = "barButtonItem20";
+            this.barButtonItem20.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem20.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem20.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem20_ItemClick);
+            // 
+            // barButtonItem21
+            // 
+            this.barButtonItem21.Caption = "离线测试";
+            this.barButtonItem21.Id = 48;
+            this.barButtonItem21.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem21.ImageOptions.Image")));
+            this.barButtonItem21.Name = "barButtonItem21";
+            this.barButtonItem21.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barButtonItem21.Size = new System.Drawing.Size(100, 0);
+            this.barButtonItem21.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem21_ItemClick);
+            // 
+            // barStaticItem6
+            // 
+            this.barStaticItem6.Caption = "barStaticItem6";
+            this.barStaticItem6.Id = 49;
+            this.barStaticItem6.Name = "barStaticItem6";
+            // 
+            // barEditItem_CurrentType_1
+            // 
+            this.barEditItem_CurrentType_1.Caption = "当前型号:";
+            this.barEditItem_CurrentType_1.Edit = this.repositoryItemComboBox3;
+            this.barEditItem_CurrentType_1.Id = 50;
+            this.barEditItem_CurrentType_1.Name = "barEditItem_CurrentType_1";
+            this.barEditItem_CurrentType_1.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            this.barEditItem_CurrentType_1.EditValueChanged += new System.EventHandler(this.barEditItem_CurrentType_1_EditValueChanged);
+            // 
+            // repositoryItemComboBox3
+            // 
+            this.repositoryItemComboBox3.AutoHeight = false;
+            this.repositoryItemComboBox3.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemComboBox3.Name = "repositoryItemComboBox3";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1612,7 +1785,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage1.ResumeLayout(false);
-            this.xtraTabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
             this.xtraTabControl2.ResumeLayout(false);
             this.xtraTabPage2.ResumeLayout(false);
@@ -1640,6 +1812,7 @@
             this.dockPanel7_Container.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.dockPanel7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1690,7 +1863,6 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem6;
         private DevExpress.XtraBars.BarButtonItem barButtonItem7;
         private DevExpress.XtraBars.BarButtonItem barButtonItem8;
-        private System.Windows.Forms.TextBox textBox1;
         private DevExpress.XtraNavBar.NavBarItem navBarItem8;
         private DevExpress.XtraNavBar.NavBarGroup navBarGroup3;
         private DevExpress.XtraNavBar.NavBarItem navBarItem10;
@@ -1765,6 +1937,21 @@
         private DevExpress.XtraBars.BarHeaderItem barHeaderItem4;
         private DevExpress.XtraBars.BarEditItem barEditItem1;
         private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private DevExpress.XtraBars.Bar bar1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem13;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem14;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem15;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem16;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem17;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem18;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem19;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem20;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem21;
+        private DevExpress.XtraBars.BarEditItem barEditItem_CurrentType_1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox3;
+        private DevExpress.XtraBars.BarLargeButtonItem barLargeButtonItem2;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem6;
     }
 }
 
