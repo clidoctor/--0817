@@ -123,33 +123,32 @@ namespace SagensVision.VisionTool
                     {
                         string name = fptool.fParam[i].DicPointName[j];                       
                         string[] ArrayName = name.Split('_');
-                        if (ArrayName.Length == 3)
-                        {
-                            NewDicPointName[j] += LastName[n];
-                        }
-                        if (ArrayName.Length < 3)
-                        {
-                            NewDicPointName[j] += LastName[n];
-                            NewDicPointName[j] += LastName[n];
-                        }
+                        //if (ArrayName.Length == 3)
+                        //{
+                        //    NewDicPointName[j] += LastName[n];
+                        //}
+                        //if (ArrayName.Length < 3)
+                        //{
+                        //    NewDicPointName[j] += LastName[n];
+                        //    NewDicPointName[j] += LastName[n];
+                        //}
                         //if (ArrayName.Length == 4)
                         //{
                         //    //ArrayName[3] = LastName[n];
                         //    NewDicPointName[j] = NewDicPointName[j].Replace(ArrayName[3],LastName[n]);
                         //}
-                        if (ArrayName.Length >= 4)
+                        if (ArrayName.Length>0)
                         {
-                            if (ArrayName[1]!="")
-                            {
-                                NewDicPointName[j] = ArrayName[0] + "_" + ArrayName[1] + LastName[n];
-                            }
-                            else
-                            {
-                                NewDicPointName[j] = ArrayName[0]  + LastName[n] + LastName[n];
-                            }
-
-
+                            //if (ArrayName[1]!="")
+                            //{
+                            //    NewDicPointName[j] = ArrayName[0] + "_" + ArrayName[1] + LastName[n];
+                            //}
+                            //else
+                            //{
+                                NewDicPointName[j] = ArrayName[0]  + "_" + (n + 1).ToString() + LastName[n];
+                            //}
                         }
+                   
 
                         n++;             
                     }

@@ -701,7 +701,7 @@
             // 
             // barStaticItem2
             // 
-            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.2.3";
+            this.barStaticItem2.Caption = "深圳鼎晟自动化技术有限公司  版本1.0.2.4";
             this.barStaticItem2.Id = 32;
             this.barStaticItem2.Name = "barStaticItem2";
             // 
@@ -1367,7 +1367,7 @@
             series3.Label = pieSeriesLabel3;
             series3.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             series3.Name = "Series1";
-            seriesPoint9.ColorSerializable = "#00B011";
+            seriesPoint9.ColorSerializable = "#00B050";
             seriesPoint10.ColorSerializable = "#FAE65A";
             seriesPoint11.ColorSerializable = "#FD792F";
             seriesPoint12.ColorSerializable = "#C40002";

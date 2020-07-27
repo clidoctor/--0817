@@ -82,7 +82,7 @@ namespace SagensVision.VisionTool
             //    MessageBox.Show(ok);
             //}
             this.MaximizeBox = true;
-            CurrentSide = "";
+            CurrentSide = "Side1";
             isSave = true;
             isCloing = false;
             splitContainerControl4.Panel1.Controls.Add(hwindow_final2);
@@ -100,7 +100,8 @@ namespace SagensVision.VisionTool
             comboBox2.SelectedIndex = 0;
             comboBox1.SelectedIndex = 0;
 
-            CurrentSide = "";
+            CurrentSide = "Side1";
+            SideName = CurrentSide;
             hwindow_final1.viewWindow.setEditModel(true);
             hwindow_final2.viewWindow.setEditModel(true);
             checkBoxRoi.Checked = true;
@@ -1571,7 +1572,7 @@ namespace SagensVision.VisionTool
         }
 
         string CurrentSide = "";
-        bool isSave = false;
+        bool isSave = true;
         bool NoChange = false;
         bool isCloing = false;
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -1619,13 +1620,14 @@ namespace SagensVision.VisionTool
                 RoiParam.isInvoke = false;
                 ChangeSide();
                 RoiParam.isInvoke = true;
+                CurrentSide = comboBox1.SelectedItem.ToString();
                 if (!HeightImage.IsInitialized())
                 {
                     return;
                 }
 
 
-                CurrentSide = comboBox1.SelectedItem.ToString();
+               
 
                 //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                 //if (File.Exists(MyGlobal.ConfigPath + SideName + ".xml"))
@@ -6002,7 +6004,7 @@ namespace SagensVision.VisionTool
             //comboBox1.SelectedIndex = 0;
             //comboBox2.SelectedIndex = 0;
             isCloing = true;
-            CurrentSide = "";
+            CurrentSide = "Side1";
         }
         bool isInsert = false;
         private void 插入ToolStripMenuItem_Click(object sender, EventArgs e)
