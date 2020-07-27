@@ -169,6 +169,8 @@ namespace SagensSdk
 
             if (!IsOnline)
             {
+                GoSdkWrapper.GoDestroy(data);
+                //GC.Collect();
                 return 1;
             }
 
@@ -410,7 +412,7 @@ namespace SagensSdk
                 isRecProfileZ = false;
             }
             GoSdkWrapper.GoDestroy(data);
-            GC.Collect();
+            //GC.Collect();
             return 1;
         }
 

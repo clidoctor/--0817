@@ -6230,7 +6230,7 @@ namespace SagensVision
                 chartControl2.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt };
                 chartControl2.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt };
                 //Pie3DSeriesView pie3DSeriesView = (Pie3DSeriesView)chartControl3.Series[0].View;
-                PieSeriesView pie3DSeriesView = (PieSeriesView)chartControl3.Series[0].View;
+                PieSeriesView pie3DSeriesView = (PieSeriesView)chartControl2.Series[0].View;
                 int totalCnt = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
                     MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt;
                 if (totalCnt == 0)
@@ -6239,19 +6239,19 @@ namespace SagensVision
                 }
                 pie3DSeriesView.Titles[0].Text = $"左工位：{totalCnt}";
             }
-            chartControl3.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Right.OkCnt };
-            chartControl3.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt };
-            chartControl3.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
-            chartControl3.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
+            chartControl1.Series[0].Points[0].Values = new double[] { MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Right.OkCnt };
+            chartControl1.Series[0].Points[1].Values = new double[] { MyGlobal.globalPointSet_Left.AnchorErrorCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt };
+            chartControl1.Series[0].Points[2].Values = new double[] { MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.FindEgdeErrorCnt };
+            chartControl1.Series[0].Points[3].Values = new double[] { MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt };
             //Pie3DSeriesView pie3DSeriesView1 = (Pie3DSeriesView)chartControl3.Series[0].View;
-            PieSeriesView pie3DSeriesView1 = (PieSeriesView)chartControl3.Series[0].View;
-            int totalCnt1 = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
+            PieSeriesView pie3DSeriesView1 = (PieSeriesView)chartControl1.Series[0].View;
+                int totalCnt1 = MyGlobal.globalPointSet_Left.OkCnt + MyGlobal.globalPointSet_Left.AnchorErrorCnt +
                 MyGlobal.globalPointSet_Left.FindEgdeErrorCnt + MyGlobal.globalPointSet_Left.ExploreHeightErrorCnt +
                 MyGlobal.globalPointSet_Right.OkCnt + MyGlobal.globalPointSet_Right.AnchorErrorCnt +
                 MyGlobal.globalPointSet_Right.FindEgdeErrorCnt + MyGlobal.globalPointSet_Right.ExploreHeightErrorCnt;
             if (totalCnt1 == 0)
             {
-                chartControl3.Series[0].Points[0].Values = new double[] { 1 };
+                chartControl1.Series[0].Points[0].Values = new double[] { 1 };
             }
             pie3DSeriesView1.Titles[0].Text = $"总产能：{totalCnt1}";
 
