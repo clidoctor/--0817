@@ -152,24 +152,24 @@ namespace SagensVision
             {
                 ShowAndSaveMsg("左工位引导-定位参数" + ok4);
             }
-            string ok5 = MyGlobal.Left_Calib_Fix.Init(MyGlobal.FindPointType_Fix, false, MyGlobal.ToolType_Calib);
-            if (ok5 != "OK")
-            {
-                ShowAndSaveMsg("左工位标定-" + ok5, false);
-            }
-            else
-            {
-                ShowAndSaveMsg("左工位标定-定位参数" + ok5);
-            }
-            string ok6 = MyGlobal.Right_Calib_Fix.Init(MyGlobal.FindPointType_Fix, true, MyGlobal.ToolType_Calib);
-            if (ok6 != "OK")
-            {
-                ShowAndSaveMsg("右工位标定-" + ok6, false);
-            }
-            else
-            {
-                ShowAndSaveMsg("右工位标定-定位参数" + ok6);
-            }
+            //string ok5 = MyGlobal.Left_Calib_Fix.Init(MyGlobal.FindPointType_Fix, false, MyGlobal.ToolType_Calib);
+            //if (ok5 != "OK")
+            //{
+            //    ShowAndSaveMsg("左工位标定-" + ok5, false);
+            //}
+            //else
+            //{
+            //    ShowAndSaveMsg("左工位标定-定位参数" + ok5);
+            //}
+            //string ok6 = MyGlobal.Right_Calib_Fix.Init(MyGlobal.FindPointType_Fix, true, MyGlobal.ToolType_Calib);
+            //if (ok6 != "OK")
+            //{
+            //    ShowAndSaveMsg("右工位标定-" + ok6, false);
+            //}
+            //else
+            //{
+            //    ShowAndSaveMsg("右工位标定-定位参数" + ok6);
+            //}
 
             //string dbcreate = SQLiteHelper.NewDbFile();
             //if (dbcreate == "OK")
@@ -291,6 +291,22 @@ namespace SagensVision
             MyGlobal.hWindow_Final[3].Show3dTrackDel += Show3dImg;
 
             ShowProfile.HMouseDown += ShowProfile_HMouseDown;
+
+            if ("亮度图" == MyGlobal.globalConfig.ShowImgType)
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = false;
+            }
+            else if ("曲面图" == MyGlobal.globalConfig.ShowImgType)
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = true;
+            }
+            else
+            {
+                MyGlobal.isShowHeightImg = false;
+                MyGlobal.isShowSurfaceImg = false;
+            }
         }
 
         private void ShowProfile_HMouseDown(object sender, HMouseEventArgs e)
@@ -557,8 +573,8 @@ namespace SagensVision
             dockPanel1.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             dockPanel8.Show();
             dockPanel8.DockedAsTabbedDocument = true;
-            dockPanel7.Show();
-            dockPanel7.DockTo(dockPanel1, DevExpress.XtraBars.Docking.DockingStyle.Bottom);
+            //dockPanel7.Show();
+            //dockPanel7.DockTo(dockPanel1, DevExpress.XtraBars.Docking.DockingStyle.Bottom);
             dockPanel2.Show();
             dockPanel2.Dock = DevExpress.XtraBars.Docking.DockingStyle.Right;
 
@@ -2852,16 +2868,12 @@ namespace SagensVision
 
                     HTuple angle1, angle2;
                     HOperatorSet.AngleLx(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);//线角度
-                    HOperatorSet.LineOrientation(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);
+                    //HOperatorSet.LineOrientation(OrginalY1[start], OrginalX1[start], PixR, PixC, out angle1);
                     angle2 = PixAngle;//料角度
-                    if (angle2 < -Math.PI / 2)
+                    if (angle2 < 0)
                     {
                         angle2 = angle2 + Math.PI;
-                    }
-                    else if (angle2 > Math.PI / 2)
-                    {
-                        angle2 = Math.PI - angle2;
-                    }
+                    }                  
                     if (angle1 < 0)
                     {
                         angle1 = angle1 + Math.PI;
@@ -2875,20 +2887,20 @@ namespace SagensVision
 
                     //if (isRight)
                     //{
-                        
+
 
                     //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
                     //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
-                        
+
                     //}
                     //else
                     //{
                     //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
                     //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
-                   
+
                     //}
 
-                 
+
                     if (i == 0)
                     {
                         x0 = X1;
@@ -2993,8 +3005,11 @@ namespace SagensVision
                 //}
                 //StaticOperate.writeTxt("C:\\Twinwin\\data\\Right\\Laser3D_1.txt", Str.ToString());
 
+                string ControlPath_Left = MyGlobal.globalConfig.uiStyle == "1" ? "C:\\IT7000\\data\\11\\C#@IT7000@db@LeftStationFile\\": "C:\\Twinwin\\data\\Left\\";
+                string ControlPath_Right = MyGlobal.globalConfig.uiStyle == "1" ? "C:\\IT7000\\data\\11\\C#@IT7000@db@RightStationFile\\": "C:\\Twinwin\\data\\Right\\";
+
                 string LorR = MyGlobal.IsRight ? "Right" : "Left";
-                string Path = MyGlobal.IsRight ? "C:\\Twinwin\\data\\Right\\" : "C:\\Twinwin\\data\\Left\\";
+                string Path = MyGlobal.IsRight ? ControlPath_Right : ControlPath_Left;
                 if (!Directory.Exists(Path))
                 {
                     Directory.CreateDirectory(Path);
@@ -4021,13 +4036,14 @@ namespace SagensVision
 
                         if (len == 0)
                         {
+                            TcpIsConnect = false;
+                            MyGlobal.sktOK = false;
                             if (MyGlobal.globalConfig.IsTcpClient)
                             {
                                 if (!ShowOnece)
                                 {
                                     ShowOnece = true;
-                                    ShowAndSaveMsg(string.Format("服务器已断开连接！"));
-                                    TcpIsConnect = false;
+                                    ShowAndSaveMsg(string.Format("服务器已断开连接！"));                                   
                                     MyGlobal.sktOK = false;
                                 }
                                 
@@ -4039,7 +4055,7 @@ namespace SagensVision
                                     ShowOnece = true;
                                     ShowAndSaveMsg(string.Format("客户端已断开连接！"));
                                     TcpIsConnect = false;
-                                    MyGlobal.sktOK = false;
+                                   
                                 }
                                
                             }
@@ -4333,7 +4349,7 @@ namespace SagensVision
 
                                 }
                             }
-
+                          
                         }
                         catch (Exception ex)
                         {
@@ -4347,7 +4363,18 @@ namespace SagensVision
                         }
 
                     }
-
+                    if (!MyGlobal.sktOK)
+                    {
+                        if (MyGlobal.globalConfig.IsTcpClient)
+                        {
+                            ShowAndSaveMsg(string.Format("服务器已断开连接！"));
+                        }
+                        else
+                        {
+                            ShowAndSaveMsg(string.Format("客户端已断开连接！"));
+                        }
+                        break;
+                    } 
                 }
                 catch (Exception ex)
                 {
