@@ -30,67 +30,67 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem1 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem2 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem3 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem4 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.PieSeriesLabel pieSeriesLabel1 = new DevExpress.XtraCharts.PieSeriesLabel();
-            DevExpress.XtraCharts.SeriesPoint seriesPoint1 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem25 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem26 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem27 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem28 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.Series series7 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.PieSeriesLabel pieSeriesLabel7 = new DevExpress.XtraCharts.PieSeriesLabel();
+            DevExpress.XtraCharts.SeriesPoint seriesPoint25 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 0);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint2 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint26 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 1);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint3 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint27 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 2);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint4 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint28 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 3);
-            DevExpress.XtraCharts.PieSeriesView pieSeriesView1 = new DevExpress.XtraCharts.PieSeriesView(new int[0]);
-            DevExpress.XtraCharts.SeriesTitle seriesTitle1 = new DevExpress.XtraCharts.SeriesTitle();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem5 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem6 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem7 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem8 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.PieSeriesLabel pieSeriesLabel2 = new DevExpress.XtraCharts.PieSeriesLabel();
-            DevExpress.XtraCharts.SeriesPoint seriesPoint5 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
+            DevExpress.XtraCharts.PieSeriesView pieSeriesView7 = new DevExpress.XtraCharts.PieSeriesView(new int[0]);
+            DevExpress.XtraCharts.SeriesTitle seriesTitle7 = new DevExpress.XtraCharts.SeriesTitle();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem29 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem30 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem31 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem32 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.Series series8 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.PieSeriesLabel pieSeriesLabel8 = new DevExpress.XtraCharts.PieSeriesLabel();
+            DevExpress.XtraCharts.SeriesPoint seriesPoint29 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 0);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint6 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint30 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 1);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint7 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint31 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 2);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint8 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint32 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 3);
-            DevExpress.XtraCharts.PieSeriesView pieSeriesView2 = new DevExpress.XtraCharts.PieSeriesView(new int[0]);
-            DevExpress.XtraCharts.SeriesTitle seriesTitle2 = new DevExpress.XtraCharts.SeriesTitle();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem9 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem10 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem11 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.CustomLegendItem customLegendItem12 = new DevExpress.XtraCharts.CustomLegendItem();
-            DevExpress.XtraCharts.Series series3 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.PieSeriesLabel pieSeriesLabel3 = new DevExpress.XtraCharts.PieSeriesLabel();
-            DevExpress.XtraCharts.SeriesPoint seriesPoint9 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
+            DevExpress.XtraCharts.PieSeriesView pieSeriesView8 = new DevExpress.XtraCharts.PieSeriesView(new int[0]);
+            DevExpress.XtraCharts.SeriesTitle seriesTitle8 = new DevExpress.XtraCharts.SeriesTitle();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem33 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem34 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem35 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.CustomLegendItem customLegendItem36 = new DevExpress.XtraCharts.CustomLegendItem();
+            DevExpress.XtraCharts.Series series9 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.PieSeriesLabel pieSeriesLabel9 = new DevExpress.XtraCharts.PieSeriesLabel();
+            DevExpress.XtraCharts.SeriesPoint seriesPoint33 = new DevExpress.XtraCharts.SeriesPoint("ok", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 0);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint10 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint34 = new DevExpress.XtraCharts.SeriesPoint("定位异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 1);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint11 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint35 = new DevExpress.XtraCharts.SeriesPoint("抓边异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 2);
-            DevExpress.XtraCharts.SeriesPoint seriesPoint12 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
+            DevExpress.XtraCharts.SeriesPoint seriesPoint36 = new DevExpress.XtraCharts.SeriesPoint("探高异常", new object[] {
             ((object)(1D)),
             ((object)(1D))}, 3);
-            DevExpress.XtraCharts.PieSeriesView pieSeriesView3 = new DevExpress.XtraCharts.PieSeriesView(new int[0]);
-            DevExpress.XtraCharts.SeriesTitle seriesTitle3 = new DevExpress.XtraCharts.SeriesTitle();
-            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
+            DevExpress.XtraCharts.PieSeriesView pieSeriesView9 = new DevExpress.XtraCharts.PieSeriesView(new int[0]);
+            DevExpress.XtraCharts.SeriesTitle seriesTitle9 = new DevExpress.XtraCharts.SeriesTitle();
+            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
             this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup(this.components);
             this.document4 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
             this.document3 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
@@ -254,19 +254,19 @@
             this.xtraTabControl2.SuspendLayout();
             this.xtraTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesView7)).BeginInit();
             this.xtraTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesView8)).BeginInit();
             this.xtraTabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(series3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesView9)).BeginInit();
             this.dockPanel8.SuspendLayout();
             this.dockPanel8_Container.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -1311,56 +1311,56 @@
             this.chartControl1.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
             this.chartControl1.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.TopOutside;
             this.chartControl1.Legend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            customLegendItem1.MarkerColor = System.Drawing.Color.Green;
-            customLegendItem1.Name = "Custom Legend Item 1";
-            customLegendItem1.Text = "OK";
-            customLegendItem2.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(230)))), ((int)(((byte)(90)))));
-            customLegendItem2.Name = "Custom Legend Item 2";
-            customLegendItem2.Text = "定位异常";
-            customLegendItem3.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(121)))), ((int)(((byte)(47)))));
-            customLegendItem3.Name = "Custom Legend Item 3";
-            customLegendItem3.Text = "抓边异常";
-            customLegendItem4.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
-            customLegendItem4.Name = "Custom Legend Item 4";
-            customLegendItem4.Text = "探高异常";
+            customLegendItem25.MarkerColor = System.Drawing.Color.Green;
+            customLegendItem25.Name = "Custom Legend Item 1";
+            customLegendItem25.Text = "OK";
+            customLegendItem26.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(230)))), ((int)(((byte)(90)))));
+            customLegendItem26.Name = "Custom Legend Item 2";
+            customLegendItem26.Text = "定位异常";
+            customLegendItem27.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(121)))), ((int)(((byte)(47)))));
+            customLegendItem27.Name = "Custom Legend Item 3";
+            customLegendItem27.Text = "抓边异常";
+            customLegendItem28.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
+            customLegendItem28.Name = "Custom Legend Item 4";
+            customLegendItem28.Text = "探高异常";
             this.chartControl1.Legend.CustomItems.AddRange(new DevExpress.XtraCharts.CustomLegendItem[] {
-            customLegendItem1,
-            customLegendItem2,
-            customLegendItem3,
-            customLegendItem4});
+            customLegendItem25,
+            customLegendItem26,
+            customLegendItem27,
+            customLegendItem28});
             this.chartControl1.Legend.Direction = DevExpress.XtraCharts.LegendDirection.LeftToRight;
             this.chartControl1.Legend.MarkerSize = new System.Drawing.Size(9, 9);
             this.chartControl1.Legend.Name = "Default Legend";
             this.chartControl1.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl1.Location = new System.Drawing.Point(2, 3);
             this.chartControl1.Name = "chartControl1";
-            pieSeriesLabel1.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesLabel1.LineLength = 1;
-            pieSeriesLabel1.LineVisibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesLabel1.TextAlignment = System.Drawing.StringAlignment.Near;
-            pieSeriesLabel1.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series1.Label = pieSeriesLabel1;
-            series1.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series1.Name = "Series1";
-            seriesPoint1.ColorSerializable = "#00B050";
-            seriesPoint2.ColorSerializable = "#FAE65A";
-            seriesPoint3.ColorSerializable = "#FD792F";
-            seriesPoint4.ColorSerializable = "#C40002";
-            series1.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
-            seriesPoint1,
-            seriesPoint2,
-            seriesPoint3,
-            seriesPoint4});
-            pieSeriesView1.ExplodeMode = DevExpress.XtraCharts.PieExplodeMode.UsePoints;
-            seriesTitle1.Alignment = System.Drawing.StringAlignment.Near;
-            seriesTitle1.Indent = 1;
-            seriesTitle1.Text = "总产能：0";
-            seriesTitle1.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesView1.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
-            seriesTitle1});
-            series1.View = pieSeriesView1;
+            pieSeriesLabel7.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesLabel7.LineLength = 1;
+            pieSeriesLabel7.LineVisibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesLabel7.TextAlignment = System.Drawing.StringAlignment.Near;
+            pieSeriesLabel7.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series7.Label = pieSeriesLabel7;
+            series7.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            series7.Name = "Series1";
+            seriesPoint25.ColorSerializable = "#00B050";
+            seriesPoint26.ColorSerializable = "#FAE65A";
+            seriesPoint27.ColorSerializable = "#FD792F";
+            seriesPoint28.ColorSerializable = "#C40002";
+            series7.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
+            seriesPoint25,
+            seriesPoint26,
+            seriesPoint27,
+            seriesPoint28});
+            pieSeriesView7.ExplodeMode = DevExpress.XtraCharts.PieExplodeMode.UsePoints;
+            seriesTitle7.Alignment = System.Drawing.StringAlignment.Near;
+            seriesTitle7.Indent = 1;
+            seriesTitle7.Text = "总产能：0";
+            seriesTitle7.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesView7.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
+            seriesTitle7});
+            series7.View = pieSeriesView7;
             this.chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series1};
+        series7};
             this.chartControl1.Size = new System.Drawing.Size(260, 230);
             this.chartControl1.TabIndex = 6;
             // 
@@ -1394,56 +1394,56 @@
             this.chartControl2.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Left;
             this.chartControl2.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.TopOutside;
             this.chartControl2.Legend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            customLegendItem5.MarkerColor = System.Drawing.Color.Green;
-            customLegendItem5.Name = "Custom Legend Item 1";
-            customLegendItem5.Text = "OK";
-            customLegendItem6.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(230)))), ((int)(((byte)(90)))));
-            customLegendItem6.Name = "Custom Legend Item 2";
-            customLegendItem6.Text = "定位异常";
-            customLegendItem7.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(121)))), ((int)(((byte)(47)))));
-            customLegendItem7.Name = "Custom Legend Item 3";
-            customLegendItem7.Text = "抓边异常";
-            customLegendItem8.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
-            customLegendItem8.Name = "Custom Legend Item 4";
-            customLegendItem8.Text = "探高异常";
+            customLegendItem29.MarkerColor = System.Drawing.Color.Green;
+            customLegendItem29.Name = "Custom Legend Item 1";
+            customLegendItem29.Text = "OK";
+            customLegendItem30.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(230)))), ((int)(((byte)(90)))));
+            customLegendItem30.Name = "Custom Legend Item 2";
+            customLegendItem30.Text = "定位异常";
+            customLegendItem31.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(121)))), ((int)(((byte)(47)))));
+            customLegendItem31.Name = "Custom Legend Item 3";
+            customLegendItem31.Text = "抓边异常";
+            customLegendItem32.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
+            customLegendItem32.Name = "Custom Legend Item 4";
+            customLegendItem32.Text = "探高异常";
             this.chartControl2.Legend.CustomItems.AddRange(new DevExpress.XtraCharts.CustomLegendItem[] {
-            customLegendItem5,
-            customLegendItem6,
-            customLegendItem7,
-            customLegendItem8});
+            customLegendItem29,
+            customLegendItem30,
+            customLegendItem31,
+            customLegendItem32});
             this.chartControl2.Legend.Direction = DevExpress.XtraCharts.LegendDirection.LeftToRight;
             this.chartControl2.Legend.MarkerSize = new System.Drawing.Size(9, 9);
             this.chartControl2.Legend.Name = "Default Legend";
             this.chartControl2.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             this.chartControl2.Location = new System.Drawing.Point(2, 3);
             this.chartControl2.Name = "chartControl2";
-            pieSeriesLabel2.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesLabel2.LineLength = 1;
-            pieSeriesLabel2.LineVisibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesLabel2.TextAlignment = System.Drawing.StringAlignment.Near;
-            pieSeriesLabel2.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series2.Label = pieSeriesLabel2;
-            series2.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series2.Name = "Series1";
-            seriesPoint5.ColorSerializable = "#00B050";
-            seriesPoint6.ColorSerializable = "#FAE65A";
-            seriesPoint7.ColorSerializable = "#FD792F";
-            seriesPoint8.ColorSerializable = "#C40002";
-            series2.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
-            seriesPoint5,
-            seriesPoint6,
-            seriesPoint7,
-            seriesPoint8});
-            pieSeriesView2.ExplodeMode = DevExpress.XtraCharts.PieExplodeMode.UsePoints;
-            seriesTitle2.Alignment = System.Drawing.StringAlignment.Near;
-            seriesTitle2.Indent = 1;
-            seriesTitle2.Text = "左工位：0";
-            seriesTitle2.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesView2.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
-            seriesTitle2});
-            series2.View = pieSeriesView2;
+            pieSeriesLabel8.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesLabel8.LineLength = 1;
+            pieSeriesLabel8.LineVisibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesLabel8.TextAlignment = System.Drawing.StringAlignment.Near;
+            pieSeriesLabel8.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series8.Label = pieSeriesLabel8;
+            series8.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            series8.Name = "Series1";
+            seriesPoint29.ColorSerializable = "#00B050";
+            seriesPoint30.ColorSerializable = "#FAE65A";
+            seriesPoint31.ColorSerializable = "#FD792F";
+            seriesPoint32.ColorSerializable = "#C40002";
+            series8.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
+            seriesPoint29,
+            seriesPoint30,
+            seriesPoint31,
+            seriesPoint32});
+            pieSeriesView8.ExplodeMode = DevExpress.XtraCharts.PieExplodeMode.UsePoints;
+            seriesTitle8.Alignment = System.Drawing.StringAlignment.Near;
+            seriesTitle8.Indent = 1;
+            seriesTitle8.Text = "左工位：0";
+            seriesTitle8.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesView8.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
+            seriesTitle8});
+            series8.View = pieSeriesView8;
             this.chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series2};
+        series8};
             this.chartControl2.Size = new System.Drawing.Size(259, 230);
             this.chartControl2.TabIndex = 6;
             // 
@@ -1479,23 +1479,23 @@
             this.chartControl3.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.Right;
             this.chartControl3.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.TopOutside;
             this.chartControl3.Legend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            customLegendItem9.MarkerColor = System.Drawing.Color.Green;
-            customLegendItem9.Name = "Custom Legend Item 1";
-            customLegendItem9.Text = "OK";
-            customLegendItem10.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(230)))), ((int)(((byte)(90)))));
-            customLegendItem10.Name = "Custom Legend Item 2";
-            customLegendItem10.Text = "定位异常";
-            customLegendItem11.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(121)))), ((int)(((byte)(47)))));
-            customLegendItem11.Name = "Custom Legend Item 3";
-            customLegendItem11.Text = "抓边异常";
-            customLegendItem12.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
-            customLegendItem12.Name = "Custom Legend Item 4";
-            customLegendItem12.Text = "探高异常";
+            customLegendItem33.MarkerColor = System.Drawing.Color.Green;
+            customLegendItem33.Name = "Custom Legend Item 1";
+            customLegendItem33.Text = "OK";
+            customLegendItem34.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(230)))), ((int)(((byte)(90)))));
+            customLegendItem34.Name = "Custom Legend Item 2";
+            customLegendItem34.Text = "定位异常";
+            customLegendItem35.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(121)))), ((int)(((byte)(47)))));
+            customLegendItem35.Name = "Custom Legend Item 3";
+            customLegendItem35.Text = "抓边异常";
+            customLegendItem36.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(0)))), ((int)(((byte)(2)))));
+            customLegendItem36.Name = "Custom Legend Item 4";
+            customLegendItem36.Text = "探高异常";
             this.chartControl3.Legend.CustomItems.AddRange(new DevExpress.XtraCharts.CustomLegendItem[] {
-            customLegendItem9,
-            customLegendItem10,
-            customLegendItem11,
-            customLegendItem12});
+            customLegendItem33,
+            customLegendItem34,
+            customLegendItem35,
+            customLegendItem36});
             this.chartControl3.Legend.Direction = DevExpress.XtraCharts.LegendDirection.LeftToRight;
             this.chartControl3.Legend.MarkerSize = new System.Drawing.Size(9, 9);
             this.chartControl3.Legend.Name = "Default Legend";
@@ -1504,33 +1504,33 @@
             this.chartControl3.Name = "chartControl3";
             this.chartControl3.PaletteBaseColorNumber = 6;
             this.chartControl3.PaletteName = "Mixed";
-            pieSeriesLabel3.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesLabel3.LineLength = 1;
-            pieSeriesLabel3.LineVisibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesLabel3.TextAlignment = System.Drawing.StringAlignment.Near;
-            pieSeriesLabel3.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            series3.Label = pieSeriesLabel3;
-            series3.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
-            series3.Name = "Series1";
-            seriesPoint9.ColorSerializable = "#00B050";
-            seriesPoint10.ColorSerializable = "#FAE65A";
-            seriesPoint11.ColorSerializable = "#FD792F";
-            seriesPoint12.ColorSerializable = "#C40002";
-            series3.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
-            seriesPoint9,
-            seriesPoint10,
-            seriesPoint11,
-            seriesPoint12});
-            pieSeriesView3.ExplodeMode = DevExpress.XtraCharts.PieExplodeMode.UsePoints;
-            seriesTitle3.Alignment = System.Drawing.StringAlignment.Near;
-            seriesTitle3.Indent = 0;
-            seriesTitle3.Text = "右工位：0";
-            seriesTitle3.Visibility = DevExpress.Utils.DefaultBoolean.True;
-            pieSeriesView3.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
-            seriesTitle3});
-            series3.View = pieSeriesView3;
+            pieSeriesLabel9.Border.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesLabel9.LineLength = 1;
+            pieSeriesLabel9.LineVisibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesLabel9.TextAlignment = System.Drawing.StringAlignment.Near;
+            pieSeriesLabel9.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            series9.Label = pieSeriesLabel9;
+            series9.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            series9.Name = "Series1";
+            seriesPoint33.ColorSerializable = "#00B050";
+            seriesPoint34.ColorSerializable = "#FAE65A";
+            seriesPoint35.ColorSerializable = "#FD792F";
+            seriesPoint36.ColorSerializable = "#C40002";
+            series9.Points.AddRange(new DevExpress.XtraCharts.SeriesPoint[] {
+            seriesPoint33,
+            seriesPoint34,
+            seriesPoint35,
+            seriesPoint36});
+            pieSeriesView9.ExplodeMode = DevExpress.XtraCharts.PieExplodeMode.UsePoints;
+            seriesTitle9.Alignment = System.Drawing.StringAlignment.Near;
+            seriesTitle9.Indent = 0;
+            seriesTitle9.Text = "右工位：0";
+            seriesTitle9.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeriesView9.Titles.AddRange(new DevExpress.XtraCharts.SeriesTitle[] {
+            seriesTitle9});
+            series9.View = pieSeriesView9;
             this.chartControl3.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
-        series3};
+        series9};
             this.chartControl3.Size = new System.Drawing.Size(259, 230);
             this.chartControl3.TabIndex = 5;
             // 
@@ -1620,7 +1620,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(290, 35);
             this.label4.TabIndex = 2;
-            this.label4.Text = "3D轨迹";
+            this.label4.Text = "轨迹";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
@@ -1658,9 +1658,9 @@
             this.tabbedView1.Documents.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseDocument[] {
             this.document4});
             this.tabbedView1.RootContainer.Element = null;
-            dockingContainer1.Element = this.documentGroup1;
+            dockingContainer3.Element = this.documentGroup1;
             this.tabbedView1.RootContainer.Nodes.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer[] {
-            dockingContainer1});
+            dockingContainer3});
             this.tabbedView1.DocumentActivated += new DevExpress.XtraBars.Docking2010.Views.DocumentEventHandler(this.tabbedView1_DocumentActivated);
             // 
             // timer1
@@ -1792,19 +1792,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
             this.xtraTabControl2.ResumeLayout(false);
             this.xtraTabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesView7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl1)).EndInit();
             this.xtraTabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesView8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl2)).EndInit();
             this.xtraTabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(pieSeriesView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(series3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesLabel9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pieSeriesView9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartControl3)).EndInit();
             this.dockPanel8.ResumeLayout(false);
             this.dockPanel8_Container.ResumeLayout(false);
