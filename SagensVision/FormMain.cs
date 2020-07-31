@@ -3081,16 +3081,16 @@ namespace SagensVision
                     Yrelative1 = dist * Math.Cos(subAngle) ;
 
 
-                    if (isRight)
-                    {
-                        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
-                        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
-                    }
-                    else
-                    {
-                        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
-                        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
-                    }
+                    //if (isRight)
+                    //{
+                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_X == null ? 0 : SubX[i].D;
+                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_Y == null ? 0 : SubY[i].D;
+                    //}
+                    //else
+                    //{
+                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_X == null ? 0 : SubX[i].D;
+                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_Y == null ? 0 : SubY[i].D;
+                    //}
 
                  
                     if (i == 0)
