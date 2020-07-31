@@ -2060,18 +2060,18 @@ namespace SagensVision
             {
 
                 double[][] x, y, z; string[][] Strlorc; HTuple[] original = new HTuple[2];
-                if (SaveBase)
-                {
-                    if (isRight)
-                    {
-                        MyGlobal.xyzBaseCoord_Right.ZCoord = null;
-                    }
-                    else
-                    {
-                        MyGlobal.xyzBaseCoord_Left.ZCoord = null;
-                    }
+                //if (SaveBase)
+                //{
+                //    if (isRight)
+                //    {
+                //        MyGlobal.xyzBaseCoord_Right.ZCoord = null;
+                //    }
+                //    else
+                //    {
+                //        MyGlobal.xyzBaseCoord_Left.ZCoord = null;
+                //    }
 
-                }
+                //}
                 string OK = RunFindPoint(Side, isRight, IntensityImage, HeightImage, out x, out y, out z, out Strlorc, out original, MyGlobal.hWindow_Final[Side - 1], OriginImage);
 
                 double[] tz = null;
@@ -2388,82 +2388,61 @@ namespace SagensVision
                 //HTuple centerR, centerC, phi, Len1, Len2, ptorder;
                 //HOperatorSet.FitRectangle2ContourXld(Cnt, "tukey", -1, 0, 0, 3, 2, out centerR, out centerC, out phi, out Len1, out Len2, out ptorder);
 
-                if (SaveBase)
-                {
-                    //计算到中心点距离
-                    double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
-                    List<double[]> tempDist = new List<double[]>();
-                    List<double[]> tempY = new List<double[]>();
-                    for (int i = 0; i < Xorigin.Count; i++)
-                    {
-                        double[] x1 = new double[Xorigin[i].Length];
-                        for (int j = 0; j < Xorigin[i].Length; j++)
-                        {
-                            HTuple dist = new HTuple();
-                            HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out dist);
-                            x1[j] = Math.Round(dist.D * xyResolution, 3);
-                        }
-                        tempDist.Add(x1);
-                    }
-                    if (isRight)
-                    {
 
-                        MyGlobal.xyzBaseCoord_Right.Dist = tempDist;
-                        MyGlobal.xyzBaseCoord_Right.intersectCoordList = AnchorList;
-
-                        MyGlobal.xyzBaseCoord_Right.XCoord = Xorigin;
-                        MyGlobal.xyzBaseCoord_Right.YCoord = Yorigin;
-                        MyGlobal.xyzBaseCoord_Right.ZCoord = ZCoord;
-
-                        StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Right, MyGlobal.BaseTxtPath_Right);
-                        //读取Z值基准高度】
-                        if (File.Exists(MyGlobal.BaseTxtPath_Right))
-                        {
-                            MyGlobal.xyzBaseCoord_Right = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Right, typeof(XYZBaseCoord));
-                        }
-                    }
-                    else
-                    {
-                        MyGlobal.xyzBaseCoord_Left.Dist = tempDist;
-                        MyGlobal.xyzBaseCoord_Left.intersectCoordList = AnchorList;
-
-                        MyGlobal.xyzBaseCoord_Left.XCoord = Xorigin;
-                        MyGlobal.xyzBaseCoord_Left.YCoord = Yorigin;
-                        MyGlobal.xyzBaseCoord_Left.ZCoord = ZCoord;
-
-                        StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Left, MyGlobal.BaseTxtPath_Left);
-                        //读取Z值基准高度】
-                        if (File.Exists(MyGlobal.BaseTxtPath_Left))
-                        {
-                            MyGlobal.xyzBaseCoord_Left = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Left, typeof(XYZBaseCoord));
-                        }
-                    }
-                }
                 //判断X Y 
-
+                bool HeightOK =true, XYOK =true;
                
                 //计算到中心点距离               
                 if (isRight)
                 {
                     
-                    if (MyGlobal.xyzBaseCoord_Right.Dist != null && !SaveBase)
+                    if (MyGlobal.xyzBaseCoord_Right.Dist_X != null && MyGlobal.xyzBaseCoord_Right.Dist_X.Count>0 /*&& !SaveBase*/)
                     {
                         for (int i = 0; i < Xorigin.Count; i++)
                         {
-                            if (MyGlobal.xyzBaseCoord_Right.Dist[i].Length != Xorigin[i].Length)
-                            {
-                                return "模板基准高度顺序与点位顺序不匹配";
-                            }
+
+                            
+
+                            //if (MyGlobal.xyzBaseCoord_Right.Dist_X[i].Length != Xorigin[i].Length)
+                            //{
+                            //    return "模板基准高度顺序与点位顺序不匹配";
+                            //}
                             for (int j = 0; j < Xorigin[i].Length; j++)
                             {
-                                HTuple Dist = 0;
-                                HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out Dist);
-                                double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
-                                double Dist1 = Dist.D * xyResolution;
-                                double Sub = (Dist1 - MyGlobal.xyzBaseCoord_Right.Dist[i][j]);
-                               
-                                if (Sub > MyGlobal.globalPointSet_Right.XYMax || Sub < MyGlobal.globalPointSet_Right.XYMin)
+                                //HTuple Dist = 0;
+                                //HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out Dist);
+                                //double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
+
+                                HTuple angle1, angle2;
+                                HOperatorSet.AngleLx(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out angle1);//线角度
+                                angle2 = AnchorList[i].Angle;//料角度
+                                if (angle2 < 0)
                                 {
+                                    angle2 = angle2 + Math.PI;
+                                }
+                                if (angle1 < 0)
+                                {
+                                    angle1 = angle1 + Math.PI;
+                                }
+
+                                double subAngle = Math.Abs(Math.Abs(angle1.D) - Math.Abs(angle2.D));
+
+                                double xDist = (Yorigin[i][j] - AnchorList[i].Row) * Xresolution;
+                                double yDist = (Xorigin[i][j] - AnchorList[i].Col) * Yresolution;
+
+                                double Dist1 = Math.Sqrt(xDist*xDist + yDist*yDist);
+                                double Xrelative1 = Dist1 * Math.Sin(subAngle) ;
+                                double Yrelative1 = Dist1 * Math.Cos(subAngle) ;
+
+                                double Sub1 = (Xrelative1 - MyGlobal.xyzBaseCoord_Right.Dist_X[i][j]);
+                                double Sub2 = (Yrelative1 - MyGlobal.xyzBaseCoord_Right.Dist_Y[i][j]);
+                                bool xNg = Sub1 > MyGlobal.globalPointSet_Right.XYMax || Sub1 < MyGlobal.globalPointSet_Right.XYMin;
+                                bool yNg = Sub2 > MyGlobal.globalPointSet_Right.XYMax || Sub2 < MyGlobal.globalPointSet_Right.XYMin;
+                                if (xNg || yNg)
+                                {
+                                    string msg = NameOrigin[i][j] + "超出范围--";
+                                    string msgx = xNg ? NameOrigin[i][j] + $"X--{Math.Round(Sub1, 3)};" : "";
+                                    string msgy = yNg ? $"Y--{ Math.Round(Sub2, 3)}" : "";
                                     if (MyGlobal.globalConfig.isUseSelfOffset)// 启用偏移校正
                                     {
                                         HTuple hom = new HTuple();
@@ -2474,8 +2453,13 @@ namespace SagensVision
                                         HOperatorSet.AffineTransPoint2d(MyGlobal.HomMat3D_Right[i], affineX, affineY, out affineX, out affineY);
                                         XCoord[i][j][0] = affineX;
                                         YCoord[i][j][0] = affineY;
-                                        string msg = NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围已补正";
-                                        ShowAndSaveMsg(msg, false);
+                                                                          
+                                         ShowAndSaveMsg(msg + msgx + msgy, false);
+                                        if (SaveBase)
+                                        {
+                                            XYOK = false;
+                                            break;
+                                        }
                                     }
                                     else
                                     {
@@ -2490,7 +2474,17 @@ namespace SagensVision
                                             };
                                             this.Invoke(sw);
                                         }
-                                        return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                                       
+                                        if (!SaveBase)
+                                        {                                                                                      
+                                            return msg+msgx+msgy;
+                                        }
+                                        else
+                                        {
+                                            ShowAndSaveMsg(msg + msgx + msgy, false);
+                                            XYOK = false;
+                                            break;
+                                        }
                                     }
 
                                 }
@@ -2498,40 +2492,55 @@ namespace SagensVision
 
 
                                 #region 判断高度范围
-                                                                   ////判断 Z 值高度
-                                    if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
-                                    {
+                                ////判断 Z 值高度
+                                if (MyGlobal.xyzBaseCoord_Right.ZCoord != null && MyGlobal.xyzBaseCoord_Right.ZCoord.Count != 0)
+                                {
 
-                                        if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[i].GetLength(0))
+                                    if (i >= MyGlobal.xyzBaseCoord_Right.ZCoord[i].GetLength(0))
+                                    {
+                                        return "请重新设置基准值";
+                                    }
+                                    double sub = ZCoord[i][j][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
+                                    if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
+                                    {
+                                        if (MyGlobal.globalConfig.isUseSelfOffset) //启用自动补偿
                                         {
-                                            return "请重新设置基准值";
-                                        }
-                                        double sub = ZCoord[i][j][0] - MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
-                                        if (sub > MyGlobal.globalPointSet_Right.HeightMax || sub < MyGlobal.globalPointSet_Right.HeightMin)
-                                        {
-                                            if (MyGlobal.globalConfig.isUseSelfOffset) //启用自动补偿
-                                            {
-                                                ZCoord[i][j][0] = MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
-                                                string msg = NameOrigin[i][j] + $"Z--{Math.Round(sub, 3)}超出范围已补正";
+                                            ZCoord[i][j][0] = MyGlobal.xyzBaseCoord_Right.ZCoord[i][j][0];
+                                            string msg = NameOrigin[i][j] + $"Z--{Math.Round(sub, 3)}超出范围已补正";
                                             ShowAndSaveMsg(msg, false);
+                                            if (SaveBase)
+                                            {
+                                                HeightOK = false;
+                                            }
+                                           
+                                        }
+                                        else
+                                        {
+                                            if (MyGlobal.hWindow_Final[i] != null)
+                                            {
+
+                                                Action sw = () =>
+                                                {
+                                                    MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-Height NG", "red", Yorigin[i][j], Xorigin[i][j]);
+                                                };
+                                                MyGlobal.hWindow_Final[i].Invoke(sw);
+                                            }
+                                            if (!SaveBase)
+                                            {
+                                                return $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
                                             }
                                             else
                                             {
-                                            if (MyGlobal.hWindow_Final[i] != null)
-                                                {
-
-                                                    Action sw = () =>
-                                                    {
-                                                        MyGlobal.hWindow_Final[i].viewWindow.dispMessage(NameOrigin[i][j] + "-Height NG", "red", Yorigin[i][j], Xorigin[i][j]);
-                                                    };
-                                                    MyGlobal.hWindow_Final[i].Invoke(sw);
-                                                }
-                                                return $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
+                                                string msg = $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
+                                                ShowAndSaveMsg(msg, false);
+                                                HeightOK = false;
+                                                break;
                                             }
                                         }
                                     }
-                                
-                                
+                                }
+
+
                                 #endregion
 
 
@@ -2542,24 +2551,52 @@ namespace SagensVision
                 }
                 else
                 {
-                    if (MyGlobal.xyzBaseCoord_Left.Dist != null && !SaveBase)
+                    if (MyGlobal.xyzBaseCoord_Left.Dist_X != null && MyGlobal.xyzBaseCoord_Right.Dist_X.Count > 0/*&& !SaveBase*/)
                     {
                         for (int i = 0; i < Xorigin.Count; i++)
                         {
-                            if (MyGlobal.xyzBaseCoord_Left.Dist[i].Length != Xorigin[i].Length)
-                            {
-                                return "模板基准高度顺序与点位顺序不匹配";
-                            }
+                            
+                            //if (MyGlobal.xyzBaseCoord_Left.Dist_X[i].Length != Xorigin[i].Length)
+                            //{
+                            //    return "模板基准高度顺序与点位顺序不匹配";
+                            //}
                             for (int j = 0; j < Xorigin[i].Length; j++)
                             {
-                                HTuple Dist = 0;
-                                HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out Dist);
-                                double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
-                                double Dist1 = Dist.D * xyResolution;
-                                double Sub = (Dist1 - MyGlobal.xyzBaseCoord_Left.Dist[i][j]);
-                               
-                                if (Sub > MyGlobal.globalPointSet_Left.XYMax || Sub < MyGlobal.globalPointSet_Left.XYMin)
+                                //HTuple Dist = 0;
+                                //HOperatorSet.DistancePp(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out Dist);
+                                //double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
+                                HTuple angle1, angle2;
+                                HOperatorSet.AngleLx(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out angle1);//线角度
+                                angle2 = AnchorList[i].Angle;//料角度
+                                if (angle2 < 0)
                                 {
+                                    angle2 = angle2 + Math.PI;
+                                }
+                                if (angle1 < 0)
+                                {
+                                    angle1 = angle1 + Math.PI;
+                                }
+
+                                double subAngle = Math.Abs(Math.Abs(angle1.D) - Math.Abs(angle2.D));
+
+                                double xDist = (Yorigin[i][j] - AnchorList[i].Row) * Xresolution;
+                                double yDist = (Xorigin[i][j] - AnchorList[i].Col) * Yresolution;
+
+                                double Dist1 = Math.Sqrt(xDist * xDist + yDist * yDist);
+
+                                double Xrelative1 = Dist1 * Math.Sin(subAngle);
+                                double Yrelative1 = Dist1 * Math.Cos(subAngle);
+
+                                double Sub1 = (Xrelative1 - MyGlobal.xyzBaseCoord_Right.Dist_X[i][j]);
+                                double Sub2 = (Yrelative1 - MyGlobal.xyzBaseCoord_Right.Dist_Y[i][j]);
+                                bool xNg = Sub1 > MyGlobal.globalPointSet_Left.XYMax || Sub1 < MyGlobal.globalPointSet_Left.XYMin;
+                                bool yNg = Sub2 > MyGlobal.globalPointSet_Left.XYMax || Sub2 < MyGlobal.globalPointSet_Left.XYMin;                            
+                               
+                                if (xNg||yNg)
+                                {
+                                    string msg = NameOrigin[i][j] + "超出范围已补正--";
+                                    string msgx = xNg ? NameOrigin[i][j] + $"X--{Math.Round(Sub1, 3)};" : "";
+                                    string msgy = yNg ? $"Y--{ Math.Round(Sub2, 3)}" : "";
                                     if (MyGlobal.globalConfig.isUseSelfOffset)// 启用偏移校正
                                     {
                                         HTuple hom = new HTuple();
@@ -2570,8 +2607,13 @@ namespace SagensVision
                                         HOperatorSet.AffineTransPoint2d(MyGlobal.HomMat3D_Left[i], affineX, affineY, out affineX, out affineY);
                                         XCoord[i][j][0] = affineX;
                                         YCoord[i][j][0] = affineY;
-                                        string msg = NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围已补正";
-                                        ShowAndSaveMsg(msg, false);
+                                                                              
+                                        ShowAndSaveMsg(msg+msgx+msgy, false);
+                                        if (SaveBase)
+                                        {
+                                            XYOK = false;
+                                            break;
+                                        }
                                     }
                                     else
                                     {
@@ -2583,13 +2625,23 @@ namespace SagensVision
                                             };
                                             this.Invoke(sw);
                                         }
-                                        return NameOrigin[i][j] + $"XY--{Math.Round(Sub, 3)}超出范围";
+                                        if (!SaveBase)
+                                        {
+                                           
+                                            return msg+msgx+msgy;
+                                        }
+                                        else
+                                        {
+                                            ShowAndSaveMsg(msg + msgx + msgy, false);
+                                            XYOK = false;
+                                            break;
+                                        }
                                     }
+                                }
+                                #region 判断高度范围
 
-                                    #region 判断高度范围
-
-                                    ////判断 Z 值高度
-                                    if (MyGlobal.xyzBaseCoord_Left.ZCoord != null && MyGlobal.xyzBaseCoord_Left.ZCoord.Count != 0)
+                                ////判断 Z 值高度
+                                if (MyGlobal.xyzBaseCoord_Left.ZCoord != null && MyGlobal.xyzBaseCoord_Left.ZCoord.Count != 0)
                                     {
 
                                         if (i >= MyGlobal.xyzBaseCoord_Left.ZCoord[i].GetLength(0))
@@ -2604,6 +2656,11 @@ namespace SagensVision
                                                 ZCoord[i][j][0] = MyGlobal.xyzBaseCoord_Left.ZCoord[i][j][0];
                                                 string msg = NameOrigin[i][j] + $"Z--{Math.Round(sub, 3)}超出范围已补正";
                                                 ShowAndSaveMsg(msg, false);
+                                                if (SaveBase)
+                                                {
+                                                    HeightOK = false;
+                                                    break;
+                                                }
                                             }
                                             else
                                             {
@@ -2616,7 +2673,17 @@ namespace SagensVision
                                                     };
                                                     MyGlobal.hWindow_Final[i].Invoke(sw);
                                                 }
-                                                return $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
+                                                if (!SaveBase)
+                                                {
+                                                    return $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
+                                                }
+                                                else
+                                                {
+                                                    string msg = $"{NameOrigin[i][j]}高度超出范围" + Math.Round(sub, 3);
+                                                    ShowAndSaveMsg(msg, false);
+                                                    HeightOK = false;
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
@@ -2624,17 +2691,125 @@ namespace SagensVision
                                     #endregion
 
 
-                                }
+                                
                             }
                         }
                     }
                 }
+
+                if (SaveBase)
+                {
+                    //计算到中心点距离
+                    double xyResolution = Math.Sqrt(Xresolution * Xresolution + Yresolution * Yresolution);
+                    List<double[]> tempDist_X = new List<double[]>();
+                    List<double[]> tempDist_Y = new List<double[]>();
+                    for (int i = 0; i < Xorigin.Count; i++)
+                    {
+
+                        
+
+                        double[] x1 = new double[Xorigin[i].Length];
+                        double[] y1 = new double[Yorigin[i].Length];
+
+                        for (int j = 0; j < Xorigin[i].Length; j++)
+                        {
+                            HTuple angle1, angle2;
+                            HOperatorSet.AngleLx(Yorigin[i][j], Xorigin[i][j], AnchorList[i].Row, AnchorList[i].Col, out angle1);//线角度
+                            angle2 = AnchorList[i].Angle;//料角度
+                            if (angle2 < 0)
+                            {
+                                angle2 = angle2 + Math.PI;
+                            }
+                            if (angle1 < 0)
+                            {
+                                angle1 = angle1 + Math.PI;
+                            }
+
+                            double subAngle = Math.Abs(Math.Abs(angle1.D) - Math.Abs(angle2.D));
+
+                            double xDist = (Yorigin[i][j] - AnchorList[i].Row) * Xresolution;
+                            double yDist = (Xorigin[i][j] - AnchorList[i].Col) * Yresolution;
+                            double dist = Math.Sqrt(xDist * xDist + yDist * yDist);
+                            double Xrelative1 = dist * Math.Sin(subAngle);
+                            double Yrelative1 = dist * Math.Cos(subAngle);
+
+                            x1[j] = Math.Round(Xrelative1, 3);
+                            y1[j] = Math.Round(Yrelative1, 3);
+                        }
+                        tempDist_X.Add(x1);
+                        tempDist_Y.Add(y1);
+
+                    }
+                    if (isRight)
+                    {
+
+                        MyGlobal.xyzBaseCoord_Right.Dist_X = tempDist_X;
+                        MyGlobal.xyzBaseCoord_Right.Dist_Y = tempDist_Y;
+
+                        MyGlobal.xyzBaseCoord_Right.intersectCoordList = AnchorList;
+
+                        MyGlobal.xyzBaseCoord_Right.XCoord = Xorigin;
+                        MyGlobal.xyzBaseCoord_Right.YCoord = Yorigin;
+                        MyGlobal.xyzBaseCoord_Right.ZCoord = ZCoord;
+
+                        if (HeightOK==false || XYOK==false)
+                        {
+                            if (MessageBox.Show("与上次模板偏差超出范围，是否继续写入新模板？","警告",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)== DialogResult.Yes)
+                            {
+                                StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Right, MyGlobal.BaseTxtPath_Right);
+                            }
+                        }
+                        else
+                        {
+                            StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Right, MyGlobal.BaseTxtPath_Right);
+                        }
+
+                       
+                        //读取Z值基准高度】
+
+                        if (File.Exists(MyGlobal.BaseTxtPath_Right))
+                        {
+                            MyGlobal.xyzBaseCoord_Right = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Right, typeof(XYZBaseCoord));
+                        }
+                    }
+                    else
+                    {
+                        MyGlobal.xyzBaseCoord_Left.Dist_X = tempDist_X;
+                        MyGlobal.xyzBaseCoord_Left.Dist_Y = tempDist_Y;
+
+                        MyGlobal.xyzBaseCoord_Left.intersectCoordList = AnchorList;
+
+                        MyGlobal.xyzBaseCoord_Left.XCoord = Xorigin;
+                        MyGlobal.xyzBaseCoord_Left.YCoord = Yorigin;
+                        MyGlobal.xyzBaseCoord_Left.ZCoord = ZCoord;
+
+                        if (HeightOK == false || XYOK == false)
+                        {
+                            if (MessageBox.Show("与上次模板偏差超出范围，是否继续写入新模板？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                            {
+                                StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Left, MyGlobal.BaseTxtPath_Left);
+                            }
+                        }
+                        else
+                        {
+                            StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Left, MyGlobal.BaseTxtPath_Left);
+                        }
+                        
+                        //读取Z值基准高度】
+                        if (File.Exists(MyGlobal.BaseTxtPath_Left))
+                        {
+                            MyGlobal.xyzBaseCoord_Left = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Left, typeof(XYZBaseCoord));
+                        }
+                    }
+                }
+
+
                 #endregion
 
                 HTuple SubX = new HTuple(); HTuple SubY = new HTuple();
                 if (isRight)
                 {
-                    if (MyGlobal.xyzBaseCoord_Right.Dist != null)
+                    if (MyGlobal.xyzBaseCoord_Right.Dist_X != null && MyGlobal.xyzBaseCoord_Right.Dist_X.Count > 0)
                     {
                         #region 重复性数据
                         //将当前数据转换到模板数据取差值                 
@@ -2659,7 +2834,7 @@ namespace SagensVision
                 }
                 else
                 {
-                    if (MyGlobal.xyzBaseCoord_Left.Dist != null)
+                    if (MyGlobal.xyzBaseCoord_Left.Dist_X != null && MyGlobal.xyzBaseCoord_Right.Dist_X.Count > 0)
                     {
                         #region 重复性数据
                         //将当前数据转换到模板数据取差值                 
@@ -2880,10 +3055,15 @@ namespace SagensVision
                     }
 
                     double subAngle = Math.Abs(Math.Abs(angle1.D) - Math.Abs(angle2.D));
-                    HTuple dist = 0;
-                    HOperatorSet.DistancePp(OrginalY1[start], OrginalX1[start], PixR, PixC, out dist);
-                    Xrelative1 = dist.D * Math.Sin(subAngle) * Xresolution;
-                    Yrelative1 = dist.D * Math.Cos(subAngle) * Yresolution;
+                    //HTuple dist = 0;
+                    //HOperatorSet.DistancePp(OrginalY1[start], OrginalX1[start], PixR, PixC, out dist);
+                    double xDist = (OrginalY1[start] - PixR) * Xresolution;
+                    double yDist = (OrginalX1[start] - PixC) * Yresolution;
+
+                    double dist = Math.Sqrt(xDist * xDist + yDist * yDist);
+                    Xrelative1 = dist * Math.Sin(subAngle) ;
+                    Yrelative1 = dist * Math.Cos(subAngle) ;
+
 
                     //if (isRight)
                     //{
@@ -6065,8 +6245,17 @@ namespace SagensVision
                     firstLogin = true;
                 }
             }
-            
-            
+
+            if (MyGlobal.IsRight)
+            {
+                label4.Text = "右工位" + "轨迹";
+               
+            }
+            else
+            {
+                label4.Text = "左工位" + "轨迹";
+                
+            }
 
             switch (UserLogin.CurrentUser)
             {

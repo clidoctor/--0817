@@ -191,7 +191,8 @@ namespace SagensVision
         public List<double[]> XCoord;
         public List<double[]> YCoord;
         public List<double[][]> ZCoord;
-        public List<double[]> Dist;
+        public List<double[]> Dist_X;
+        public List<double[]> Dist_Y;
         public List<IntersetionCoord> intersectCoordList = new List<IntersetionCoord>();
     }
 
