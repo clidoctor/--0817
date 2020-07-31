@@ -290,7 +290,7 @@
             this.document4.ControlName = "dockPanel8";
             this.document4.FloatLocation = new System.Drawing.Point(0, 0);
             this.document4.FloatSize = new System.Drawing.Size(200, 200);
-            this.document4.Properties.AllowClose = DevExpress.Utils.DefaultBoolean.True;
+            this.document4.Properties.AllowClose = DevExpress.Utils.DefaultBoolean.False;
             this.document4.Properties.AllowFloat = DevExpress.Utils.DefaultBoolean.True;
             this.document4.Properties.AllowFloatOnDoubleClick = DevExpress.Utils.DefaultBoolean.True;
             // 
@@ -706,6 +706,7 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem20),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem21),
             new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.barEditItem_CurrentType_1, "", false, true, true, 128)});
+            this.bar1.OptionsBar.AllowQuickCustomization = false;
             this.bar1.OptionsBar.MultiLine = true;
             this.bar1.OptionsBar.UseWholeRow = true;
             this.bar1.Text = "Custom 4";
@@ -1443,7 +1444,7 @@
             series2.View = pieSeriesView2;
             this.chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series2};
-            this.chartControl2.Size = new System.Drawing.Size(259, 275);
+            this.chartControl2.Size = new System.Drawing.Size(259, 230);
             this.chartControl2.TabIndex = 6;
             // 
             // btn_clear_curr_capacity2
@@ -1530,7 +1531,7 @@
             series3.View = pieSeriesView3;
             this.chartControl3.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series3};
-            this.chartControl3.Size = new System.Drawing.Size(259, 279);
+            this.chartControl3.Size = new System.Drawing.Size(259, 230);
             this.chartControl3.TabIndex = 5;
             // 
             // btn_clear_curr_capacity3
@@ -1550,6 +1551,7 @@
             this.dockPanel8.DockedAsTabbedDocument = true;
             this.dockPanel8.ID = new System.Guid("49038a4a-15c9-4116-8eb9-75d4ef7c3b65");
             this.dockPanel8.Name = "dockPanel8";
+            this.dockPanel8.Options.ShowCloseButton = false;
             this.dockPanel8.OriginalSize = new System.Drawing.Size(200, 200);
             // 
             // dockPanel8_Container
@@ -1652,6 +1654,7 @@
             // 
             this.tabbedView1.DocumentGroups.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup[] {
             this.documentGroup1});
+            this.tabbedView1.DocumentProperties.AllowClose = false;
             this.tabbedView1.Documents.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseDocument[] {
             this.document4});
             this.tabbedView1.RootContainer.Element = null;

@@ -2405,15 +2405,50 @@ namespace SagensVision.VisionTool
                     {
                         //HOperatorSet.AffineTransPoint3d(HomMat3D, row, col,zcoord, out row, out col,out zcoord);
                         HOperatorSet.AffineTransPoint2d(HomMat3D, row, col, out row, out col);
-                        if (IsRight)
+                        if (IsRight)//task
                         {
                             zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Right.TotalZoffset;
+                            switch (SideId)
+                            {
+                                case 1:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Right.SideZOffset1;
+                                    break;
+                                case 2:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Right.SideZOffset2;
+                                    break;
+                                case 3:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Right.SideZOffset3;
+                                    break;
+                                case 4:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Right.SideZOffset4;
+                                    break;
+                                default:
+                                    break;
+                            }
+
                             row = row + MyGlobal.globalPointSet_Right.gbParam[Sid].Xoffset;
                             col = col + MyGlobal.globalPointSet_Right.gbParam[Sid].Yoffset;
                         }
                         else
                         {
                             zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Left.TotalZoffset;
+                            switch (SideId)
+                            {
+                                case 1:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Left.SideZOffset1;
+                                    break;
+                                case 2:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Left.SideZOffset2;
+                                    break;
+                                case 3:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Left.SideZOffset3;
+                                    break;
+                                case 4:
+                                    zcoord = zcoord + fParam[Sid].roiP[i].Zoffset + fParam[Sid].SigleZoffset + MyGlobal.globalPointSet_Left.SideZOffset4;
+                                    break;
+                                default:
+                                    break;
+                            }
                             row = row + MyGlobal.globalPointSet_Left.gbParam[Sid].Xoffset;
                             col = col + MyGlobal.globalPointSet_Left.gbParam[Sid].Yoffset;
                         }

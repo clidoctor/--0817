@@ -248,6 +248,22 @@ namespace SagensVision
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
             gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
+
+            if ("亮度图" == MyGlobal.globalConfig.ShowImgType)
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = false;
+        }
+            else if ("曲面图" == MyGlobal.globalConfig.ShowImgType)
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = true;
+            }
+            else
+            {
+                MyGlobal.isShowHeightImg = false;
+                MyGlobal.isShowSurfaceImg = false;
+            }
         }
 
         void InitControl()
@@ -296,7 +312,7 @@ namespace SagensVision
             {
                 MyGlobal.isShowHeightImg = true;
                 MyGlobal.isShowSurfaceImg = false;
-            }
+        }
             else if ("曲面图" == MyGlobal.globalConfig.ShowImgType)
             {
                 MyGlobal.isShowHeightImg = true;
@@ -3048,7 +3064,7 @@ namespace SagensVision
                     if (angle2 < 0)
                     {
                         angle2 = angle2 + Math.PI;
-                    }                  
+                    }
                     if (angle1 < 0)
                     {
                         angle1 = angle1 + Math.PI;
@@ -3065,22 +3081,18 @@ namespace SagensVision
                     Yrelative1 = dist * Math.Cos(subAngle) ;
 
 
-                    //if (isRight)
-                    //{
+                    if (isRight)
+                    {
+                        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
+                        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
+                    }
+                    else
+                    {
+                        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
+                        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+                    }
 
-
-                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
-                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
-
-                    //}
-                    //else
-                    //{
-                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
-                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
-
-                    //}
-
-
+                 
                     if (i == 0)
                     {
                         x0 = X1;
@@ -4223,7 +4235,7 @@ namespace SagensVision
                                 if (!ShowOnece)
                                 {
                                     ShowOnece = true;
-                                    ShowAndSaveMsg(string.Format("服务器已断开连接！"));                                   
+                                    ShowAndSaveMsg(string.Format("服务器已断开连接！"));
                                     MyGlobal.sktOK = false;
                                 }
                                 
@@ -4529,7 +4541,7 @@ namespace SagensVision
 
                                 }
                             }
-                          
+
                         }
                         catch (Exception ex)
                         {

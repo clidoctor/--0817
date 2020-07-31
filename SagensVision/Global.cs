@@ -105,6 +105,12 @@ namespace SagensVision
     public class GlobalPointSet
     {
         public double TotalZoffset = 0;//整体Z
+
+        public double SideZOffset1 = 0;
+        public double SideZOffset2 = 0;
+        public double SideZOffset3 = 0;
+        public double SideZOffset4 = 0;
+
         public int Startpt = 1;//起始点
         public double HeightMin = 0;//最小高度
         public double HeightMax = 0;
