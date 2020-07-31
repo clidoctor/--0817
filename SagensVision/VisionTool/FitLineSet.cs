@@ -345,6 +345,10 @@ namespace SagensVision.VisionTool
 
                         HTuple row, col;
                         fpTool.FindFirstAnchor(Id, out row, out col, CurrentIndex);
+                        if (row.Length==0)
+                        {
+                            return;
+                        }
                         fpTool.fParam[Id - 1].roiP[RowId].AnchorRow = row.D;
                         fpTool.fParam[Id - 1].roiP[RowId].AnchorCol = col.D;
 
@@ -431,6 +435,7 @@ namespace SagensVision.VisionTool
                             fpTool.roiList2[Id].Add(new ROIRectangle2());
 
                             //每个区域单独设置Roi
+                            hwindow_final1.viewWindow.notDisplayRoi();
                             hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref fpTool.roiList[Id]);
                         }
 
@@ -1678,8 +1683,6 @@ namespace SagensVision.VisionTool
             isGenSection = true;
             //fpTool.fpTool.roiList2[Id].Add(new ROIRectangle2());
 
-            ////每个区域单独设置Roi
-            //hwindow_final1.viewWindow.genRect1(400, 400, 600, 600, ref fpTool.roiList[Id]);
 
         }
 
@@ -6872,7 +6875,7 @@ namespace SagensVision.VisionTool
             }
 
         }
-        int _NumOfSection = 0;
+        int _NumOfSection = 10;
 
         [Category("\t\t\t\t截面设置")]
         [DisplayName("矩形长轴")]

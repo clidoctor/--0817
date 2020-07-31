@@ -21,8 +21,8 @@ namespace SagensVision
 
             BonusSkins.Register();
             SkinManager.EnableFormSkins();
-            UserLookAndFeel.Default.SetSkinStyle("Blue");
-
+            //UserLookAndFeel.Default.SetSkinStyle("Blue");
+            UserLookAndFeel.Default.SetSkinStyle("Black");
             Process Current = Process.GetCurrentProcess();
             Process[] Processs = Process.GetProcessesByName(Current.ProcessName);
 
