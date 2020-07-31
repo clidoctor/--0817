@@ -248,6 +248,22 @@ namespace SagensVision
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
             gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
+
+            if ("亮度图" == MyGlobal.globalConfig.ShowImgType)
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = false;
+            }
+            else if ("曲面图" == MyGlobal.globalConfig.ShowImgType)
+            {
+                MyGlobal.isShowHeightImg = true;
+                MyGlobal.isShowSurfaceImg = true;
+            }
+            else
+            {
+                MyGlobal.isShowHeightImg = false;
+                MyGlobal.isShowSurfaceImg = false;
+            }
         }
 
         void InitControl()
@@ -2873,22 +2889,18 @@ namespace SagensVision
                     Xrelative1 = dist.D * Math.Sin(subAngle) * Xresolution;
                     Yrelative1 = dist.D * Math.Cos(subAngle) * Yresolution;
 
-                    //if (isRight)
-                    //{
-                        
+                    if (isRight)
+                    {
+                        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
+                        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
+                    }
+                    else
+                    {
+                        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
+                        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
+                    }
 
-                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubX[i].D;
-                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist == null ? 0 : SubY[i].D;
-                        
-                    //}
-                    //else
-                    //{
-                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubX[i].D;
-                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist == null ? 0 : SubY[i].D;
-                   
-                    //}
 
-                 
                     if (i == 0)
                     {
                         x0 = X1;

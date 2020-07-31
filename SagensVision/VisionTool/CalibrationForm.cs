@@ -22,7 +22,13 @@ namespace SagensVision.VisionTool
             calib = new Calibration.mainUtl();
             this.Controls.Add(calib);
             calib.Dock = DockStyle.Fill;
-            calib.GetRobotIdxDelegate += OnGetIdxDelegate;
+            //calib.GetRobotIdxDelegate += OnGetIdxDelegate;
+            if (MyGlobal.globalConfig.uiStyle == "2")
+            {
+                calib.GetRobotIdxDelegate += OnGetIdxByReadCsv;
+            }
+            else { calib.GetRobotIdxDelegate += OnGetIdxDelegate; }
+            
             this.MaximizeBox = false;
         }
 
@@ -57,6 +63,31 @@ namespace SagensVision.VisionTool
                 }
                 
             });
+        }
+
+        private void OnGetIdxByReadCsv(string idx, string LorR)
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader($@"C:\\Twinwin\\data\\{LorR}\\Calibration.csv"))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string a = sr.ReadLine();
+                        string[] b = a.Split(',');
+                        if (idx == b[0])
+                        {
+                            calib.SetValue(idx, b);
+                            break;
+                        }
+                    }
+                    sr.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Read CSV:" + ex.Message);
+            }
         }
 
         private void CalibrationForm_FormClosing(object sender, FormClosingEventArgs e)

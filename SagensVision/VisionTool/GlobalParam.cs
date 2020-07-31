@@ -45,7 +45,11 @@ namespace SagensVision.VisionTool
 
                     textBox_Start.Text = MyGlobal.globalPointSet_Right.Startpt.ToString();
                     textBox_totalZ.Text = MyGlobal.globalPointSet_Right.TotalZoffset.ToString();
-                    
+                    textBox_SideZ1.Text = MyGlobal.globalPointSet_Right.SideZOffset1.ToString();
+                    textBox_SideZ2.Text = MyGlobal.globalPointSet_Right.SideZOffset2.ToString();
+                    textBox_SideZ3.Text = MyGlobal.globalPointSet_Right.SideZOffset3.ToString();
+                    textBox_SideZ4.Text = MyGlobal.globalPointSet_Right.SideZOffset4.ToString();
+
                     textBox_xOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Xoffset.ToString();
                     textBox_yOffset.Text = MyGlobal.globalPointSet_Right.gbParam[0].Yoffset.ToString();
                     cb_IsUp.Checked = MyGlobal.globalPointSet_Right.IsUp[0];
@@ -60,6 +64,11 @@ namespace SagensVision.VisionTool
 
                     textBox_Start.Text = MyGlobal.globalPointSet_Left.Startpt.ToString();
                     textBox_totalZ.Text = MyGlobal.globalPointSet_Left.TotalZoffset.ToString();
+                    textBox_SideZ1.Text = MyGlobal.globalPointSet_Left.SideZOffset1.ToString();
+                    textBox_SideZ2.Text = MyGlobal.globalPointSet_Left.SideZOffset2.ToString();
+                    textBox_SideZ3.Text = MyGlobal.globalPointSet_Left.SideZOffset3.ToString();
+                    textBox_SideZ4.Text = MyGlobal.globalPointSet_Left.SideZOffset4.ToString();
+
                     textBox_xOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Xoffset.ToString();
                     textBox_yOffset.Text = MyGlobal.globalPointSet_Left.gbParam[0].Yoffset.ToString();
                     cb_IsUp.Checked = MyGlobal.globalPointSet_Left.IsUp[0];
@@ -219,6 +228,46 @@ namespace SagensVision.VisionTool
                     else
                     {
                         MyGlobal.globalPointSet_Left.TotalZoffset = num;
+                    }
+                    break;
+                case "textBox_SideZ1":
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.SideZOffset1 = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.SideZOffset1 = num;
+                    }
+                    break;
+                case "textBox_SideZ2":
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.SideZOffset2 = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.SideZOffset2 = num;
+                    }
+                    break;
+                case "textBox_SideZ3":
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.SideZOffset3 = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.SideZOffset3 = num;
+                    }
+                    break;
+                case "textBox_SideZ4":
+                    if (isRight)
+                    {
+                        MyGlobal.globalPointSet_Right.SideZOffset4 = num;
+                    }
+                    else
+                    {
+                        MyGlobal.globalPointSet_Left.SideZOffset4 = num;
                     }
                     break;
                 case "textBox_Start":
@@ -420,7 +469,19 @@ namespace SagensVision.VisionTool
             //w.Items.Add("曲面图");
             //w.Items.Add("彩色图");
             comboBoxEdit1.EditValueChanged += ShowImgTypeChanged;
-            comboBoxEdit1.EditValue = MyGlobal.globalConfig.ShowImgType;
+            if (MyGlobal.globalConfig.ShowImgType == "Intensity")
+            {
+                comboBoxEdit1.EditValue = "亮度图";
+            }
+            else if (MyGlobal.globalConfig.ShowImgType == "Surface")
+            {
+                comboBoxEdit1.EditValue = "曲面图";
+            }
+            else 
+            {
+                comboBoxEdit1.EditValue = "彩色图";
+            }
+            
         }
         private void ShowImgTypeChanged(object sender, EventArgs e)
         {
@@ -428,18 +489,21 @@ namespace SagensVision.VisionTool
             {
                 MyGlobal.isShowHeightImg = true;
                 MyGlobal.isShowSurfaceImg = false;
+                MyGlobal.globalConfig.ShowImgType = "Intensity";
             }
             else if ("曲面图" == comboBoxEdit1.EditValue.ToString())
             {
                 MyGlobal.isShowHeightImg = true;
                 MyGlobal.isShowSurfaceImg = true;
+                MyGlobal.globalConfig.ShowImgType = "Surface";
             }
             else
             {
                 MyGlobal.isShowHeightImg = false;
                 MyGlobal.isShowSurfaceImg = false;
+                MyGlobal.globalConfig.ShowImgType = "Color";
             }
-            MyGlobal.globalConfig.ShowImgType = comboBoxEdit1.EditValue.ToString();
+
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
