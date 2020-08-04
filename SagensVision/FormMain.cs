@@ -248,22 +248,7 @@ namespace SagensVision
             //match2.load = new Matching.Form1.LoadParam(loadMathParam);
             //OffFram.Run = new OfflineFrm.RunOff(RunOffline);
             gbParamSet.Run = new VisionTool.GlobalParam.RunOff(RunBaseHeight);
-
-            if ("亮度图" == MyGlobal.globalConfig.ShowImgType)
-            {
-                MyGlobal.isShowHeightImg = true;
-                MyGlobal.isShowSurfaceImg = false;
-        }
-            else if ("曲面图" == MyGlobal.globalConfig.ShowImgType)
-            {
-                MyGlobal.isShowHeightImg = true;
-                MyGlobal.isShowSurfaceImg = true;
-            }
-            else
-            {
-                MyGlobal.isShowHeightImg = false;
-                MyGlobal.isShowSurfaceImg = false;
-            }
+            
         }
 
         void InitControl()
@@ -308,12 +293,12 @@ namespace SagensVision
 
             ShowProfile.HMouseDown += ShowProfile_HMouseDown;
 
-            if ("亮度图" == MyGlobal.globalConfig.ShowImgType)
+            if ("Intensity" == MyGlobal.globalConfig.ShowImgType)
             {
                 MyGlobal.isShowHeightImg = true;
                 MyGlobal.isShowSurfaceImg = false;
-        }
-            else if ("曲面图" == MyGlobal.globalConfig.ShowImgType)
+            }
+            else if ("Surface" == MyGlobal.globalConfig.ShowImgType)
             {
                 MyGlobal.isShowHeightImg = true;
                 MyGlobal.isShowSurfaceImg = true;
@@ -2470,7 +2455,7 @@ namespace SagensVision
                                         XCoord[i][j][0] = affineX;
                                         YCoord[i][j][0] = affineY;
                                                                           
-                                         ShowAndSaveMsg(msg + msgx + msgy, false);
+                                         ShowAndSaveMsg(msg + msgx + msgy + "已补正", false);
                                         if (SaveBase)
                                         {
                                             XYOK = false;
@@ -2567,7 +2552,7 @@ namespace SagensVision
                 }
                 else
                 {
-                    if (MyGlobal.xyzBaseCoord_Left.Dist_X != null && MyGlobal.xyzBaseCoord_Right.Dist_X.Count > 0/*&& !SaveBase*/)
+                    if (MyGlobal.xyzBaseCoord_Left.Dist_X != null && MyGlobal.xyzBaseCoord_Left.Dist_X.Count > 0/*&& !SaveBase*/)
                     {
                         for (int i = 0; i < Xorigin.Count; i++)
                         {
@@ -2603,14 +2588,14 @@ namespace SagensVision
                                 double Xrelative1 = Dist1 * Math.Sin(subAngle);
                                 double Yrelative1 = Dist1 * Math.Cos(subAngle);
 
-                                double Sub1 = (Xrelative1 - MyGlobal.xyzBaseCoord_Right.Dist_X[i][j]);
-                                double Sub2 = (Yrelative1 - MyGlobal.xyzBaseCoord_Right.Dist_Y[i][j]);
+                                double Sub1 = (Xrelative1 - MyGlobal.xyzBaseCoord_Left.Dist_X[i][j]);
+                                double Sub2 = (Yrelative1 - MyGlobal.xyzBaseCoord_Left.Dist_Y[i][j]);
                                 bool xNg = Sub1 > MyGlobal.globalPointSet_Left.XYMax || Sub1 < MyGlobal.globalPointSet_Left.XYMin;
                                 bool yNg = Sub2 > MyGlobal.globalPointSet_Left.XYMax || Sub2 < MyGlobal.globalPointSet_Left.XYMin;                            
                                
                                 if (xNg||yNg)
                                 {
-                                    string msg = NameOrigin[i][j] + "超出范围已补正--";
+                                    string msg = NameOrigin[i][j] + "超出范围--";
                                     string msgx = xNg ? NameOrigin[i][j] + $"X--{Math.Round(Sub1, 3)};" : "";
                                     string msgy = yNg ? $"Y--{ Math.Round(Sub2, 3)}" : "";
                                     if (MyGlobal.globalConfig.isUseSelfOffset)// 启用偏移校正
@@ -2624,7 +2609,7 @@ namespace SagensVision
                                         XCoord[i][j][0] = affineX;
                                         YCoord[i][j][0] = affineY;
                                                                               
-                                        ShowAndSaveMsg(msg+msgx+msgy, false);
+                                        ShowAndSaveMsg(msg+msgx+msgy + "已补正", false);
                                         if (SaveBase)
                                         {
                                             XYOK = false;
@@ -3008,7 +2993,7 @@ namespace SagensVision
                     double PixC = 0; double PixR = 0;
                     double AxisC = 0; double AxisR = 0;
                     double PixAngle = 0;
-                    if (Acount >= 0 && Acount < XCoord[0].Length)
+                    if (start >= 0 && start < XCoord[0].Length)
                     {
                         PixC = AnchorC[0];
                         PixR = AnchorR[0];
@@ -3016,7 +3001,7 @@ namespace SagensVision
                         AxisC = AxisAnchorC[0];
                         AxisR = AxisAnchorR[0];
                     }
-                    else if (Acount >= XCoord[0].Length && Acount < XCoord[0].Length + XCoord[1].Length)
+                    else if (start >= XCoord[0].Length && start < XCoord[0].Length + XCoord[1].Length)
                     {
                         PixC = AnchorC[1];
                         PixR = AnchorR[1];
@@ -3024,7 +3009,7 @@ namespace SagensVision
                         AxisC = AxisAnchorC[1];
                         AxisR = AxisAnchorR[1];
                     }
-                    else if (Acount >= XCoord[0].Length + XCoord[1].Length && Acount < XCoord[0].Length + XCoord[1].Length + XCoord[2].Length)
+                    else if (start >= XCoord[0].Length + XCoord[1].Length && start < XCoord[0].Length + XCoord[1].Length + XCoord[2].Length)
                     {
                         PixC = AnchorC[2];
                         PixR = AnchorR[2];
@@ -3032,7 +3017,7 @@ namespace SagensVision
                         AxisC = AxisAnchorC[2];
                         AxisR = AxisAnchorR[2];
                     }
-                    else if (Acount >= XCoord[0].Length + XCoord[1].Length + XCoord[2].Length && Acount < XCoord[0].Length + XCoord[1].Length + XCoord[2].Length + XCoord[3].Length)
+                    else if (start >= XCoord[0].Length + XCoord[1].Length + XCoord[2].Length && start < XCoord[0].Length + XCoord[1].Length + XCoord[2].Length + XCoord[3].Length)
                     {
                         PixC = AnchorC[3];
                         PixR = AnchorR[3];
@@ -3069,7 +3054,7 @@ namespace SagensVision
                     {
                         angle1 = angle1 + Math.PI;
                     }
-
+ 
                     double subAngle = Math.Abs(Math.Abs(angle1.D) - Math.Abs(angle2.D));
                     //HTuple dist = 0;
                     //HOperatorSet.DistancePp(OrginalY1[start], OrginalX1[start], PixR, PixC, out dist);
@@ -3077,22 +3062,32 @@ namespace SagensVision
                     double yDist = (OrginalX1[start] - PixC) * Yresolution;
 
                     double dist = Math.Sqrt(xDist * xDist + yDist * yDist);
-                    Xrelative1 = dist * Math.Sin(subAngle) ;
-                    Yrelative1 = dist * Math.Cos(subAngle) ;
+                    Xrelative1 = dist * Math.Sin(subAngle);
+                    Yrelative1 = dist * Math.Cos(subAngle);
 
 
                     //if (isRight)
                     //{
-                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_X == null ? 0 : SubX[i].D;
-                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_Y == null ? 0 : SubY[i].D;
+                    //    if (SubX.Length != 0)
+                    //    {
+                    //        //        return "请重新写入基准";
+                    //        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_X == null ? 0 : SubX[start].D;
+                    //        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_Y == null ? 0 : SubY[start].D;
+                    //    }
+
                     //}
                     //else
                     //{
-                    //    Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_X == null ? 0 : SubX[i].D;
-                    //    Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_Y == null ? 0 : SubY[i].D;
+                    //    if (SubX.Length != 0)
+                    //    {
+                    //        //        return "请重新写入基准";
+                    //        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_X == null ? 0 : SubX[start].D;
+                    //        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_Y == null ? 0 : SubY[start].D;
+                    //    }
+
                     //}
 
-                 
+
                     if (i == 0)
                     {
                         x0 = X1;
@@ -3129,7 +3124,7 @@ namespace SagensVision
 
 
                         //test
-                        pix.Append(saveTime + "\t" + Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + Z1.ToString("0.000") + "\t");
+                        pix.Append(saveTime + "\t" + Pix_x.ToString("0.000") + "\t" + Pix_y.ToString("0.000") + "\t" + subAngle.ToString("0.000") + "\t");
                     }
                     else
                     {
