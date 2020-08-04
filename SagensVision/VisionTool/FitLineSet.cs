@@ -838,7 +838,7 @@ namespace SagensVision.VisionTool
         //public static double Resolution;
         //public static double yResolution;
 
-        private void simpleButton2_Click(object sender, EventArgs e)
+        private void simpleButton2_Click(object sender, EventArgs e)//关闭激光
         {
             string error = "";
             bool ok = MyGlobal.GoSDK.Stop(ref error);
@@ -1333,7 +1333,7 @@ namespace SagensVision.VisionTool
             MessageBox.Show("拟合成功！");
         }
 
-        private void simpleButton4_Click(object sender, EventArgs e)
+        private void simpleButton4_Click(object sender, EventArgs e)//上一帧
         {
             if (CurrentIndex == 0)
             {
@@ -1393,7 +1393,7 @@ namespace SagensVision.VisionTool
             }
         }
 
-        private void simpleButton3_Click(object sender, EventArgs e)
+        private void simpleButton3_Click(object sender, EventArgs e)//下一帧
         {
 
             int Total = Convert.ToInt32(textBox_Total.Text.ToString());
@@ -1450,7 +1450,7 @@ namespace SagensVision.VisionTool
 
         }
         bool ShowSection = false;
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)//显示
         {
             ShowSection = checkBox1.Checked;
         }
@@ -1553,7 +1553,7 @@ namespace SagensVision.VisionTool
             MessageBox.Show("保存成功！");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)//保存参数
         {
             RoiParam.isInvoke = false;
             if (isRight)
@@ -1580,7 +1580,7 @@ namespace SagensVision.VisionTool
         bool isSave = true;
         bool NoChange = false;
         bool isCloing = false;
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)//选择边
         {
 
             if (isCloing || NoChange || comboBox1.SelectedItem.ToString() == CurrentSide)
@@ -1661,7 +1661,7 @@ namespace SagensVision.VisionTool
             //roiCount++;
         }
         bool isGenSection = false;
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)//截图区域
         {
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
             hwindow_final2.viewWindow.notDisplayRoi();
@@ -1686,7 +1686,7 @@ namespace SagensVision.VisionTool
 
         }
 
-        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)//右键删除
         {
             int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
 
@@ -1747,7 +1747,7 @@ namespace SagensVision.VisionTool
             }
         }
 
-        private void 删除所有ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 删除所有ToolStripMenuItem_Click(object sender, EventArgs e)//右键删除所有
         {
             if (dataGridView1.Rows.Count == 0)
             {
@@ -1900,17 +1900,14 @@ namespace SagensVision.VisionTool
 
         }
         private int Ignore = 0;
-        private void simpleButton5_Click(object sender, EventArgs e)
-        {
 
-        }
         bool SelectAll = false;
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)//右键全选
         {
             SelectAll = checkBox2.Checked;
         }
 
-        private void simpleButton7_Click(object sender, EventArgs e)
+        private void simpleButton7_Click(object sender, EventArgs e)//run按钮
         {
             try
             {
@@ -5871,26 +5868,6 @@ namespace SagensVision.VisionTool
         }
 
 
-        private void textBox_Num_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void simpleButton8_Click(object sender, EventArgs e)
-        {
-            //IntersetionCoord intersect = new IntersetionCoord();
-            //string ok1 = fix.FixLine.FixLine(Intesity, Side, out intersect);
-            //HTuple homMaxFix = new HTuple();
-            //HOperatorSet.VectorAngleToRigid(fix.FixLine.intersectCoordList[Side - 1].Row, fix.FixLine.intersectCoordList[Side - 1].Col,
-            //    0, intersect.Row, intersect.Col, 0, out homMaxFix);
-            //string OK = flset.FindPoint(Side, Intesity, HeightImage, out X, out Y, out Z, out Str, Homat3D, Hwnd, false, homMaxFix);
-            //return OK;
-        }
-
-        private void simpleButton9_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void 更改ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -6101,7 +6078,7 @@ namespace SagensVision.VisionTool
         }
 
         int PtOrder = -1;
-        private void simpleButton5_Click_1(object sender, EventArgs e)
+        private void simpleButton5_Click_1(object sender, EventArgs e)//偏移起终点1，2
         {
             if (hwindow_final1.Image == null || !hwindow_final1.Image.IsInitialized())
             {
@@ -6132,7 +6109,7 @@ namespace SagensVision.VisionTool
         }
 
         bool edit = false;
-        private void checkBoxRoi_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxRoi_CheckedChanged(object sender, EventArgs e)//ROI编辑模式
         {
             edit = checkBoxRoi.Checked;
             if (edit)
@@ -6147,25 +6124,7 @@ namespace SagensVision.VisionTool
             }
         }
         bool ReName = false;
-        private void 重命名ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //ReName = true;
-                //richTextBox1.ReadOnly = false;
-                //int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-                //if (richTextBox1.SelectedText == "")
-                //{
-                //    return;
-                //}
-                //PreSelect = richTextBox1.SelectedText;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+       
 
 
         bool isSelectOne = false;
@@ -6291,7 +6250,7 @@ namespace SagensVision.VisionTool
             }
         }
 
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)//不启用定位
         {
             NotUseFix = checkBox4.Checked;
             RoiParam.isInvoke = false;
@@ -6300,18 +6259,7 @@ namespace SagensVision.VisionTool
             RoiParam.isInvoke = true;
         }
 
-        private void richTextBox1_MouseMove(object sender, MouseEventArgs e)
-        {
-            //int SideId = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
-            //if (PreSelect!="" && DicPointName[SideId].Keys.Contains(PreSelect))
-            //{               
-            //    richTextBox1.Focus();
-            //    int id = DicPointName[SideId][PreSelect];
-            //    int fId = richTextBox1.GetFirstCharIndexFromLine(id);
-            //    richTextBox1.Select(fId, PreSelect.Length);
-            //}
-
-        }
+     
 
         bool isSelecting = false;
         private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
@@ -6663,7 +6611,7 @@ namespace SagensVision.VisionTool
         }
 
        
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)//左右工位
         {
             if (isLoading)
             {
@@ -6686,7 +6634,7 @@ namespace SagensVision.VisionTool
             MessageBox.Show("切换成功!");
         }
 
-        private void simpleButton1_Click_1(object sender, EventArgs e)
+        private void simpleButton1_Click_1(object sender, EventArgs e)//添加
         {
             try
             {
@@ -7179,6 +7127,10 @@ namespace SagensVision.VisionTool
         }
         string _TypeOfFindLine = "极值";
 
+
+        /// <summary>
+        /// 0极值 1最高点下降
+        /// </summary>
         [BrowsableAttribute(false)]
         public int SelectedType
         {

@@ -179,6 +179,13 @@ namespace SagensVision.VisionTool
 
         }
 
+        /// <summary>
+        /// 显示轮廓，并输出已显示轮廓的ROW ,COl
+        /// </summary>
+        /// <param name="ProfileId">ROI中线的 ID</param>
+        /// <param name="row">显示轮廓的ROW</param>
+        /// <param name="col">显示轮廓的COL</param>
+        /// <param name="hwind"></param>
         public void ShowProfile(int ProfileId, out HTuple row, out HTuple col, HWindow_Final hwind = null)
         {
             row = new HTuple(); col = new HTuple();
@@ -198,7 +205,7 @@ namespace SagensVision.VisionTool
                     return;
                 }
 
-                HTuple row1 = -new HTuple(RArray[ProfileId]);
+                HTuple row1 = -new HTuple(RArray[ProfileId]);//取出对应ID的ROI中的线，转成Htuple
                 HTuple col1 = new HTuple(CArray[ProfileId]);
                 if (row1.Length == 0)
                 {
@@ -1007,6 +1014,7 @@ namespace SagensVision.VisionTool
         /// 由轮廓拟合点
         /// </summary>
         /// <param name="SideId">边序号 从1 开始</param>
+        /// <param name="ProfileId">ROI 中线的 ID</param>
         /// <param name="LastR">输出行坐标</param>
         /// <param name="LastC">输出列坐标</param>
         /// <param name="hwnd">输入窗体（可选）</param>
@@ -1017,7 +1025,7 @@ namespace SagensVision.VisionTool
             try
             {
                 int Id = SideId - 1;
-                int roiID = -1;
+                int roiID = -1;//这条线所属ROI 的 ID
                 for (int i = 0; i < fParam[Id].roiP.Count; i++)
                 {
 
@@ -1037,10 +1045,13 @@ namespace SagensVision.VisionTool
                 }
 
                 HTuple row, col;
-                ShowProfile(ProfileId, out row, out col, hwnd_profile);
+                ShowProfile(ProfileId, out row, out col, hwnd_profile);//显示轮廓
 
-                HTuple RotateRow = new HTuple(); HTuple RotateCol = new HTuple(); HTuple HomMat = new HTuple();
-                HTuple rotateMaxR = new HTuple();HTuple rotateMaxC = new HTuple();
+                HTuple RotateRow = new HTuple();
+                HTuple RotateCol = new HTuple();
+                HTuple HomMat = new HTuple();
+                HTuple rotateMaxR = new HTuple();
+                HTuple rotateMaxC = new HTuple();
                 if (RArray == null || RArray[ProfileId].Length == 0)
                 {
                     return "RArray is NULL";
@@ -1055,7 +1066,7 @@ namespace SagensVision.VisionTool
                 //除去 -30 *200 的点
                 HTuple eq30_1 = row.TupleEqualElem(-6000 - 0 + 150);
                 HTuple eqId_1 = eq30_1.TupleFind(1);
-                HTuple temp_1 = row.TupleRemove(eqId_1);
+                HTuple temp_1 = row.TupleRemove(eqId_1);//获取有效值
                 HTuple temp_2 = col.TupleRemove(eqId_1);
 
                 if (roiList[Id].Count == 0)
@@ -1068,12 +1079,13 @@ namespace SagensVision.VisionTool
 
                 //HTuple mZRowId = col.TupleFindFirst(maxZCol);
                 //HTuple mZRow = row[mZRowId];
-                HTuple mZRow = 0; HTuple maxZCol = 0;
+                HTuple mZRow = 0;
+                HTuple maxZCol = 0;
 
                 
                 // 锚定 Roi
                 HTuple RoiCoord = roiList[Id][roiID].getModelData();
-                double R1 = RoiCoord[0] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;
+                double R1 = RoiCoord[0] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;//锚定变换之后
                 double C1 = RoiCoord[1] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
                 double R2 = RoiCoord[2] + mZRow.D - fParam[Id].roiP[roiID].AnchorRow;
                 double C2 = RoiCoord[3] + maxZCol.D - fParam[Id].roiP[roiID].AnchorCol;
@@ -1361,6 +1373,16 @@ namespace SagensVision.VisionTool
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Side">边1，2，3，4</param>
+        /// <param name="HeightImage">曲面图</param>
+        /// <param name="intersectCoord"></param>
+        /// <param name="hwnd">窗体</param>
+        /// <param name="debug"></param>
+        /// <param name="ShowFeatures"></param>
+        /// <returns></returns>
         public string FindIntersectPoint(int Side, HObject HeightImage, out IntersetionCoord intersectCoord, HWindow_Final hwnd = null, bool debug = false,bool ShowFeatures = true)
         {
             List<HTuple> Hlines = new List<HTuple>(); intersectCoord = new IntersetionCoord();
@@ -1470,6 +1492,14 @@ namespace SagensVision.VisionTool
             }
         }
 
+        /// <summary>
+        /// 获取矩形ROI中的 线
+        /// </summary>
+        /// <param name="roi">rect2 roi</param>
+        /// <param name="SideID">边</param>
+        /// <param name="RoiId"></param>
+        /// <param name="LineCoord">分割的线的参数</param>
+        /// <param name="hwnd"></param>
         public void DispSection(ROIRectangle2 roi, int SideID, int RoiId, out HTuple[] LineCoord, HWindow_Final hwnd = null)
         {
             LineCoord = new HTuple[1];
@@ -1519,6 +1549,15 @@ namespace SagensVision.VisionTool
             }
         }
 
+        /// <summary>
+        /// 等分roi线
+        /// </summary>
+        /// <param name="Image"></param>
+        /// <param name="lineCoord">线的信息，row1,col1,row2,col2,roi phi</param>
+        /// <param name="row">线等分row</param>
+        /// <param name="col">线等分col</param>
+        /// <param name="IgnorePt"></param>
+        /// <returns></returns>
         string GenSection(HObject Image, HTuple lineCoord, out HTuple row, out HTuple col, out HTuple IgnorePt)
         {
             row = new HTuple(); col = new HTuple(); IgnorePt = 0;
@@ -1644,13 +1683,26 @@ namespace SagensVision.VisionTool
             }
         }
 
+
+        /// <summary>
+        /// 将单边的ROI 里面线 等分之后输出 Z,Row,Col信息
+        /// </summary>
+        /// <param name="SideId">边1，2，3，4</param>
+        /// <param name="HeightImage">曲面图</param>
+        /// <param name="Rarray">一条边ROI等分线 Z信息 二维数组</param>
+        /// <param name="Row">一条边ROI等分线 ROW坐标 二维数组</param>
+        /// <param name="Carray">一条边ROI等分线 COL坐标 二维数组</param>
+        /// <param name="Phi">一条边 ROI 截出来线参数 二维数组</param>
+        /// <param name="ignorePt"></param>
+        /// <param name="Fix"></param>
+        /// <returns></returns>
         public string GenProfileCoord(int SideId, HObject HeightImage, out double[][] Rarray, out double[][] Row, out double[][] Carray, out double[][] Phi, out int ignorePt, HTuple Fix = null)
         {
             Rarray = null; Carray = null; Row = null; Phi = null; ignorePt = 0;
             try
             {
                 int SId = SideId - 1;
-                int k = 0;
+                int k = 0;//一条边ROI所有需要截出来的线
                 //
                 for (int i = 0; i < roiList2[SId].Count; i++)
                 {
@@ -1661,12 +1713,12 @@ namespace SagensVision.VisionTool
                 }
                 int n = 0;
                 Rarray = new double[k][]; Carray = new double[k][]; Row = new double[k][]; Phi = new double[k][];
-                double[] Rarray1;
+                double[] Rarray1;//Carray 转成一维数组
                 double[] Carray1;
 
                 HTuple HPhi = new HTuple();
 
-                int[] profileNum = new int[k];
+                int[] profileNum = new int[k];//ROI截出来线等分的长度
                 for (int i = 0; i < roiList2[SId].Count; i++)
                 {
                     //Debug.WriteLine(n);
@@ -1690,12 +1742,12 @@ namespace SagensVision.VisionTool
                         temp.Phi = tempPhi;
                     }
 
-                    DispSection(temp, SId, i, out lineCoord);
+                    DispSection(temp, SId, i, out lineCoord);//分割矩形
                     for (int j = 0; j < lineCoord.Length; j++)
                     {
                         /* HTuple Sigle = new HTuple();*/
                         HTuple col = new HTuple(); HTuple row = new HTuple(); HTuple ignore = new HTuple();
-                        string ok = GenSection(HeightImage, lineCoord[j], out row, out col, out ignore);
+                        string ok = GenSection(HeightImage, lineCoord[j], out row, out col, out ignore);//等分线
                         ignorePt += ignore;
                         profileNum[n] = row.Length;
                         Rarray[n] = row;
@@ -1739,7 +1791,10 @@ namespace SagensVision.VisionTool
                     }
                 }
 
-                HTuple Zpoint = new HTuple(); HTuple HRow = new HTuple(); HTuple HRarray = new HTuple(); HTuple HCarray = new HTuple();
+                HTuple Zpoint = new HTuple();//一条边ROI等分线 Z信息
+                HTuple HRow = new HTuple();
+                HTuple HRarray = new HTuple();//Rarray -> 一维数组 -> HTuple
+                HTuple HCarray = new HTuple();
                 try
                 {
                     HOperatorSet.GetGrayval(HeightImage, Rarray1, Carray1, out Zpoint);
@@ -1753,7 +1808,8 @@ namespace SagensVision.VisionTool
                     return "GenProfileCoord error: 区域位于图像之外" + RowNum;
                 }
 
-                HRarray = Rarray1; HCarray = Carray1;
+                HRarray = Rarray1;
+                HCarray = Carray1;
                 int m = 0;
 
                 for (int i = 0; i < profileNum.Length; i++)
@@ -1762,7 +1818,7 @@ namespace SagensVision.VisionTool
                     {
                         continue;
                     }
-                    HTuple z = Zpoint.TupleSelectRange(m, m + profileNum[i] - 1);
+                    HTuple z = Zpoint.TupleSelectRange(m, m + profileNum[i] - 1);//每一条等分线的z信息（Htuple）
                     HTuple r = HRarray.TupleSelectRange(m, m + profileNum[i] - 1);
                     HTuple c = HCarray.TupleSelectRange(m, m + profileNum[i] - 1);
 
@@ -1772,7 +1828,7 @@ namespace SagensVision.VisionTool
                     HOperatorSet.TupleFind(EqId, 1, out EqId);
                     if (EqId.D != -1)
                     {
-                        z = z[EqId];
+                        z = z[EqId];//每一条等分线的z信息（Htuple）-->有效值
                         r = r[EqId];
                         c = c[EqId];
                     }
@@ -2911,17 +2967,30 @@ namespace SagensVision.VisionTool
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SideId">边1，2，3，4</param>
+        /// <param name="HeightImage">曲面图</param>
+        /// <param name="HLines"></param>
+        /// <param name="hwind"></param>
+        /// <param name="debug"></param>
+        /// <param name="ShowFeatures"></param>
+        /// <returns></returns>
         public string FindPoint(int SideId, HObject HeightImage, out List<HTuple> HLines, HWindow_Final hwind = null, bool debug = false, bool ShowFeatures = true)
         {
             //HObject RIntesity = new HObject(), RHeight = new HObject();
             StringBuilder Str = new StringBuilder();
             HLines = new List<HTuple>();
 
-            double[][] RowCoord = null; double[][] ColCoord = null; double[][] ZCoord = null; string[][] StrLineOrCircle = null;
+            double[][] RowCoord = null;
+            double[][] ColCoord = null;
+            double[][] ZCoord = null;
+            string[][] StrLineOrCircle = null;
             try
             {
                 int Sid = SideId - 1;
-                string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore, null);
+                string ok1 = GenProfileCoord(Sid + 1, HeightImage, out RArray, out Row, out CArray, out Phi, out Ignore, null); //将单边的ROI 里面线 等分之后输出 Z, Row, Col信息
                 if (ok1 != "OK")
                 {
                     return ok1;
@@ -2951,9 +3020,9 @@ namespace SagensVision.VisionTool
                         }
                         //Debug.WriteLine(Num);
                         HTuple row1, col1; HTuple anchor, anchorc;
-                        if (fParam[Sid].roiP[i].SelectedType == 0)
+                        if (fParam[Sid].roiP[i].SelectedType == 0)//取极值
                         {
-                            if (fParam[Sid].roiP[i].TopDownDist != 0 && fParam[Sid].roiP[i].xDist != 0)
+                            if (fParam[Sid].roiP[i].TopDownDist != 0 && fParam[Sid].roiP[i].xDist != 0)//最高点下降距离topDownDist  离最高点距离xDist
                             {
                                 string ok = FindMaxPtFallDown(Sid + 1, j, out row1, out col1, out anchor, out anchorc);
                             }
