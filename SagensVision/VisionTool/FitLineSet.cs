@@ -423,7 +423,7 @@ namespace SagensVision.VisionTool
                         }
                         else
                         {
-                            currentId = dataGridView1.CurrentCell.RowIndex;
+                            //currentId = dataGridView1.CurrentCell.RowIndex;
                             currentId = CurrentRowIndex;
                             //ID
                             Name = dataGridView1.Rows[currentId].Cells[1].Value.ToString();
@@ -446,8 +446,9 @@ namespace SagensVision.VisionTool
                         {
                             if (ActiveId != currentId)
                             {
-                                RoiIsMoving = false;
-                                return;
+                                currentId = ActiveId;
+                                //RoiIsMoving = false;
+                                //return;
                             }
                         }
 
@@ -6312,7 +6313,8 @@ namespace SagensVision.VisionTool
                             roiController2.viewController.ShowAllRoiModel = -1;
                             hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[SideId]);
                         }
-
+                        //hwindow_final2.viewWindow.notDisplayRoi();
+                        //hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[SideId]);
                         roiController2.viewController.ShowAllRoiModel = id;
                         roiController2.viewController.repaint(id);
                     }
@@ -6529,9 +6531,9 @@ namespace SagensVision.VisionTool
                     }
                     else
                     {
-                        hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[Id]);
-                        roiController2.viewController.ShowAllRoiModel = CopyId + 1;
-                        roiController2.viewController.repaint(CopyId + 1);
+                        roiController2.viewController.ShowAllRoiModel = currentId + 1;
+                        hwindow_final2.viewWindow.displayROI(ref fpTool.roiList2[Id]);                       
+                        roiController2.viewController.repaint(currentId + 1);
                     }
                     hwindow_final2.viewWindow.setActiveRoi(currentId + 1);
                 }
@@ -6563,6 +6565,8 @@ namespace SagensVision.VisionTool
                     dataGridView1.Rows[i].Cells[0].Value = (i + 1);
                 }
                 dataGridView1.ClearSelection();
+                dataGridView1.Rows[currentId + 1].Selected = true;
+                CurrentRowIndex = currentId + 1;
                 RoiIsMoving = false;
             }
             catch (Exception)
