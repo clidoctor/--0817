@@ -64,6 +64,7 @@ namespace SagensVision.VisionTool
                 t2.Value = MyGlobal.globalPointSet_Right.imgRotateArr[1];
                 r3.Value = MyGlobal.globalPointSet_Right.imgRotateArr[2];
                 d4.Value = MyGlobal.globalPointSet_Right.imgRotateArr[3];
+                this.Text = "右工位旋转设置";
             }
             else
             {
@@ -71,6 +72,7 @@ namespace SagensVision.VisionTool
                 t2.Value = MyGlobal.globalPointSet_Left.imgRotateArr[1];
                 r3.Value = MyGlobal.globalPointSet_Left.imgRotateArr[2];
                 d4.Value = MyGlobal.globalPointSet_Left.imgRotateArr[3];
+                this.Text = "左工位旋转设置";
             }
 
         }

@@ -59,6 +59,18 @@
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.textBox_SideZ4 = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.textBox_SideZ3 = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBox_SideZ2 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox_SideZ1 = new System.Windows.Forms.TextBox();
             this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBox_XYMax = new System.Windows.Forms.TextBox();
@@ -76,22 +88,8 @@
             this.cb_UseFix = new System.Windows.Forms.CheckBox();
             this.cb_UseSelfOffset = new System.Windows.Forms.CheckBox();
             this.cb_Reverse = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
             this.comboBoxEdit1 = new DevExpress.XtraEditors.ComboBoxEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.textBox_SideZ1 = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.textBox_SideZ2 = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.textBox_SideZ3 = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.textBox_SideZ4 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -401,6 +399,106 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "整体高度偏移";
             // 
+            // label24
+            // 
+            this.label24.Location = new System.Drawing.Point(21, 159);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(75, 22);
+            this.label24.TabIndex = 79;
+            this.label24.Text = "Side4";
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(208, 156);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(27, 22);
+            this.label25.TabIndex = 81;
+            this.label25.Text = "mm";
+            // 
+            // textBox_SideZ4
+            // 
+            this.textBox_SideZ4.Location = new System.Drawing.Point(102, 156);
+            this.textBox_SideZ4.Name = "textBox_SideZ4";
+            this.textBox_SideZ4.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SideZ4.TabIndex = 80;
+            this.textBox_SideZ4.Text = "0";
+            this.textBox_SideZ4.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(21, 131);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(75, 22);
+            this.label22.TabIndex = 76;
+            this.label22.Text = "Side3";
+            // 
+            // label23
+            // 
+            this.label23.Location = new System.Drawing.Point(208, 128);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(27, 22);
+            this.label23.TabIndex = 78;
+            this.label23.Text = "mm";
+            // 
+            // textBox_SideZ3
+            // 
+            this.textBox_SideZ3.Location = new System.Drawing.Point(102, 128);
+            this.textBox_SideZ3.Name = "textBox_SideZ3";
+            this.textBox_SideZ3.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SideZ3.TabIndex = 77;
+            this.textBox_SideZ3.Text = "0";
+            this.textBox_SideZ3.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(21, 103);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(75, 22);
+            this.label20.TabIndex = 73;
+            this.label20.Text = "Side2";
+            // 
+            // label21
+            // 
+            this.label21.Location = new System.Drawing.Point(208, 100);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(27, 22);
+            this.label21.TabIndex = 75;
+            this.label21.Text = "mm";
+            // 
+            // textBox_SideZ2
+            // 
+            this.textBox_SideZ2.Location = new System.Drawing.Point(102, 100);
+            this.textBox_SideZ2.Name = "textBox_SideZ2";
+            this.textBox_SideZ2.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SideZ2.TabIndex = 74;
+            this.textBox_SideZ2.Text = "0";
+            this.textBox_SideZ2.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(21, 75);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(75, 22);
+            this.label17.TabIndex = 70;
+            this.label17.Text = "Side1";
+            // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(208, 72);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(27, 22);
+            this.label19.TabIndex = 72;
+            this.label19.Text = "mm";
+            // 
+            // textBox_SideZ1
+            // 
+            this.textBox_SideZ1.Location = new System.Drawing.Point(102, 72);
+            this.textBox_SideZ1.Name = "textBox_SideZ1";
+            this.textBox_SideZ1.Size = new System.Drawing.Size(100, 22);
+            this.textBox_SideZ1.TabIndex = 71;
+            this.textBox_SideZ1.Text = "0";
+            this.textBox_SideZ1.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
+            // 
             // simpleButton3
             // 
             this.simpleButton3.Location = new System.Drawing.Point(35, 613);
@@ -511,7 +609,7 @@
             // 
             // simpleButton5
             // 
-            this.simpleButton5.Location = new System.Drawing.Point(459, 15);
+            this.simpleButton5.Location = new System.Drawing.Point(458, 15);
             this.simpleButton5.Name = "simpleButton5";
             this.simpleButton5.Size = new System.Drawing.Size(90, 23);
             this.simpleButton5.TabIndex = 86;
@@ -574,22 +672,6 @@
             this.cb_Reverse.Visible = false;
             this.cb_Reverse.CheckedChanged += new System.EventHandler(this.cb_Reverse_CheckedChanged);
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(104, 511);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 92;
-            this.textBox1.Text = "0";
-            // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(22, 514);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(43, 14);
-            this.label16.TabIndex = 93;
-            this.label16.Text = "起始点";
-            // 
             // comboBoxEdit1
             // 
             this.comboBoxEdit1.Location = new System.Drawing.Point(104, 556);
@@ -611,106 +693,6 @@
             this.labelControl1.TabIndex = 95;
             this.labelControl1.Text = "图像显示类型";
             // 
-            // label17
-            // 
-            this.label17.Location = new System.Drawing.Point(21, 75);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(75, 22);
-            this.label17.TabIndex = 70;
-            this.label17.Text = "Side1";
-            // 
-            // label19
-            // 
-            this.label19.Location = new System.Drawing.Point(208, 72);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(27, 22);
-            this.label19.TabIndex = 72;
-            this.label19.Text = "mm";
-            // 
-            // textBox_SideZ1
-            // 
-            this.textBox_SideZ1.Location = new System.Drawing.Point(102, 72);
-            this.textBox_SideZ1.Name = "textBox_SideZ1";
-            this.textBox_SideZ1.Size = new System.Drawing.Size(100, 22);
-            this.textBox_SideZ1.TabIndex = 71;
-            this.textBox_SideZ1.Text = "0";
-            this.textBox_SideZ1.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
-            // 
-            // label20
-            // 
-            this.label20.Location = new System.Drawing.Point(21, 103);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(75, 22);
-            this.label20.TabIndex = 73;
-            this.label20.Text = "Side2";
-            // 
-            // label21
-            // 
-            this.label21.Location = new System.Drawing.Point(208, 100);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(27, 22);
-            this.label21.TabIndex = 75;
-            this.label21.Text = "mm";
-            // 
-            // textBox_SideZ2
-            // 
-            this.textBox_SideZ2.Location = new System.Drawing.Point(102, 100);
-            this.textBox_SideZ2.Name = "textBox_SideZ2";
-            this.textBox_SideZ2.Size = new System.Drawing.Size(100, 22);
-            this.textBox_SideZ2.TabIndex = 74;
-            this.textBox_SideZ2.Text = "0";
-            this.textBox_SideZ2.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
-            // 
-            // label22
-            // 
-            this.label22.Location = new System.Drawing.Point(21, 131);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(75, 22);
-            this.label22.TabIndex = 76;
-            this.label22.Text = "Side3";
-            // 
-            // label23
-            // 
-            this.label23.Location = new System.Drawing.Point(208, 128);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(27, 22);
-            this.label23.TabIndex = 78;
-            this.label23.Text = "mm";
-            // 
-            // textBox_SideZ3
-            // 
-            this.textBox_SideZ3.Location = new System.Drawing.Point(102, 128);
-            this.textBox_SideZ3.Name = "textBox_SideZ3";
-            this.textBox_SideZ3.Size = new System.Drawing.Size(100, 22);
-            this.textBox_SideZ3.TabIndex = 77;
-            this.textBox_SideZ3.Text = "0";
-            this.textBox_SideZ3.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
-            // 
-            // label24
-            // 
-            this.label24.Location = new System.Drawing.Point(21, 159);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(75, 22);
-            this.label24.TabIndex = 79;
-            this.label24.Text = "Side4";
-            // 
-            // label25
-            // 
-            this.label25.Location = new System.Drawing.Point(208, 156);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(27, 22);
-            this.label25.TabIndex = 81;
-            this.label25.Text = "mm";
-            // 
-            // textBox_SideZ4
-            // 
-            this.textBox_SideZ4.Location = new System.Drawing.Point(102, 156);
-            this.textBox_SideZ4.Name = "textBox_SideZ4";
-            this.textBox_SideZ4.Size = new System.Drawing.Size(100, 22);
-            this.textBox_SideZ4.TabIndex = 80;
-            this.textBox_SideZ4.Text = "0";
-            this.textBox_SideZ4.TextChanged += new System.EventHandler(this.textBox_ColorMin_TextChanged);
-            // 
             // GlobalParam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -718,8 +700,6 @@
             this.ClientSize = new System.Drawing.Size(679, 765);
             this.Controls.Add(this.labelControl1);
             this.Controls.Add(this.comboBoxEdit1);
-            this.Controls.Add(this.label16);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cb_Reverse);
             this.Controls.Add(this.cb_UseSelfOffset);
             this.Controls.Add(this.cb_UseFix);
@@ -811,8 +791,6 @@
         private System.Windows.Forms.CheckBox cb_UseFix;
         private System.Windows.Forms.CheckBox cb_UseSelfOffset;
         private System.Windows.Forms.CheckBox cb_Reverse;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label16;
         private DevExpress.XtraEditors.ComboBoxEdit comboBoxEdit1;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private System.Windows.Forms.Label label24;
