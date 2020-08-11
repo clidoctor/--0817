@@ -77,7 +77,7 @@ namespace SagensVision.Communication
                     return;
                 
                 try
-                {
+                {                  
                     MyGlobal.sktServer.Close();
                     MessageBox.Show("服务器 关闭成功！");
                 }

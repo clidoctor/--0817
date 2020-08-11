@@ -612,18 +612,34 @@ namespace SagensVision
         {
             Action<string> fp = (string msg1) =>
             {
-                if (this.richTextBox1.Lines.Length > 300)
+                if (this.richTextBox1.Lines.Length > 100)
                 {
-                    int index = this.richTextBox1.Text.IndexOf(Environment.NewLine);
-                    this.richTextBox1.Text = this.richTextBox1.Text.Remove(0, index + Environment.NewLine.Length);
+                    //int index = this.richTextBox1.Text.IndexOf(Environment.NewLine);
+                    //this.richTextBox1.Text = this.richTextBox1.Text.Remove(0, index + Environment.NewLine.Length);
+                    this.richTextBox1.Clear();
                 }
                 string formatStr = "HH:mm:ss:ffff";
-                richTextBox1.SelectionColor = flag ? Color.Black : Color.Red;
+
+               
+
                 string longMsg = string.Format("[{0}]", DateTime.Now.ToString(formatStr)) + msg1;
                 this.richTextBox1.AppendText(Environment.NewLine + longMsg);
 
+                int line = richTextBox1.Lines.Length -1;
+                int first = richTextBox1.GetFirstCharIndexFromLine(line);
+                if (first != -1 && line !=0)
+                {
+                    int last = richTextBox1.Lines[line].Length;
+                    richTextBox1.Select(first, last);
+                }
+
+                richTextBox1.SelectionColor = flag ? Color.Black : Color.Red;
+
                 this.richTextBox1.Select(this.richTextBox1.Text.Length, 0);
                 this.richTextBox1.ScrollToCaret();
+               
+               
+
                 //this.richrichTextBox1.ScrollBars = ScrollBars.Both;
                 //Misc.SaveLog(longMsg);
                 StaticOperate.SaveLog(longMsg);
@@ -2798,6 +2814,16 @@ namespace SagensVision
                             {
                                 StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Right, MyGlobal.BaseTxtPath_Right);
                             }
+                            else
+                            {
+                                //读取Z值基准高度】
+
+                                if (File.Exists(MyGlobal.BaseTxtPath_Right))
+                                {
+                                    MyGlobal.xyzBaseCoord_Right = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Right, typeof(XYZBaseCoord));
+                                }
+                                return "用户取消写入模板";
+                            }
                         }
                         else
                         {
@@ -2828,6 +2854,15 @@ namespace SagensVision
                             if (MessageBox.Show("与上次模板偏差超出范围，是否继续写入新模板？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                             {
                                 StaticOperate.WriteXML(MyGlobal.xyzBaseCoord_Left, MyGlobal.BaseTxtPath_Left);
+                            }
+                            else
+                            {
+                                //读取Z值基准高度】
+                                if (File.Exists(MyGlobal.BaseTxtPath_Left))
+                                {
+                                    MyGlobal.xyzBaseCoord_Left = (XYZBaseCoord)StaticOperate.ReadXML(MyGlobal.BaseTxtPath_Left, typeof(XYZBaseCoord));
+                                }
+                                return "用户取消写入模板";
                             }
                         }
                         else
@@ -3101,32 +3136,32 @@ namespace SagensVision
                     double yDist = (OrginalX1[start] - PixC) * Yresolution;
 
                     double dist = Math.Sqrt(xDist * xDist + yDist * yDist);
-                    Xrelative1 = dist * Math.Sin(subAngle);
-                    Yrelative1 = dist * Math.Cos(subAngle);
+                    //Xrelative1 = dist * Math.Sin(subAngle);
+                    //Yrelative1 = dist * Math.Cos(subAngle);
 
 
-                    //if (isRight)
-                    //{
-                    //    if (SubX.Length != 0)
-                    //    {
-                    //        //        return "请重新写入基准";
-                    //        Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_X == null ? 0 : SubX[start].D;
-                    //        Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_Y == null ? 0 : SubY[start].D;
-                    //    }
+                    if (isRight)
+                    {
+                        if (SubX.Length != 0)
+                        {
+                            //        return "请重新写入基准";
+                            Xrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_X == null ? 0 : SubX[start].D;
+                            Yrelative1 = MyGlobal.xyzBaseCoord_Right.Dist_Y == null ? 0 : SubY[start].D;
+                        }
 
-                    //}
-                    //else
-                    //{
-                    //    if (SubX.Length != 0)
-                    //    {
-                    //        //        return "请重新写入基准";
-                    //        Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_X == null ? 0 : SubX[start].D;
-                    //        Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_Y == null ? 0 : SubY[start].D;
-                    //    }
+                    }
+                    else
+                    {
+                        if (SubX.Length != 0)
+                        {
+                            //        return "请重新写入基准";
+                            Xrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_X == null ? 0 : SubX[start].D;
+                            Yrelative1 = MyGlobal.xyzBaseCoord_Left.Dist_Y == null ? 0 : SubY[start].D;
+                        }
 
-                    //}
+                    }
 
-                 
+
                     if (i == 0)
                     {
                         x0 = X1;
@@ -4279,7 +4314,7 @@ namespace SagensVision
                                 if (!ShowOnece)
                                 {
                                     ShowOnece = true;
-                                    ShowAndSaveMsg(string.Format("客户端已断开连接！"));
+                                    ShowAndSaveMsg(string.Format("客户端已断开连接！"),false);
                                     TcpIsConnect = false;
                                    
                                 }
@@ -4593,13 +4628,14 @@ namespace SagensVision
                     {
                         if (MyGlobal.globalConfig.IsTcpClient)
                         {
-                            ShowAndSaveMsg(string.Format("服务器已断开连接！"));
+                            ShowAndSaveMsg(string.Format("服务器已断开连接！"), false);
+                            break;
                         }
                         else
                         {
-                            ShowAndSaveMsg(string.Format("客户端已断开连接！"));
+                            ShowAndSaveMsg(string.Format("客户端已断开连接！"), false);
                         }
-                        break;
+                       
                     } 
                 }
                 catch (Exception ex)
@@ -4772,7 +4808,7 @@ namespace SagensVision
 
                                     if (ok1 != "OK")
                                     {
-                                        ShowAndSaveMsg(ok1);
+                                        ShowAndSaveMsg(ok1,false);
                                         if (Side == 4)
                                         {
                                             //SaveSend = Encoding.UTF8.GetBytes("SAVE_NG");
@@ -4991,6 +5027,7 @@ namespace SagensVision
 
         private void navBarItem11_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
+            MyGlobal.flset2 = new FitLineSet("Fix");
             MyGlobal.flset2.ToolType = "GlueGuide";
             MyGlobal.flset2.FindType = "Fix";
             MyGlobal.flset2.ShowDialog();
@@ -5126,10 +5163,14 @@ namespace SagensVision
                     {
                             ShowAndSaveMsg(OK, false);
                     }
-                    if (i == 3)
-                    {
-                        ShowAndSaveMsg(OK);
-                    }
+                        else
+                        {
+                            if (i == 3)
+                            {
+                                ShowAndSaveMsg(OK);
+                            }
+                        }
+                   
                 }
                 }
                 catch (Exception ex)
@@ -6237,8 +6278,9 @@ namespace SagensVision
         VisionTool.FitLineSet flset = new VisionTool.FitLineSet();
         private void navBarItem12_LinkPressed(object sender, DevExpress.XtraNavBar.NavBarLinkEventArgs e)
         {
+            flset = new VisionTool.FitLineSet();
             flset.ToolType = "GlueGuide";
-            flset.FindType = "FitLineSet";
+            flset.FindType = "FitLineSet";          
             flset.ShowDialog();
         }
 
@@ -6608,15 +6650,17 @@ namespace SagensVision
 
         private void barButtonItem16_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            flset = new VisionTool.FitLineSet();
             flset.ToolType = "GlueGuide";
-            flset.FindType = "FitLineSet";
+            flset.FindType = "FitLineSet";            
             flset.ShowDialog();
         }
 
         private void barButtonItem17_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            MyGlobal.flset2 = new FitLineSet("Fix");
             MyGlobal.flset2.ToolType = "GlueGuide";
-            MyGlobal.flset2.FindType = "Fix";
+            MyGlobal.flset2.FindType = "Fix";           
             MyGlobal.flset2.ShowDialog();
         }
 
@@ -6987,10 +7031,14 @@ namespace SagensVision
                         {
                             ShowAndSaveMsg(OK, false);
                         }
-                        if (i == 3)
+                        else
                         {
-                            ShowAndSaveMsg(OK);
+                            if (i == 3)
+                            {
+                                ShowAndSaveMsg(OK);
+                            }
                         }
+                        
                     }
                 }
                 catch (Exception ex)

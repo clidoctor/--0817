@@ -28,6 +28,11 @@ namespace SagensVision.Communication
             {
                 string msg = textBox_send.Text.ToString();
                 byte[] sendbytes = Encoding.UTF8.GetBytes(msg);
+                if (MyGlobal.sktClient==null)
+                {
+                    MessageBox.Show("未连接!");
+                    return;
+                }
                 MyGlobal.sktClient.Send(sendbytes);
             }
             catch (Exception)

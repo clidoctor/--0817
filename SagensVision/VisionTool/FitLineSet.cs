@@ -110,7 +110,7 @@ namespace SagensVision.VisionTool
             isLoading = false;
             RoiParam.isInvoke = true;
             RoiParam.ChangeSection += RoiParam_ChangeSection;
-            
+            isSave = true;
         }
 
         private void RoiParam_ChangeSection(ValueChangedType obj, double value)
@@ -412,7 +412,10 @@ namespace SagensVision.VisionTool
                     //case ROIController.EVENT_DELETED_ACTROI:
                     //case ROIController.EVENT_DELETED_ALL_ROIS:
                     case ROIController.EVENT_UPDATE_ROI:
-                      
+                        if (isLoading)
+                        {
+                            return;
+                        }
                         RoiIsMoving = true;
                         int Id = Convert.ToInt32(SideName.Substring(4, 1)) - 1;
                         ArrayList array = roiController2.ROIList;
@@ -6266,7 +6269,7 @@ namespace SagensVision.VisionTool
         private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
         {
 
-            if (dataGridView1.CurrentCell == null || RoiIsMoving || isSelecting)
+            if (dataGridView1.CurrentCell == null || RoiIsMoving || isSelecting || isLoading)
             {
                 return;
             }
