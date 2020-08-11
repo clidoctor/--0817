@@ -25,7 +25,7 @@ namespace SagensVision.VisionTool
 
         public static double[][] Row;
         public static double[][] Phi;
-        public List<ROI>[] roiList = new List<ROI>[4];
+        public List<ROI>[] roiList = new List<ROI>[4];//定位显示轮廓 抓取特征点的 框
         public List<ROI>[] roiList2 = new List<ROI>[4];
         public FitProfileParam[] fParam = new FitProfileParam[4];
         public IntersetionCoord[] intersectCoordList = new IntersetionCoord[4];
